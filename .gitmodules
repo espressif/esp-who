@@ -1,0 +1,9 @@
+[submodule "esp-idf"]
+	path = esp-idf
+	url = https://github.com/espressif/esp-idf
+[submodule "components/esp-face"]
+	path = components/esp-face
+	url = https://github.com/espressif/esp-face
+[submodule "components/esp32-camera"]
+	path = components/esp32-camera
+	url = https://github.com/espressif/esp32-camera.git

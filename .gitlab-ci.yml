@@ -1,0 +1,114 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  # System environment
+
+  # Common parameters for the 'make' during CI tests
+  MAKEFLAGS: "-j5 --no-keep-going"
+
+# GitLab-CI environment
+
+  # more attempts for more robust
+  GET_SOURCES_ATTEMPTS: "10"
+  ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
+
+  # We use get_sources.sh script to fetch the submodules and/or re-fetch the repo
+  # if it was corrupted (if submodule update fails this can happen)
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: none
+  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+
+before_script:
+  # add gitlab ssh key
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
+  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  # replace submodule esp-idf to internal repository to speedup cloning
+  - sed -i "s%https://github.com/espressif/esp-idf%${GITLAB_SSH_SERVER}/idf/esp-idf.git%" .gitmodules
+  - git submodule update --init
+  # (the same regular expressions are used to set these are used in 'only:' sections below
+  - source esp-idf/tools/ci/configure_ci_environment.sh
+
+  # fetch the submodules (& if necessary re-fetch repo) from gitlab
+  - time ./esp-idf/tools/ci/get-full-sources.sh
+
+
+.add_gitlab_key_before:
+  before_script: &add_gitlab_key_before
+    - echo "Not fetching submodules"
+    - source ${IDF_PATH}/tools/ci/configure_ci_environment.sh
+    # add gitlab ssh key
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $AUTO_KEY > ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+
+.build_template: &build_template
+  stage: build
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  tags:
+    - build
+  variables:
+    BATCH_BUILD: "1"
+    V: "0"
+
+.build_examples_make_template: &build_examples_make_template
+  <<: *build_template
+  retry: 1
+  artifacts:
+    when: always
+    paths:
+      - build_examples/*/*/build/*.bin
+      - build_examples/*/*/build/*.elf
+      - build_examples/*/*/build/*.map
+      - build_examples/*/*/build/download.config
+      - build_examples/*/*/build/bootloader/*.bin
+      - ${LOG_PATH}
+      - ${IDF_PATH}/tools/ci
+    expire_in: 1 week
+  variables:
+    IDF_CI_BUILD: "1"
+    LOG_PATH: "$CI_PROJECT_DIR/log_examples_make"
+  script:
+    # it's not possible to build 100% out-of-tree and have the "artifacts"
+    # mechanism work, but this is the next best thing
+    - rm -rf build_examples
+    - mkdir build_examples
+    - cd build_examples
+    - mkdir -p ${LOG_PATH}
+    - ${CI_PROJECT_DIR}/tools/ci/build_examples.sh "${CI_PROJECT_DIR}/examples" "${CI_JOB_NAME}"
+
+build_examples_make_00:
+  <<: *build_examples_make_template
+
+
+push_to_github:
+  stage: deploy
+  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  tags:
+    - deploy
+  only:
+    - master
+    - /^release\/v/
+  when: on_success
+  dependencies:
+    - build_examples_make_00
+  before_script:
+    - echo "skip default before_script"
+  script:
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo -n $GH_PUSH_KEY > ~/.ssh/id_rsa_base64
+    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+    - git remote remove github &>/dev/null || true
+    - git remote add github git@github.com:espressif/esp-who.git
+    - ${IDF_PATH}/tools/ci/push_to_github.sh
