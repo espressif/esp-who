@@ -10,7 +10,7 @@ ESP-WHO supports development of face detection and recognition applications base
 
 In general, the ESP-WHO features will be supported as shown below:
 
-![overview](img/overview.png) 
+![overview](img/overview.jpg)
 
 In ESP-WHO, Detection, Recognition and Image Utility are at the core of the platform.
 
