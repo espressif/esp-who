@@ -68,6 +68,8 @@ void task_process(void *arg)
     int is_logging = 1;
     int next_logging_index = 0;
 
+    int64_t timestamp = 0;
+
     do
     {
         img_buffer = (uint16_t *)facenet_get_image();
@@ -75,7 +77,9 @@ void task_process(void *arg)
                               img_buffer,
                               gl_input_image_width * gl_input_image_height);
 
+        timestamp = esp_timer_get_time();
         box_array_t *net_boxes = face_detect(image_matrix);
+        ESP_LOGI(TAG, "Detection time consumption: %lldms", (esp_timer_get_time() - timestamp) / 1000);
 
         if (net_boxes)
         {
@@ -129,10 +133,19 @@ void task_process(void *arg)
                 }
                 else
                 {
+                    timestamp = esp_timer_get_time();
                     int matched_id = recognize_face(aligned_face,
                                                     id_list, thresh,
                                                     next_logging_index);
-                    ESP_LOGE(TAG, "Matched ID: %d", matched_id);
+                    if (matched_id)
+                    {
+                        ESP_LOGE(TAG, "Matched ID: %d", matched_id);
+                    }
+                    else
+                    {
+                        ESP_LOGE(TAG, "No Matched ID");
+                    }
+                    ESP_LOGI(TAG, "Recognition time consumption: %lldms", (esp_timer_get_time() - timestamp) / 1000);
                 }
             }
             else
