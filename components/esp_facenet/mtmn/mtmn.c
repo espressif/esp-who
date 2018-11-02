@@ -33,7 +33,8 @@ static int first_time[3] = {0};
 mtmn_net_t *pnet (dl_matrix3du_t *in)
 {
 #define PNET_LAYER_NUM (3)
-    static dl_matrix3d_t *filters[PNET_LAYER_NUM * 4] = {0};
+#define PNET_COEF_PER_LAYER (5)
+    static dl_matrix3d_t *filters[PNET_LAYER_NUM * PNET_COEF_PER_LAYER] = {0};
     char name[50];
 
     // Get filters
@@ -42,24 +43,26 @@ mtmn_net_t *pnet (dl_matrix3du_t *in)
         first_time[0] = 1;
         for (int i = 0; i < PNET_LAYER_NUM; i++)
         {
-            sprintf(name, "pnet_l%d_dilate", i+1);
-            filters[i * 4 + 0] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
-            sprintf(name, "pnet_l%d_depth", i+1);
-            filters[i * 4 + 1] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
-            sprintf(name, "pnet_l%d_compress", i+1);
-            filters[i * 4 + 2] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
-            sprintf(name, "pnet_l%d_bias", i+1);
-            filters[i * 4 + 3] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
+            sprintf(name, "pnet_l%d_mn_dilate", i+1);
+            filters[i * PNET_COEF_PER_LAYER + 0] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
+            sprintf(name, "pnet_l%d_mn_depth", i+1);
+            filters[i * PNET_COEF_PER_LAYER + 1] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
+            sprintf(name, "pnet_l%d_mn_compress", i+1);
+            filters[i * PNET_COEF_PER_LAYER + 2] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
+            sprintf(name, "pnet_l%d_mn_bias", i+1);
+            filters[i * PNET_COEF_PER_LAYER + 3] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
+            sprintf(name, "pnet_l%d_mn_depth_active_prelu_alpha", i+1);
+            filters[i * PNET_COEF_PER_LAYER + 4] = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d(name, NULL, 0);
         }
     }
-    dl_matrix3d_t **l1_f = &(filters[0]);
-    dl_matrix3d_t **l2_f = &(filters[4]);
-    dl_matrix3d_t **l3_f = &(filters[8]);
+    dl_matrix3d_t **l1_f = &(filters[0 * PNET_COEF_PER_LAYER]);
+    dl_matrix3d_t **l2_f = &(filters[1 * PNET_COEF_PER_LAYER]);
+    dl_matrix3d_t **l3_f = &(filters[2 * PNET_COEF_PER_LAYER]);
 
-    dl_matrix3d_t *l4_category_conv = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_category_weight", NULL, 0);
-    dl_matrix3d_t *l4_category_bias = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_category_bias", NULL, 0);
-    dl_matrix3d_t *l4_offset_conv = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_offset_weight", NULL, 0);
-    dl_matrix3d_t *l4_offset_bias = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_offset_bias", NULL, 0);
+    dl_matrix3d_t *l4_category_conv = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_category_cnn_weight", NULL, 0);
+    dl_matrix3d_t *l4_category_bias = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_category_cnn_bias", NULL, 0);
+    dl_matrix3d_t *l4_offset_conv = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_offset_cnn_weight", NULL, 0);
+    dl_matrix3d_t *l4_offset_bias = (dl_matrix3d_t *)get_coeff_pnet_model.getter_3d("pnet_l4_offset_cnn_bias", NULL, 0);
 
     // Layer 1
     dl_matrix3d_conv_config_t config;
@@ -68,16 +71,16 @@ mtmn_net_t *pnet (dl_matrix3du_t *in)
     config.padding = PADDING_VALID;
     config.mode = DL_XTENSA_IMPL;
     config.type = INPUT_UINT8;
-    dl_matrix3d_t *l1 = dl_matrix3d_mobilenet(in, l1_f[0], l1_f[1], l1_f[2], l1_f[3], NULL, &config);
+    dl_matrix3d_t *l1 = dl_matrix3d_mobilenet(in, l1_f[0], l1_f[1], l1_f[2], l1_f[3], l1_f[4], &config);
 
     // Layer 2
     config.stride_x = 1;
     config.stride_y = 1;
     config.type = INPUT_FLOAT;
-    dl_matrix3d_t *l2 = dl_matrix3d_mobilenet(l1, l2_f[0], l2_f[1], l2_f[2], l2_f[3], NULL, &config);
+    dl_matrix3d_t *l2 = dl_matrix3d_mobilenet(l1, l2_f[0], l2_f[1], l2_f[2], l2_f[3], l2_f[4], &config);
     
     // Layer 3
-    dl_matrix3d_t *l3 = dl_matrix3d_mobilenet(l2, l3_f[0], l3_f[1], l3_f[2], l3_f[3], NULL, &config);
+    dl_matrix3d_t *l3 = dl_matrix3d_mobilenet(l2, l3_f[0], l3_f[1], l3_f[2], l3_f[3], l3_f[4], &config);
 
     mtmn_net_t *pnet_o = (mtmn_net_t *)calloc(1, sizeof(mtmn_net_t));
     // Layer 4 category
