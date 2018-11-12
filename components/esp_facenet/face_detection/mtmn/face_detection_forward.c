@@ -24,9 +24,9 @@
 #include <string.h>
 #include <math.h>
 #include "esp_system.h"
-#include "face_detection.h"
+#include "face_detection_forward.h"
 
-static const char *TAG = "face_detection";
+static const char *TAG = "face_detection_forward";
 
 box_array_t *pnet_forward(dl_matrix3du_t *image)
 {/*{{{*/

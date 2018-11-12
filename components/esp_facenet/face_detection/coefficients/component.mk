@@ -14,7 +14,7 @@ $$(COMPONENT_PATH)/./$2.c: $$(COMPONENT_PATH)/$1/ $$(MKMODEL_PATH)/mkmodel ../in
 
 endef
 
-MKMODEL_PATH := $(COMPONENT_PATH)/../../lib
+MKMODEL_PATH := $(COMPONENT_PATH)/../../../lib
 
 $(eval $(call CompileNeuralNetCoefficients,pnet/model,pnet_model,-no-quantized,-3d))
 $(eval $(call CompileNeuralNetCoefficients,rnet/model,rnet_model,-no-quantized,-3d))

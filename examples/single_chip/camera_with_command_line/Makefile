@@ -4,6 +4,9 @@
 #
 
 PROJECT_NAME := facenet_single_command_line
-EXTRA_COMPONENT_DIRS += $(PROJECT_PATH)/../../../components $(PROJECT_PATH)/../../../components/esp_facenet
+
+SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
+
+include $(SOLUTION_PATH)/components/component_conf.mk
 include $(IDF_PATH)/make/project.mk
 
