@@ -114,8 +114,6 @@ push_to_github:
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   dependencies: []
-  before_script:
-    - echo "skip default before_script"
   script:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
