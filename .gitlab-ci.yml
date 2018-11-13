@@ -125,4 +125,4 @@ push_to_github:
     - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
     - git remote remove github &>/dev/null || true
     - git remote add github git@github.com:espressif/esp-who.git
-    - eval $(git for-each-ref --shell bash --format 'if [ $CI_BUILD_REF == %(objectname) ]; then git checkout -B %(refname:strip=3); git push --follow-tags github %(refname:strip=3); fi;' $GITHUB_PUSH_REFS)
+    - $IDF_PATH/tools/ci/push_to_github.sh
