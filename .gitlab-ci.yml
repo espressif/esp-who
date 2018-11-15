@@ -97,7 +97,6 @@ push_to_github:
   only:
     - master
     - /^release\/v/
-    - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
   dependencies:
     - build_examples_make_00
