@@ -20,7 +20,6 @@
 #include "esp32-hal-log.h"
 #else
 #include "esp_log.h"
-static const char* TAG = "ov2640";
 #endif
 
 static void write_regs(sensor_t *sensor, const uint8_t (*regs)[2]){
@@ -166,17 +165,17 @@ static int set_pixformat(sensor_t *sensor, pixformat_t pixformat)
 
 static int set_contrast(sensor_t *sensor, int level)
 {
-    return write_level_regs(sensor, contrast_regs, NUM_CONTRAST_LEVELS, level);
+    return write_level_regs(sensor, (const uint8_t **)contrast_regs, NUM_CONTRAST_LEVELS, level);
 }
 
 static int set_brightness(sensor_t *sensor, int level)
 {
-    return write_level_regs(sensor, brightness_regs, NUM_BRIGHTNESS_LEVELS, level);
+    return write_level_regs(sensor, (const uint8_t **)brightness_regs, NUM_BRIGHTNESS_LEVELS, level);
 }
 
 static int set_saturation(sensor_t *sensor, int level)
 {
-    return write_level_regs(sensor, saturation_regs, NUM_SATURATION_LEVELS, level);
+    return write_level_regs(sensor, (const uint8_t **)saturation_regs, NUM_SATURATION_LEVELS, level);
 }
 
 static int set_gainceiling(sensor_t *sensor, gainceiling_t gainceiling)
