@@ -41,7 +41,7 @@ before_script:
 .add_gitlab_key_before:
   before_script: &add_gitlab_key_before
     - echo "Not fetching submodules"
-    - source $IDF_PATH/tools/ci/configure_ci_environment.sh
+    - source ${IDF_PATH}/tools/ci/configure_ci_environment.sh
     # add gitlab ssh key
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -59,49 +59,35 @@ before_script:
     BATCH_BUILD: "1"
     V: "0"
 
-.build_examples_template: &build_examples_template
+.build_examples_make_template: &build_examples_make_template
   <<: *build_template
   retry: 1
   artifacts:
     when: always
     paths:
-      - build_examples/*/*/*/build/*.bin
-      - build_examples/*/*/*/build/*.elf
-      - build_examples/*/*/*/build/*.map
-      - build_examples/*/*/*/build/download.config
-      - build_examples/*/*/*/build/bootloader/*.bin
-      - $LOG_PATH
+      - build_examples/*/*/build/*.bin
+      - build_examples/*/*/build/*.elf
+      - build_examples/*/*/build/*.map
+      - build_examples/*/*/build/download.config
+      - build_examples/*/*/build/bootloader/*.bin
+      - ${LOG_PATH}
+      - ${IDF_PATH}/tools/ci
     expire_in: 1 week
   variables:
     IDF_CI_BUILD: "1"
-    LOG_PATH: "$CI_PROJECT_DIR/log_examples"
+    LOG_PATH: "$CI_PROJECT_DIR/log_examples_make"
   script:
     # it's not possible to build 100% out-of-tree and have the "artifacts"
     # mechanism work, but this is the next best thing
     - rm -rf build_examples
     - mkdir build_examples
     - cd build_examples
-    # build some of examples
     - mkdir -p ${LOG_PATH}
-    - ${IDF_PATH}/tools/ci/build_examples.sh "${CI_JOB_NAME}"
+    - ${CI_PROJECT_DIR}/tools/ci/build_examples.sh "${CI_PROJECT_DIR}/examples" "${CI_JOB_NAME}"
 
-build_facenet_test:
-  stage: build
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
-  tags:
-    - build
-  variables:
-    BATCH_BUILD: "1"
-    IDF_CI_BUILD: "1"
-  script:
-    - cd examples/single_chip/camera_with_command_line
-    # Test debug build (default)
-    - make defconfig
-    - make V=0
-    # Now test release build
-    - make clean
-    - sed -i.bak -e's/CONFIG_OPTIMIZATION_LEVEL_DEBUG\=y/CONFIG_OPTIMIZATION_LEVEL_RELEASE=y/' sdkconfig
-    - make V=0
+build_examples_make_00:
+  <<: *build_examples_make_template
+
 
 push_to_github:
   stage: deploy
@@ -113,7 +99,10 @@ push_to_github:
     - /^release\/v/
     - /^v\d+\.\d+(\.\d+)?($|-)/
   when: on_success
-  dependencies: []
+  dependencies:
+    - build_examples_make_00
+  before_script:
+    - echo "skip default before_script"
   script:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -123,4 +112,4 @@ push_to_github:
     - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
     - git remote remove github &>/dev/null || true
     - git remote add github git@github.com:espressif/esp-who.git
-    - $IDF_PATH/tools/ci/push_to_github.sh
+    - ${IDF_PATH}/tools/ci/push_to_github.sh

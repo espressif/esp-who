@@ -1,3 +1,6 @@
 [submodule "esp-idf"]
 	path = esp-idf
 	url = https://github.com/espressif/esp-idf
+[submodule "components/esp-face"]
+	path = components/esp-face
+	url = ssh://git@gitlab.espressif.cn:27227/face-recognition-framework/esp-face.git
