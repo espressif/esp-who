@@ -1,25 +1,30 @@
 # Camera with Command Line in Single Chip
 
-This example implements Human Face Detection with a single ESP32 chip and without LCD. ESP32 gets input of image from camera and displays results in the Command Line after recognition. 
+This example demonstrates **Human Face Detection** with a single ESP32 chip (without using any LCD module). ESP32 firstly gets images that are captured by the camera module, then determines if there are any human faces as well as displays its **Detection Results** in the **Serial Terminal**. 
 
 # Preparation
 
 To run this example, you need the following components:
 
-* ESP32 module: this example has been tested with **ESP32-WROVER**, which is highly recommended for getting started with.
-* Camera module: this example has been tested with **OV2640** camera module which is highly recommended for getting started with.
-* Set up [ESP-IDF](https://github.com/espressif/esp-idf)
-* Set up [ESP-WHO](https://github.com/espressif/esp-who)
+* An ESP32 Module: **ESP32-WROVER**, which we highly recommend for beginners, is used in this example.
+* A Camera Module: the **OV2640** image sensor, which we highly recommend for beginners, is used in this example.
+* SDKs:
+	* [ESP-IDF](https://github.com/espressif/esp-idf)
+	* [ESP-WHO](https://github.com/espressif/esp-who)
 
-Any other confusions about preparation, please see general guide in the README.md of ESP-WHO.
-
+For the detailed introduction about preparation, please see [here](../../../README.md).
 
 # Quick Start
 
-If preparations are ready, please follow this section to **connect** the camera to ESP32 module, flash application to ESP32, finally execute human face detection and display the **result**.
+After you've completed the hardware settings, please follow the steps below:
 
-## Connect
-Specific pins used in this example to connect ESP32 module and camera module are listed in table below. 
+1. **Connect** the camera to ESP32 module;
+2. **Flash Applications** to ESP32;
+3. **Start Human Face Detection** and **Check Detection Results**.
+
+## Connecting
+
+The table below lists the specific pins used in this example for connecting the ESP32 module and the camera module. 
 
 | Interface | Camera Pin | Pin Mapping for ESP32-WROVER | 
 | :--- | :---: | :---: |
@@ -42,17 +47,28 @@ Specific pins used in this example to connect ESP32 module and camera module are
 | Power Supply 3.3V | 3V3 | 3V3 | 
 | Ground | GND | GND | 
 
+> The pin mapping will be slightly different if you use other ESP32 modules. 
 
-In particular, if you have a **ESP-WROVER-KIT**, camera connector is already broken out and labeled Camera / JP4. Solder 2.54 mm / 0.1" double row, 18 pin socket in provided space and plug the camera module, OV2640 for example, right into it. Line up 3V3 and GND pins on camera module and on ESP-WROVER-KIT. D0 and D1 should be left unconnected outside the socket. The image below shows **ESP-WROVER-KIT** plugged with **OV2640** camera module.
+In particular, if you are using a **ESP-WROVER-KIT** for your development, whose camera connector is already broken out (the one labeled Camera / JP4), please follow the steps below:
+
+1. Plug your camera module, i.e. the OV2640 module in this example, on the board;
+2. Connect the 3V3 and GND pins on the camera module to those counterparts on the board. 
+
+The image below shows a **ESP-WROVER-KIT** development board with a **OV2640** camera module installed on it.
 
 ![esp_wrover_kit_with_ov2640](../../../img/esp_wrover_kit_with_ov2640.png)  
 
+## Flashing to ESP32
 
-## Results
+Please see [here](../../../README.md).
 
-Open a serial terminal by using `make monitor` at this project, point the camera to a human face with a distance of 0.3m at least, then you will see the following information:
+## Checking Detection Result
+
+1. Put your camera module away from a human face for at least 0.3 meter; 
+2. Open a Serial Terminal by using the command line `make monitor`;
+3. Check result at your Serial Terminal, and you will be able to see information displayed in the screenshot below:
 
 ![detected](../../../img/detected.png) 
 
-The key word **DETECTED** comes out when a human face is detected.
+The keyword **DETECTED** appears whenever ESP32 detects a human face.
 
