@@ -12,7 +12,7 @@ To run this example, you need the following components:
 	* [ESP-IDF](https://github.com/espressif/esp-idf)
 	* [ESP-WHO](https://github.com/espressif/esp-who)
 
-For the detailed introduction about preparation, please see [here](../../../README.md).
+For the detailed introduction about preparation, please see [here](https://github.com/espressif/esp-who).
 
 # Quick Start
 
@@ -60,7 +60,7 @@ The image below shows a **ESP-WROVER-KIT** development board with a **OV2640** c
 
 ## Flashing to ESP32
 
-Please see [here](../../../README.md).
+Please see [here](https://github.com/espressif/esp-who).
 
 ## Checking Detection Result
 

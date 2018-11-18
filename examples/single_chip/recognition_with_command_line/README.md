@@ -1,25 +1,32 @@
 # Recognition with Command Line in Single Chip
 
-This example implements Human Face Recognition with a single ESP32 chip and without LCD. ESP32 gets input of image from camera and displays results in the Command Line after recognition.
+This example demonstrates **Human Face Recognition** with a single ESP32 chip (without using any LCD module). ESP32 firstly gets images that are captured by the camera module, then determines if there are any recognized human faces as well as displays its **Recognition Results** in the **Serial Terminal**. 
 
 # Preparation
 
 To run this example, you need the following components:
 
-* ESP32 module: this example has been tested with **ESP32-WROVER**, which is highly recommended for getting started with.
-* Camera module: this example has been tested with **OV2640** camera module which is highly recommended for getting started with.
-* Set up [ESP-IDF](https://github.com/espressif/esp-idf)
-* Set up [ESP-WHO](https://github.com/espressif/esp-who)
+* An ESP32 Module: **ESP32-WROVER**, which we highly recommend for beginners, is used in this example.
+* A Camera Module: the **OV2640** image sensor, which we highly recommend for beginners, is used in this example.
+* SDKs:
+	* [ESP-IDF](https://github.com/espressif/esp-idf)
+	* [ESP-WHO](https://github.com/espressif/esp-who)
 
-Any other confusions about preparation, please see general guide in the README.md of ESP-WHO.
+For the detailed introduction about preparation, please see [here](https://github.com/espressif/esp-who).
 
 
 # Quick Start
 
-If preparations are ready, please follow this section to **connect** the camera to ESP32 module, flash application to ESP32, finally execute human face recognition and display the **result**.
+
+After you've completed the hardware settings, please follow the steps below:
+
+1. **Connect** the camera to ESP32 module;
+2. **Flash Application** to ESP32;
+3. **Start Human Face Recognition** and **Check Detection Results**.
 
 ## Connect
-Specific pins used in this example to connect ESP32 module and camera module are listed in table below.
+
+The table below lists the specific pins used in this example for connecting the ESP32 module and the camera module. 
 
 | Interface | Camera Pin | Pin Mapping for ESP32-WROVER |
 | :--- | :---: | :---: |
@@ -42,36 +49,50 @@ Specific pins used in this example to connect ESP32 module and camera module are
 | Power Supply 3.3V | 3V3 | 3V3 |
 | Ground | GND | GND |
 
+> The pin mapping will be slightly different if you use other ESP32 modules. 
 
-In particular, if you have a **ESP-WROVER-KIT**, camera connector is already broken out and labeled Camera / JP4. Solder 2.54 mm / 0.1" double row, 18 pin socket in provided space and plug the camera module, OV2640 for example, right into it. Line up 3V3 and GND pins on camera module and on ESP-WROVER-KIT. D0 and D1 should be left unconnected outside the socket. The image below shows **ESP-WROVER-KIT** plugged with **OV2640** camera module.
+In particular, if you are using a **ESP-WROVER-KIT** for your development, whose camera connector is already broken out (the one labeled Camera / JP4), please follow the steps below:
+
+1. Plug your camera module, i.e. the OV2640 module in this example, on the board; 
+2. Connect the 3V3 and GND pins on the camera module to those counterparts on the board. 
+
+The image below shows a **ESP-WROVER-KIT** development board with a **OV2640** camera module installed on it.
 
 ![esp_wrover_kit_with_ov2640](../../../img/esp_wrover_kit_with_ov2640.png)  
 
+## Flashing to ESP32
 
-## Results
+Please see [here](https://github.com/espressif/esp-who).
 
-Open a serial terminal by using `make monitor` at this project, point the camera to a human face with a distance of 0.3m at least, then face entry will start after two faces are detected. The following information shows the output of the command line before the entry process:
+## Checking Results
 
-![login_delay2](../../../img/login_delay2.png)
-![login_delay1](../../../img/login_delay1.png)
+1. Put your camera module away from a human face for at least 0.3 m; 
+2. Open a Serial Terminal by using the command line `make monitor`;
+3. Check result at your Serial Terminal, and you will be able to see information as displayed in the screenshot below, which indicates the **Face Enrollment** will start soon:
 
-#### Login
+	![login_delay2](../../../img/enroll_start_count_down.png)
 
-Then the face entry process will begin, during which the program will input multiple faces to get a person's ID:
+### Enrolling a Face ID
 
-![start_login](../../../img/start_login.png)
+To successfully enroll a **Face ID**, ESP32 will collect a certain number of samples of a user's face, which is configurable and 3 by default. To be more specific, by default, ESP32 will collect three samples of a user's face to enroll a new **Face ID**. 
 
-You can also reset the number of faces entered by one person, which is set to 3 by default.
-When the last face of ID is entered, the process of face recognition will start:
+![start_enrollment_1](../../../img/enrollment_take_1st_sample.png)
+![start_enrollment_2](../../../img/enrollment_take_2nd_sample.png)
+![start_enrollment_3](../../../img/enrollment_take_3rd_sample.png)
+![errolled_face_id](../../../img/errolled_face_id.png)
+
+### Recognizing a Face ID
+
+After the **Face ID Enrollment**, ESP32 starts the **Face Recognition**:
 
 ![start_recognition](../../../img/start_recognition.png)
 
-#### Recognition
+ESP32 checks if the newly detected face matches any existing **Face ID**, whenever it detects a face:
 
-When a face is detected, it will be recognized whether the face is the same as the entered ID. If it is the same, the corresponding ID number will be displayed:
+* If Yes, the Serial Terminal displays the corresponding **Face ID**:
 
-![recognition_matched](../../../img/matched.png)
+	![recognition_matched](../../../img/matched.png)
 
-Otherwise, the command line will display `No Matched ID`:
+* If No, the Serial Terminal displays `No Matched ID`:
 
-![recognition_no_matched](../../../img/no_matched.png)
+	![recognition_no_matched](../../../img/no_matched.png)
