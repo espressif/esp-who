@@ -34,6 +34,9 @@ extern "C"
 #include "image_util.h"
 #include "app_camera.h"
 
+#define ENROLL_CONFIRM_TIMES 3
+#define FACE_ID_SAVE_NUMBER 1
+
     void app_facenet_main();
 
 #if __cplusplus
