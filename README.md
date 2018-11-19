@@ -67,7 +67,7 @@ See setup guides for detailed instructions to set up the ESP-IDF:
 
 # Components
 
-Components 是这个SDK的主要框架，里面有camera相关驱动，算法core等，这些会被大多数的应用所包含。
+Components is the main framework of the SDK, with camera driver and algorithm inside.
 
 See the following sections for more details about components.
 
