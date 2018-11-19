@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := facenet_single_command_line
+PROJECT_NAME := recognition_command_line
 
 SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
 
