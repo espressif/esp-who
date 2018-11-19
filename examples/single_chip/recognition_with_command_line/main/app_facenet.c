@@ -46,6 +46,22 @@ void facenet_output_image(void *buffer)
     xTaskNotifyGive(gpst_input_task);
 }
 
+char *number_suffix(int32_t number)
+{
+    uint8_t n = number % 10;
+
+    if (n == 0)
+        return "zero";
+    else if (n == 1)
+        return "st";
+    else if (n == 2)
+        return "nd";
+    else if (n == 3)
+        return "rd";
+    else
+        return "th";
+}
+
 void task_process(void *arg)
 { /*{{{*/
     dl_matrix3du_t *image_matrix = dl_matrix3du_alloc(1,
@@ -64,9 +80,10 @@ void task_process(void *arg)
     fptp_t thresh = FACE_REC_THRESHOLD;
     dl_matrix3d_t *id_list[FACE_ID_SAVE_NUMBER] = {0};
 
-    char delay_before_login = 3;
-    int is_logging = 1;
-    int next_logging_index = 0;
+    int8_t count_down_second = 3; //second
+    int8_t is_enrolling = 1;
+    int32_t next_enroll_index = 0;
+    int8_t left_sample_face;
 
     int64_t timestamp = 0;
 
@@ -89,39 +106,39 @@ void task_process(void *arg)
 
             if (align_face(net_boxes, image_matrix, aligned_face) == ESP_OK)
             {
-                if ((is_logging == 1) && (next_logging_index < FACE_ID_SAVE_NUMBER))
+                //count down
+                while (count_down_second > 0)
                 {
-                    // delay
-                    if (delay_before_login > 1)
+                    ESP_LOGE(TAG, "Face ID Enrollment Starts in %ds.", count_down_second);
+
+                    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+                    count_down_second--;
+
+                    if (count_down_second == 0)
+                        ESP_LOGE(TAG, ">>> Face ID Enrollment Starts <<<");
+                }
+
+                //enroll
+                if ((is_enrolling == 1) && (next_enroll_index < FACE_ID_SAVE_NUMBER))
+                {
+                    if (id_list[next_enroll_index] == NULL)
+                        id_list[next_enroll_index] = dl_matrix3d_alloc(1, 1, 1, FACE_ID_SIZE);
+
+                    left_sample_face = enroll(aligned_face, id_list[next_enroll_index], ENROLL_CONFIRM_TIMES);
+                    ESP_LOGE(TAG, "Face ID Enrollment: Take the %d%s sample",
+                             ENROLL_CONFIRM_TIMES - left_sample_face,
+                             number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
+
+                    if (left_sample_face == 0)
                     {
-                        delay_before_login--;
-                        ESP_LOGE(TAG, "Login start in %d.", delay_before_login);
+                        next_enroll_index++;
+                        ESP_LOGE(TAG, "Enrolled Face ID: %d", next_enroll_index);
 
-                        facenet_output_image(img_buffer);
-
-                        continue;
-                    }
-                    else if (delay_before_login == 1)
-                    {
-                        ESP_LOGE(TAG, ">>> Start Face Login <<<");
-                        delay_before_login--;
-                    }
-
-                    // login
-                    if (id_list[next_logging_index] == NULL)
-                    {
-                        id_list[next_logging_index] = dl_matrix3d_alloc(1, 1, 1, FACE_ID_SIZE);
-                    }
-
-                    if (login(aligned_face, id_list[next_logging_index], LOGIN_CONFIRM_TIMES) == ESP_OK)
-                    {
-                        next_logging_index++;
-                        ESP_LOGE(TAG, "Login ID: %d", next_logging_index);
-
-                        if (next_logging_index == FACE_ID_SAVE_NUMBER)
+                        if (next_enroll_index == FACE_ID_SAVE_NUMBER)
                         {
-                            is_logging = 0;
-                            ESP_LOGE(TAG, ">>> Start Face Recognition <<<");
+                            is_enrolling = 0;
+                            ESP_LOGE(TAG, ">>> Face Recognition Starts <<<");
                             vTaskDelay(2000 / portTICK_PERIOD_MS);
                         }
                         else
@@ -134,18 +151,17 @@ void task_process(void *arg)
                 else
                 {
                     timestamp = esp_timer_get_time();
-                    int matched_id = recognize_face(aligned_face,
-                                                    id_list, thresh,
-                                                    next_logging_index);
+
+                    uint16_t matched_id = recognize_face(aligned_face,
+                                                         id_list, thresh,
+                                                         next_enroll_index);
                     if (matched_id)
-                    {
-                        ESP_LOGE(TAG, "Matched ID: %d", matched_id);
-                    }
+                        ESP_LOGE(TAG, "Matched Face ID: %d", matched_id);
                     else
-                    {
-                        ESP_LOGE(TAG, "No Matched ID");
-                    }
-                    ESP_LOGI(TAG, "Recognition time consumption: %lldms", (esp_timer_get_time() - timestamp) / 1000);
+                        ESP_LOGE(TAG, "No Matched Face ID");
+
+                    ESP_LOGI(TAG, "Recognition time consumption: %lldms",
+                             (esp_timer_get_time() - timestamp) / 1000);
                 }
             }
             else
