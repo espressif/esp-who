@@ -16,3 +16,8 @@ Face recognition framework
 - Provide basic face recognition example
 - Move `esp_facenet` to `esp-face` as submodule
 - Add some documents for API reference and guide
+
+## 0.5.1
+Modify recognition example
+- enroll procedure changes to waiting 3 seconds
+- update readme
