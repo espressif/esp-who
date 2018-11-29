@@ -551,7 +551,7 @@ int CEspLcd::drawStringSevSeg(const char *string, uint16_t poX, uint16_t poY, ui
 
 int CEspLcd::drawNumberSevSeg(int long_num, uint16_t poX, uint16_t poY, uint8_t size)
 {
-    char tmp[10];
+    char tmp[12];
     if (long_num < 0) {
         snprintf(tmp, sizeof(tmp), "%d", long_num);
     } else {
@@ -619,7 +619,7 @@ int CEspLcd::drawString(const char *string, uint16_t x, uint16_t y)
 
 int CEspLcd::drawNumber(int long_num, uint16_t poX, uint16_t poY)
 {
-    char tmp[10];
+    char tmp[12];
     if (long_num < 0) {
         snprintf(tmp, sizeof(tmp), "%d", long_num);
     } else {
