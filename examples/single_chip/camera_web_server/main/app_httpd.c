@@ -686,7 +686,7 @@ void app_httpd_main(){
 
 
     ra_filter_init(&ra_filter, 20);
-
+#if CONFIG_ESP_FACE_DETECT_ENABLED
     mtmn_config.min_face = 80;
     mtmn_config.pyramid = 0.7;
     mtmn_config.p_threshold.score = 0.6;
@@ -697,7 +697,7 @@ void app_httpd_main(){
     mtmn_config.o_threshold.score = 0.7;
     mtmn_config.o_threshold.nms = 0.4;
     mtmn_config.o_threshold.candidate_number = 1;
-
+#endif
     ESP_LOGI(TAG, "Starting web server on port: '%d'", config.server_port);
     if (httpd_start(&camera_httpd, &config) == ESP_OK) {
         httpd_register_uri_handler(camera_httpd, &index_uri);
