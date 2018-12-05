@@ -29,8 +29,8 @@ extern "C"
 {
 #endif
 
-#include "face_detection_forward.h"
-#include "face_recognition.h"
+#include "fd_forward.h"
+#include "fr_forward.h"
 #include "image_util.h"
 #include "app_camera.h"
 
