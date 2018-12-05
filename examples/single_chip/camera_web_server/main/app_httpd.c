@@ -29,10 +29,10 @@ static const char* TAG = "camera_httpd";
 #endif
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
-#include "face_detection_forward.h"
+#include "fd_forward.h"
 #include "dl_lib.h"
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
-#include "face_recognition.h"
+#include "fr_forward.h"
 
 #define ENROLL_CONFIRM_TIMES 5
 #define FACE_ID_SAVE_NUMBER 7
@@ -323,6 +323,7 @@ static esp_err_t capture_handler(httpd_req_t *req){
 #endif
         draw_face_boxes(image_matrix, net_boxes, face_id);
         free(net_boxes->box);
+        free(net_boxes->landmark);
         free(net_boxes);
     }
 
@@ -428,6 +429,7 @@ static esp_err_t stream_handler(httpd_req_t *req){
 #endif
                                 draw_face_boxes(image_matrix, net_boxes, face_id);
                                 free(net_boxes->box);
+                                free(net_boxes->landmark);
                                 free(net_boxes);
                             }
                             if(!fmt2jpg(image_matrix->item, fb->width*fb->height*3, fb->width, fb->height, PIXFORMAT_RGB888, 90, &_jpg_buf, &_jpg_buf_len)){
