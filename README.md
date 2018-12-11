@@ -73,12 +73,12 @@ See the following sections for more details about components.
 
 ## Camera
 
-The [camera](components/camera) component contains drivers for camera devices of ESP32. Now OV2640 is supported.
+The [camera](https://github.com/espressif/esp32-camera/tree/master) component contains drivers for camera devices of ESP32. Now OV2640 is supported.
 
 
 ## esp-face
 
-The [esp-face](components/esp-face) component contains the APIs of ESP-WHO neural networks, including face detection and recognition framework.
+The [esp-face](https://github.com/espressif/esp-face/tree/master) component contains the APIs of ESP-WHO neural networks, including face detection and recognition framework.
 
 
 # Examples
