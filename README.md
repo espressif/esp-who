@@ -17,7 +17,7 @@ In ESP-WHO, Detection, Recognition and Image Utility are at the core of the plat
 
 * **Image Utility** offers fundamental image processing APIs for ESP32.
 
-* **Detection** takes images as input and give the position of face if there is a face. It is implemented with MTMN model, which refers to [MTCNN](http://cn.arxiv.org/abs/1604.02878) and [MobileNet](https://arxiv.org/abs/1801.04381). However, we replace CNN with MobileNet block and the model size is quite smaller than other face detection models.
+* **Detection** takes images as input and give the position of face if there is a face. It is implemented with MTMN model, which refers to [MTCNN](http://cn.arxiv.org/abs/1604.02878) and [MobileNets](https://arxiv.org/abs/1801.04381). However, we replace CNN with MobileNets block and the model size is quite smaller than other face detection models.
 
 * **Recognition** is to identify the particular person, and it needs the results of detection. It is implemented with MobileFace model.
 
