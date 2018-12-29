@@ -31,6 +31,9 @@
 
 static const char *TAG = "app_process";
 
+#define ENROLL_CONFIRM_TIMES 3
+#define FACE_ID_SAVE_NUMBER 1
+static face_id_list id_list = {0};
 char *number_suffix(int32_t number)
 {
     uint8_t n = number % 10;
@@ -75,10 +78,6 @@ void task_process(void *arg)
                                                       FACE_WIDTH,
                                                       FACE_HEIGHT,
                                                       3);
-
-
-    fptp_t thresh = FACE_REC_THRESHOLD;
-    dl_matrix3d_t *id_list[FACE_ID_SAVE_NUMBER] = {0};
 
     int8_t count_down_second = 3; //second
     int8_t is_enrolling = 1;
@@ -131,12 +130,9 @@ void task_process(void *arg)
                 }
 
                 //enroll
-                if ((is_enrolling == 1) && (next_enroll_index < FACE_ID_SAVE_NUMBER))
+                if (is_enrolling == 1)
                 {
-                    if (id_list[next_enroll_index] == NULL)
-                        id_list[next_enroll_index] = dl_matrix3d_alloc(1, 1, 1, FACE_ID_SIZE);
-
-                    left_sample_face = enroll(aligned_face, id_list[next_enroll_index], ENROLL_CONFIRM_TIMES);
+                    left_sample_face = enroll_face(&id_list, aligned_face);
                     ESP_LOGE(TAG, "Face ID Enrollment: Take the %d%s sample",
                              ENROLL_CONFIRM_TIMES - left_sample_face,
                              number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
@@ -144,9 +140,9 @@ void task_process(void *arg)
                     if (left_sample_face == 0)
                     {
                         next_enroll_index++;
-                        ESP_LOGE(TAG, "Enrolled Face ID: %d", next_enroll_index);
+                        ESP_LOGE(TAG, "Enrolled Face ID: %d", id_list.tail);
 
-                        if (next_enroll_index == FACE_ID_SAVE_NUMBER)
+                        if (id_list.count == FACE_ID_SAVE_NUMBER)
                         {
                             is_enrolling = 0;
                             ESP_LOGE(TAG, ">>> Face Recognition Starts <<<");
@@ -163,11 +159,8 @@ void task_process(void *arg)
                 {
                     int64_t recog_match_time = esp_timer_get_time();
 
-                    uint16_t matched_id = recognize_face(aligned_face,
-                                                         id_list,
-                                                         thresh,
-                                                         next_enroll_index);
-                    if (matched_id)
+                    int matched_id = recognize_face(&id_list, aligned_face);
+                    if (matched_id >= 0)
                         ESP_LOGE(TAG, "Matched Face ID: %d", matched_id);
                     else
                         ESP_LOGE(TAG, "No Matched Face ID");
@@ -193,5 +186,6 @@ void task_process(void *arg)
 
 void app_facenet_main()
 {
+    face_id_init(&id_list, FACE_ID_SAVE_NUMBER, ENROLL_CONFIRM_TIMES);
     xTaskCreatePinnedToCore(task_process, "process", 4 * 1024, NULL, 5, NULL, 1);
 }

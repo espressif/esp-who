@@ -24,7 +24,7 @@
 #include "esp_log.h"
 #include "esp_system.h"
 #include "freertos/FreeRTOS.h"
-#include "freertos/queue.h"
+#include "freertos/task.h"
 #include "app_facenet.h"
 #include "sdkconfig.h"
 #include "dl_lib.h"
