@@ -75,8 +75,7 @@ static int8_t detection_enabled = 0;
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
 static int8_t recognition_enabled = 0;
 static int8_t is_enrolling = 0;
-static int32_t next_enroll_index = 0;
-static dl_matrix3d_t *id_list[FACE_ID_SAVE_NUMBER] = {0};
+static face_id_list id_list = {0};
 #endif
 #endif
 static ra_filter_t ra_filter;
@@ -195,31 +194,21 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
         return matched_id;
     }
     if (align_face(net_boxes, image_matrix, aligned_face) == ESP_OK){
-        if ((is_enrolling == 1) && (next_enroll_index < FACE_ID_SAVE_NUMBER)) {
-            if (id_list[next_enroll_index] == NULL) {
-                id_list[next_enroll_index] = dl_matrix3d_alloc(1, 1, 1, FACE_ID_SIZE);
-                if(!id_list[next_enroll_index]){
-                    ESP_LOGE(TAG, "Could not allocate id_list");
-                    dl_matrix3du_free(aligned_face);
-                    return matched_id;
-                }
-            }
-
-            int8_t left_sample_face = enroll(aligned_face, id_list[next_enroll_index], ENROLL_CONFIRM_TIMES);
+        if (is_enrolling == 1){
+            int8_t left_sample_face = enroll_face(&id_list, aligned_face);
 
             if(left_sample_face == (ENROLL_CONFIRM_TIMES - 1)){
-                ESP_LOGD(TAG, "Enrolling Face ID: %d", next_enroll_index+1);
+                ESP_LOGD(TAG, "Enrolling Face ID: %d", id_list.tail);
             }
-            ESP_LOGD(TAG, "Enrolling Face ID: %d sample %d", next_enroll_index+1, ENROLL_CONFIRM_TIMES - left_sample_face);
-            rgb_printf(image_matrix, FACE_COLOR_CYAN, "ID[%u] Sample[%u]", next_enroll_index+1, ENROLL_CONFIRM_TIMES - left_sample_face);
+            ESP_LOGD(TAG, "Enrolling Face ID: %d sample %d", id_list.tail, ENROLL_CONFIRM_TIMES - left_sample_face);
+            rgb_printf(image_matrix, FACE_COLOR_CYAN, "ID[%u] Sample[%u]", id_list.tail, ENROLL_CONFIRM_TIMES - left_sample_face);
             if (left_sample_face == 0){
-                next_enroll_index++;
                 is_enrolling = 0;
-                ESP_LOGD(TAG, "Enrolled Face ID: %d", next_enroll_index);
+                ESP_LOGD(TAG, "Enrolled Face ID: %d", id_list.tail);
             }
         } else {
-            matched_id = recognize_face(aligned_face, id_list, FACE_REC_THRESHOLD, next_enroll_index);
-            if (matched_id) {
+            matched_id = recognize_face(&id_list, aligned_face);
+            if (matched_id >= 0) {
                 ESP_LOGW(TAG, "Match Face ID: %u", matched_id);
                 rgb_printf(image_matrix, FACE_COLOR_GREEN, "Hello Subject %u", matched_id);
             } else {
@@ -699,6 +688,9 @@ void app_httpd_main(){
     mtmn_config.o_threshold.score = 0.7;
     mtmn_config.o_threshold.nms = 0.4;
     mtmn_config.o_threshold.candidate_number = 1;
+#if CONFIG_ESP_FACE_RECOGNITION_ENABLED
+    face_id_init(&id_list, FACE_ID_SAVE_NUMBER, ENROLL_CONFIRM_TIMES);
+#endif
 #endif
     ESP_LOGI(TAG, "Starting web server on port: '%d'", config.server_port);
     if (httpd_start(&camera_httpd, &config) == ESP_OK) {
