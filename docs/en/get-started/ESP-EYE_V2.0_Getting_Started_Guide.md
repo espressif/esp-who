@@ -1,6 +1,6 @@
 # ESP-EYE Getting Started Guide
 
-[[中文]](../../ zh_CN/get-started/ESP-EYE_V2.0_Getting_Started_Guide.md)
+[[中文]](../../zh_CN/get-started/ESP-EYE_V2.0_Getting_Started_Guide.md)
 
 ## What You Need
 
