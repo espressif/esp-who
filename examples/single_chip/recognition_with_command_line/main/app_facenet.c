@@ -101,6 +101,7 @@ void task_process(void *arg)
         if (true != res)
         {
             ESP_LOGE(TAG, "fmt2rgb888 failed, fb: %d", fb->len);
+            dl_matrix3du_free(image_matrix);
             continue;
         }
 
