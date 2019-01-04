@@ -40,6 +40,7 @@ static const char *TAG = "app_wifi";
 #define EXAMPLE_ESP_WIFI_SSID      CONFIG_ESP_WIFI_SSID
 #define EXAMPLE_ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
 #define EXAMPLE_MAX_STA_CONN       CONFIG_MAX_STA_CONN
+#define EXAMPLE_IP_ADDR            CONFIG_SERVER_IP
 
 static esp_err_t event_handler(void *ctx, system_event_t *event)
 {/*{{{*/
@@ -75,6 +76,20 @@ static esp_err_t event_handler(void *ctx, system_event_t *event)
 static void wifi_init_softap()
 {
     tcpip_adapter_init();
+
+    if (strcmp(EXAMPLE_IP_ADDR, "192.168.4.1"))
+    {
+        int a, b, c, d;
+        sscanf(EXAMPLE_IP_ADDR, "%d.%d.%d.%d", &a, &b, &c, &d);
+        tcpip_adapter_ip_info_t ip_info;
+        IP4_ADDR(&ip_info.ip, a, b, c, d);
+        IP4_ADDR(&ip_info.gw, a, b, c, d);
+        IP4_ADDR(&ip_info.netmask, 255, 255, 255, 0);
+        ESP_ERROR_CHECK(tcpip_adapter_dhcps_stop(WIFI_IF_AP));
+        ESP_ERROR_CHECK(tcpip_adapter_set_ip_info(WIFI_IF_AP, &ip_info));
+        ESP_ERROR_CHECK(tcpip_adapter_dhcps_start(WIFI_IF_AP));
+    }
+
     ESP_ERROR_CHECK(esp_event_loop_init(event_handler, NULL));
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
@@ -103,7 +118,7 @@ static void wifi_init_softap()
 
     esp_wifi_set_ps(WIFI_PS_NONE);
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_AP));
-    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
 
     ESP_ERROR_CHECK(esp_wifi_start());
 

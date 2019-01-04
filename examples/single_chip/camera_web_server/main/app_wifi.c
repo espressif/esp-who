@@ -43,6 +43,7 @@
 #define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
 #define EXAMPLE_ESP_WIFI_AP_SSID   CONFIG_ESP_WIFI_AP_SSID
 #define EXAMPLE_ESP_WIFI_AP_PASS   CONFIG_ESP_WIFI_AP_PASSWORD
+#define EXAMPLE_IP_ADDR            CONFIG_SERVER_IP
 
 static const char *TAG = "camera wifi";
 
@@ -87,6 +88,18 @@ static esp_err_t event_handler(void *ctx, system_event_t *event)
 
 void wifi_init_softap()
 {
+    if (strcmp(EXAMPLE_IP_ADDR, "192.168.4.1"))
+    {
+        int a, b, c, d;
+        sscanf(EXAMPLE_IP_ADDR, "%d.%d.%d.%d", &a, &b, &c, &d);
+        tcpip_adapter_ip_info_t ip_info;
+        IP4_ADDR(&ip_info.ip, a, b, c, d);
+        IP4_ADDR(&ip_info.gw, a, b, c, d);
+        IP4_ADDR(&ip_info.netmask, 255, 255, 255, 0);
+        ESP_ERROR_CHECK(tcpip_adapter_dhcps_stop(WIFI_IF_AP));
+        ESP_ERROR_CHECK(tcpip_adapter_set_ip_info(WIFI_IF_AP, &ip_info));
+        ESP_ERROR_CHECK(tcpip_adapter_dhcps_start(WIFI_IF_AP));
+    }
     wifi_config_t wifi_config;
     memset(&wifi_config, 0, sizeof(wifi_config_t));
     snprintf((char*)wifi_config.ap.ssid, 32, "%s", EXAMPLE_ESP_WIFI_AP_SSID);

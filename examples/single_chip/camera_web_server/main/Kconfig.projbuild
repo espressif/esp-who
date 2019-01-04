@@ -25,6 +25,10 @@ config ESP_WIFI_AP_PASSWORD
     help
 	AP password for WPA2 or empty for Open.
 
+config SERVER_IP
+    string "IP address of server"
+    default "192.168.4.1"
+
 config ESP_MAXIMUM_RETRY
     int "Maximum retry"
     default 5

@@ -11,10 +11,14 @@ config ESP_WIFI_PASSWORD
     default ""
     help
 	WiFi password (WPA or WPA2) for the example to use.
-		
+
 config MAX_STA_CONN
     int "Maximal STA connections"
     default 1
     help
 	Max number of the STA connects to AP.
+
+config SERVER_IP
+    string "IP address of server"
+    default "192.168.4.1"
 endmenu
