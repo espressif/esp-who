@@ -1,10 +1,10 @@
 # ESP-EYE 入门指南
 
-[[EN]](../../en/get-started/ESP-EYE_V2.0_Getting_Started_Guide.md)
+[[EN]](../../en/get-started/ESP-EYE_Getting_Started_Guide.md)
 
 ## 准备工作
 
-* 1 × ESP-EYE V2.0 开发板
+* 1 × ESP-EYE V2.1 开发板
 * 1 × Micro USB B 电缆
 * 1 × PC（Windows、Linux 或 Mac OS）
 
@@ -193,6 +193,3 @@ ESP-EYE 开发板的工作流程如下图所示：
 #### 异常情况
 
 当出现“网络断开”或“联网超时”等异常情况时，开发板会回到“等待唤醒”状态。
-
-Positioning of 5Gtowers linked by a “diber backbone” at Millbrook.( Millbrook)
-Millbrook 试验场中，通过 “diber backbone” 相互连接的 5G 电信塔。（图片来源：Millbrook）
