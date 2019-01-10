@@ -72,3 +72,21 @@ Please see [here](https://github.com/espressif/esp-who).
 
 The keyword **DETECTED** appears whenever ESP32 detects a human face.
 
+## Advance Configuration
+
+In this example, several parameters can be configured by customers to better support different customized scenarios. For the detailed description of these parameters, please see [Here](https://github.com/espressif/esp-face/tree/master/face_detection).
+
+Besides, please see below for the recommended configuration for general-purpose scenarios:
+
+```
+mtmn_config.min_face = 80;
+mtmn_config.pyramid = 0.7;
+mtmn_config.p_threshold.score = 0.6;
+mtmn_config.p_threshold.nms = 0.7;
+mtmn_config.r_threshold.score = 0.7;
+mtmn_config.r_threshold.nms = 0.7;
+mtmn_config.r_threshold.candidate_number = 4;
+mtmn_config.o_threshold.score = 0.7;
+mtmn_config.o_threshold.nms = 0.4;
+mtmn_config.o_threshold.candidate_number = 1;
+```
