@@ -45,6 +45,8 @@ choice CAMERA_MODEL
 
 config CAMERA_MODEL_WROVER_KIT
     bool "WROVER-KIT With OV2640 Module"
+config CAMERA_MODEL_ESP_EYE
+    bool "ESP_EYE DevKit"
 config CAMERA_MODEL_M5STACK_PSRAM
     bool "M5Stack Camera With PSRAM"
 config CAMERA_MODEL_AI_THINKER
