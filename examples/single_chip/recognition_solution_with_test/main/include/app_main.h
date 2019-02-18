@@ -11,7 +11,7 @@
 #include "esp_vfs_dev.h"
 #include "driver/uart.h"
 
-#define VERSION "1.0.0"
+#define VERSION "0.11.0"
 
 #define GPIO_LED_RED    21
 #define GPIO_LED_WHITE  22

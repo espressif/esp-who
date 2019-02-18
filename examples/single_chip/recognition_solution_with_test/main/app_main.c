@@ -179,7 +179,7 @@ void app_main()
     }
     vTaskDelete(consoleHandle_t);
 
-    char sig[80] = "manufacturing test en ";
+    char sig[80] = "FACTORY_TEST";
     if((line != NULL)&&(strcmp(sig,line)==0)){
         ESP_LOGE("VERSION", "PERIPHERAL TEST\n");
         app_wifi_test_init();
