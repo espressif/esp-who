@@ -28,6 +28,7 @@
 en_fsm_state_test g_state_test = LED_TEST;
 uint8_t led_pass = 0;
 uint8_t mic_pass = 0;
+uint8_t con_recv_flag = 0;
 char *line = NULL;
 TaskHandle_t consoleHandle_t;
 
@@ -94,6 +95,7 @@ void console_task(void *arg)
     }
     line = linenoise(prompt);
     while(1){
+        con_recv_flag = 1;
         vTaskDelay(5000/portTICK_PERIOD_MS);
     }
 }
@@ -167,9 +169,13 @@ int g_is_deleting = 0;
 
 void app_main()
 {
+    printf("\n");
+    ESP_LOGI("esp-eye", "Version "VERSION);
+    printf("\n");
+
     xTaskCreatePinnedToCore(&console_task, "console", 2*1024, NULL, 5, &consoleHandle_t, 1);
     int64_t start_time = esp_timer_get_time();
-    while(line == NULL){
+    while(con_recv_flag == 0){
         int64_t end_time = esp_timer_get_time();
         if(((end_time-start_time)/1000)<5000){
             vTaskDelay(200 / portTICK_PERIOD_MS);
@@ -178,10 +184,11 @@ void app_main()
         }
     }
     vTaskDelete(consoleHandle_t);
+    printf("\n");
 
     char sig[80] = "FACTORY_TEST";
     if((line != NULL)&&(strcmp(sig,line)==0)){
-        ESP_LOGE("VERSION", "PERIPHERAL TEST\n");
+        ESP_LOGE("MODE", "PERIPHERAL TEST\n");
         app_wifi_test_init();
         gpio_led_test_init();
         app_speech_wakeup_test_init();
@@ -209,7 +216,6 @@ void app_main()
 
         vTaskDelay(30 / portTICK_PERIOD_MS);
         ESP_LOGI("esp-eye", "Please say 'Hi LeXin' to the board");
-        ESP_LOGI("esp-eye", "Version "VERSION);
         while (g_state == WAIT_FOR_WAKEUP)
             vTaskDelay(1000 / portTICK_PERIOD_MS);
         app_wifi_init();
