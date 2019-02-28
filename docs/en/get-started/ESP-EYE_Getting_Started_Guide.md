@@ -133,7 +133,10 @@ The figure below describes the workflow of ESP-EYE:
 
 #### 1. Voice Wake-up 
 
-ESP-EYE awaits to be woken up after powering up (Red LED on and white LED off). The board wakes up after recognizing the wake-up command "Hi Lexin", and then awaits for networking (Red LED flashing and white LED off). Subsequently, users can initiate the networking.
+ESP-EYE awaits to be woken up after powering up (Red LED on and white LED off). The board wakes up after recognizing the wake-up command "Hi Lexin" ([Ləsɪ:n]), and then awaits for networking (Red LED flashing and white LED off). Subsequently, users can initiate the networking.
+
+>Note: If you want to download an audio clip of our wake-up command "Hi Lexin", please click [here](https://dl.espressif.com/dl/Hi_Lexin_wake-up_commend.wav).
+
 
 #### 2. Networking
 
