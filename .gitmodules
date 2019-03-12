@@ -7,3 +7,6 @@
 [submodule "components/esp32-camera"]
 	path = components/esp32-camera
 	url = https://github.com/espressif/esp32-camera.git
+[submodule "components/quirc"]
+	path = components/quirc
+	url = https://github.com/dlbeer/quirc.git
