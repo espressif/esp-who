@@ -1,0 +1,2 @@
+$(shell sed -i '859c \\tint best = 0;' $(SOLUTION_PATH)/components/quirc/quirc/lib/identify.c)
+$(shell sed -i '860c \\tint best_score = 0;' $(SOLUTION_PATH)/components/quirc/quirc/lib/identify.c)
