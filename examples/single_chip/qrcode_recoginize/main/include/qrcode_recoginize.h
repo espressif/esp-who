@@ -21,8 +21,8 @@
   * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *
   */
-#ifndef _APP_QR_RECOGINIZE_H_
-#define _APP_QR_RECOGINIZE_H_
+#ifndef _QRCODE_RECOGINIZE_H_
+#define _QRCODE_RECOGINIZE_H_
 
 enum{
 	RECONGIZE_OK,
@@ -34,4 +34,4 @@ enum{
  */
 void app_qr_recognize(void *pdata);
 
-#endif /* _APP_QR_RECOGINIZE_H_ */
+#endif /* _QRCODE_RECOGINIZE_H_ */

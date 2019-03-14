@@ -30,7 +30,7 @@
 #include "qrcode_recoginize.h"
 
 #define CAMERA_PIXEL_FORM PIXFORMAT_GRAYSCALE
-#define CAMERA_FRAME_SIZE FRAMESIZE_VGA
+#define CAMERA_FRAME_SIZE FRAMESIZE_QVGA
 
 static const char *TAG = "app_camera";
 

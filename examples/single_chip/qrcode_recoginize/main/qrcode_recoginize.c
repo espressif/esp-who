@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
+#include "freertos/portmacro.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "freertos/event_groups.h"
@@ -35,7 +36,7 @@
 #include "quirc_internal.h"
 #include "qrcode_recoginize.h"
 
-#define PRINT_QR 0
+#define PRINT_QR 1
 
 static char *TAG = "QR-recognizer";
 
@@ -65,17 +66,17 @@ static void dump_cells(const struct quirc_code *code)
     printf("\n");
 
     for (v = 0; v < code->size; v++) {
-        printf("    ");
+		printf("\033[0m    ");
         for (u = 0; u < code->size; u++) {
             int p = v * code->size + u;
 
             if (code->cell_bitmap[p >> 3] & (1 << (p & 7))) {
-                printf("[]");
+				printf("\033[40m  ");
             } else {
-                printf("  ");
+				printf("\033[47m  ");
             }
         }
-        printf("\n");
+		printf("\033[0m\n");
     }
 }
 
@@ -87,11 +88,12 @@ static void dump_data(const struct quirc_data *data)
     printf("    Data type: %d (%s)\n", data->data_type,
            data_type_str(data->data_type));
     printf("    Length: %d\n", data->payload_len);
-    printf("    Payload: %s\n", data->payload);
+    printf("\033[31m    Payload: %s\n", data->payload);
 
     if (data->eci) {
-        printf("    ECI: %d\n", data->eci);
+        printf("\033[31m    ECI: %d\n", data->eci);
     }
+    printf("\033[0m\n");
 }
 
 static void dump_info(struct quirc *q, uint8_t count)
@@ -130,12 +132,17 @@ static void dump_info(struct quirc *q, uint8_t count)
 void qr_recoginze(void *parameter)
 {
     camera_config_t *camera_config = (camera_config_t *)parameter;
-    // Use VGA Size currently, but quirc can support other frame size.(eg: FRAMESIZE_SVGA,FRAMESIZE_VGA，
-    // FRAMESIZE_CIF,FRAMESIZE_QVGA,FRAMESIZE_HQVGA,FRAMESIZE_QCIF,FRAMESIZE_QQVGA2,FRAMESIZE_QQVGA,etc)
-    if (camera_config->frame_size > FRAMESIZE_VGA) {
-        ESP_LOGE(TAG, "Camera Frame Size err %d", (camera_config->frame_size));
+    // Use QVGA Size currently, but quirc can support other frame size.(eg: 
+    // FRAMESIZE_QVGA,FRAMESIZE_HQVGA,FRAMESIZE_QCIF,FRAMESIZE_QQVGA2,FRAMESIZE_QQVGA,etc)
+    if (camera_config->frame_size > FRAMESIZE_QVGA) {
+        ESP_LOGE(TAG, "Camera Frame Size err %d, support maxsize is QVGA", (camera_config->frame_size));
         vTaskDelete(NULL);
     }
+
+    struct quirc *qr_recognizer = NULL;
+    camera_fb_t *fb = NULL;
+    uint8_t *image = NULL;
+    int id_count = 0;
 
     // Save image width and height, avoid allocate memory repeatly.
     uint16_t old_width = 0;
@@ -143,14 +150,18 @@ void qr_recoginze(void *parameter)
 
     // Construct a new QR-code recognizer.
     ESP_LOGI(TAG, "Construct a new QR-code recognizer(quirc).");
-    struct quirc *qr_recognizer = quirc_new();
+    qr_recognizer = quirc_new();
     if (!qr_recognizer) {
         ESP_LOGE(TAG, "Can't create quirc object");
     }
 
+    /* 入口处检测一次 */
+    ESP_LOGI(TAG, "uxHighWaterMark = %d", uxTaskGetStackHighWaterMark( NULL ));
+
     while (1) {
+        ESP_LOGI(TAG, "uxHighWaterMark = %d", uxTaskGetStackHighWaterMark( NULL ));
         // Capture a frame
-        camera_fb_t *fb = esp_camera_fb_get();
+        fb = esp_camera_fb_get();
         if (!fb) {
             ESP_LOGE(TAG, "Camera capture failed");
             continue;
@@ -178,12 +189,12 @@ void qr_recoginze(void *parameter)
          * the image for QR-code recognition. The locations and content of each
          * code may be obtained using accessor functions described below.
          */
-        uint8_t *image = quirc_begin(qr_recognizer, NULL, NULL);
+        image = quirc_begin(qr_recognizer, NULL, NULL);
         memcpy(image, fb->buf, fb->len);
         quirc_end(qr_recognizer);
 
         // Return the number of QR-codes identified in the last processed image.
-        int id_count = quirc_count(qr_recognizer);
+        id_count = quirc_count(qr_recognizer);
         if (id_count == 0) {
             ESP_LOGE(TAG, "Error: not a valid qrcode");
             esp_camera_fb_return(fb);
@@ -202,5 +213,5 @@ void qr_recoginze(void *parameter)
 
 void app_qr_recognize(void *pdata)
 {
-    xTaskCreate(qr_recoginze, "qr_recoginze", 1024 * 100, pdata, 5, NULL);
+    xTaskCreate(qr_recoginze, "qr_recoginze", 1024 * 40, pdata, 5, NULL);
 }

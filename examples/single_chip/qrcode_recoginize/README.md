@@ -62,3 +62,6 @@ The image below shows a **ESP-WROVER-KIT** development board with a **OV2640** c
 
 Please see [here](https://github.com/espressif/esp-who).
 
+## Trouble
+
+1. Can't use 20MHz XCLK when image format is grayscale.
