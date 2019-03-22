@@ -332,10 +332,10 @@ http_response:
         int64_t frame_time = fr_end - last_frame;
         last_frame = fr_end;
         frame_time /= 1000;
-        ESP_LOGI(TAG, "MJPG: %uKB %ums (%.1ffps), %u+%u+%u+%u=%u",
+        ESP_LOGI(TAG, "MJPG: %uKB %ums (%.1ffps), process: %u",
                 (uint32_t)(_jpg_buf_len/1024),
                 (uint32_t)frame_time, 1000.0 / (uint32_t)frame_time,
-                (uint32_t)ready_time, (uint32_t)face_time, (uint32_t)recognize_time, (uint32_t)encode_time, (uint32_t)process_time);
+                (uint32_t)process_time);
     }
 
     last_frame = 0;
