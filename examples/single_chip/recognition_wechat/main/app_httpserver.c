@@ -323,10 +323,10 @@ http_response:
         }
         int64_t fr_end = esp_timer_get_time();
 
-        int64_t ready_time = (fr_ready - fr_start)/1000;
-        int64_t face_time = (fr_face - fr_ready)/1000;
-        int64_t recognize_time = (fr_recognize - fr_face)/1000;
-        int64_t encode_time = (fr_encode - fr_recognize)/1000;
+        //int64_t ready_time = (fr_ready - fr_start)/1000;
+        //int64_t face_time = (fr_face - fr_ready)/1000;
+        //int64_t recognize_time = (fr_recognize - fr_face)/1000;
+        //int64_t encode_time = (fr_encode - fr_recognize)/1000;
         int64_t process_time = (fr_encode - fr_start)/1000;
 
         int64_t frame_time = fr_end - last_frame;
