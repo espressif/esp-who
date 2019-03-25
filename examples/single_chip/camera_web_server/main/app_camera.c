@@ -29,7 +29,7 @@ static const char *TAG = "app_camera";
 
 void app_camera_main ()
 {
-#if CONFIG_CAMERA_MODEL_CUSTOM
+#if CONFIG_CAMERA_MODEL_ESP_EYE
     /* IO13, IO14 is designed for JTAG by default,
      * to use it as generalized input,
      * firstly declair it as pullup input */
