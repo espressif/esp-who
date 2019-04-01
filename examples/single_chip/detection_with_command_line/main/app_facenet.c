@@ -38,6 +38,7 @@ mtmn_config_t init_config()
     mtmn_config.pyramid = 0.7;
     mtmn_config.p_threshold.score = 0.6;
     mtmn_config.p_threshold.nms = 0.7;
+    mtmn_config.p_threshold.candidate_number = 100;
     mtmn_config.r_threshold.score = 0.7;
     mtmn_config.r_threshold.nms = 0.7;
     mtmn_config.r_threshold.candidate_number = 4;
