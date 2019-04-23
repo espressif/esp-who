@@ -27,7 +27,6 @@
 #include "freertos/queue.h"
 #include "app_facenet.h"
 #include "sdkconfig.h"
-#include "dl_lib.h"
 
 static const char *TAG = "app_process";
 

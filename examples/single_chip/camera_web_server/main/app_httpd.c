@@ -30,7 +30,6 @@ static const char* TAG = "camera_httpd";
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
 #include "fd_forward.h"
-#include "dl_lib.h"
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
 #include "fr_forward.h"
 
