@@ -1,35 +1,48 @@
-# Example for Wechat App
+# Face Detection and Recognition using the "ESP EYE" WeChat Mini Program 
 
-This is an example of face recognition at Wechat platform. You need to access the app then get the complete experience.
+This example provides the function of face detection and recognition through a Mini Program called **ESP EYE**, which is developed by Espressif for its AI development board ESP-EYE, on the WeChat platform.
 
-![Wechat app](../../../img/esp_eye_wechat_qr.jpg)
+![WeChat app](../../../img/esp_eye_wechat_qr.jpg)
 
 ## Overview
 
-Like other examples in this repository, this is the face recognition demo via wechat app. The basic connection protocol between the board and the phone is HTTP. Instead of typing some IP address or command through web browser, we encapsolute those commands into some simple buttons, and display the image and result in a proper layout. In order to get the right IP address automatically, we implement BluFi to lead connecting to the LAN, and then use MDNS to get its IP address. In addition, with the help of phone keyboard, we can register our face id with a proper name(only support [a-z][A-Z][0-9]), query enrolled face ids, and delete one.
+WeChat is China's most popular IM (Instant Message) application developed by Tencent, with a user base of more than one billion people. WeChat Mini Programs can be thought of as "sub-applications" within the WeChat ecosystem which provide advanced features to WeChat users, such as e-commerce, task management, coupon services, etc.
 
-![Overview](../../../img/esp_eye_wechat.jpg)
+To provide an alternative platform to interact with our AI development board ESP-EYE, we have developed the **ESP EYE** Mini Program on the WeChat platform. The **ESP EYE**, when used with a proper ESP32 development board (with a camera interface), provides WeChat users with a series of easy-to-use functions, such as face detection, face recognition, face ID enrollment, and face ID management.
 
+Face detection and recognition using the **ESP EYE** Mini Program has the following advantages: 
+* **Intuitive Visual Interface**
+* **Customized Face ID Naming** Use your smartphone's keyboard to input Face ID names. Note that only [a-z][A-Z][0-9] characters are supported.
+* **No manually IP address entering required!** The Blufi device automatically shares its IP address with the smartphone using the MDNS protocol.
 
-## Pre-request
- * [ESP-EYE](../../../docs/en/get-started/ESP-EYE_Getting_Started_Guide.md) board or other ESP32-series boards with camera interface
- * Access to Wechat app.
- * Make your phone connected to a Router or AP. Because we need the connection in Local Area Nerwork(LAN).
- * Make your phone bluetooth enable.
+## How to Use this Example
 
-## Walk through
+### What You Need
 
- 1. Download the program to the board. There is one thing to mention, when compiling the project, remember to make BT/BLE enable and PSRAM enable. To simplify this step, please do `make defconfig` to replace some default configuration.
+ * An ESP32 development board: An [ESP-EYE](../../../docs/en/get-started/ESP-EYE_Getting_Started_Guide.md) board or other development boards based on ESP32 with a camera interface
+ * A smartphone that is equipped with 
+    * the WeChat application
+    * the Bluetooth function
+ * A PC (Windows, Linux, or MacOS)
+  
+### Step by Step Introduction
 
- 2. Open the Wechat App, now there is no STA available to notify. So press icon `+` to search and pair BluFi device. 
+1. Download and flash this example to your ESP32 board, following the steps described in [ESP-IDF Getting Started](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/). Please configure the `BT/BLE` and `PSRAM` parameters when compiling the project (You can enable the default configuration easily by using the pre-built `make defconfig` command in your terminal).
+
+2. Launch the WeChat App on your smartphone and go to the **ESP EYE** Mini Program.  
+
+3. Click on the `+` icon to scan nearby BluFi devices. 
+
+	![WeChat app](../../../img/esp_eye_Wechat_cross.jpeg)
  
- 3. Connect the device. Then it will prompt a new page to configure the network. Fill the SSID and Password of the network which your phone is connecting to.
+4. Connect the device you want to control by clicking it from the list of scanned nearby BluFi devices, which is the ESP32 development board in this example. Here, the Mini Program will prompt a separated interface, requesting your network configuration. 
 
- 4. Now you should notice that the board has been connected to the same network. Through notifying with the board, the page will automatically find the current IP and enter to a new page.
+	![WeChat app](../../../img/esp_eye_Wechat_list.jpg)
+	
+5. Enter the SSID and Password of the network that your smartphone connects to. Note that once configured for BluFi settings, your ESP32 board will store these settings and automatically connect to the previously configured network. To avoid this, please press the **Reset** button on your ESP32 development board for three times in a row.  
+	
+	![WeChat app](../../../img/esp_eye_Wechat_network_configuration.jpg)
 
- 5. In this page, you will have some buttons and one fixed window. Press the button in the middle of the window, then enjoy yourself!
+6. Then, the BluFi device connects to the same network with your smartphone. Here, the BluFi shares its IP address to your smartphone using MDNS protocol. After that, you will see the main interface of the **ESP EYE** Mini Program and be able to use the "Face Detection" (the upper left button), "Face Recognition" (the upper right button), "Face ID Enrollment" (the lower left button) and "Face ID Management" (the lower right button) functions by clicking on the corresponding buttons.
 
-## Complementary
-
- Once the BluFi of the board is configured. it will remember the settings, and will automatically connect to the network. If you want to reset the BluFi, you need to fast reset the board 3 times. Then the information will be cleared.
-
+	![Overview](../../../img/esp_eye_wechat.jpg)
