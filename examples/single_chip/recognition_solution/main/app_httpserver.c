@@ -283,6 +283,7 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
             }
 
             draw_face_boxes(image_matrix, net_boxes);
+            free(net_boxes->score);
             free(net_boxes->box);
             free(net_boxes->landmark);
             free(net_boxes);
