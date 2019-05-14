@@ -245,6 +245,7 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         if (out_res.net_boxes)
         {
             draw_face_boxes(out_res.image, fb->width, fb->height, out_res.net_boxes);
+            free(out_res.net_boxes->score);
             free(out_res.net_boxes->box);
             free(out_res.net_boxes->landmark);
             free(out_res.net_boxes);
