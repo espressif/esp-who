@@ -170,7 +170,7 @@ static void draw_face_boxes(dl_matrix3du_t *image_matrix, box_array_t *boxes, in
         fb_gfx_drawFastHLine(&fb, x, y+h-1, w, color);
         fb_gfx_drawFastVLine(&fb, x, y, h, color);
         fb_gfx_drawFastVLine(&fb, x+w-1, y, h, color);
-#if 0
+#if 1
         // landmark
         int x0, y0, j;
         for (j = 0; j < 10; j+=2) {
