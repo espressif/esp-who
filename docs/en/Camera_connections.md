@@ -4,7 +4,7 @@
 The table below lists the specific pins used in this example for connecting the ESP32 module and the camera module. 
 
 | Interface | Camera Pin | ESP32-WROVER | ESP-EYE |
-| :--- | :---: | :---: |
+| :--- | :---: | :---: | :---: |
 | SCCB Clock | SIOC | IO27 | IO23 |
 | SCCB Data | SIOD | IO26 | IO18 |
 | System Clock | XCLK | IO21 | IO4 |
