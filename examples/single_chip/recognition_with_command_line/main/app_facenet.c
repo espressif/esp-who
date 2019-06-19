@@ -74,8 +74,11 @@ void task_process(void *arg)
     size_t frame_num = 0;
     dl_matrix3du_t *image_matrix = NULL;
     camera_fb_t *fb = NULL;
+
+    /* 1. Load configuration for detection */
     mtmn_config_t mtmn_config = init_config();
 
+    /* 2. Preallocate matrix to store aligned face 56x56  */
     dl_matrix3du_t *aligned_face = dl_matrix3du_alloc(1,
                                                       FACE_WIDTH,
                                                       FACE_HEIGHT,
@@ -89,6 +92,7 @@ void task_process(void *arg)
     do
     {
         int64_t start_time = esp_timer_get_time();
+        /* 3. Get one image with camera */
         fb = esp_camera_fb_get();
         if (!fb)
         {
@@ -98,7 +102,10 @@ void task_process(void *arg)
         int64_t fb_get_time = esp_timer_get_time();
         ESP_LOGI(TAG, "Get one frame in %lld ms.", (fb_get_time - start_time) / 1000);
 
+        /* 4. Allocate image matrix to store RGB data */
         image_matrix = dl_matrix3du_alloc(1, fb->width, fb->height, 3);
+
+        /* 5. Transform image to RGB */
         uint32_t res = fmt2rgb888(fb->buf, fb->len, fb->format, image_matrix->item);
         if (true != res)
         {
@@ -109,64 +116,67 @@ void task_process(void *arg)
 
         esp_camera_fb_return(fb);
 
+        /* 6. Do face detection */
         box_array_t *net_boxes = face_detect(image_matrix, &mtmn_config);
         ESP_LOGI(TAG, "Detection time consumption: %lldms", (esp_timer_get_time() - fb_get_time) / 1000);
 
         if (net_boxes)
         {
             frame_num++;
-            ESP_LOGI(TAG, "Face Detection Count: %d", frame_num);
+            //ESP_LOGI(TAG, "Face Detection Count: %d", frame_num);
 
+            /* 5. Do face alignment */
             if (align_face(net_boxes, image_matrix, aligned_face) == ESP_OK)
             {
                 //count down
                 while (count_down_second > 0)
                 {
-                    ESP_LOGE(TAG, "Face ID Enrollment Starts in %ds.", count_down_second);
+                    ESP_LOGI(TAG, "Face ID Enrollment Starts in %ds.\n", count_down_second);
 
                     vTaskDelay(1000 / portTICK_PERIOD_MS);
 
                     count_down_second--;
 
                     if (count_down_second == 0)
-                        ESP_LOGE(TAG, ">>> Face ID Enrollment Starts <<<");
+                        ESP_LOGI(TAG, "\n>>> Face ID Enrollment Starts <<<\n");
                 }
 
-                //enroll
+                /* 6. Do face enrollment */
                 if (is_enrolling == 1)
                 {
                     left_sample_face = enroll_face(&id_list, aligned_face);
-                    ESP_LOGE(TAG, "Face ID Enrollment: Take the %d%s sample",
+                    ESP_LOGI(TAG, "Face ID Enrollment: Take the %d%s sample",
                              ENROLL_CONFIRM_TIMES - left_sample_face,
                              number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
 
                     if (left_sample_face == 0)
                     {
                         next_enroll_index++;
-                        ESP_LOGE(TAG, "Enrolled Face ID: %d", id_list.tail);
+                        ESP_LOGI(TAG, "\nEnrolled Face ID: %d", id_list.tail);
 
                         if (id_list.count == FACE_ID_SAVE_NUMBER)
                         {
                             is_enrolling = 0;
-                            ESP_LOGE(TAG, ">>> Face Recognition Starts <<<");
+                            ESP_LOGI(TAG, "\n>>> Face Recognition Starts <<<\n");
                             vTaskDelay(2000 / portTICK_PERIOD_MS);
                         }
                         else
                         {
-                            ESP_LOGE(TAG, "Please log in another one.");
+                            ESP_LOGI(TAG, "Please log in another one.");
                             vTaskDelay(2500 / portTICK_PERIOD_MS);
                         }
                     }
                 }
+                /* 6. Do face recognition */
                 else
                 {
                     int64_t recog_match_time = esp_timer_get_time();
 
                     int matched_id = recognize_face(&id_list, aligned_face);
                     if (matched_id >= 0)
-                        ESP_LOGE(TAG, "Matched Face ID: %d", matched_id);
+                        ESP_LOGI(TAG, "Matched Face ID: %d\n", matched_id);
                     else
-                        ESP_LOGE(TAG, "No Matched Face ID");
+                        ESP_LOGI(TAG, "No Matched Face ID\n");
 
                     ESP_LOGI(TAG, "Recognition time consumption: %lldms",
                              (esp_timer_get_time() - recog_match_time) / 1000);

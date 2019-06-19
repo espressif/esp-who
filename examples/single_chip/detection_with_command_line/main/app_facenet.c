@@ -55,11 +55,14 @@ void task_process (void *arg)
     size_t frame_num = 0;
     dl_matrix3du_t *image_matrix = NULL;
     camera_fb_t *fb = NULL;
+    
+    /* 1. Load configuration for detection */
     mtmn_config_t mtmn_config = init_config();
 
     do
     {
         int64_t start_time = esp_timer_get_time();
+        /* 2. Get one image with camera */
         fb = esp_camera_fb_get();
         if (!fb)
         {
@@ -69,7 +72,10 @@ void task_process (void *arg)
         int64_t fb_get_time = esp_timer_get_time();
         ESP_LOGI(TAG, "Get one frame in %lld ms.", (fb_get_time - start_time) / 1000);
 
+        /* 3. Allocate image matrix to store RGB data */
         image_matrix = dl_matrix3du_alloc(1, fb->width, fb->height, 3);
+
+        /* 4. Transform image to RGB */
         uint32_t res = fmt2rgb888(fb->buf, fb->len, fb->format, image_matrix->item);
         if (true != res)
         {
@@ -80,6 +86,7 @@ void task_process (void *arg)
 
         esp_camera_fb_return(fb);
 
+        /* 5. Do face detection */
         box_array_t *net_boxes = face_detect(image_matrix, &mtmn_config);
         ESP_LOGI(TAG, "Detection time consumption: %lldms", (esp_timer_get_time() - fb_get_time) / 1000);
 

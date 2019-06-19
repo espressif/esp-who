@@ -292,7 +292,6 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
             if(!fmt2jpg(image_matrix->item, fb->width*fb->height*3, fb->width, fb->height, PIXFORMAT_RGB888, 90, &_jpg_buf, &_jpg_buf_len))
             {
                 ESP_LOGE(TAG, "fmt2jpg failed");
-                res = ESP_FAIL;
             }
             esp_camera_fb_return(fb);
             fb = NULL;
