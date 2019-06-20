@@ -135,7 +135,7 @@
                 padding: 0 5px
             }
 
-            button {
+            button, .button {
                 display: block;
                 margin: 5px;
                 padding: 0 12px;
@@ -147,6 +147,17 @@
                 border-radius: 5px;
                 font-size: 16px;
                 outline: 0
+            }
+
+            .save {
+                position: absolute;
+                right: 25px;
+                top: 0px;
+                height: 16px;
+                line-height: 16px;
+                padding: 0 4px;
+                text-decoration: none;
+                cursor: pointer
             }
 
             button:hover {
@@ -543,8 +554,9 @@
                 </div>
                 <figure>
                     <div id="stream-container" class="image-container hidden">
+                        <a id="save-still" href="#" class="button save" download="capture.jpg">Save</a>
                         <div class="close" id="close-stream">×</div>
-                        <img id="stream" src="">
+                        <img id="stream" src="" crossorigin>
                     </div>
                 </figure>
             </div>
@@ -657,6 +669,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const streamButton = document.getElementById('toggle-stream')
   const enrollButton = document.getElementById('face_enroll')
   const closeButton = document.getElementById('close-stream')
+  const saveButton = document.getElementById('save-still')
 
   const stopStream = () => {
     window.stop();
@@ -692,6 +705,24 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   enrollButton.onclick = () => {
     updateConfig(enrollButton)
+  }
+
+  saveButton.onclick = () => {
+    var canvas = document.createElement("canvas");
+    canvas.width = view.width;
+    canvas.height = view.height;
+    document.body.appendChild(canvas);
+    var context = canvas.getContext('2d');
+    context.drawImage(view,0,0);
+    try {
+      var dataURL = canvas.toDataURL('image/jpeg');
+      saveButton.href = dataURL;
+      var d = new Date();
+      saveButton.download = d.getFullYear() + ("0"+(d.getMonth()+1)).slice(-2) + ("0" + d.getDate()).slice(-2) + ("0" + d.getHours()).slice(-2) + ("0" + d.getMinutes()).slice(-2) + ("0" + d.getSeconds()).slice(-2) + ".jpg";
+    } catch (e) {
+      console.error(e);
+    }
+    canvas.parentNode.removeChild(canvas);
   }
 
   // Attach default on change action
