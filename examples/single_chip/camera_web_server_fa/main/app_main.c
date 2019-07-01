@@ -23,6 +23,7 @@
 #include "app_camera.h"
 #include "app_wifi.h"
 #include "app_httpd.h"
+#include "fa_forward.h"
 #include "fr_forward.h"
 
 void app_main()
