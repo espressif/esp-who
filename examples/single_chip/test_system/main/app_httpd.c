@@ -221,7 +221,7 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
     {
         if (g_is_enrolling == 1)
         {
-            int8_t left_sample_face = enroll_face(&g_id_list, aligned_face);
+            int8_t left_sample_face = enroll_face2(&g_id_list, aligned_face);
 
             if (left_sample_face == (ENROLL_CONFIRM_TIMES - 1))
             {
@@ -237,7 +237,7 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
         }
         else
         {
-            matched_id = recognize_face(&g_id_list, aligned_face);
+            matched_id = recognize_face2(&g_id_list, aligned_face);
             if (matched_id >= 0)
             {
                 ESP_LOGW(TAG, "Match Face ID: %u", matched_id);
@@ -1048,7 +1048,7 @@ enrollment_status_t upload_handler_enrollment(dl_matrix3du_t *image_matrix, box_
                 ESP_LOGE(tag, "Face is aligned.");
 
                 uint64_t timestamp = esp_timer_get_time();
-                int8_t left_sample_face = enroll_face(&g_id_list, aligned_face);
+                int8_t left_sample_face = enroll_face2(&g_id_list, aligned_face);
                 *duration = (uint32_t)((esp_timer_get_time() - timestamp) / 1000);
 
                 enrollment_status = ENROLLING;
@@ -1115,7 +1115,7 @@ esp_err_t upload_handler_recognition(dl_matrix3du_t *image_matrix, box_array_t *
                 ESP_LOGI(tag, "Face is aligned.");
 
                 uint64_t timestamp = esp_timer_get_time();
-                matched_ids[i] = recognize_face(&g_id_list, aligned_face);
+                matched_ids[i] = recognize_face2(&g_id_list, aligned_face);
                 duration_n += (esp_timer_get_time() - timestamp);
                 aligned_face_counter++;
 
