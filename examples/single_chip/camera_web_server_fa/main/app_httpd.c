@@ -234,15 +234,17 @@ static void run_face_attributes(dl_matrix3du_t *image_matrix, box_array_t *net_b
         ESP_LOGE(TAG, "Could not allocate face recognition buffer");
         return ;
     }
-    if (align_face(net_boxes, image_matrix, aligned_face) == ESP_OK){
+    if (align_face3(net_boxes, image_matrix, aligned_face,16.5) == ESP_OK){
+        char *emo = get_face_emotion(aligned_face);
+
+        align_face3(net_boxes, image_matrix, aligned_face, 11.5);
         int age = 0;
         int gender = 0;
         get_age_gender(&age,&gender,aligned_face);
         char *sgender = gender>0 ?"male":"female";
-        
-        char *emo = get_face_emotion(aligned_face);
-        ESP_LOGW(TAG, "emotion: %s, age: %d, gender:%s", emo,age,sgender);
+
         rgb_printf(image_matrix, FACE_COLOR_GREEN, "%s,%d,%s", emo,age,sgender);
+        ESP_LOGW(TAG, "emotion: %s, age: %d, gender:%s", emo,age,sgender);
     } else {
         ESP_LOGW(TAG, "Face Not Aligned");
         //rgb_print(image_matrix, FACE_COLOR_YELLOW, "Human Detected");
