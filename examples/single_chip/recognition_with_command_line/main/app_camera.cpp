@@ -28,6 +28,20 @@ TaskHandle_t gpst_input_task = NULL;
 
 void app_camera_init()
 {
+#if CONFIG_CAMERA_MODEL_ESP_EYE
+    /* IO13, IO14 is designed for JTAG by default,
+     * to use it as generalized input,
+     * firstly declair it as pullup input */
+    gpio_config_t conf;
+    conf.mode = GPIO_MODE_INPUT;
+    conf.pull_up_en = GPIO_PULLUP_ENABLE;
+    conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+    conf.intr_type = GPIO_INTR_DISABLE;
+    conf.pin_bit_mask = 1LL << 13;
+    gpio_config(&conf);
+    conf.pin_bit_mask = 1LL << 14;
+    gpio_config(&conf);
+#endif
     camera_config_t config;
     config.ledc_channel = LEDC_CHANNEL_0;
     config.ledc_timer = LEDC_TIMER_0;
