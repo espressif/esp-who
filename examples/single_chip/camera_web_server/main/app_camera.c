@@ -20,6 +20,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #include "esp_log.h"
+#include "driver/ledc.h"
 #include "esp_camera.h"
 #include "app_camera.h"
 #include "sdkconfig.h"
@@ -42,6 +43,32 @@ void app_camera_main ()
     gpio_config(&conf);
     conf.pin_bit_mask = 1LL << 14;
     gpio_config(&conf);
+#endif
+
+#ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+    gpio_set_direction(LED_GPIO_NUM,GPIO_MODE_OUTPUT);
+    ledc_timer_config_t ledc_timer = {
+        .duty_resolution = LEDC_TIMER_8_BIT,  // resolution of PWM duty
+        .freq_hz = 1000,                       // frequency of PWM signal
+        .speed_mode = LEDC_LOW_SPEED_MODE,    // timer mode
+        .timer_num = LEDC_TIMER_1             // timer index
+    };
+    switch (ledc_timer_config(&ledc_timer)) {
+        case ESP_ERR_INVALID_ARG: ESP_LOGE(TAG, "ledc_timer_config() parameter error"); break;
+        case ESP_FAIL: ESP_LOGE(TAG, "ledc_timer_config() Can not find a proper pre-divider number base on the given frequency and the current duty_resolution"); break;
+        default: break;
+    }
+    ledc_channel_config_t ledc_channel = {
+        .channel    = LEDC_CHANNEL_1,
+        .duty       = 0,
+        .gpio_num   = LED_GPIO_NUM,
+        .speed_mode = LEDC_LOW_SPEED_MODE,
+        .hpoint     = 0,
+        .timer_sel  = LEDC_TIMER_1
+    };
+    if (ledc_channel_config(&ledc_channel) == ESP_ERR_INVALID_ARG) {
+        ESP_LOGE(TAG, "ledc_channel_config() parameter error");
+    }
 #endif
 
     camera_config_t config;

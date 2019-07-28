@@ -119,6 +119,7 @@
 #define HREF_GPIO_NUM     23
 #define PCLK_GPIO_NUM     22
 
+#define LED_GPIO_NUM       4
 
 #elif CONFIG_CAMERA_MODEL_CUSTOM
 #define PWDN_GPIO_NUM    CONFIG_CAMERA_PIN_PWDN

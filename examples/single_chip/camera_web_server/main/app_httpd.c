@@ -17,6 +17,7 @@
 #include "esp_camera.h"
 #include "img_converters.h"
 #include "fb_gfx.h"
+#include "driver/ledc.h"
 //#include "camera_index.h"
 #include "sdkconfig.h"
 
@@ -45,6 +46,12 @@ static const char* TAG = "camera_httpd";
 #define FACE_COLOR_YELLOW (FACE_COLOR_RED | FACE_COLOR_GREEN)
 #define FACE_COLOR_CYAN   (FACE_COLOR_BLUE | FACE_COLOR_GREEN)
 #define FACE_COLOR_PURPLE (FACE_COLOR_BLUE | FACE_COLOR_RED)
+#endif
+
+#ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+#define FLASH_LEDC_SPEED_MODE LEDC_LOW_SPEED_MODE
+#define FLASH_LEDC_CHANNEL LEDC_CHANNEL_1
+int flash_ledc_duty = 0; 
 #endif
 
 typedef struct {
@@ -243,7 +250,21 @@ static esp_err_t capture_handler(httpd_req_t *req){
     esp_err_t res = ESP_OK;
     int64_t fr_start = esp_timer_get_time();
 
+    #ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+    ledc_set_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL, flash_ledc_duty);
+    ledc_update_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL);
+    ESP_LOGI(TAG, "Activating LED duty cycle=%d", flash_ledc_duty);
+    vTaskDelay(150 / portTICK_PERIOD_MS);
+    #endif
+    
     fb = esp_camera_fb_get();
+    
+    #ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+    ledc_set_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL, 0);
+    ledc_update_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL);
+    ESP_LOGI(TAG, "LED Off");
+    #endif
+    
     if (!fb) {
         ESP_LOGE(TAG, "Camera capture failed");
         httpd_resp_send_500(req);
@@ -360,11 +381,18 @@ static esp_err_t stream_handler(httpd_req_t *req){
 
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 
+#ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+    ledc_set_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL, flash_ledc_duty);
+    ledc_update_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL);
+    ESP_LOGI(TAG, "Activating LED duty cycle=%d", flash_ledc_duty);
+#endif
+
     while(true){
 #if CONFIG_ESP_FACE_DETECT_ENABLED
         detected = false;
         face_id = 0;
 #endif
+
         fb = esp_camera_fb_get();
         if (!fb) {
             ESP_LOGE(TAG, "Camera capture failed");
@@ -490,6 +518,12 @@ static esp_err_t stream_handler(httpd_req_t *req){
         );
     }
 
+#ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+    ledc_set_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL, 0);
+    ledc_update_duty(FLASH_LEDC_SPEED_MODE, FLASH_LEDC_CHANNEL);    
+    ESP_LOGI(TAG, "LED Off");
+#endif
+
     last_frame = 0;
     return res;
 }
@@ -557,6 +591,9 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     else if(!strcmp(variable, "special_effect")) res = s->set_special_effect(s, val);
     else if(!strcmp(variable, "wb_mode")) res = s->set_wb_mode(s, val);
     else if(!strcmp(variable, "ae_level")) res = s->set_ae_level(s, val);
+#if CONFIG_CAMERA_MODEL_AI_THINKER
+    else if(!strcmp(variable, "flash_level")) flash_ledc_duty = val;
+#endif
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
     else if(!strcmp(variable, "face_detect")) {
@@ -620,7 +657,9 @@ static esp_err_t status_handler(httpd_req_t *req){
     p+=sprintf(p, "\"hmirror\":%u,", s->status.hmirror);
     p+=sprintf(p, "\"dcw\":%u,", s->status.dcw);
     p+=sprintf(p, "\"colorbar\":%u", s->status.colorbar);
-
+#ifdef CONFIG_CAMERA_MODEL_AI_THINKER
+    p+= sprintf(p, "\"flash_level\":%u", flash_ledc_duty);
+#endif
 #if CONFIG_ESP_FACE_DETECT_ENABLED
     p+=sprintf(p, ",\"face_detect\":%u", detection_enabled);
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
