@@ -48,14 +48,6 @@ static const char* TAG = "camera_httpd";
 #endif
 
 typedef struct {
-        size_t size; //number of values used for filtering
-        size_t index; //current value index
-        size_t count; //value count
-        int sum;
-        int * values; //array to be filled with values
-} ra_filter_t;
-
-typedef struct {
         httpd_req_t *req;
         size_t len;
 } jpg_chunking_t;
@@ -65,7 +57,6 @@ static const char* _STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" 
 static const char* _STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
 static const char* _STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %u\r\n\r\n";
 
-static ra_filter_t ra_filter;
 httpd_handle_t stream_httpd = NULL;
 httpd_handle_t camera_httpd = NULL;
 #if CONFIG_ESP_FACE_DETECT_ENABLED
@@ -77,6 +68,15 @@ static int8_t is_enrolling = 0;
 static face_id_list id_list = {0};
 #endif
 #endif
+
+typedef struct {
+        size_t size; //number of values used for filtering
+        size_t index; //current value index
+        size_t count; //value count
+        int sum;
+        int * values; //array to be filled with values
+} ra_filter_t;
+
 static ra_filter_t ra_filter;
 
 static ra_filter_t * ra_filter_init(ra_filter_t * filter, size_t sample_size){
@@ -84,7 +84,6 @@ static ra_filter_t * ra_filter_init(ra_filter_t * filter, size_t sample_size){
 
     filter->values = (int *)malloc(sample_size * sizeof(int));
     if(!filter->values){
-        free(filter);
         return NULL;
     }
     memset(filter->values, 0, sample_size * sizeof(int));
