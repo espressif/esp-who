@@ -1,6 +1,6 @@
 set(COMPONENT_SRCS
     app_main.cpp
-    app_facenet.c
+    app_facenet.cpp
     app_camera.cpp
     app_lcd.cpp
     )

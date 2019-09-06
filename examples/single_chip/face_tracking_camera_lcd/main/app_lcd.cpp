@@ -85,17 +85,8 @@ void app_lcd_task(void *pvParameters)
         time1[0] = esp_timer_get_time();
         xQueueReceive(gpst_output_queue, &img, portMAX_DELAY);
         time1[1] = esp_timer_get_time();
-#if FACE_RECOGNITION
-        int id = -2;
-        if (xQueueReceive(gpst_recog_output_queue, &id, 0) == pdTRUE)
-        {
-            if (id == 0)
-                rgb_printf(img, COLOR_RED, "Hello Subject 0");
-            else
-                rgb_printf(img, COLOR_GREEN, "WHO? %d", id);
-        }
-#endif
-        transform_output_image_adjustable(display_buffer, img, DISPLAY_IMAGE_WIDTH, DISPLAY_IMAGE_HEIGHT, LCD_WIDTH, LCD_HEIGHT);
+
+        transform_output_image(display_buffer, img, DISPLAY_IMAGE_WIDTH * DISPLAY_IMAGE_HEIGHT);
 
         time1[2] = esp_timer_get_time();
         char str_buf[50];

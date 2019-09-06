@@ -55,5 +55,5 @@ extern "C" void app_main()
     app_camera_init();
     app_lcd_main();
     app_facenet_main();
-    //xTaskCreatePinnedToCore(&printTask, "printTask", 2*1024, NULL, 5, NULL, 1);
+    // xTaskCreatePinnedToCore(&printTask, "printTask", 2 * 1024, NULL, 5, NULL, 1);
 }
