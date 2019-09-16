@@ -50,6 +50,7 @@ static const char* TAG = "camera_httpd";
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
 int led_duty = 0; 
+bool isStreaming = false;
 #ifdef CONFIG_LED_LEDC_LOW_SPEED_MODE
 #define CONFIG_LED_LEDC_SPEED_MODE LEDC_LOW_SPEED_MODE
 #else
@@ -69,7 +70,7 @@ static const char* _STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %
 
 httpd_handle_t stream_httpd = NULL;
 httpd_handle_t camera_httpd = NULL;
-bool isStreaming = false;
+
 #if CONFIG_ESP_FACE_DETECT_ENABLED
 static mtmn_config_t mtmn_config = {0};
 static int8_t detection_enabled = 0;
@@ -391,10 +392,9 @@ static esp_err_t stream_handler(httpd_req_t *req){
 
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 
-    isStreaming = true;
-
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     enable_led(true);
+    isStreaming = true;    
 #endif
 
     while(true){
@@ -528,8 +528,9 @@ static esp_err_t stream_handler(httpd_req_t *req){
         );
     }
 
-    isStreaming = false;
+
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    isStreaming = false;
     enable_led(false);
 #endif
 
