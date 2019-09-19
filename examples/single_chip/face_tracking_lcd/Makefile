@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := detection_command_line
+PROJECT_NAME := face_tracking_lcd
 
 SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
 
