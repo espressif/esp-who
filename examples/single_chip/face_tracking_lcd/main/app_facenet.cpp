@@ -54,6 +54,13 @@ typedef struct
     struct rectangle_coordinate_t<int> target;
 } tracker_info;
 
+void break_point()
+{
+    while (true)
+    {
+    }
+}
+
 void init_config(mtmn_config_t *mtmn_config)
 {
     mtmn_config->type = FAST;
@@ -62,10 +69,10 @@ void init_config(mtmn_config_t *mtmn_config)
     mtmn_config->pyramid_times = 4;
     mtmn_config->p_threshold.score = 0.6;
     mtmn_config->p_threshold.nms = 0.7;
-    mtmn_config->p_threshold.candidate_number = 5;
+    mtmn_config->p_threshold.candidate_number = 10;
     mtmn_config->r_threshold.score = 0.7;
     mtmn_config->r_threshold.nms = 0.7;
-    mtmn_config->r_threshold.candidate_number = 2;
+    mtmn_config->r_threshold.candidate_number = 5;
     mtmn_config->o_threshold.score = 0.7;
     mtmn_config->o_threshold.nms = 0.7;
     mtmn_config->o_threshold.candidate_number = 2;
@@ -123,6 +130,7 @@ void task_transform_input(void *arg)
 
         /* Transform image to RGB */
         uint32_t res = fmt2rgb888(fb->buf, fb->len, fb->format, buf);
+
         time0[3] = esp_timer_get_time();
         if (true != res)
         {
@@ -156,10 +164,10 @@ void task_process(void *arg)
     size_t frame_num = 0;
     dl_matrix3du_t image_matrix;
     image_matrix.n = 1;
-    image_matrix.w = DISPLAY_IMAGE_WIDTH;
-    image_matrix.h = DISPLAY_IMAGE_HEIGHT;
+    image_matrix.w = resolution[CAMERA_FRAME_SIZE][0];
+    image_matrix.h = resolution[CAMERA_FRAME_SIZE][1];
     image_matrix.c = 3;
-    image_matrix.stride = 3 * DISPLAY_IMAGE_WIDTH;
+    image_matrix.stride = 3 * image_matrix.w;
     image_matrix.item = NULL;
     mtmn_config_t mtmn_config;
 
@@ -180,7 +188,7 @@ void task_process(void *arg)
         if (net_boxes)
         {
             frame_num++;
-            draw_rectangle_rgb888(image_matrix.item, net_boxes, 240);
+            draw_rectangle_rgb888(image_matrix.item, net_boxes, resolution[CAMERA_FRAME_SIZE][0]);
             //ESP_LOGI(TAG, "DETECTED: %d\n", frame_num);
             free(net_boxes->score);
             free(net_boxes->box);
@@ -201,10 +209,10 @@ void task_pnet(void *arg)
     box_array_t *net_boxes = NULL;
     dl_matrix3du_t image_matrix;
     image_matrix.n = 1;
-    image_matrix.w = DISPLAY_IMAGE_WIDTH;
-    image_matrix.h = DISPLAY_IMAGE_HEIGHT;
+    image_matrix.w = resolution[CAMERA_FRAME_SIZE][0];
+    image_matrix.h = resolution[CAMERA_FRAME_SIZE][1];
     image_matrix.c = 3;
-    image_matrix.stride = 3 * DISPLAY_IMAGE_WIDTH;
+    image_matrix.stride = 3 * image_matrix.w;
     image_matrix.item = NULL;
     st_net_info net_info = {0};
     int64_t time0[4] = {0};
@@ -251,10 +259,10 @@ void task_rnet(void *arg)
     box_array_t *net_boxes = NULL;
     dl_matrix3du_t image_matrix;
     image_matrix.n = 1;
-    image_matrix.w = DISPLAY_IMAGE_WIDTH;
-    image_matrix.h = DISPLAY_IMAGE_HEIGHT;
+    image_matrix.w = resolution[CAMERA_FRAME_SIZE][0];
+    image_matrix.h = resolution[CAMERA_FRAME_SIZE][1];
     image_matrix.c = 3;
-    image_matrix.stride = 3 * DISPLAY_IMAGE_WIDTH;
+    image_matrix.stride = 3 * image_matrix.w;
     image_matrix.item = NULL;
     st_net_info net_info = {0};
     int64_t time0[4] = {0};
@@ -301,10 +309,10 @@ void task_onet(void *arg)
     box_array_t *net_boxes = NULL;
     dl_matrix3du_t image_matrix;
     image_matrix.n = 1;
-    image_matrix.w = DISPLAY_IMAGE_WIDTH;
-    image_matrix.h = DISPLAY_IMAGE_HEIGHT;
+    image_matrix.w = resolution[CAMERA_FRAME_SIZE][0];
+    image_matrix.h = resolution[CAMERA_FRAME_SIZE][1];
     image_matrix.c = 3;
-    image_matrix.stride = 3 * DISPLAY_IMAGE_WIDTH;
+    image_matrix.stride = 3 * image_matrix.w;
     image_matrix.item = NULL;
     st_net_info net_info = {0};
     tracker_info tracker_info = {0};
@@ -354,7 +362,7 @@ void task_track(void *arg)
 {
     // TODO: init
     tracker_info tracker_info;
-    int image_shape[] = {DISPLAY_IMAGE_WIDTH, DISPLAY_IMAGE_WIDTH, 3};
+    int image_shape[] = {resolution[CAMERA_FRAME_SIZE][1], resolution[CAMERA_FRAME_SIZE][0], 3};
     ArrayReal<uint8_t, float, 3> image(image_shape, NOT_ALLOC);
     KCF<float> tracker;
     struct rectangle_side_t<float> target;
@@ -413,7 +421,7 @@ void app_facenet_main()
 
     for (int i = 0; i < 3; i++)
     {
-        image_rgb888[i] = (uint8_t *)calloc(DISPLAY_IMAGE_WIDTH * DISPLAY_IMAGE_HEIGHT * 3, sizeof(uint8_t));
+        image_rgb888[i] = (uint8_t *)calloc(resolution[CAMERA_FRAME_SIZE][0] * resolution[CAMERA_FRAME_SIZE][1] * 3, sizeof(uint8_t));
         xQueueSend(gpst_image_matrix_queue, &(image_rgb888[i]), 0);
     }
 

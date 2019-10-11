@@ -36,8 +36,8 @@ CEspLcd *tft = NULL;
 static void rgb_print(uint8_t *item, uint32_t color, const char *str)
 {
     fb_data_t fb;
-    fb.width = 240;
-    fb.height = 240;
+    fb.width = resolution[CAMERA_FRAME_SIZE][0];
+    fb.height = resolution[CAMERA_FRAME_SIZE][1];
     fb.data = item;
     fb.bytes_per_pixel = 3;
     fb.format = FB_BGR888;
@@ -76,26 +76,27 @@ static int rgb_printf(uint8_t *item, uint32_t color, const char *format, ...)
 void app_lcd_task(void *pvParameters)
 {
     int64_t time1[5] = {0};
-    const int x = LCD_WIDTH - DISPLAY_IMAGE_WIDTH;
-    const int y = LCD_HEIGHT - DISPLAY_IMAGE_HEIGHT;
+    const int display_width = LCD_WIDTH;
+    const int display_height = LCD_WIDTH * resolution[CAMERA_FRAME_SIZE][1] / resolution[CAMERA_FRAME_SIZE][0];
     uint8_t *img;
-    uint16_t *display_buffer = (uint16_t *)calloc(1, DISPLAY_IMAGE_WIDTH * DISPLAY_IMAGE_HEIGHT * sizeof(uint16_t));
+    uint8_t *resized_image = (uint8_t *)calloc(1, LCD_WIDTH * LCD_HEIGHT * 3 * sizeof(uint8_t));
+    uint16_t *display_buffer = (uint16_t *)calloc(1, LCD_WIDTH * LCD_HEIGHT * sizeof(uint16_t));
     while (1)
     {
         time1[0] = esp_timer_get_time();
         xQueueReceive(gpst_output_queue, &img, portMAX_DELAY);
         time1[1] = esp_timer_get_time();
 
-        transform_output_image(display_buffer, img, DISPLAY_IMAGE_WIDTH * DISPLAY_IMAGE_HEIGHT);
+        image_resize_linear(resized_image, img, display_width, display_height, 3, resolution[CAMERA_FRAME_SIZE][0], resolution[CAMERA_FRAME_SIZE][1]);
+        transform_output_image(display_buffer, resized_image, display_width * display_height);
 
         time1[2] = esp_timer_get_time();
         char str_buf[50];
         tft->drawBitmap(0, 0, display_buffer, LCD_WIDTH, LCD_HEIGHT);
         time1[3] = esp_timer_get_time();
         if (xQueueSend(gpst_image_matrix_queue, &img, 0) != pdTRUE)
-        {
             ESP_LOGE("Output", "Send fail");
-        }
+
         time1[4] = esp_timer_get_time();
 
 #if 0
@@ -108,6 +109,7 @@ void app_lcd_task(void *pvParameters)
                 );
 #endif
     }
+    free(resized_image);
     free(display_buffer);
 }
 
