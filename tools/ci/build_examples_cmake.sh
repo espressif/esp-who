@@ -35,6 +35,8 @@ set -o nounset # Exit if variable not set.
 # Remove the initial space and instead use '\n'.
 IFS=$'\n\t'
 
+export PATH="$IDF_PATH/tools:$PATH"  # for idf.py
+
 # -----------------------------------------------------------------------------
 
 die() {
@@ -60,7 +62,7 @@ LOG_SUSPECTED=${LOG_PATH}/common_log.txt
 touch ${LOG_SUSPECTED}
 SDKCONFIG_DEFAULTS_CI=sdkconfig.ci
 
-EXAMPLE_PATHS=$( find ${CI_PROJECT_DIR}/examples/ -type f -name Makefile | grep -v "/build_system/cmake/" | sort )
+EXAMPLE_PATHS=$( find ${CI_PROJECT_DIR}/examples/ -type f -name CMakeLists.txt | grep -v "/components/" | grep -v "/main/" | sort )
 
 if [ -z "${CI_NODE_TOTAL:-}" ]
 then
@@ -97,10 +99,10 @@ fi
 build_example () {
     local ID=$1
     shift
-    local MAKE_FILE=$1
+    local CMAKELISTS=$1
     shift
 
-    local EXAMPLE_DIR=$(dirname "${MAKE_FILE}")
+    local EXAMPLE_DIR=$(dirname "${CMAKELISTS}")
     local EXAMPLE_NAME=$(basename "${EXAMPLE_DIR}")
 
     echo "Building ${EXAMPLE_NAME} as ${ID}..."
@@ -116,14 +118,13 @@ build_example () {
         touch ${BUILDLOG}
 
 
-        make clean >>${BUILDLOG} 2>&1 &&
-		make defconfig >>${BUILDLOG} 2>&1 &&
-        make all >>${BUILDLOG} 2>&1 &&
+        idf.py fullclean >>${BUILDLOG} 2>&1 &&
+		idf.py build >>${BUILDLOG} 2>&1 &&
 
         cat ${BUILDLOG}
     popd
 
-    grep -i "error\|warning" "${BUILDLOG}" 2>&1 >> "${LOG_SUSPECTED}" || :
+    grep -i "error\|warning" "${BUILDLOG}" 2>&1 | grep -v "error.c.obj" >> "${LOG_SUSPECTED}" || :
 }
 
 EXAMPLE_NUM=0
@@ -150,15 +151,14 @@ echo -e "\nFound issues:"
 #       Ignore the next messages:
 # "error.o" or "-Werror" in compiler's command line
 # "reassigning to symbol" or "changes choice state" in sdkconfig
-# 'Compiler and toochain versions is not supported' from make/project.mk
+# 'Compiler and toochain versions is not supported' from crosstool_version_check.cmake
 IGNORE_WARNS="\
 library/error\.o\
 \|\ -Werror\
 \|error\.d\
 \|reassigning to symbol\
 \|changes choice state\
-\|Compiler version is not supported\
-\|Toolchain version is not supported\
+\|crosstool_version_check\.cmake\
 "
 
 sort -u "${LOG_SUSPECTED}" | grep -v "${IGNORE_WARNS}" \
