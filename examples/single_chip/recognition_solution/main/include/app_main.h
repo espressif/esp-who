@@ -8,6 +8,7 @@
 #define GPIO_LED_RED    21
 #define GPIO_LED_WHITE  22
 #define GPIO_BUTTON     15
+#define GPIO_BOOT       0
 
 typedef enum
 {
