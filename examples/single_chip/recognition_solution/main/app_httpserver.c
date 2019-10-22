@@ -49,7 +49,7 @@ face_id_list st_face_list = {0};
 
 dl_matrix3du_t *aligned_face = NULL;
 
-static void oneshot_timer_callback(void* arg);
+//static void oneshot_timer_callback(void* arg);
 
 const char *number_suffix(int32_t number)
 {
@@ -196,8 +196,9 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         // exec event
         if (g_state == START_DELETE)
         {
-            uint8_t left = delete_face_id_in_flash(&st_face_list);
-            ESP_LOGW(TAG, "%d ID Left", left);
+            int8_t left = delete_face_id_in_flash(&st_face_list);
+            if (left >= 0)
+                ESP_LOGW(TAG, "%d ID Left", left);
             g_state = START_DETECT;
             continue;
         }
@@ -227,79 +228,84 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         if(!fmt2rgb888(fb->buf, fb->len, fb->format, image_matrix->item))
         {
             ESP_LOGW(TAG, "fmt2rgb888 failed");
+            _jpg_buf = fb->buf;
+            _jpg_buf_len = fb->len;
             //res = ESP_FAIL;
             //dl_matrix3du_free(image_matrix);
             //break;
         }
-
-        fr_ready = esp_timer_get_time();
-        box_array_t *net_boxes = face_detect(image_matrix, &mtmn_config);
-        fr_face = esp_timer_get_time();
-        // Detection End
-
-        fr_recognize = fr_face;
-        if (net_boxes)
+        else
         {
-            if ((g_state == START_ENROLL || g_state == START_RECOGNITION)
-            && (align_face(net_boxes, image_matrix, aligned_face) == ESP_OK))
+
+            fr_ready = esp_timer_get_time();
+            box_array_t *net_boxes = face_detect(image_matrix, &mtmn_config);
+            fr_face = esp_timer_get_time();
+            // Detection End
+
+            fr_recognize = fr_face;
+            if (net_boxes)
             {
-                if (g_state == START_ENROLL)
+                if ((g_state == START_ENROLL || g_state == START_RECOGNITION)
+                        && (align_face(net_boxes, image_matrix, aligned_face) == ESP_OK))
                 {
-                    rgb_print(image_matrix, FACE_COLOR_YELLOW, "START ENROLLING");
-                    ESP_LOGD(TAG, "START ENROLLING");
-
-                    int left_sample_face = enroll_face_id_to_flash(&st_face_list, aligned_face);
-                    ESP_LOGD(TAG, "Face ID %d Enrollment: Taken the %d%s sample",
-                            st_face_list.tail,
-                            ENROLL_CONFIRM_TIMES - left_sample_face,
-                            number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
-                    gpio_set_level(GPIO_LED_RED, 0);
-                    rgb_printf(image_matrix, FACE_COLOR_CYAN, "\nThe %u%s sample",
-                            ENROLL_CONFIRM_TIMES - left_sample_face,
-                            number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
-
-                    if (left_sample_face == 0)
+                    if (g_state == START_ENROLL)
                     {
-                        ESP_LOGI(TAG, "Enrolled Face ID: %d", st_face_list.tail);
-                        rgb_printf(image_matrix, FACE_COLOR_CYAN, "\n\nEnrolled Face ID: %d", st_face_list.tail);
-                        g_is_enrolling = 0;
-                        g_state = START_RECOGNITION;
-                    }
-                }
-                else
-                {
-                    face_id = recognize_face(&st_face_list, aligned_face);
+                        rgb_print(image_matrix, FACE_COLOR_YELLOW, "START ENROLLING");
+                        ESP_LOGD(TAG, "START ENROLLING");
 
-                    if (face_id >= 0)
-                    {
-                        gpio_set_level(GPIO_LED_RED, 1);
-                        rgb_printf(image_matrix, FACE_COLOR_GREEN, "Hello ID %u", face_id);
+                        int left_sample_face = enroll_face_id_to_flash(&st_face_list, aligned_face);
+                        ESP_LOGD(TAG, "Face ID %d Enrollment: Taken the %d%s sample",
+                                st_face_list.tail,
+                                ENROLL_CONFIRM_TIMES - left_sample_face,
+                                number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
+                        gpio_set_level(GPIO_LED_RED, 0);
+                        rgb_printf(image_matrix, FACE_COLOR_CYAN, "\nThe %u%s sample",
+                                ENROLL_CONFIRM_TIMES - left_sample_face,
+                                number_suffix(ENROLL_CONFIRM_TIMES - left_sample_face));
+
+                        if (left_sample_face == 0)
+                        {
+                            ESP_LOGI(TAG, "Enrolled Face ID: %d", st_face_list.tail ? st_face_list.tail - 1 : FACE_ID_SAVE_NUMBER - 1);
+                            rgb_printf(image_matrix, FACE_COLOR_CYAN, "\n\nEnrolled Face ID: %d", st_face_list.tail - 1);
+                            g_is_enrolling = 0;
+                            g_state = START_RECOGNITION;
+                        }
                     }
                     else
                     {
-                        rgb_print(image_matrix, FACE_COLOR_RED, "\nWHO?");
+                        face_id = recognize_face(&st_face_list, aligned_face);
+
+                        if (face_id >= 0)
+                        {
+                            gpio_set_level(GPIO_LED_RED, 1);
+                            rgb_printf(image_matrix, FACE_COLOR_GREEN, "Hello ID %u", face_id);
+                        }
+                        else
+                        {
+                            rgb_print(image_matrix, FACE_COLOR_RED, "\nWHO?");
+                        }
                     }
                 }
+
+                draw_face_boxes(image_matrix, net_boxes);
+                dl_lib_free(net_boxes->score);
+                dl_lib_free(net_boxes->box);
+                dl_lib_free(net_boxes->landmark);
+                dl_lib_free(net_boxes);
+
+                fr_recognize = esp_timer_get_time();
+                if(!fmt2jpg(image_matrix->item, fb->width*fb->height*3, fb->width, fb->height, PIXFORMAT_RGB888, 90, &_jpg_buf, &_jpg_buf_len))
+                {
+                    ESP_LOGE(TAG, "fmt2jpg failed");
+                }
+                esp_camera_fb_return(fb);
+                fb = NULL;
             }
-
-            draw_face_boxes(image_matrix, net_boxes);
-            free(net_boxes->score);
-            free(net_boxes->box);
-            free(net_boxes->landmark);
-            free(net_boxes);
-
-            fr_recognize = esp_timer_get_time();
-            if(!fmt2jpg(image_matrix->item, fb->width*fb->height*3, fb->width, fb->height, PIXFORMAT_RGB888, 90, &_jpg_buf, &_jpg_buf_len))
+            else
             {
-                ESP_LOGE(TAG, "fmt2jpg failed");
+                _jpg_buf = fb->buf;
+                _jpg_buf_len = fb->len;
             }
-            esp_camera_fb_return(fb);
-            fb = NULL;
-        }
-        else
-        {
-            _jpg_buf = fb->buf;
-            _jpg_buf_len = fb->len;
         }
         dl_matrix3du_free(image_matrix);
         fr_encode = esp_timer_get_time();
@@ -357,30 +363,39 @@ httpd_uri_t _face_stream_handler = {
 
 httpd_handle_t camera_httpd = NULL;
 
-const esp_timer_create_args_t oneshot_timer_args = {
-            .callback = &oneshot_timer_callback,
-            /* argument specified here will be passed to timer callback function */
-            .name = "one-shot"
-};
-esp_timer_handle_t oneshot_timer;
+//const esp_timer_create_args_t oneshot_timer_args = {
+//            .callback = &oneshot_timer_callback,
+//            /* argument specified here will be passed to timer callback function */
+//            .name = "one-shot"
+//};
+//esp_timer_handle_t oneshot_timer;
+//
+//static void oneshot_timer_callback(void* arg)
+//{
+//    //if(g_state != START_ENROLL)
+//    //    g_is_enrolling = 1;
+//}
 
-static void oneshot_timer_callback(void* arg)
+
+static void IRAM_ATTR gpio_isr_handler_enroll(void* arg)
 {
     if(g_state != START_ENROLL)
         g_is_enrolling = 1;
+    //esp_timer_start_once(oneshot_timer, 500000);
+    //if(err == ESP_ERR_INVALID_STATE)
+    //{
+    //    ESP_ERROR_CHECK(esp_timer_stop(oneshot_timer));
+    //    g_is_enrolling = 0;
+    //    g_is_deleting = 1;
+    //    gpio_set_level(GPIO_LED_WHITE, 0);
+    //}
 }
 
-
-static void IRAM_ATTR gpio_isr_handler(void* arg)
+static void IRAM_ATTR gpio_isr_handler_delete(void* arg)
 {
-    esp_err_t err = esp_timer_start_once(oneshot_timer, 500000);
-    if(err == ESP_ERR_INVALID_STATE)
-    {
-        ESP_ERROR_CHECK(esp_timer_stop(oneshot_timer));
-        g_is_enrolling = 0;
-        g_is_deleting = 1;
-        gpio_set_level(GPIO_LED_WHITE, 0);
-    }
+    g_is_enrolling = 0;
+    g_is_deleting = 1;
+    
 }
 
 void app_httpserver_init ()
@@ -388,15 +403,16 @@ void app_httpserver_init ()
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     config.stack_size = 4096 * 2;
 
-    ESP_ERROR_CHECK(esp_timer_create(&oneshot_timer_args, &oneshot_timer));
+    //ESP_ERROR_CHECK(esp_timer_create(&oneshot_timer_args, &oneshot_timer));
 
     gpio_config_t io_conf = {0};
     io_conf.mode = GPIO_MODE_INPUT;
     io_conf.intr_type = GPIO_PIN_INTR_POSEDGE;
-    io_conf.pin_bit_mask = 1LL << GPIO_BUTTON;
+    io_conf.pin_bit_mask = 1LL << GPIO_BUTTON | 1LL << GPIO_BOOT;
     io_conf.pull_up_en = GPIO_PULLUP_ENABLE;
     gpio_config(&io_conf);
-    gpio_isr_handler_add(GPIO_BUTTON, gpio_isr_handler, NULL);
+    gpio_isr_handler_add(GPIO_BUTTON, gpio_isr_handler_enroll, NULL);
+    gpio_isr_handler_add(GPIO_BOOT, gpio_isr_handler_delete, NULL);
 
     face_id_init(&st_face_list, FACE_ID_SAVE_NUMBER, ENROLL_CONFIRM_TIMES);
     aligned_face = dl_matrix3du_alloc(1, FACE_WIDTH, FACE_HEIGHT, 3);

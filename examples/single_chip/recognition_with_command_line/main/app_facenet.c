@@ -187,10 +187,10 @@ void task_process(void *arg)
                 ESP_LOGI(TAG, "Detected face is not proper.");
             }
 
-            free(net_boxes->score);
-            free(net_boxes->box);
-            free(net_boxes->landmark);
-            free(net_boxes);
+            dl_lib_free(net_boxes->score);
+            dl_lib_free(net_boxes->box);
+            dl_lib_free(net_boxes->landmark);
+            dl_lib_free(net_boxes);
         }
 
         dl_matrix3du_free(image_matrix);

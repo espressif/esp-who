@@ -67,11 +67,11 @@ The users can add/delete a Face ID after the network is successfully established
 - After the Face ID enrollment, the red LED on the board is off and the browser displays **ENROLLED FACE ID XXX**;
 - The board enters Face Detection after the Face ID enrollment.
 
-Currently, ESP-EYE can enroll up to 10 Face IDs. Please note that the maximum number of enrolled Face IDs can be configured according to how users allocate the flash memory. However, we recommend a number that is no greater than 30.
+Currently, ESP-EYE can enroll up to 10 Face IDs. Please note that the maximum number of enrolled Face IDs can be configured according to how users allocate the flash memory.
 
 ##### 5.2 Delete a Face ID
 
-- Double-click the Side Tactile Button to delete an existing Face ID.
+- Single-click the Top Tactile Button "BOOT" to delete an existing Face ID.
 - After that, the board deletes the earliest record of all the existing enrolled Face IDs. The white LED on the board flashes, and the browser displays: **XXX ID(S) LEFT**.
 
 #### Troubleshooting
