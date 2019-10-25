@@ -531,6 +531,12 @@
                                 <label class="slider" for="colorbar"></label>
                             </div>
                         </div>
+                        <div class="input-group" id="led-group">
+                          <label for="led_intensity">LED Intensity</label>
+                          <div class="range-min">0</div>
+                          <input type="range" id="led_intensity" min="0" max="255" value="0" class="default-action">
+                          <div class="range-max">255</div>
+                        </div>
                         <div class="input-group" id="face_detect-group">
                             <label for="face_detect">Face Detection</label>
                             <div class="switch">
@@ -612,6 +618,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
         value ? show(wb) : hide(wb)
       } else if(el.id === "face_recognize"){
         value ? enable(enrollButton) : disable(enrollButton)
+      } else if(el.id == "led_intensity"){
+        value > -1 ? show(ledGroup) : hide(ledGroup)
       }
     }
   }
@@ -670,6 +678,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const enrollButton = document.getElementById('face_enroll')
   const closeButton = document.getElementById('close-stream')
   const saveButton = document.getElementById('save-still')
+  const ledGroup = document.getElementById('led-group')
 
   const stopStream = () => {
     window.stop();

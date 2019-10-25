@@ -17,6 +17,7 @@
 #include "esp_camera.h"
 #include "img_converters.h"
 #include "fb_gfx.h"
+#include "driver/ledc.h"
 //#include "camera_index.h"
 #include "sdkconfig.h"
 
@@ -47,6 +48,16 @@ static const char* TAG = "camera_httpd";
 #define FACE_COLOR_PURPLE (FACE_COLOR_BLUE | FACE_COLOR_RED)
 #endif
 
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+int led_duty = 0; 
+bool isStreaming = false;
+#ifdef CONFIG_LED_LEDC_LOW_SPEED_MODE
+#define CONFIG_LED_LEDC_SPEED_MODE LEDC_LOW_SPEED_MODE
+#else
+#define CONFIG_LED_LEDC_SPEED_MODE LEDC_HIGH_SPEED_MODE
+#endif
+#endif
+
 typedef struct {
         httpd_req_t *req;
         size_t len;
@@ -59,6 +70,7 @@ static const char* _STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %
 
 httpd_handle_t stream_httpd = NULL;
 httpd_handle_t camera_httpd = NULL;
+
 #if CONFIG_ESP_FACE_DETECT_ENABLED
 static mtmn_config_t mtmn_config = {0};
 static int8_t detection_enabled = 0;
@@ -225,6 +237,19 @@ static int run_face_recognition(dl_matrix3du_t *image_matrix, box_array_t *net_b
 }
 #endif
 #endif
+
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+void enable_led(bool en) {      // Turn LED On or Off
+    int duty = en ? led_duty : 0;
+    if (en && isStreaming && (led_duty > CONFIG_LED_MAX_INTENSITY)) {
+        duty = CONFIG_LED_MAX_INTENSITY;
+    } 
+    ledc_set_duty(CONFIG_LED_LEDC_SPEED_MODE, CONFIG_LED_LEDC_CHANNEL, duty);
+    ledc_update_duty(CONFIG_LED_LEDC_SPEED_MODE, CONFIG_LED_LEDC_CHANNEL);
+    ESP_LOGI(TAG, "Set LED intensity to %d", duty);
+}
+#endif
+
 static size_t jpg_encode_stream(void * arg, size_t index, const void* data, size_t len){
     jpg_chunking_t *j = (jpg_chunking_t *)arg;
     if(!index){
@@ -242,7 +267,15 @@ static esp_err_t capture_handler(httpd_req_t *req){
     esp_err_t res = ESP_OK;
     int64_t fr_start = esp_timer_get_time();
 
+    #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    enable_led(true);
+    vTaskDelay(150 / portTICK_PERIOD_MS); // The LED needs to be turned on ~150ms before the call to esp_camera_fb_get()  
+    fb = esp_camera_fb_get();             // or it won't be visible in the frame. A better way to do this is needed. 
+    enable_led(false);                  
+    #else
     fb = esp_camera_fb_get();
+    #endif
+    
     if (!fb) {
         ESP_LOGE(TAG, "Camera capture failed");
         httpd_resp_send_500(req);
@@ -359,11 +392,17 @@ static esp_err_t stream_handler(httpd_req_t *req){
 
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    enable_led(true);
+    isStreaming = true;    
+#endif
+
     while(true){
 #if CONFIG_ESP_FACE_DETECT_ENABLED
         detected = false;
         face_id = 0;
 #endif
+
         fb = esp_camera_fb_get();
         if (!fb) {
             ESP_LOGE(TAG, "Camera capture failed");
@@ -489,6 +528,12 @@ static esp_err_t stream_handler(httpd_req_t *req){
         );
     }
 
+
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    isStreaming = false;
+    enable_led(false);
+#endif
+
     last_frame = 0;
     return res;
 }
@@ -556,6 +601,9 @@ static esp_err_t cmd_handler(httpd_req_t *req){
     else if(!strcmp(variable, "special_effect")) res = s->set_special_effect(s, val);
     else if(!strcmp(variable, "wb_mode")) res = s->set_wb_mode(s, val);
     else if(!strcmp(variable, "ae_level")) res = s->set_ae_level(s, val);
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    else if(!strcmp(variable, "led_intensity")) { led_duty = val; if (isStreaming) enable_led(true); }
+#endif
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
     else if(!strcmp(variable, "face_detect")) {
@@ -619,7 +667,11 @@ static esp_err_t status_handler(httpd_req_t *req){
     p+=sprintf(p, "\"hmirror\":%u,", s->status.hmirror);
     p+=sprintf(p, "\"dcw\":%u,", s->status.dcw);
     p+=sprintf(p, "\"colorbar\":%u", s->status.colorbar);
-
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    p+= sprintf(p, ",\"led_intensity\":%u", led_duty);
+#else
+    p+= sprintf(p, ",\"led_intensity\":%d", -1);
+#endif
 #if CONFIG_ESP_FACE_DETECT_ENABLED
     p+=sprintf(p, ",\"face_detect\":%u", detection_enabled);
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED

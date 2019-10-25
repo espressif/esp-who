@@ -38,6 +38,59 @@ config ESP_MAXIMUM_RETRY
     Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
 endmenu
 
+menu "LED Illuminator"
+config LED_ILLUMINATOR_ENABLED
+    bool "LED Illuminator Enabled"
+    default n
+    help
+    Enable an LED Flash or IR Illuminator
+
+config LED_LEDC_PIN
+    depends on LED_ILLUMINATOR_ENABLED
+    int "LED Illuminator GPIO Pin"
+    range 0 33
+    default 4
+    help
+    Set a pin to illuminate an onboard LED or IR Illuminator when streaming or taking snapshots.
+
+config LED_MAX_INTENSITY
+    depends on LED_ILLUMINATOR_ENABLED
+    int "LED Maximum Intensity (0-255)"
+    range 0 255
+    default 255
+    help
+    Limit the maximum intensity of the LED while streaming to prevent overheating (0-255).
+
+choice LED_LEDC_SPEED_MODE
+    depends on LED_ILLUMINATOR_ENABLED
+    bool "Select LEDC Timer Speed Mode"
+    default LED_LEDC_LOW_SPEED_MODE
+    help
+    Select a speed mode for the LEDC channel 
+
+config LED_LEDC_LOW_SPEED_MODE  
+    bool "LOW_SPEED_MODE"
+config LED_LEDC_HIGH_SPEED_MODE
+    bool "HIGH_SPEED_MODE"
+endchoice
+
+config LED_LEDC_TIMER
+    depends on LED_ILLUMINATOR_ENABLED
+    int "LEDC Timer"
+    range 0 3
+    default 1
+    help
+    Select the LEDC Timer (0-3)
+
+config LED_LEDC_CHANNEL
+    depends on LED_ILLUMINATOR_ENABLED
+    int "LEDC Channel"
+    range 0 7
+    default 1
+    help
+    Select the LEDC Channel (0-7)
+endmenu
+
 menu "Camera Pins"
 choice CAMERA_MODEL
     bool "Select Camera Pinout"
