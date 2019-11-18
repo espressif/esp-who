@@ -37,6 +37,7 @@ static const char *TAG = "camera_httpd";
 
 #if CONFIG_ESP_FACE_DETECT_LSSH
 #include "lssh_forward.h"
+static int dynamic_min_face = 80;
 #endif
 
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
@@ -204,27 +205,44 @@ static void draw_face_boxes(dl_matrix3du_t *image_matrix, box_array_t *boxes, in
     fb.data = image_matrix->item;
     fb.bytes_per_pixel = 3;
     fb.format = FB_BGR888;
+
+#if CONFIG_ESP_FACE_DETECT_LSSH
+    int min_face = 10000;
+#endif
     for (i = 0; i < boxes->len; i++)
     {
         // rectangle box
-        x = (int)boxes->box[i].box_p[0];
-        y = (int)boxes->box[i].box_p[1];
-        w = (int)boxes->box[i].box_p[2] - x + 1;
-        h = (int)boxes->box[i].box_p[3] - y + 1;
+        x = max((int)boxes->box[i].box_p[0], 0);
+        y = max((int)boxes->box[i].box_p[1], 0);
+        w = min((int)boxes->box[i].box_p[2], image_matrix->w) - x + 1;
+        h = min((int)boxes->box[i].box_p[3], image_matrix->h) - y + 1;
         fb_gfx_drawFastHLine(&fb, x, y, w, color);
         fb_gfx_drawFastHLine(&fb, x, y + h - 1, w, color);
         fb_gfx_drawFastVLine(&fb, x, y, h, color);
         fb_gfx_drawFastVLine(&fb, x + w - 1, y, h, color);
-#if 0
+
         // landmark
+#if 1
+#if CONFIG_LSSH_WITH_LANDMARK
         int x0, y0, j;
-        for (j = 0; j < 10; j+=2) {
+        for (j = 0; j < 10; j += 2)
+        {
             x0 = (int)boxes->landmark[i].landmark_p[j];
-            y0 = (int)boxes->landmark[i].landmark_p[j+1];
+            y0 = (int)boxes->landmark[i].landmark_p[j + 1];
             fb_gfx_fillRect(&fb, x0, y0, 3, 3, color);
         }
 #endif
+#endif
+
+#if CONFIG_ESP_FACE_DETECT_LSSH
+        min_face = DL_IMAGE_MIN(min_face, DL_IMAGE_MIN(w, h));
+#endif
     }
+
+#if CONFIG_ESP_FACE_DETECT_LSSH
+    // dynamic_min_face = min_face;
+    dynamic_min_face = 53;
+#endif
 }
 
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
@@ -532,7 +550,7 @@ static esp_err_t stream_handler(httpd_req_t *req)
                     else
                     {
 #if CONFIG_ESP_FACE_DETECT_LSSH
-                        lssh_update_image_shape(&lssh_config, image_matrix->h, image_matrix->w);
+                        lssh_update_config(&lssh_config, dynamic_min_face, image_matrix->h, image_matrix->w);
 #endif
                         fr_ready = esp_timer_get_time();
                         box_array_t *net_boxes = NULL;
@@ -940,7 +958,7 @@ void app_httpd_main()
 #endif
 
 #if CONFIG_ESP_FACE_DETECT_LSSH
-    lssh_config = lssh_initialize_config(80, 0.6, 0.3, 240, 320);
+    lssh_config = lssh_get_config(dynamic_min_face, 0.60, 0.3, 240, 320);
 #endif
 
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
