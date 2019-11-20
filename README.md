@@ -62,7 +62,7 @@ See setup guides for detailed instructions to set up the ESP-IDF:
 
 * [Getting Started Guide for the stable ESP-IDF version](https://docs.espressif.com/projects/esp-idf/en/stable/get-started-cmake/index.html)
 
- In this case, we take [ESP-IDF v3.2](https://github.com/espressif/esp-idf/releases/v3.2) as the test version.
+ In this case, we take [ESP-IDF v3.3](https://github.com/espressif/esp-idf/releases/v3.3) as the test version.
 
  If you have already configured ESP-IDF before and don't want to change the existing one, you can just point `IDF_PATH` to the ESP-IDF that is in ESP-WHO.
 
