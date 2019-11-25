@@ -30,7 +30,6 @@ static const char *TAG = "app_lcd";
 TaskHandle_t gpst_output_task = NULL;
 QueueHandle_t gpst_output_queue = NULL;
 extern QueueHandle_t gpst_image_matrix_queue;
-extern QueueHandle_t gpst_recog_output_queue;
 CEspLcd *tft = NULL;
 
 static void rgb_print(uint8_t *item, uint32_t color, const char *str)
@@ -76,8 +75,6 @@ static int rgb_printf(uint8_t *item, uint32_t color, const char *format, ...)
 void app_lcd_task(void *pvParameters)
 {
     int64_t time1[5] = {0};
-    const int display_width = LCD_WIDTH;
-    const int display_height = LCD_WIDTH * resolution[CAMERA_FRAME_SIZE][1] / resolution[CAMERA_FRAME_SIZE][0];
     uint8_t *img;
     uint8_t *resized_image = (uint8_t *)calloc(1, LCD_WIDTH * LCD_HEIGHT * 3 * sizeof(uint8_t));
     uint16_t *display_buffer = (uint16_t *)calloc(1, LCD_WIDTH * LCD_HEIGHT * sizeof(uint16_t));
@@ -87,8 +84,7 @@ void app_lcd_task(void *pvParameters)
         xQueueReceive(gpst_output_queue, &img, portMAX_DELAY);
         time1[1] = esp_timer_get_time();
 
-        image_resize_linear(resized_image, img, display_width, display_height, 3, resolution[CAMERA_FRAME_SIZE][0], resolution[CAMERA_FRAME_SIZE][1]);
-        transform_output_image(display_buffer, resized_image, display_width * display_height);
+        transform_output_image(display_buffer, img, LCD_WIDTH * LCD_HEIGHT);
 
         time1[2] = esp_timer_get_time();
         char str_buf[50];
@@ -164,5 +160,5 @@ extern "C" void app_lcd_main()
 
     gpst_output_queue = xQueueCreate(LCD_CACHE_NUM, sizeof(void *));
 
-    xTaskCreatePinnedToCore(app_lcd_task, "lcd_task", 4096, NULL, 7, &gpst_output_task, 0);
+    xTaskCreatePinnedToCore(app_lcd_task, "lcd_task", 4096, NULL, 5, &gpst_output_task, 0);
 }
