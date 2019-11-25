@@ -23,9 +23,6 @@
 
 static const char *TAG = "app_camera";
 
-QueueHandle_t gpst_input_queue = NULL;
-TaskHandle_t gpst_input_task = NULL;
-
 void app_camera_init()
 {
 #if CONFIG_CAMERA_MODEL_ESP_EYE
@@ -60,16 +57,17 @@ void app_camera_init()
     config.pin_sscb_sda = SIOD_GPIO_NUM;
     config.pin_sscb_scl = SIOC_GPIO_NUM;
     config.pin_pwdn = PWDN_GPIO_NUM;
-    config.pin_reset = -1;//RESET_GPIO_NUM;
+    config.pin_reset = -1; //RESET_GPIO_NUM;
     config.xclk_freq_hz = XCLK_FREQ;
     config.pixel_format = CAMERA_PIXEL_FORMAT;
     config.frame_size = CAMERA_FRAME_SIZE;
     config.jpeg_quality = 10;
-    config.fb_count = 1;
+    config.fb_count = 3;
 
     // camera init
     esp_err_t err = esp_camera_init(&config);
-    if (err != ESP_OK) {
+    if (err != ESP_OK)
+    {
         ESP_LOGE(TAG, "Camera init failed with error 0x%x", err);
         return;
     }
