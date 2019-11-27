@@ -90,6 +90,7 @@ static mtmn_config_t mtmn_config = {0};
 
 #if CONFIG_ESP_FACE_DETECT_LSSH
 static lssh_config_t lssh_config;
+static int min_face=80;
 #endif
 
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
@@ -532,7 +533,7 @@ static esp_err_t stream_handler(httpd_req_t *req)
                     else
                     {
 #if CONFIG_ESP_FACE_DETECT_LSSH
-                        lssh_update_image_shape(&lssh_config, image_matrix->h, image_matrix->w);
+                        // lssh_update_config(&lssh_config, min_face, image_matrix->h, image_matrix->w);
 #endif
                         fr_ready = esp_timer_get_time();
                         box_array_t *net_boxes = NULL;
@@ -940,7 +941,7 @@ void app_httpd_main()
 #endif
 
 #if CONFIG_ESP_FACE_DETECT_LSSH
-    lssh_config = lssh_initialize_config(80, 0.6, 0.3, 240, 320);
+    lssh_config = lssh_get_config(min_face, 0.7, 0.3, 240, 320);
 #endif
 
 #if CONFIG_ESP_FACE_RECOGNITION_ENABLED
