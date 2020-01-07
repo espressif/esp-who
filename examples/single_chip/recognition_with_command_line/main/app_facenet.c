@@ -174,11 +174,11 @@ void task_process(void *arg)
 
                     int matched_id = recognize_face(&id_list, aligned_face);
                     if (matched_id >= 0)
-                        ESP_LOGI(TAG, "Matched Face ID: %d\n", matched_id);
+                        ESP_LOGI(TAG, "Matched Face ID: %d", matched_id);
                     else
-                        ESP_LOGI(TAG, "No Matched Face ID\n");
+                        ESP_LOGI(TAG, "No Matched Face ID");
 
-                    ESP_LOGI(TAG, "Recognition time consumption: %lldms",
+                    ESP_LOGI(TAG, "Recognition time consumption: %lldms\n",
                              (esp_timer_get_time() - recog_match_time) / 1000);
                 }
             }
