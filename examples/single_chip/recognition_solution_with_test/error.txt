@@ -1,0 +1,16 @@
+tion Error: Core  1 panic'ed (Interrupt wdt timeout on CPU1)
+Core 1 register dump:
+PC      : 0x40090e90  PS      : 0x00060034  A0      : 0x8008ed9c  A1      : 0x3ffe9960  
+0x40090e90: memcmp at /home/jeroen/esp8266/esp32/newlib_xtensa-2.2.0-bin/newlib_xtensa-2.2.0/xtensa-esp32-elf/newlib/libc/string/../../../.././newlib/libc/string/memcmp.c:64
+
+A2      : 0x3ffe7f70  A3      : 0x3f409d50  A4      : 0x3ffe7f84  A5      : 0x00000001  
+A6      : 0x00060023  A7      : 0x00000000  A8      : 0x8008e2b8  A9      : 0x3ffe9950  
+A10     : 0x00000003  A11     : 0x00060023  A12     : 0x00060023  A13     : 0x3ffb0c00  
+A14     : 0x00000008  A15     : 0x00000001  SAR     : 0x00000019  EXCCAUSE: 0x00000006  
+EXCVADDR: 0x00000000  LBEG    : 0x400909dd  LEND    : 0x40090a11  LCOUNT  : 0x0000002c  
+0x400909dd: memcpy at /home/jeroen/esp8266/esp32/newlib_xtensa-2.2.0-bin/newlib_xtensa-2.2.0/xtensa-esp32-elf/newlib/libc/machine/xtensa/../../../../.././newlib/libc/machine/xtensa/memcpy.S:291
+
+0x40090a11: memcpy at /home/jeroen/esp8266/esp32/newlib_xtensa-2.2.0-bin/newlib_xtensa-2.2.0/xtensa-esp32-elf/newlib/libc/machine/xtensa/../../../../.././newlib/libc/machine/xtensa/memcpy.S:324
+
+
+

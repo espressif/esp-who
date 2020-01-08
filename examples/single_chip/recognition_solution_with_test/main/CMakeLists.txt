@@ -5,6 +5,9 @@ set(COMPONENT_SRCS
     app_speech_recsrc.c
     app_speech_wakeup.c
     app_wifi.c
+    blur_detect.c
+    app_led_test.c
+    app_facenet_test.c
     )
 
 set(COMPONENT_ADD_INCLUDEDIRS include)
@@ -17,6 +20,7 @@ set(COMPONENT_REQUIRES
     fb_gfx
     esp-sr
     spiffs
+    console
     )
 
 register_component()
