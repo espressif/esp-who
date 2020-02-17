@@ -12,14 +12,15 @@
 #include "esp_partition.h"
 #include "app_speech_srcif.h"
 #include "sdkconfig.h"
-#include "esp_sr_iface.h"
-#include "esp_sr_models.h"
+#include "esp_wn_iface.h"
+#include "esp_wn_models.h"
+#include "dl_lib_coefgetter_if.h"
 #include "app_main.h"
 
-#define SR_MODEL esp_sr_wakenet3_quantized
+static const esp_wn_iface_t *wakenet = &WAKENET_MODEL;
+static const model_coeff_getter_t *model_coeff_getter = &WAKENET_COEFF;
 
 static src_cfg_t srcif;
-static const esp_sr_iface_t *model = &SR_MODEL;
 static model_iface_data_t *model_data;
 
 QueueHandle_t sndQueue;
@@ -27,20 +28,20 @@ QueueHandle_t sndQueue;
 static void event_wakeup_detected(int r)
 {
     assert(g_state == WAIT_FOR_WAKEUP);
-    printf("%s DETECTED.\n", model->get_word_name(model_data, r));
+    printf("%s DETECTED.\n", wakenet->get_word_name(model_data, r));
     g_state = WAIT_FOR_CONNECT;
 }
 
 void nnTask(void *arg)
 {
-    int audio_chunksize = model->get_samp_chunksize(model_data);
+    int audio_chunksize = wakenet->get_samp_chunksize(model_data);
     int16_t *buffer=malloc(audio_chunksize*sizeof(int16_t));
     assert(buffer);
 
     while(1) {
         xQueueReceive(sndQueue, buffer, portMAX_DELAY);
 
-        int r=model->detect(model_data, buffer);
+        int r=wakenet->detect(model_data, buffer);
         if (r) 
         {
             event_wakeup_detected(r);
@@ -54,15 +55,14 @@ void nnTask(void *arg)
 void app_speech_wakeup_init()
 {
     //Initialize NN model
-    model_data=model->create(DET_MODE_95);
+    model_data=wakenet->create(model_coeff_getter,DET_MODE_95);
 
-    wake_word_info_t* word_list = malloc(sizeof(wake_word_info_t));
-    esp_err_t ret = model->get_word_list(model_data, word_list);
-    if (ret == ESP_OK) printf("wake word number = %d, word1 name = %s\n", 
-                               word_list->wake_word_num, word_list->wake_word_list[0]);
-    free(word_list);    
+    int wake_word_num = wakenet->get_word_num(model_data);
+    char *wake_word_list = wakenet->get_word_name(model_data, 1);
+    if (wake_word_num) printf("wake word number = %d, word1 name = %s\n", 
+                               wake_word_num, wake_word_list);  
 
-    int audio_chunksize=model->get_samp_chunksize(model_data);
+    int audio_chunksize=wakenet->get_samp_chunksize(model_data);
 
     //Initialize sound source
     sndQueue=xQueueCreate(2, (audio_chunksize*sizeof(int16_t)));
@@ -73,3 +73,4 @@ void app_speech_wakeup_init()
 
     xTaskCreatePinnedToCore(&nnTask, "nn", 2*1024, NULL, 5, NULL, 1);
 }
+
