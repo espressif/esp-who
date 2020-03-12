@@ -135,7 +135,7 @@
                 padding: 0 5px
             }
 
-            button {
+            button, .button {
                 display: block;
                 margin: 5px;
                 padding: 0 12px;
@@ -335,6 +335,17 @@
                 display: none
             }
 
+            .save {
+                position: absolute;
+                right: 25px;
+                top: 0px;
+                height: 16px;
+                line-height: 16px;
+                padding: 0 4px;
+                text-decoration: none;
+                cursor: pointer
+            }
+
             input[type=text] {
                 border: 1px solid #363636;
                 font-size: 14px;
@@ -391,7 +402,7 @@
                         <div class="input-group" id="framesize-group">
                             <label for="framesize">Resolution</label>
                             <select id="framesize" class="default-action">
-                            	<!-- 5MP -->
+                                <!-- 5MP -->
                                 <option value="21" selected="selected">QSXGA(2560x1920)</option>
                                 <option value="20">P FHD(1080x1920)</option>
                                 <option value="19">WQXGA(2560x1600)</option>
@@ -895,8 +906,9 @@
                 </div>
                 <figure>
                     <div id="stream-container" class="image-container hidden">
+                        <a id="save-still" href="#" class="button save" download="capture.jpg">Save</a>
                         <div class="close" id="close-stream">×</div>
-                        <img id="stream" src="">
+                        <img id="stream" src="" crossorigin>
                     </div>
                 </figure>
             </div>
@@ -987,15 +999,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
   document
     .querySelectorAll('.reg-action')
     .forEach(el => {
-    	if (el.type === 'text') {
-    		el.onkeyup = function(e){
-    			if(e.keyCode == 13){
-    				setRegValue(el);
-    			}
-    		}
-    	} else {
-    		el.onchange = () => setRegValue(el)
-    	}
+        if (el.type === 'text') {
+            el.onkeyup = function(e){
+                if(e.keyCode == 13){
+                    setRegValue(el);
+                }
+            }
+        } else {
+            el.onchange = () => setRegValue(el)
+        }
     })
 
 
@@ -1124,6 +1136,26 @@ document.addEventListener('DOMContentLoaded', function (event) {
     });
   }
 
+  const saveButton = document.getElementById('save-still');
+
+  saveButton.onclick = () => {
+    var canvas = document.createElement("canvas");
+    canvas.width = view.width;
+    canvas.height = view.height;
+    document.body.appendChild(canvas);
+    var context = canvas.getContext('2d');
+    context.drawImage(view,0,0);
+    try {
+      var dataURL = canvas.toDataURL('image/jpeg');
+      saveButton.href = dataURL;
+      var d = new Date();
+      saveButton.download = d.getFullYear() + ("0"+(d.getMonth()+1)).slice(-2) + ("0" + d.getDate()).slice(-2) + ("0" + d.getHours()).slice(-2) + ("0" + d.getMinutes()).slice(-2) + ("0" + d.getSeconds()).slice(-2) + ".jpg";
+    } catch (e) {
+      console.error(e);
+    }
+    canvas.parentNode.removeChild(canvas);
+  }
+  
   const hide = el => {
     el.classList.add('hidden')
   }
