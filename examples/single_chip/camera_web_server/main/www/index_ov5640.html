@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>ESP32 OV3660</title>
+        <title>ESP32 OV5640</title>
         <style>
             body {
                 font-family: Arial,Helvetica,sans-serif;
@@ -126,7 +126,7 @@
                 min-width: 47%
             }
 
-            .input-group input,.input-group select {
+            .input-group input,.input-group select,.input-group span {
                 flex-grow: 1
             }
 
@@ -135,7 +135,7 @@
                 padding: 0 5px
             }
 
-            button, .button {
+            button {
                 display: block;
                 margin: 5px;
                 padding: 0 12px;
@@ -147,17 +147,6 @@
                 border-radius: 5px;
                 font-size: 16px;
                 outline: 0
-            }
-
-            .save {
-                position: absolute;
-                right: 25px;
-                top: 0px;
-                height: 16px;
-                line-height: 16px;
-                padding: 0 4px;
-                text-decoration: none;
-                cursor: pointer
             }
 
             button:hover {
@@ -377,13 +366,12 @@
                 display: none
             }
 
-
         </style>
     </head>
     <body>
         <section class="main">
             <div id="logo">
-                <label for="nav-toggle-cb" id="nav-toggle">&#9776;&nbsp;&nbsp;Toggle OV3660 settings</label>
+                <label for="nav-toggle-cb" id="nav-toggle">&#9776;&nbsp;&nbsp;Toggle settings</label>
             </div>
             <div id="content">
                 <div id="sidebar">
@@ -403,6 +391,11 @@
                         <div class="input-group" id="framesize-group">
                             <label for="framesize">Resolution</label>
                             <select id="framesize" class="default-action">
+                            	<!-- 5MP -->
+                                <option value="21" selected="selected">QSXGA(2560x1920)</option>
+                                <option value="20">P FHD(1080x1920)</option>
+                                <option value="19">WQXGA(2560x1600)</option>
+                                <option value="18">QHD(2560x1440)</option>
                                 <!-- 3MP -->
                                 <option value="17">QXGA(2048x1564)</option>
                                 <option value="16">P 3MP(864x1564)</option>
@@ -526,8 +519,8 @@
                         <div class="input-group" id="aec_value-group">
                             <label for="aec_value">Manual Exposure</label>
                             <div class="range-min">0</div>
-                            <input type="range" id="aec_value" min="0" max="1536" value="320" class="default-action">
-                            <div class="range-max">1536</div>
+                            <input type="range" id="aec_value" min="0" max="1920" value="320" class="default-action">
+                            <div class="range-max">1920</div>
                         </div>
                         <div class="input-group" id="aec2-group">
                             <label for="aec2">Night Mode</label>
@@ -598,12 +591,6 @@
                                 <label class="slider" for="colorbar"></label>
                             </div>
                         </div>
-                        <div class="input-group" id="led-group">
-                            <label for="led_intensity">LED Intensity</label>
-                            <div class="range-min">0</div>
-                            <input type="range" id="led_intensity" min="0" max="255" value="0" class="default-action">
-                            <div class="range-max">255</div>
-                        </div>
                         <div class="input-group" id="face_detect-group">
                             <label for="face_detect">Face Detection</label>
                             <div class="switch">
@@ -618,12 +605,13 @@
                                 <label class="slider" for="face_recognize"></label>
                             </div>
                         </div>
+
+
                         <section id="buttons">
                             <button id="get-still">Get Still</button>
                             <button id="toggle-stream">Start Stream</button>
                             <button id="face_enroll" class="disabled" disabled="disabled">Enroll Face</button>
                         </section>
-
 
                         <div style="margin-top: 8px;"><center><span style="font-weight: bold;">Advanced Settings</span></center></div>
                         <hr style="width:100%">
@@ -672,14 +660,27 @@
                                     <label class="slider" for="bypass-pll"></label>
                                 </div>
                             </div>
+                            <div class="input-group" id="set-pre-pll-group">
+                                <label for="pre-pll">Pre Div</label>
+                                <select id="pre-pll">
+                                    <option value="1" selected="selected">1x</option>
+                                    <option value="2">2x</option>
+                                    <option value="3">3x</option>
+                                    <option value="4">4x</option>
+                                    <option value="5">1.5x</option>
+                                    <option value="6">6x</option>
+                                    <option value="7">2.5x</option>
+                                    <option value="8">8x</option>
+                                </select>
+                            </div>
                             <div class="input-group" id="set-mul-pll-group">
-                                <label for="mul-pll">Multiplier (0 - 31)</label>
+                                <label for="mul-pll">Multiplier (4 - 252)</label>
                                 <div class="text">
-                                    <input id="mul-pll" type="text" minlength="1" maxlength="2" size="18" value="30">
+                                    <input id="mul-pll" type="text" minlength="1" maxlength="3" size="18" value="10">
                                 </div>
                             </div>
                             <div class="input-group" id="root-pll-group">
-                                <label for="root-pll">Root Multiplier</label>
+                                <label for="root-pll">Root Div</label>
                                 <select id="root-pll">
                                     <option value="0" selected="selected">1x</option>
                                     <option value="1">2x</option>
@@ -691,22 +692,13 @@
                                     <input id="sys-pll" type="text" minlength="1" maxlength="2" size="18" value="1">
                                 </div>
                             </div>
-                            <div class="input-group" id="set-pre-pll-group">
-                                <label for="pre-pll">Pre Div</label>
-                                <select id="pre-pll">
-                                    <option value="0">1x</option>
-                                    <option value="1">1.5x</option>
-                                    <option value="2">2x</option>
-                                    <option value="3" selected="selected">3x</option>
-                                </select>
-                            </div>
                             <div class="input-group" id="set-seld5-pll-group">
-                                <label for="seld5-pll">Seld5 Div</label>
+                                <label for="seld5-pll">PCLK Root Div</label>
                                 <select id="seld5-pll">
-                                    <option value="0" selected="selected">1x</option>
-                                    <option value="1">1x</option>
-                                    <option value="2">2x</option>
-                                    <option value="3">2.5x</option>
+                                    <option value="0">1x</option>
+                                    <option value="1" selected="selected">2x</option>
+                                    <option value="2">4x</option>
+                                    <option value="3">8x</option>
                                 </select>
                             </div>
                             <div class="input-group" id="pclk-en-group">
@@ -718,9 +710,13 @@
                             </div>
                             <div class="input-group" id="set-pclk-pll-group">
                                 <label for="pclk-pll">PCLK Div (0 - 31)</label>
-                                <div class="text">
-                                    <input id="pclk-pll" type="text" minlength="1" maxlength="2" size="18" value="10">
-                                </div>
+                                <select id="pclk-pll">
+                                    <option value="1">1x</option>
+                                    <option value="2">2x</option>
+                                    <option value="4" selected="selected">4x</option>
+                                    <option value="8">8x</option>
+                                    <option value="16">16x</option>
+                                </select>
                             </div>
                             <button id="set-pll">Set PLL</button>
                         </section>
@@ -739,10 +735,10 @@
                             <div class="input-group" id="set-end-res-group">
                                 <label for="end-x">Adress End</label>
                                 <div class="text">
-                                    X:<input id="end-x" type="text" minlength="1" maxlength="4" size="6" value="2079">
+                                    X:<input id="end-x" type="text" minlength="1" maxlength="4" size="6" value="2623">
                                 </div>
                                 <div class="text">
-                                    Y:<input id="end-y" type="text" minlength="1" maxlength="4" size="6" value="1547">
+                                    Y:<input id="end-y" type="text" minlength="1" maxlength="4" size="6" value="1951">
                                 </div>
                             </div>
                             <div class="input-group" id="set-offset-res-group">
@@ -751,25 +747,25 @@
                                     X:<input id="offset-x" type="text" minlength="1" maxlength="3" size="6" value="16">
                                 </div>
                                 <div class="text">
-                                    Y:<input id="offset-y" type="text" minlength="1" maxlength="3" size="6" value="6">
+                                    Y:<input id="offset-y" type="text" minlength="1" maxlength="3" size="6" value="4">
                                 </div>
                             </div>
                             <div class="input-group" id="set-total-res-group">
                                 <label for="total-x">Total Size</label>
                                 <div class="text">
-                                    X:<input id="total-x" type="text" minlength="1" maxlength="4" size="6" value="2300">
+                                    X:<input id="total-x" type="text" minlength="1" maxlength="4" size="6" value="2844">
                                 </div>
                                 <div class="text">
-                                    Y:<input id="total-y" type="text" minlength="1" maxlength="4" size="6" value="1564">
+                                    Y:<input id="total-y" type="text" minlength="1" maxlength="4" size="6" value="1968">
                                 </div>
                             </div>
                             <div class="input-group" id="set-output-res-group">
                                 <label for="output-x">Output Size</label>
                                 <div class="text">
-                                    X:<input id="output-x" type="text" minlength="1" maxlength="4" size="6" value="2048">
+                                    X:<input id="output-x" type="text" minlength="1" maxlength="4" size="6" value="2592">
                                 </div>
                                 <div class="text">
-                                    Y:<input id="output-y" type="text" minlength="1" maxlength="4" size="6" value="1536">
+                                    Y:<input id="output-y" type="text" minlength="1" maxlength="4" size="6" value="1944">
                                 </div>
                             </div>
                             <div class="input-group" id="scaling-group">
@@ -893,14 +889,14 @@
                             <div class="input-group"><label for="aecagc5">AEC PK VTS</label><input type="range" id="aecagc5" min="0" max="65535" value="0" class="reg-action" reg="0x350c" offset="0" mask="0xffff"></div>
 
                         </section>
-                        
+
+
                     </nav>
                 </div>
                 <figure>
                     <div id="stream-container" class="image-container hidden">
-                        <a id="save-still" href="#" class="button save" download="capture.jpg">Save</a>
                         <div class="close" id="close-stream">×</div>
-                        <img id="stream" src="" crossorigin>
+                        <img id="stream" src="">
                     </div>
                 </figure>
             </div>
@@ -929,7 +925,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   }
 
   function setReg(reg, offset, mask, value, cb){
-    console.log('Set Reg', '0x'+reg.toString(16), offset, '0x'+mask.toString(16), '0x'+value.toString(16), '('+value+')');
+    //console.log('Set Reg', '0x'+reg.toString(16), offset, '0x'+mask.toString(16), '0x'+value.toString(16), '('+value+')');
     value = (value & mask) << offset;
     mask = mask << offset;
     fetchUrl(`${baseHost}/reg?reg=${reg}&mask=${mask}&val=${value}`, cb);
@@ -944,6 +940,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
         value = (value & mask) >> offset;
         txt = ''+value;
       }
+      //console.log('Get Reg', '0x'+reg.toString(16), offset, '0x'+(mask >> offset).toString(16), '0x'+value.toString(16), '('+txt+')');
       cb(code, txt);
     });
   }
@@ -958,6 +955,94 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   function setWindow(start_x, start_y, end_x, end_y, offset_x, offset_y, total_x, total_y, output_x, output_y, scaling, binning, cb){
     fetchUrl(`${baseHost}/resolution?sx=${start_x}&sy=${start_y}&ex=${end_x}&ey=${end_y}&offx=${offset_x}&offy=${offset_y}&tx=${total_x}&ty=${total_y}&ox=${output_x}&oy=${output_y}&scale=${scaling}&binning=${binning}`, cb);
+  }
+
+
+  const setRegValue = (el) => {
+    let reg = el.attributes.reg?parseInt(el.attributes.reg.nodeValue):0;
+    let offset = el.attributes.offset?parseInt(el.attributes.offset.nodeValue):0;
+    let mask = el.attributes.mask?parseInt(el.attributes.mask.nodeValue):255;
+    let value = 0;
+    switch (el.type) {
+      case 'checkbox':
+        value = el.checked ? mask : 0;
+        break;
+      case 'range':
+      case 'text':
+      case 'select-one':
+        value = el.value;
+        break
+      default:
+        return;
+    }
+
+    setReg(reg, offset, mask, value, function(code, txt){
+      if(code != 200){
+        alert('Error['+code+']: '+txt);
+      }
+    });
+  }
+
+  // Attach on change action for register elements
+  document
+    .querySelectorAll('.reg-action')
+    .forEach(el => {
+    	if (el.type === 'text') {
+    		el.onkeyup = function(e){
+    			if(e.keyCode == 13){
+    				setRegValue(el);
+    			}
+    		}
+    	} else {
+    		el.onchange = () => setRegValue(el)
+    	}
+    })
+
+
+  const updateRegValue = (el, value, updateRemote) => {
+    let initialValue;
+    let offset = el.attributes.offset?parseInt(el.attributes.offset.nodeValue):0;
+    let mask = (el.attributes.mask?parseInt(el.attributes.mask.nodeValue):255) << offset;
+    value = (value & mask) >> offset;
+    if (el.type === 'checkbox') {
+      initialValue = el.checked
+      value = !!value
+      el.checked = value
+    } else {
+      initialValue = el.value
+      el.value = value
+    }
+  }
+
+
+  const printReg = (el) => {
+    let reg = el.attributes.reg?parseInt(el.attributes.reg.nodeValue):0;
+    let offset = el.attributes.offset?parseInt(el.attributes.offset.nodeValue):0;
+    let mask = el.attributes.mask?parseInt(el.attributes.mask.nodeValue):255;
+    let value = 0;
+    switch (el.type) {
+      case 'checkbox':
+        value = el.checked ? mask : 0;
+        break;
+      case 'range':
+      case 'select-one':
+        value = el.value;
+        break
+      default:
+        return;
+    }
+    value = (value & mask) << offset;
+    return '0x'+reg.toString(16)+', 0x'+value.toString(16);
+  }
+
+  document.getElementById('get-gamma').onclick = () => {
+    let out = 'static const DRAM_ATTR uint16_t sensor_regs_gamma0[][2] = {\n';
+    out += '    {'+printReg(document.getElementById('gamma-bias'))+'},\n'
+    for (var i = 1; i < 17; i++) {
+      out += '    {'+printReg(document.getElementById('gamma-'+i))+'}'+((i<16)?',':'')+'\n'
+    }
+    out += '};\n';
+    alert(out);
   }
 
   const setRegButton = document.getElementById('set-reg')
@@ -1039,83 +1124,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
     });
   }
 
-  const setRegValue = (el) => {
-    let reg = el.attributes.reg?parseInt(el.attributes.reg.nodeValue):0;
-    let offset = el.attributes.offset?parseInt(el.attributes.offset.nodeValue):0;
-    let mask = el.attributes.mask?parseInt(el.attributes.mask.nodeValue):255;
-    let value = 0;
-    switch (el.type) {
-      case 'checkbox':
-        value = el.checked ? mask : 0;
-        break;
-      case 'range':
-      case 'text':
-      case 'select-one':
-        value = el.value;
-        break
-      default:
-        return;
-    }
-
-    setReg(reg, offset, mask, value, function(code, txt){
-      if(code != 200){
-        alert('Error['+code+']: '+txt);
-      }
-    });
-  }
-
-  // Attach on change action for register elements
-  document
-    .querySelectorAll('.reg-action')
-    .forEach(el => {
-        if (el.type === 'text') {
-            el.onkeyup = function(e){
-                if(e.keyCode == 13){
-                    setRegValue(el);
-                }
-            }
-        } else {
-            el.onchange = () => setRegValue(el)
-        }
-    })
-
-
-  const updateRegValue = (el, value, updateRemote) => {
-    let initialValue;
-    let offset = el.attributes.offset?parseInt(el.attributes.offset.nodeValue):0;
-    let mask = (el.attributes.mask?parseInt(el.attributes.mask.nodeValue):255) << offset;
-    value = (value & mask) >> offset;
-    if (el.type === 'checkbox') {
-      initialValue = el.checked
-      value = !!value
-      el.checked = value
-    } else {
-      initialValue = el.value
-      el.value = value
-    }
-  }
-
-
-  const printReg = (el) => {
-    let reg = el.attributes.reg?parseInt(el.attributes.reg.nodeValue):0;
-    let offset = el.attributes.offset?parseInt(el.attributes.offset.nodeValue):0;
-    let mask = el.attributes.mask?parseInt(el.attributes.mask.nodeValue):255;
-    let value = 0;
-    switch (el.type) {
-      case 'checkbox':
-        value = el.checked ? mask : 0;
-        break;
-      case 'range':
-      case 'select-one':
-        value = el.value;
-        break
-      default:
-        return;
-    }
-    value = (value & mask) << offset;
-    return '0x'+reg.toString(16)+', 0x'+value.toString(16);
-  }
-
   const hide = el => {
     el.classList.add('hidden')
   }
@@ -1152,16 +1160,16 @@ document.addEventListener('DOMContentLoaded', function (event) {
         value ? hide(exposure) : show(exposure)
       } else if(el.id === "agc"){
         if (value) {
+          //show(gainCeiling)
           hide(agcGain)
         } else {
+          //hide(gainCeiling)
           show(agcGain)
         }
       } else if(el.id === "awb_gain"){
         value ? show(wb) : hide(wb)
       } else if(el.id === "face_recognize"){
         value ? enable(enrollButton) : disable(enrollButton)
-      } else if(el.id == "led_intensity"){
-        value > -1 ? show(ledGroup) : hide(ledGroup)
       }
     }
   }
@@ -1191,6 +1199,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
         console.log(`request to ${query} finished, status: ${response.status}`)
       })
   }
+
+  // Attach default on change action
+  document
+    .querySelectorAll('.default-action')
+    .forEach(el => {
+      el.onchange = () => updateConfig(el)
+    })
 
   document
     .querySelectorAll('.close')
@@ -1228,8 +1243,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const streamButton = document.getElementById('toggle-stream')
   const enrollButton = document.getElementById('face_enroll')
   const closeButton = document.getElementById('close-stream')
-  const saveButton = document.getElementById('save-still')
-  const ledGroup = document.getElementById('led-group')
 
   const stopStream = () => {
     window.stop();
@@ -1267,40 +1280,18 @@ document.addEventListener('DOMContentLoaded', function (event) {
     updateConfig(enrollButton)
   }
 
-  saveButton.onclick = () => {
-    var canvas = document.createElement("canvas");
-    canvas.width = view.width;
-    canvas.height = view.height;
-    document.body.appendChild(canvas);
-    var context = canvas.getContext('2d');
-    context.drawImage(view,0,0);
-    try {
-      var dataURL = canvas.toDataURL('image/jpeg');
-      saveButton.href = dataURL;
-      var d = new Date();
-      saveButton.download = d.getFullYear() + ("0"+(d.getMonth()+1)).slice(-2) + ("0" + d.getDate()).slice(-2) + ("0" + d.getHours()).slice(-2) + ("0" + d.getMinutes()).slice(-2) + ("0" + d.getSeconds()).slice(-2) + ".jpg";
-    } catch (e) {
-      console.error(e);
-    }
-    canvas.parentNode.removeChild(canvas);
-  }
-
-  // Attach default on change action
-  document
-    .querySelectorAll('.default-action')
-    .forEach(el => {
-      el.onchange = () => updateConfig(el)
-    })
-
   // Custom actions
   // Gain
   const agc = document.getElementById('agc')
   const agcGain = document.getElementById('agc_gain-group')
+  //const gainCeiling = document.getElementById('gainceiling-group')
   agc.onchange = () => {
     updateConfig(agc)
     if (agc.checked) {
+      //show(gainCeiling)
       hide(agcGain)
     } else {
+      //hide(gainCeiling)
       show(agcGain)
     }
   }

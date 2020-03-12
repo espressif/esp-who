@@ -30,7 +30,7 @@ static const char *TAG = "app_camera";
 
 void app_camera_main ()
 {
-#if CONFIG_CAMERA_MODEL_ESP_EYE
+#if CONFIG_CAMERA_MODEL_ESP_EYE || CONFIG_CAMERA_MODEL_ESP32_CAM_BOARD
     /* IO13, IO14 is designed for JTAG by default,
      * to use it as generalized input,
      * firstly declair it as pullup input */
@@ -97,7 +97,7 @@ void app_camera_main ()
     config.xclk_freq_hz = 20000000;
     config.pixel_format = PIXFORMAT_JPEG;
     //init with high specs to pre-allocate larger buffers
-    config.frame_size = FRAMESIZE_UXGA;
+    config.frame_size = FRAMESIZE_QSXGA;
     config.jpeg_quality = 10;
     config.fb_count = 2;
 
@@ -116,5 +116,5 @@ void app_camera_main ()
         s->set_saturation(s, -2);//lower the saturation
     }
     //drop down frame size for higher initial frame rate
-    s->set_framesize(s, FRAMESIZE_QVGA);
+    s->set_framesize(s, FRAMESIZE_HD);
 }
