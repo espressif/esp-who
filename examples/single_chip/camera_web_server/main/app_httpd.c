@@ -20,6 +20,7 @@
 #include "driver/ledc.h"
 //#include "camera_index.h"
 #include "sdkconfig.h"
+#include "app_mdns.h"
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
@@ -705,8 +706,12 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     int res = 0;
 
     if (!strcmp(variable, "framesize")) {
-        if (s->pixformat == PIXFORMAT_JPEG)
+        if (s->pixformat == PIXFORMAT_JPEG) {
             res = s->set_framesize(s, (framesize_t)val);
+            if (res == 0) {
+                app_mdns_update_framesize(val);
+            }
+        }
     }
     else if (!strcmp(variable, "quality"))
         res = s->set_quality(s, val);

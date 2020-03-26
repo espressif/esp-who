@@ -33,6 +33,8 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
+#include "mdns.h"
+
 /* The examples use WiFi configuration that you can set via 'make menuconfig'.
 
    If you'd rather not, just change the below entries to strings with
@@ -83,6 +85,7 @@ static esp_err_t event_handler(void *ctx, system_event_t *event)
     default:
         break;
     }
+    mdns_handle_system_event(ctx, event);
     return ESP_OK;
 }
 
