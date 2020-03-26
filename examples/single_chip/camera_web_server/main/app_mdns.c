@@ -21,8 +21,11 @@
   * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   *
   */
-
+#include <string.h>
 #include "sdkconfig.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "esp_camera.h"
@@ -31,30 +34,155 @@
 
 static const char *TAG = "camera mdns";
 
+static const char * service_name = "_esp-cam";
+static const char * proto = "_tcp";
+static mdns_result_t * found_cams = NULL;
+static SemaphoreHandle_t query_lock = NULL;
+static char iname[64];
+static char hname[64];
+static char framesize[4];
+static char pixformat[4];
+static const char * model = NULL;
+
+static void mdns_query_for_cams()
+{
+    mdns_result_t * new_cams = NULL;
+    esp_err_t err = mdns_query_ptr(service_name, proto, 5000, 4,  &new_cams);
+    if(err){
+        ESP_LOGE(TAG, "MDNS Query Failed: %s", esp_err_to_name(err));
+        return;
+    }
+	xSemaphoreTake(query_lock, portMAX_DELAY);
+    if (found_cams != NULL) {
+    	mdns_query_results_free(found_cams);
+    }
+	found_cams = new_cams;
+	xSemaphoreGive(query_lock);
+}
+
+static void mdns_task(void * arg)
+{
+	for (;;) {
+		mdns_query_for_cams();
+		//delay 55 seconds
+		vTaskDelay((55 * 1000) / portTICK_PERIOD_MS);
+	}
+    vTaskDelete(NULL);
+}
+
+/*
+*  Public Functions
+*/
+
+const char * app_mdns_query(size_t * out_len)
+{
+	//build JSON
+    static char json_response[2048];
+    char *p = json_response;
+    *p++ = '[';
+
+    //add own data first
+    tcpip_adapter_ip_info_t ip;
+    if (strlen(CONFIG_ESP_WIFI_SSID)) {
+    	tcpip_adapter_get_ip_info(TCPIP_ADAPTER_IF_STA, &ip);
+    } else {
+    	tcpip_adapter_get_ip_info(TCPIP_ADAPTER_IF_AP, &ip);
+    }
+    *p++ = '{';
+    p += sprintf(p, "\"instance\":\"%s\",", iname);
+    p += sprintf(p, "\"host\":\"%s.local\",", hname);
+    p += sprintf(p, "\"port\":80,");
+    p += sprintf(p, "\"txt\":{");
+    p += sprintf(p, "\"pixformat\":\"%s\",", pixformat);
+    p += sprintf(p, "\"framesize\":\"%s\",", framesize);
+    p += sprintf(p, "\"stream_port\":\"81\",");
+    p += sprintf(p, "\"board\":\"%s\",", CAM_BOARD);
+    p += sprintf(p, "\"model\":\"%s\",", model);
+    *p++ = '}';
+    *p++ = ',';
+	p += sprintf(p, "\"ip\":\"" IPSTR "\",", IP2STR(&(ip.ip)));
+	p += sprintf(p, "\"id\":\"" IPSTR ":80\",", IP2STR(&(ip.ip)));
+	p += sprintf(p, "\"service\":\"%s\",", service_name);
+	p += sprintf(p, "\"proto\":\"%s\"", proto);
+    *p++ = '}';
+
+	xSemaphoreTake(query_lock, portMAX_DELAY);
+    if (found_cams) {
+    	*p++ = ',';
+    }
+    mdns_result_t * r = found_cams;
+    mdns_ip_addr_t * a = NULL;
+    int t;
+    while(r){
+    	*p++ = '{';
+        if(r->instance_name){
+            p += sprintf(p, "\"instance\":\"%s\",", r->instance_name);
+        }
+        if(r->hostname){
+            p += sprintf(p, "\"host\":\"%s.local\",", r->hostname);
+            p += sprintf(p, "\"port\":%u,", r->port);
+        }
+        if(r->txt_count){
+            p += sprintf(p, "\"txt\":{");
+            for(t=0; t<r->txt_count; t++){
+            	if (t > 0) {
+            		*p++ = ',';
+            	}
+                p += sprintf(p, "\"%s\":\"%s\"", r->txt[t].key, r->txt[t].value?r->txt[t].value:"NULL");
+            }
+    		*p++ = '}';
+    		*p++ = ',';
+        }
+        a = r->addr;
+        while(a){
+            if(a->addr.type != IPADDR_TYPE_V6){
+                p += sprintf(p, "\"ip\":\"" IPSTR "\",", IP2STR(&(a->addr.u_addr.ip4)));
+            	p += sprintf(p, "\"id\":\"" IPSTR ":%u\",", IP2STR(&(a->addr.u_addr.ip4)), r->port);
+                break;
+            }
+            a = a->next;
+        }
+        p += sprintf(p, "\"service\":\"%s\",", service_name);
+        p += sprintf(p, "\"proto\":\"%s\"", proto);
+    	*p++ = '}';
+        r = r->next;
+        if (r) {
+        	*p++ = ',';
+        }
+    }
+	xSemaphoreGive(query_lock);
+    *p++ = ']';
+    *out_len = (uint32_t)p - (uint32_t)json_response;
+    *p++ = '\0';
+    ESP_LOGI(TAG, "JSON: %uB", *out_len);
+    return (const char *)json_response;
+}
+
 void app_mdns_update_framesize(int size)
 {
-	char framesize[4];
     snprintf(framesize, 4, "%d", size);
-    if(mdns_service_txt_item_set("_esp-cam", "_tcp", "framesize", (char*)framesize)){
+    if(mdns_service_txt_item_set(service_name, proto, "framesize", (char*)framesize)){
         ESP_LOGE(TAG, "mdns_service_txt_item_set() framesize Failed");
     }
 }
 
 void app_mdns_main()
-{
-	char iname[64];
-	char hname[64];
+{	
     uint8_t mac[6];
-	char framesize[4];
-	char pixformat[4];
 
-    if(esp_read_mac(mac, ESP_MAC_WIFI_STA) != ESP_OK){
+	query_lock = xSemaphoreCreateBinary();
+	if (query_lock == NULL) {
+        ESP_LOGE(TAG, "xSemaphoreCreateMutex() Failed");
+        return;
+	}
+	xSemaphoreGive(query_lock);
+
+    if (esp_read_mac(mac, ESP_MAC_WIFI_STA) != ESP_OK) {
         ESP_LOGE(TAG, "esp_read_mac() Failed");
         return;
     }
 
     sensor_t * s = esp_camera_sensor_get();
-    const char * model;
     switch(s->id.PID){
         case OV2640_PID: model = "OV2640"; break;
         case OV3660_PID: model = "OV3660"; break;
@@ -70,10 +198,11 @@ void app_mdns_main()
     while (*src) {
     	c = *src++;
     	if (c >= 'A' && c <= 'Z') {
-    		c -= 'A';
+    		c -= 'A' - 'a';
     	}
     	*dst++ = c;
     }
+    *dst++ = '\0';
 
     if(mdns_init() != ESP_OK){
         ESP_LOGE(TAG, "mdns_init() Failed");
@@ -104,7 +233,10 @@ void app_mdns_main()
         {(char*)"pixformat"   	,(char*)pixformat}
     };
 
-    if(mdns_service_add(NULL, "_esp-cam", "_tcp", 80, camera_txt_data, 5)) {
+    if(mdns_service_add(NULL, service_name, proto, 80, camera_txt_data, 5)) {
         ESP_LOGE(TAG, "mdns_service_add() ESP-CAM Failed");
+        return;
     }
+
+    xTaskCreate(mdns_task, "mdns-cam", 2048, NULL, 2, NULL);
 }

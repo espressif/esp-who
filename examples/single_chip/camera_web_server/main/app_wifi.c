@@ -172,4 +172,5 @@ void app_wifi_main()
         wifi_init_sta();
     }
     ESP_ERROR_CHECK(esp_wifi_start());
+    ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_NONE));
 }

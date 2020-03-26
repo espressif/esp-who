@@ -883,6 +883,15 @@ static esp_err_t status_handler(httpd_req_t *req)
     return httpd_resp_send(req, json_response, strlen(json_response));
 }
 
+static esp_err_t mdns_handler(httpd_req_t *req)
+{
+    size_t json_len = 0;
+    const char * json_response = app_mdns_query(&json_len);
+    httpd_resp_set_type(req, "application/json");
+    httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+    return httpd_resp_send(req, json_response, json_len);
+}
+
 static esp_err_t xclk_handler(httpd_req_t *req)
 {
     char *buf = NULL;
@@ -1142,6 +1151,12 @@ void app_httpd_main()
         .handler = win_handler,
         .user_ctx = NULL};
 
+    httpd_uri_t mdns_uri = {
+        .uri = "/mdns",
+        .method = HTTP_GET,
+        .handler = mdns_handler,
+        .user_ctx = NULL};
+
     ra_filter_init(&ra_filter, 20);
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
@@ -1184,6 +1199,8 @@ void app_httpd_main()
         httpd_register_uri_handler(camera_httpd, &greg_uri);
         httpd_register_uri_handler(camera_httpd, &pll_uri);
         httpd_register_uri_handler(camera_httpd, &win_uri);
+
+        httpd_register_uri_handler(camera_httpd, &mdns_uri);
     }
 
     config.server_port += 1;
