@@ -20,6 +20,7 @@
 #include "driver/ledc.h"
 //#include "camera_index.h"
 #include "sdkconfig.h"
+#include "app_mdns.h"
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
@@ -705,8 +706,12 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     int res = 0;
 
     if (!strcmp(variable, "framesize")) {
-        if (s->pixformat == PIXFORMAT_JPEG)
+        if (s->pixformat == PIXFORMAT_JPEG) {
             res = s->set_framesize(s, (framesize_t)val);
+            if (res == 0) {
+                app_mdns_update_framesize(val);
+            }
+        }
     }
     else if (!strcmp(variable, "quality"))
         res = s->set_quality(s, val);
@@ -876,6 +881,15 @@ static esp_err_t status_handler(httpd_req_t *req)
     httpd_resp_set_type(req, "application/json");
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
     return httpd_resp_send(req, json_response, strlen(json_response));
+}
+
+static esp_err_t mdns_handler(httpd_req_t *req)
+{
+    size_t json_len = 0;
+    const char * json_response = app_mdns_query(&json_len);
+    httpd_resp_set_type(req, "application/json");
+    httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+    return httpd_resp_send(req, json_response, json_len);
 }
 
 static esp_err_t xclk_handler(httpd_req_t *req)
@@ -1137,6 +1151,12 @@ void app_httpd_main()
         .handler = win_handler,
         .user_ctx = NULL};
 
+    httpd_uri_t mdns_uri = {
+        .uri = "/mdns",
+        .method = HTTP_GET,
+        .handler = mdns_handler,
+        .user_ctx = NULL};
+
     ra_filter_init(&ra_filter, 20);
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
@@ -1179,6 +1199,8 @@ void app_httpd_main()
         httpd_register_uri_handler(camera_httpd, &greg_uri);
         httpd_register_uri_handler(camera_httpd, &pll_uri);
         httpd_register_uri_handler(camera_httpd, &win_uri);
+
+        httpd_register_uri_handler(camera_httpd, &mdns_uri);
     }
 
     config.server_port += 1;
