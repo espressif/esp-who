@@ -97,7 +97,7 @@ const char * app_mdns_query(size_t * out_len)
     p += sprintf(p, "\"framesize\":\"%s\",", framesize);
     p += sprintf(p, "\"stream_port\":\"81\",");
     p += sprintf(p, "\"board\":\"%s\",", CAM_BOARD);
-    p += sprintf(p, "\"model\":\"%s\",", model);
+    p += sprintf(p, "\"model\":\"%s\"", model);
     *p++ = '}';
     *p++ = ',';
 	p += sprintf(p, "\"ip\":\"" IPSTR "\",", IP2STR(&(ip.ip)));
