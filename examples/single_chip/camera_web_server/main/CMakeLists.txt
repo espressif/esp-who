@@ -7,6 +7,7 @@ set(COMPONENT_REQUIRES
     nvs_flash
     esp_http_server
     fb_gfx
+    mdns
     )
 
 set(COMPONENT_EMBED_FILES
