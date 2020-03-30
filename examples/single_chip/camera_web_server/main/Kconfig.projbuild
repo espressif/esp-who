@@ -1,6 +1,12 @@
 menu "Camera Web Server"
 
 menu "WiFi Settings"
+config ESP_HOST_NAME
+    string "Camera Host Name"
+    default ""
+    help
+    Hostname that the camera will advertise over mDNS.
+
 config ESP_WIFI_SSID
     string "WiFi STA SSID"
     default ""

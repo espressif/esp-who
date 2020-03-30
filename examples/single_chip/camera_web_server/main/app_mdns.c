@@ -177,11 +177,6 @@ void app_mdns_main()
 	}
 	xSemaphoreGive(query_lock);
 
-    if (esp_read_mac(mac, ESP_MAC_WIFI_STA) != ESP_OK) {
-        ESP_LOGE(TAG, "esp_read_mac() Failed");
-        return;
-    }
-
     sensor_t * s = esp_camera_sensor_get();
     switch(s->id.PID){
         case OV2640_PID: model = "OV2640"; break;
@@ -190,7 +185,17 @@ void app_mdns_main()
         case OV7725_PID: model = "OV7725"; break;
         default: model = "UNKNOWN"; break;
     }
-    snprintf(iname, 64, "%s-%s-%02X%02X%02X", CAM_BOARD, model, mac[3], mac[4], mac[5]);
+    
+    if (strlen(CONFIG_ESP_HOST_NAME) > 0) {
+        snprintf(iname, 64, "%s", CONFIG_ESP_HOST_NAME);
+    } else {
+        if (esp_read_mac(mac, ESP_MAC_WIFI_STA) != ESP_OK) {
+            ESP_LOGE(TAG, "esp_read_mac() Failed");
+            return;
+        }
+        snprintf(iname, 64, "%s-%s-%02X%02X%02X", CAM_BOARD, model, mac[3], mac[4], mac[5]);
+    }
+
     snprintf(framesize, 4, "%d", s->status.framesize);
     snprintf(pixformat, 4, "%d", s->pixformat);
 
