@@ -21,6 +21,7 @@
 //#include "camera_index.h"
 #include "sdkconfig.h"
 #include "app_mdns.h"
+#include "app_camera.h"
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
@@ -840,6 +841,9 @@ static esp_err_t status_handler(httpd_req_t *req)
         p+=print_reg(p, s, 0x132, 0xFF);
     }
 
+    p += sprintf(p, "\"board\":\"%s\",", CAM_BOARD);
+    p += sprintf(p, "\"xclk\":%u,", s->xclk_freq_hz / 1000000);
+    p += sprintf(p, "\"pixformat\":%u,", s->pixformat);
     p += sprintf(p, "\"framesize\":%u,", s->status.framesize);
     p += sprintf(p, "\"quality\":%u,", s->status.quality);
     p += sprintf(p, "\"brightness\":%d,", s->status.brightness);
@@ -1086,10 +1090,20 @@ static esp_err_t index_handler(httpd_req_t *req)
     }
 }
 
+static esp_err_t monitor_handler(httpd_req_t *req)
+{
+    extern const unsigned char monitor_html_gz_start[] asm("_binary_monitor_html_gz_start");
+    extern const unsigned char monitor_html_gz_end[] asm("_binary_monitor_html_gz_end");
+    size_t monitor_html_gz_len = monitor_html_gz_end - monitor_html_gz_start;
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    return httpd_resp_send(req, (const char *)monitor_html_gz_start, monitor_html_gz_len);
+}
+
 void app_httpd_main()
 {
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-    config.max_uri_handlers = 10;
+    config.max_uri_handlers = 12;
 
     httpd_uri_t index_uri = {
         .uri = "/",
@@ -1157,6 +1171,12 @@ void app_httpd_main()
         .handler = mdns_handler,
         .user_ctx = NULL};
 
+    httpd_uri_t monitor_uri = {
+        .uri = "/monitor",
+        .method = HTTP_GET,
+        .handler = monitor_handler,
+        .user_ctx = NULL};
+
     ra_filter_init(&ra_filter, 20);
 
 #if CONFIG_ESP_FACE_DETECT_ENABLED
@@ -1201,6 +1221,7 @@ void app_httpd_main()
         httpd_register_uri_handler(camera_httpd, &win_uri);
 
         httpd_register_uri_handler(camera_httpd, &mdns_uri);
+        httpd_register_uri_handler(camera_httpd, &monitor_uri);
     }
 
     config.server_port += 1;
