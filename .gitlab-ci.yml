@@ -36,7 +36,10 @@ before_script:
   - source esp-idf/tools/ci/configure_ci_environment.sh
 
   # fetch the submodules (& if necessary re-fetch repo) from gitlab
-  - time ./esp-idf/tools/ci/get-full-sources.sh
+  - time git submodule update --init --recursive
+
+  - ./esp-idf/install.sh
+  - . ./esp-idf/export.sh
 
 
 .add_gitlab_key_before:

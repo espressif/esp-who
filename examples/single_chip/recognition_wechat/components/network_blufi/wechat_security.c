@@ -40,7 +40,7 @@
 #include "mbedtls/aes.h"
 #include "mbedtls/dhm.h"
 #include "mbedtls/md5.h"
-#include "rom/crc.h"
+#include "esp32/rom/crc.h"
 
 /* wechat Includes */
 #include "wechat_blufi.h"
