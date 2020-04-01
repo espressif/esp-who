@@ -60,9 +60,9 @@ If you clone project without `--recursive` flag, please go to the `esp-who` dire
 ### ESP-IDF
 See setup guides for detailed instructions to set up the ESP-IDF:
 
-* [Getting Started Guide for the stable ESP-IDF version](https://docs.espressif.com/projects/esp-idf/en/stable/get-started-cmake/index.html)
+* [Getting Started Guide for ESP-IDF v4.0](https://docs.espressif.com/projects/esp-idf/en/v4.0/get-started/index.html)
 
- In this case, we take [ESP-IDF v3.3.1](https://github.com/espressif/esp-idf/releases/v3.3.1) as the test version.
+ In this case, we take [ESP-IDF v4.0](https://github.com/espressif/esp-idf/tree/release/v4.0) as the default version.
 
  If you have already configured ESP-IDF before and don't want to change the existing one, you can just point `IDF_PATH` to the ESP-IDF that is in ESP-WHO.
 
