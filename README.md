@@ -46,7 +46,13 @@ The recommended resolution of input image is **QVGA (320x240)**.
 
 As for choosing camera as an image offer, make sure that the ESP32 module you choose offers specific pins that your camera needs.
 
-By now, we have provided the driver of **OV2640** and **OV3660**, which are highly recommended to get started with.
+By now, we have provided some drivers of cameras, which are highly recommended to get started with:
+
+**OV2640**
+
+**OV3660**
+
+**OV5640**
 
 ### ESP-WHO
 Make sure you clone the project recursive:
@@ -62,9 +68,9 @@ See setup guides for detailed instructions to set up the ESP-IDF:
 
 * [Getting Started Guide for ESP-IDF v4.0](https://docs.espressif.com/projects/esp-idf/en/v4.0/get-started/index.html)
 
- In this case, we take [ESP-IDF v4.0](https://github.com/espressif/esp-idf/tree/release/v4.0) as the default version.
+ We take [ESP-IDF v4.0](https://github.com/espressif/esp-idf/tree/release/v4.0) as the default version.
 
- If you have already configured ESP-IDF before and don't want to change the existing one, you can just point `IDF_PATH` to the ESP-IDF that is in ESP-WHO.
+ > Now this repository supports two versions of IDF: v3.3.1 and v4.0.0. Master branch is based on v4.0.0, while for v3.3.1, please checkout to idfv3.3.1 branch.
 
 
 # Components
