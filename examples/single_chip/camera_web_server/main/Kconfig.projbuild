@@ -31,6 +31,12 @@ config ESP_WIFI_AP_PASSWORD
     help
 	AP password for WPA2 or empty for Open.
 
+config ESP_WIFI_AP_CHANNEL
+    string "WiFi AP Channel"
+    default ""
+    help
+	AP channel for better connection performance.
+
 config SERVER_IP
     string "WiFi AP IP Address"
     default "192.168.4.1"

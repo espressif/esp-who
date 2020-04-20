@@ -41,6 +41,7 @@ static const char *TAG = "app_wifi";
 #define EXAMPLE_ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
 #define EXAMPLE_MAX_STA_CONN       CONFIG_MAX_STA_CONN
 #define EXAMPLE_IP_ADDR            CONFIG_SERVER_IP
+#define EXAMPLE_ESP_WIFI_AP_CHANNEL CONFIG_ESP_WIFI_AP_CHANNEL
 
 static esp_err_t event_handler(void *ctx, system_event_t *event)
 {/*{{{*/
@@ -114,6 +115,11 @@ static void wifi_init_softap()
     wifi_config.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
     if (strlen(EXAMPLE_ESP_WIFI_PASS) == 0) {
         wifi_config.ap.authmode = WIFI_AUTH_OPEN;
+    }
+    if (strlen(EXAMPLE_ESP_WIFI_AP_CHANNEL)) {
+        int channel;
+        sscanf(EXAMPLE_ESP_WIFI_AP_CHANNEL, "%d", &channel);
+        wifi_config.ap.channel = channel;
     }
 
     esp_wifi_set_ps(WIFI_PS_NONE);

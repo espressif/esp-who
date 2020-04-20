@@ -45,7 +45,9 @@
 #define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
 #define EXAMPLE_ESP_WIFI_AP_SSID   CONFIG_ESP_WIFI_AP_SSID
 #define EXAMPLE_ESP_WIFI_AP_PASS   CONFIG_ESP_WIFI_AP_PASSWORD
+#define EXAMPLE_MAX_STA_CONN       CONFIG_MAX_STA_CONN
 #define EXAMPLE_IP_ADDR            CONFIG_SERVER_IP
+#define EXAMPLE_ESP_WIFI_AP_CHANNEL CONFIG_ESP_WIFI_AP_CHANNEL
 
 static const char *TAG = "camera wifi";
 
@@ -108,10 +110,15 @@ void wifi_init_softap()
     snprintf((char*)wifi_config.ap.ssid, 32, "%s", EXAMPLE_ESP_WIFI_AP_SSID);
     wifi_config.ap.ssid_len = strlen((char*)wifi_config.ap.ssid);
     snprintf((char*)wifi_config.ap.password, 64, "%s", EXAMPLE_ESP_WIFI_AP_PASS);
-    wifi_config.ap.max_connection = 1;
+    wifi_config.ap.max_connection = EXAMPLE_MAX_STA_CONN;
     wifi_config.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
     if (strlen(EXAMPLE_ESP_WIFI_AP_PASS) == 0) {
         wifi_config.ap.authmode = WIFI_AUTH_OPEN;
+    }
+    if (strlen(EXAMPLE_ESP_WIFI_AP_CHANNEL)) {
+        int channel;
+        sscanf(EXAMPLE_ESP_WIFI_AP_CHANNEL, "%d", &channel);
+        wifi_config.ap.channel = channel;
     }
 
     ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config));
