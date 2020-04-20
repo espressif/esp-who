@@ -70,7 +70,7 @@ See setup guides for detailed instructions to set up the ESP-IDF:
 
  We take [ESP-IDF v4.0](https://github.com/espressif/esp-idf/tree/release/v4.0) as the default version.
 
- > Now this repository supports two versions of IDF: v3.3.1 and v4.0.0. Master branch is based on v4.0.0, while for v3.3.1, please checkout to idfv3.3.1 branch.
+ > Now this repository supports two versions of IDF: v3.3.1 and v4.0.0.
 
 
 # Components
