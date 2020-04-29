@@ -31,6 +31,12 @@ config ESP_WIFI_AP_PASSWORD
     help
 	AP password for WPA2 or empty for Open.
 
+config MAX_STA_CONN
+    int "Maximal STA connections"
+    default 1
+    help
+	Max number of the STA connects to AP.
+
 config ESP_WIFI_AP_CHANNEL
     string "WiFi AP Channel"
     default ""
