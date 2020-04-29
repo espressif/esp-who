@@ -1,0 +1,53 @@
+
+build/esp32-s2-hmi.elf:     file format elf32-xtensa-le
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .rtc.text     00000000  600fe000  600fe000  004f43f7  2**0
+                  CONTENTS
+  1 .rtc.dummy    00000000  3fcf4000  3fcf4000  004f43f7  2**0
+                  CONTENTS
+  2 .rtc.force_fast 00000000  3fcf4000  3fcf4000  004f43f7  2**0
+                  CONTENTS
+  3 .rtc_noinit   00000000  50000000  50000000  004f43f7  2**0
+                  CONTENTS
+  4 .rtc.force_slow 00000000  50000000  50000000  004f43f7  2**0
+                  CONTENTS
+  5 .iram0.vectors 00000403  40378000  40378000  004c5000  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  6 .iram0.text   0000a901  40378404  40378404  004c5404  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  7 .iram0.text_end 00000003  40382d05  40382d05  004cfd05  2**0
+                  ALLOC
+  8 .dram0.data   000026e4  3fca0000  3fca0000  004c2000  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .noinit       00000000  3fca26e4  3fca26e4  004f43f7  2**0
+                  CONTENTS
+ 10 .dram0.bss    00000ec4  3fca26e4  3fca26e4  004c46e4  2**2
+                  ALLOC
+ 11 .dram0.heap_start 00000000  3fca35a8  3fca35a8  004f43f7  2**0
+                  CONTENTS
+ 12 .flash.rodata 004c0838  38000020  38000020  00001020  2**4
+                  CONTENTS, ALLOC, LOAD, DATA
+ 13 .flash.text   000243d7  44000020  44000020  004d0020  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+ 14 .xtensa.info  00000038  00000000  00000000  004f43f7  2**0
+                  CONTENTS, READONLY
+ 15 .comment      0000006b  00000000  00000000  004f442f  2**0
+                  CONTENTS, READONLY
+ 16 .debug_frame  00008e68  00000000  00000000  004f449c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_info   001e0d99  00000000  00000000  004fd304  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .debug_abbrev 00021744  00000000  00000000  006de09d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 19 .debug_loc    0005ffe5  00000000  00000000  006ff7e1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 20 .debug_aranges 00003b70  00000000  00000000  0075f7c8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 21 .debug_ranges 00008338  00000000  00000000  00763338  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 22 .debug_line   000d4d46  00000000  00000000  0076b670  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 23 .debug_str    0002780e  00000000  00000000  008403b6  2**0
+                  CONTENTS, READONLY, DEBUGGING
