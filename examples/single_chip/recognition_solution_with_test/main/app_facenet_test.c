@@ -143,7 +143,7 @@ static void IRAM_ATTR boot_isr_handler(void* arg)
 
 void app_facenet_test_main()
 {
-    gpio_install_isr_service(0);
+    //gpio_install_isr_service(0);
     gpio_set_intr_type(15, GPIO_INTR_POSEDGE);
     gpio_isr_handler_add(15, gpio_isr_handler, (void*) 15);
     gpio_set_intr_type(0, GPIO_INTR_POSEDGE);

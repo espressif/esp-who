@@ -76,7 +76,7 @@ static void i2s_test_init(void)
     i2s_config_t i2s_config = {
         .mode = I2S_MODE_MASTER | I2S_MODE_RX,//the mode must be set according to DSP configuration
         .sample_rate = 16000,                           //must be the same as DSP configuration
-        .channel_format = I2S_CHANNEL_FMT_ONLY_RIGHT,   //must be the same as DSP configuration
+        .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,   //must be the same as DSP configuration
         .bits_per_sample = 32,                          //must be the same as DSP configuration
         .communication_format = I2S_COMM_FORMAT_I2S,
         .dma_buf_count = 3,
@@ -99,10 +99,10 @@ void recsrcTask_test(void *arg)
     i2s_test_init();
 
     src_cfg_t *cfg=(src_cfg_t*)arg;
-    int buffer_size = cfg->item_size * (sizeof(int32_t)/sizeof(int16_t));
+    size_t samp_len = cfg->item_size*2*sizeof(int)/sizeof(int16_t);
 
-    int32_t *samp=malloc(buffer_size);
-    int16_t *samp_out = malloc(cfg->item_size);
+    int32_t *samp=malloc(samp_len);
+    //int16_t *samp_out = malloc(cfg->item_size);
 
     size_t read_len = 0;
 
@@ -113,12 +113,14 @@ void recsrcTask_test(void *arg)
             continue;
         }
 
-        i2s_read(1, samp, buffer_size, &read_len, portMAX_DELAY);
-        for (int x=0; x<cfg->item_size/2; x++) {
-            samp_out[x] = (int16_t)(samp[x] >> 16) * 7;
+        i2s_read(1, samp, samp_len, &read_len, portMAX_DELAY);
+        for (int x=0; x<cfg->item_size/4; x++) {
+            int s1 = ((samp[x * 4] + samp[x * 4 + 1]) >> 13) & 0x0000FFFF;
+            int s2 = ((samp[x * 4 + 2] + samp[x * 4 + 3]) << 3) & 0xFFFF0000;
+            samp[x] = s1 | s2;
         }
 
-        xQueueSend(*cfg->queue, samp_out, portMAX_DELAY);
+        xQueueSend(*cfg->queue, samp, portMAX_DELAY);
     }
 
     vTaskDelete(NULL);
