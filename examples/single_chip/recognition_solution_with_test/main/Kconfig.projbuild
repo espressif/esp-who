@@ -18,7 +18,14 @@ config MAX_STA_CONN
     help
 	Max number of the STA connects to AP.
 
+config ESP_WIFI_AP_CHANNEL
+    string "WiFi AP Channel"
+    default ""
+    help
+	AP channel for better connection performance.
+
 config SERVER_IP
     string "IP address of server"
     default "192.168.4.1"
 endmenu
+

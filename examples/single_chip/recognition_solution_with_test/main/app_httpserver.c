@@ -222,8 +222,6 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         {
             ESP_LOGE(TAG, "dl_matrix3du_alloc failed");
             res = ESP_FAIL;
-            esp_camera_fb_return(fb);
-            fb = NULL;
             break;
         }
 
@@ -312,6 +310,7 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         dl_matrix3du_free(image_matrix);
         fr_encode = esp_timer_get_time();
 
+
         if(res == ESP_OK){
             size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, _jpg_buf_len);
             res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
@@ -322,7 +321,6 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         if(res == ESP_OK){
             res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
         }
- 
         if(fb){
             esp_camera_fb_return(fb);
             fb = NULL;
@@ -345,14 +343,14 @@ esp_err_t facenet_stream_handler(httpd_req_t *req)
         int64_t frame_time = fr_end - last_frame;
         last_frame = fr_end;
         frame_time /= 1000;
-        ESP_LOGI(TAG, "MJPG: %uKB %ums (%.1ffps), %u+%u+%u+%u=%u",
+        ESP_LOGD(TAG, "MJPG: %uKB %ums (%.1ffps), %u+%u+%u+%u=%u",
                 (uint32_t)(_jpg_buf_len/1024),
                 (uint32_t)frame_time, 1000.0 / (uint32_t)frame_time,
                 (uint32_t)ready_time, (uint32_t)face_time, (uint32_t)recognize_time, (uint32_t)encode_time, (uint32_t)process_time);
     }
 
     last_frame = 0;
-    g_state = WAIT_FOR_CONNECT;
+    g_state = WAIT_FOR_WAKEUP;
     return ESP_OK;
 }
 
@@ -425,4 +423,3 @@ void app_httpserver_init ()
         httpd_register_uri_handler(camera_httpd, &_face_stream_handler);
     }
 }
-
