@@ -74,7 +74,7 @@ void task_output(void *pvParameters)
 
     uart_param_config(UART_NUM_1, &uart_config);
     uart_set_pin(UART_NUM_1, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
-    // uart_set_pin(UART_NUM_0, 14, 15, ECHO_TEST_RTS, ECHO_TEST_CTS);
+    
     uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0);
 
     // Configure a temporary buffer for the incoming data
@@ -125,7 +125,7 @@ void task_output(void *pvParameters)
                         memcpy(cache + 5 + 4, fb->buf, fb_len);
                         uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4 + fb_len);
                     }else{
-                        od_box_array_t *detect_result = hand_detection_forward(image_matrix, 128, 0.4, 0.45, 1);
+                        od_box_array_t *detect_result = hand_detection_forward(image_matrix, 80, 0.4, 0.45, 1);
 
                         if(detect_result){
                             draw_boxes(image_matrix, detect_result);
