@@ -64,7 +64,7 @@ void ns_process(ns_handle_t inst, int16_t *indata, int16_t *outdata);
 void ns_destroy(ns_handle_t inst);
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif //_ESP_NS_H_
