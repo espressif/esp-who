@@ -1,9 +1,0 @@
-build
-
-sdkconfig
-sdkconfig.old
-
-pnet_model.*
-rnet_model.*
-onet_model.*
-frmn_model.*

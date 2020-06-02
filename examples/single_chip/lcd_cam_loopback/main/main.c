@@ -11,15 +11,15 @@
 #include "esp_heap_caps.h"
 #include "esp_log.h"
 #include "soc/system_reg.h"
+#include "esp_timer.h"
 #include "cam.h"
 #include "ov2640.h"
 #include "lcd.h"
 #include "jpeg.h"
-#include "fd_forward.h"
 #include "lssh_forward.h"
-#include "fr_forward.h"
 #include "image_util.h"
 #include "input.h"
+#include "lssh_human_face_mn2_q.h"
 
 static const char *TAG = "main";
 
@@ -49,42 +49,27 @@ static const char *TAG = "main";
 #define CAM_D6    GPIO_NUM_21
 #define CAM_D7    GPIO_NUM_38
 
-void init_config(mtmn_config_t *mtmn_config)
-{
-    mtmn_config->type = FAST;
-    mtmn_config->min_face = 80;
-    mtmn_config->pyramid = 0.707;
-    mtmn_config->pyramid_times = 4;
-    mtmn_config->p_threshold.score = 0.6;
-    mtmn_config->p_threshold.nms = 0.7;
-    mtmn_config->p_threshold.candidate_number = 5;
-    mtmn_config->r_threshold.score = 0.5;
-    mtmn_config->r_threshold.nms = 0.7;
-    mtmn_config->r_threshold.candidate_number = 4;
-    mtmn_config->o_threshold.score = 0.7;
-    mtmn_config->o_threshold.nms = 0.7;
-    mtmn_config->o_threshold.candidate_number = 4;
-}
-mtmn_config_t mtmn_config;
-box_array_t *onet_forward(dl_matrix3du_t *image, box_array_t *net_boxes, net_config_t *config);
-face_id_list id_list = {0};
+//box_array_t *onet_forward(dl_matrix3du_t *image, box_array_t *net_boxes, net_config_t *config);
+//face_id_list id_list = {0};
 
-void face_detection(uint16_t *cam_buf) {
-    dl_matrix3du_t *image_mat = dl_matrix3du_alloc(1, CAM_WIDTH, CAM_HIGH, 3);
-    transform_input_image(image_mat->item, cam_buf, CAM_WIDTH * CAM_HIGH);
-    lssh_config_t lssh_config = lssh_get_config(80, 0.7, 0.3, CAM_HIGH, CAM_WIDTH);
+void face_detection(dl_matrix3dq_t *image_mat, uint16_t *cam_buf, lssh_config_t lssh_config) {
+
+    image_resize_4_(image_mat->item, cam_buf, 80, 60, 3, 320, 1);
+    //transform_input_image(image_mat->item, cam_buf, CAM_WIDTH * CAM_HIGH);
+    /*
     net_config_t onet_config = {0};
     onet_config.w = 48;
     onet_config.h = 48;
     onet_config.threshold = mtmn_config.o_threshold;
+    */
 
-    int32_t c1 = get_ccount();
-    // box_array_t *net_boxes = face_detect(image_mat, &mtmn_config);
+    // int t1 = esp_timer_get_time();
+    // int32_t c1 = get_count();
     box_array_t *lnet_boxes = lssh_detect_object(image_mat, lssh_config);
     if (lnet_boxes)
     {
         // box_array_t *net_boxes = onet_forward(image_mat, lnet_boxes, &onet_config);
-        draw_rectangle_rgb565(cam_buf, lnet_boxes, CAM_WIDTH, true);
+        draw_rectangle_rgb565(cam_buf, lnet_boxes, CAM_WIDTH);
         dl_lib_free(lnet_boxes->score);
         dl_lib_free(lnet_boxes->box);
         dl_lib_free(lnet_boxes->landmark);
@@ -134,9 +119,9 @@ void face_detection(uint16_t *cam_buf) {
         //     dl_lib_free(net_boxes);
         // }
     }
-    int32_t c2 = get_ccount();
-    printf("count: %d\n", (c2 - c1)/1000000);
-    dl_matrix3du_free(image_mat);
+    // int32_t c2 = get_count();
+    // int t2 = esp_timer_get_time();
+    // printf("count: %d, time: %dms\n", (c2 - c1)/1000, (t2 - t1) / 1000);
 }
 
 static void cam_task(void *arg)
@@ -156,8 +141,7 @@ static void cam_task(void *arg)
     lcd_init(&lcd_config);
 #endif
 
-    init_config(&mtmn_config);
-    face_id_init(&id_list, 1, 3);
+    //face_id_init(&id_list, 1, 3);
 
 #if 0
 
@@ -213,13 +197,20 @@ static void cam_task(void *arg)
     ESP_LOGI(TAG, "camera init done\n");
     cam_start();
 
+    dl_matrix3dq_op_init();
+
+    //dl_matrix3du_t *image_mat = dl_matrix3du_alloc(1, CAM_WIDTH, CAM_HIGH, 3);
+    dl_matrix3dq_t *image_mat = dl_matrix3dq_alloc(1, 80, 60, 3, 0);
+    lssh_config_t lssh_config = lssh_get_config(lssh_human_face_mn2, 64, 10, 0.3, 240, 320, false, DL_TIE_IMPL);
+
     /* Load configuration for detection */
-    init_config(&mtmn_config);
     while (1) {
         uint8_t *cam_buf = NULL;
         size_t recv_len = cam_take(&cam_buf);
 
-        face_detection(cam_buf);
+        int t1 = esp_timer_get_time();
+        face_detection(image_mat, cam_buf, lssh_config);
+        int t2 = esp_timer_get_time();
 #if JPEG_MODE
         int w, h;
         uint8_t *img = jpeg_decode(cam_buf, &w, &h);
@@ -234,16 +225,23 @@ static void cam_task(void *arg)
         lcd_write_data(cam_buf, CAM_WIDTH * CAM_HIGH * 2);
 #endif
         cam_give(cam_buf);   
+        int t3 = esp_timer_get_time();
+        printf("time: %d + %d = %dms, fps: %d\n",
+                (t2 - t1) / 1000,
+                (t3 - t2) / 1000,
+                (t3 - t1) / 1000,
+                1000000 / (t3 - t1));
         // 使用逻辑分析仪观察帧率
         gpio_set_level(LCD_BK, 1);
         gpio_set_level(LCD_BK, 0);  
     }
 #endif
+    //dl_matrix3du_free(image_mat);
     vTaskDelete(NULL);
 }
 
 void app_main() 
 {
     SET_PERI_REG_MASK(SYSTEM_CPU_PER_CONF_REG, SYSTEM_CPU_WAIT_MODE_FORCE_ON); // fix two core issue
-    xTaskCreate(cam_task, "cam_task", 4096, NULL, 5, NULL);
+    xTaskCreatePinnedToCore(cam_task, "cam_task", 2*4096, NULL, 5, NULL, 1);
 }
