@@ -178,6 +178,9 @@ void app_mdns_main()
 	xSemaphoreGive(query_lock);
 
     sensor_t * s = esp_camera_sensor_get();
+    if(s == NULL){
+        return;
+    }
     switch(s->id.PID){
         case OV2640_PID: model = "OV2640"; break;
         case OV3660_PID: model = "OV3660"; break;
