@@ -165,20 +165,6 @@ image_list_t *__get_boxes_sigmoid(lssh_module_result_t stage, int threshold, int
 box_array_t *lssh_detect_object(dl_matrix3dq_t *image, lssh_config_t config)
 {
     /**
-     * @brief resize image
-     * 
-     */
-    //dl_matrix3dq_t *resized_image = dl_matrix3dq_alloc(1, config.resized_width, config.resized_height, image->c, 0);
-    // image_resize_linear(resized_image->item, image->item, resized_image->w, resized_image->h, resized_image->c, image->w, image->h);
-    //assert(image->h == 240);
-    //assert(image->w == 320);
-    //assert(config.resized_height == 60);
-    //assert(config.resized_width == 80);
-    //image_resize_4(resized_image->item, image->item, resized_image->w, resized_image->h, resized_image->c, image->w, image->c);
-    //image_zoom_in_twice(resized_image->item, resized_image->w, resized_image->h, resized_image->c, image->item, image->w, image->c);
-    //printf("resize: %d, %d\n", resized_image->w, resized_image->h);
-
-    /**
      * @brief net operation
      * 
      */

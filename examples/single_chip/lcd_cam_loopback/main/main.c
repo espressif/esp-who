@@ -20,6 +20,7 @@
 #include "image_util.h"
 #include "input.h"
 #include "lssh_human_face_mn2_q.h"
+#include "fb_gfx.h"
 
 static const char *TAG = "main";
 
@@ -52,24 +53,69 @@ static const char *TAG = "main";
 //box_array_t *onet_forward(dl_matrix3du_t *image, box_array_t *net_boxes, net_config_t *config);
 //face_id_list id_list = {0};
 
-void face_detection(dl_matrix3dq_t *image_mat, uint16_t *cam_buf, lssh_config_t lssh_config) {
+static void rgb_print(dl_matrix3du_t *image_matrix, uint32_t color, const char *str)
+{
+    fb_data_t fb;
+    fb.width = image_matrix->w;
+    fb.height = image_matrix->h;
+    fb.data = image_matrix->item;
+    fb.bytes_per_pixel = 3;
+    fb.format = FB_BGR565;
+    fb_gfx_print(&fb, (fb.width - (strlen(str) * 14)) / 2, 10, color, str);
+}
 
-    image_resize_4_(image_mat->item, cam_buf, 80, 60, 3, 320, 1);
-    //transform_input_image(image_mat->item, cam_buf, CAM_WIDTH * CAM_HIGH);
-    /*
-    net_config_t onet_config = {0};
-    onet_config.w = 48;
-    onet_config.h = 48;
-    onet_config.threshold = mtmn_config.o_threshold;
-    */
+static int rgb_printf(dl_matrix3du_t *image_matrix, uint32_t color, const char *format, ...)
+{
+    char loc_buf[64];
+    char *temp = loc_buf;
+    int len;
+    va_list arg;
+    va_list copy;
+    va_start(arg, format);
+    va_copy(copy, arg);
+    len = vsnprintf(loc_buf, sizeof(loc_buf), format, arg);
+    va_end(copy);
+    if (len >= sizeof(loc_buf))
+    {
+        temp = (char *)malloc(len + 1);
+        if (temp == NULL)
+        {
+            return 0;
+        }
+    }
+    vsnprintf(temp, len + 1, format, arg);
+    va_end(arg);
+    rgb_print(image_matrix, color, temp);
+    if (len > 64)
+    {
+        free(temp);
+    }
+    return len;
+}
+typedef struct
+{
+    float score;          /// score threshold for filter candidates by score
+    float nms;            /// nms threshold for nms process
+    int candidate_number; /// candidate number limitation for each net
+} threshold_config_t;
+typedef struct
+{
+    int w;                        /// net width
+    int h;                        /// net height
+    threshold_config_t threshold; /// threshold of net
+} net_config_t;
+void face_detection(dl_matrix3dq_t *image_mat, uint16_t *cam_buf, lssh_config_t lssh_config, int n) {
+
+    image_resize_n(image_mat->item, cam_buf, 320/n, 240/n, 3, 320, n);
 
     // int t1 = esp_timer_get_time();
     // int32_t c1 = get_count();
     box_array_t *lnet_boxes = lssh_detect_object(image_mat, lssh_config);
     if (lnet_boxes)
     {
-        // box_array_t *net_boxes = onet_forward(image_mat, lnet_boxes, &onet_config);
+        //box_array_t *net_boxes = onet_forward(image_mat, lnet_boxes, &onet_config);
         draw_rectangle_rgb565(cam_buf, lnet_boxes, CAM_WIDTH);
+        dl_lib_free(lnet_boxes->category);
         dl_lib_free(lnet_boxes->score);
         dl_lib_free(lnet_boxes->box);
         dl_lib_free(lnet_boxes->landmark);
@@ -200,8 +246,17 @@ static void cam_task(void *arg)
     dl_matrix3dq_op_init();
 
     //dl_matrix3du_t *image_mat = dl_matrix3du_alloc(1, CAM_WIDTH, CAM_HIGH, 3);
-    dl_matrix3dq_t *image_mat = dl_matrix3dq_alloc(1, 80, 60, 3, 0);
-    lssh_config_t lssh_config = lssh_get_config(lssh_human_face_mn2, 64, 10, 0.3, 240, 320, false, DL_TIE_IMPL);
+    int n = 3;
+
+    lssh_config_t lssh_config = lssh_get_config(lssh_human_face_mn2, 16*n, 10, 0.3, 240, 320, false, DL_TIE_IMPL);
+    dl_matrix3dq_t *image_mat = dl_matrix3dq_alloc(1, 320/n, 320/n, 3, 0);
+
+    fb_data_t fb;
+    fb.width = 320;
+    fb.height = 240;
+    fb.bytes_per_pixel = 2;
+
+    int last_time = esp_timer_get_time();
 
     /* Load configuration for detection */
     while (1) {
@@ -209,8 +264,15 @@ static void cam_task(void *arg)
         size_t recv_len = cam_take(&cam_buf);
 
         int t1 = esp_timer_get_time();
-        face_detection(image_mat, cam_buf, lssh_config);
+        face_detection(image_mat, cam_buf, lssh_config, n);
         int t2 = esp_timer_get_time();
+        fb.data = cam_buf;
+        int fps = 1e6 / (t2 - last_time);
+        char buf[10];
+        snprintf(buf, 10, "FPS: %d\n", fps);
+        fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
+        last_time = t2;
+
 #if JPEG_MODE
         int w, h;
         uint8_t *img = jpeg_decode(cam_buf, &w, &h);
@@ -225,12 +287,12 @@ static void cam_task(void *arg)
         lcd_write_data(cam_buf, CAM_WIDTH * CAM_HIGH * 2);
 #endif
         cam_give(cam_buf);   
-        int t3 = esp_timer_get_time();
-        printf("time: %d + %d = %dms, fps: %d\n",
-                (t2 - t1) / 1000,
-                (t3 - t2) / 1000,
-                (t3 - t1) / 1000,
-                1000000 / (t3 - t1));
+        // int t3 = esp_timer_get_time();
+        // printf("time: %d + %d = %dms, fps: %d, %d\n",
+        //         (t2 - t1) / 1000,
+        //         (t3 - t2) / 1000,
+        //         (t3 - t1) / 1000,
+        //         1000000 / (t3 - t1), fps);
         // 使用逻辑分析仪观察帧率
         gpio_set_level(LCD_BK, 1);
         gpio_set_level(LCD_BK, 0);  

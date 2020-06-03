@@ -110,20 +110,20 @@ void image_resize_4(qtp_t *dimage, uint8_t *simage, int dw, int dh, int dc, int 
     }
 }
 
-void image_resize_4_(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int sc)
+void image_resize_n(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int n)
 {
     for (int dyi = 0; dyi < dh; dyi++)
     {
         int _di = dyi * dw;
 
-        int _si0 = dyi * 4 * sw;
+        int _si0 = dyi * n * sw;
         int _si1 = _si0 + sw;
 
         for (int dxi = 0; dxi < dw; dxi++)
         {
             int di = (_di + dxi) * dc;
-            int si0 = (_si0 + dxi * 4) * sc;
-            int si1 = (_si1 + dxi * 4) * sc;
+            int si0 = (_si0 + dxi * n);
+            int si1 = (_si1 + dxi * n);
 
             if (1 == dc)
             {

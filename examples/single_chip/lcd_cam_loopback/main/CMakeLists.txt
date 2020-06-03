@@ -2,6 +2,7 @@ set(COMPONENT_SRCS
     main.c
     image_util.c
     lssh_forward.c
+    fb_gfx.c
     )
 
 register_component()

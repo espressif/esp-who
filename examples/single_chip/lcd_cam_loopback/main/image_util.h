@@ -283,7 +283,7 @@ extern "C"
     void image_resize_linear(uint8_t *dst_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h);
 
     void image_resize_4(qtp_t *dimage, uint8_t *simage, int dw, int dh, int dc, int sw, int sc);
-    void image_resize_4_(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int sc);
+    void image_resize_n(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int n);
 
     /**
      * @brief 
