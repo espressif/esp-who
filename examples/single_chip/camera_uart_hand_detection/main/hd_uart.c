@@ -54,7 +54,23 @@ static void draw_boxes(dl_matrix3du_t *image_matrix, od_box_array_t *boxes)
 }
 
 
-void task_output(void *pvParameters)
+static void draw_points(dl_matrix3du_t *image_matrix, dl_matrix3d_t *landmarks)
+{
+    uint32_t color = FACE_COLOR_GREEN;
+    fb_data_t fb;
+    fb.width = image_matrix->w;
+    fb.height = image_matrix->h;
+    fb.data = image_matrix->item;
+    fb.bytes_per_pixel = 3;
+    fb.format = FB_BGR888;
+    int num = (landmarks->n) * (landmarks->w) * (landmarks->h) * (landmarks->c) / 2;
+    for(int i = 0; i < num; i++)
+    {
+        fb_gfx_fillRect(&fb, (int)(landmarks->item[2*i]), (int)(landmarks->item[2*i+1]), 3, 3, color);
+    }
+}
+
+void task_pose_estimation(void *pvParameters)
 {
     uint64_t start_time;
     uint64_t end_time;
@@ -125,9 +141,16 @@ void task_output(void *pvParameters)
                         memcpy(cache + 5 + 4, fb->buf, fb_len);
                         uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4 + fb_len);
                     }else{
-                        od_box_array_t *detect_result = hand_detection_forward(image_matrix, 80, 0.4, 0.45, 1);
+                        // dl_matrix3du_free(image_matrix);
+                        // memcpy(cache + 5, &fb_len, 4);
+                        // memcpy(cache + 5 + 4, fb->buf, fb_len);
+                        // uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4 + fb_len);
+                        od_box_array_t *detect_result = hand_detection_forward(image_matrix, 80, 0.5, 0.45, 0, 1);
 
                         if(detect_result){
+                            // dl_matrix3d_t *landmarks = handpose_estimation_forward(image_matrix, 112, detect_result, 1);
+                            // draw_points(image_matrix, landmarks);
+                            // dl_matrix3d_free(landmarks);
                             draw_boxes(image_matrix, detect_result);
                             dl_lib_free(detect_result->score);
                             dl_lib_free(detect_result->box);
@@ -163,7 +186,66 @@ void task_output(void *pvParameters)
    
 }
 
+
+void task_uart_images(void *pvParameters)
+{
+    uint64_t start_time;
+    uint64_t end_time;
+    uint32_t fb_len;
+    camera_fb_t *fb;
+
+    uart_config_t uart_config = 
+    {
+        .baud_rate = 2000000,
+        .data_bits = UART_DATA_8_BITS,
+        .parity    = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+    };
+
+    uart_param_config(UART_NUM_1, &uart_config);
+    uart_set_pin(UART_NUM_1, ECHO_TEST_TXD, ECHO_TEST_RXD, ECHO_TEST_RTS, ECHO_TEST_CTS);
+    
+    uart_driver_install(UART_NUM_1, BUF_SIZE * 2, 0, 0, NULL, 0);
+
+    // Configure a temporary buffer for the incoming data
+    uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
+
+    //send buffer
+    uint8_t *cache = (uint8_t *) malloc(BUF_SIZE * 15);
+    //add start flag.
+    memcpy(cache, START, 5);
+
+    do
+    {   
+        start_time = esp_timer_get_time();
+        fb = esp_camera_fb_get();
+        if (fb == NULL)
+        {
+            continue;
+        }
+        end_time = esp_timer_get_time();
+
+        start_time = (end_time - start_time) / 1000;
+
+        fb_len = fb->len;
+
+        int len = uart_read_bytes(UART_NUM_1, data, BUF_SIZE, 100 / portTICK_RATE_MS);
+        if (len > 0) 
+        {
+            if (strncmp((char *)data, GET_FLAG, 3) == 0) 
+            {
+                    memcpy(cache + 5, &fb_len, 4);
+                    memcpy(cache + 5 + 4, fb->buf, fb_len);
+                    uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4 + fb_len);   
+            }
+        }
+        esp_camera_fb_return(fb);
+    } while (1);
+   
+}
+
 void app_uart_image_main()
 {
-    xTaskCreatePinnedToCore(task_output, "uart_process", 4 * 1024, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(task_uart_images, "uart_process", 4 * 1024, NULL, 5, NULL, 1);
 }
