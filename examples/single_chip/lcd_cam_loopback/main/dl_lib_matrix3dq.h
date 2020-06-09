@@ -91,6 +91,23 @@ typedef struct
     int compress_exponent;   /*!< Exponent of compress filter */
 } dl_matrix3dq_mobilenet_config_t;
 
+/**
+ * Configuration of balzeblock operation
+ */
+typedef struct
+{
+    int stride_x;            /*!< Strides of width */
+    int stride_y;            /*!< Strides of height */
+    dl_padding_type padding; /*!< Padding type */
+    int mode;       /*!< Implementation mode */
+    int dw1_exponent;        /*!< Exponent of dw1 filter */
+    int pw1_exponent;        /*!< Exponent of pw1 filter */
+    int dw2_exponent;        /*!< Exponent of dw2 filter */
+    int pw2_exponent;        /*!< Exponent of pw2 filter */
+    int shortcut;           /*!< Shortcut connection flag */
+} dl_matrix3dq_blazeblock_config_t;
+
+
 //
 // Utility
 //
@@ -265,6 +282,7 @@ void dl_matrix3dq_batch_normalize(dl_matrix3dq_t *m, dl_matrix3dq_t *scale, dl_m
  */
 dl_matrix3dq_t *dl_matrix3dq_add(dl_matrix3dq_t *in_1, dl_matrix3dq_t *in_2, int exponent);
 
+dl_matrix3dq_t *dl_matrix3dq_add_channel_diff(dl_matrix3dq_t *in_1, dl_matrix3dq_t *in_2, int exponent);
 //
 // Activation
 //
@@ -970,6 +988,30 @@ dl_matrix3dq_t *dl_matrix3dqq_mobilefaceblock_prelu_split_1_2(dl_matrix3dq_t *in
                                                               dl_padding_type padding,
                                                               int mode,
                                                               int shortcut);
+
+//
+// BlazeBlock
+//
+dl_matrix3dq_t *dl_matrix3dqq_blazeblock(dl_matrix3dq_t *in,
+                                        dl_matrix3dq_t *dw1_kernel,
+                                        dl_matrix3dq_t *dw1_bias,
+                                        dl_matrix3dq_t *pw1_kernel,
+                                        dl_matrix3dq_t *pw1_bias,
+                                        dl_matrix3dq_blazeblock_config_t config,
+                                        char *name);
+
+dl_matrix3dq_t *dl_matrix3dqq_double_blazeblock(dl_matrix3dq_t *in,
+                                        dl_matrix3dq_t *dw1_kernel,
+                                        dl_matrix3dq_t *dw1_bias,
+                                        dl_matrix3dq_t *pw1_kernel,
+                                        dl_matrix3dq_t *pw1_bias,
+                                        dl_matrix3dq_t *dw2_kernel,
+                                        dl_matrix3dq_t *dw2_bias,
+                                        dl_matrix3dq_t *pw2_kernel,
+                                        dl_matrix3dq_t *pw2_bias,
+                                        dl_matrix3dq_blazeblock_config_t config,
+                                        char *name);
+
 //
 // Mobilenet
 //

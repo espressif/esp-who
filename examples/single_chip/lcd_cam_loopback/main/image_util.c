@@ -1560,3 +1560,727 @@ void warp_affine(dl_matrix3du_t *img, dl_matrix3du_t *crop, Matrix *M)
     }
     matrix_free(M_inv);
 }
+
+
+void image_zoom_in_twice_q(qtp_t *dimage,
+                         int dw,
+                         int dh,
+                         int dc,
+                         uint8_t *simage,
+                         int sw,
+                         int sc)
+{
+    for (int dyi = 0; dyi < dh; dyi++)
+    {
+        int _di = dyi * dw;
+
+        int _si0 = dyi * 2 * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < dw; dxi++)
+        {
+            int di = (_di + dxi) * dc;
+            int si0 = (_si0 + dxi * 2) * sc;
+            int si1 = (_si1 + dxi * 2) * sc;
+
+            if (1 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 1] + simage[si1] + simage[si1 + 1]) >> 2);
+            }
+            else if (3 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 3] + simage[si1] + simage[si1 + 3]) >> 2);
+                dimage[di + 1] = (uint16_t)((simage[si0 + 1] + simage[si0 + 4] + simage[si1 + 1] + simage[si1 + 4]) >> 2);
+                dimage[di + 2] = (uint16_t)((simage[si0 + 2] + simage[si0 + 5] + simage[si1 + 2] + simage[si1 + 5]) >> 2);
+            }
+            else
+            {
+                for (int dci = 0; dci < dc; dci++)
+                {
+                    dimage[di + dci] = (uint16_t)((simage[si0 + dci] + simage[si0 + 3 + dci] + simage[si1 + dci] + simage[si1 + 3 + dci] + 2) >> 2);
+                }
+            }
+        }
+    }
+    return;
+}
+
+
+void image_zoom_in_twice_q_shift(qtp_t *dimage,
+                         int dw,
+                         int dh,
+                         int dc,
+                         uint8_t *simage,
+                         int sw,
+                         int sc,
+                         int shift)
+{
+    assert(shift>=2);
+    int shift_real = shift - 2;
+    for (int dyi = 0; dyi < dh; dyi++)
+    {
+        int _di = dyi * dw;
+
+        int _si0 = dyi * 2 * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < dw; dxi++)
+        {
+            int di = (_di + dxi) * dc;
+            int si0 = (_si0 + dxi * 2) * sc;
+            int si1 = (_si1 + dxi * 2) * sc;
+
+            if (1 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 1] + simage[si1] + simage[si1 + 1]) << shift_real);
+            }
+            else if (3 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 3] + simage[si1] + simage[si1 + 3]) << shift_real);
+                dimage[di + 1] = (uint16_t)((simage[si0 + 1] + simage[si0 + 4] + simage[si1 + 1] + simage[si1 + 4]) << shift_real);
+                dimage[di + 2] = (uint16_t)((simage[si0 + 2] + simage[si0 + 5] + simage[si1 + 2] + simage[si1 + 5]) << shift_real);
+            }
+            else
+            {
+                for (int dci = 0; dci < dc; dci++)
+                {
+                    dimage[di + dci] = (uint16_t)((simage[si0 + dci] + simage[si0 + 3 + dci] + simage[si1 + dci] + simage[si1 + 3 + dci] + 2) << shift_real);
+                }
+            }
+        }
+    }
+    return;
+}
+
+
+void image_resize_linear_q(qtp_t *dst_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h, int shift)
+{ /*{{{*/
+    float scale_x = (float)src_w / dst_w;
+    float scale_y = (float)src_h / dst_h;
+
+    int dst_stride = dst_c * dst_w;
+    int src_stride = dst_c * src_w;
+
+    if (fabs(scale_x - 2) <= 1e-6 && fabs(scale_y - 2) <= 1e-6)
+    {
+        image_zoom_in_twice_q_shift(
+            dst_image,
+            dst_w,
+            dst_h,
+            dst_c,
+            src_image,
+            src_w,
+            dst_c,
+            shift);
+    }
+    else
+    {
+        for (int y = 0; y < dst_h; y++)
+        {
+            float fy[2];
+            fy[0] = (float)((y + 0.5) * scale_y - 0.5); // y
+            int src_y = (int)fy[0];                     // y1
+            fy[0] -= src_y;                             // y - y1
+            fy[1] = 1 - fy[0];                          // y2 - y
+            src_y = DL_IMAGE_MAX(0, src_y);
+            src_y = DL_IMAGE_MIN(src_y, src_h - 2);
+
+            for (int x = 0; x < dst_w; x++)
+            {
+                float fx[2];
+                fx[0] = (float)((x + 0.5) * scale_x - 0.5); // x
+                int src_x = (int)fx[0];                     // x1
+                fx[0] -= src_x;                             // x - x1
+                if (src_x < 0)
+                {
+                    fx[0] = 0;
+                    src_x = 0;
+                }
+                if (src_x > src_w - 2)
+                {
+                    fx[0] = 0;
+                    src_x = src_w - 2;
+                }
+                fx[1] = 1 - fx[0]; // x2 - x
+
+                for (int c = 0; c < dst_c; c++)
+                {
+                    dst_image[y * dst_stride + x * dst_c + c] = ((qtp_t)(round(src_image[src_y * src_stride + src_x * dst_c + c] * fx[1] * fy[1] + src_image[src_y * src_stride + (src_x + 1) * dst_c + c] * fx[0] * fy[1] + src_image[(src_y + 1) * src_stride + src_x * dst_c + c] * fx[1] * fy[0] + src_image[(src_y + 1) * src_stride + (src_x + 1) * dst_c + c] * fx[0] * fy[0])))<<shift;
+                }
+            }
+        }
+    }
+} /*}}}*/
+
+
+void image_zoom_in_twice_padding_q(qtp_t *dimage,
+                         int dw,
+                         int dh,
+                         int dc,
+                         uint8_t *simage,
+                         int sw,
+                         int sc,
+                         int tw,
+                         int th, 
+                         int ow, 
+                         int oh)
+{
+    for (int dyi = 0; dyi < th; dyi++)
+    {
+        int _di = (dyi + oh) * dw;
+
+        int _si0 = dyi * 2 * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < tw; dxi++)
+        {
+            int di = (_di + dxi + ow) * dc;
+            int si0 = (_si0 + dxi * 2) * sc;
+            int si1 = (_si1 + dxi * 2) * sc;
+
+            if (1 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 1] + simage[si1] + simage[si1 + 1]) >> 2);
+            }
+            else if (3 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 3] + simage[si1] + simage[si1 + 3]) >> 2);
+                dimage[di + 1] = (uint16_t)((simage[si0 + 1] + simage[si0 + 4] + simage[si1 + 1] + simage[si1 + 4]) >> 2);
+                dimage[di + 2] = (uint16_t)((simage[si0 + 2] + simage[si0 + 5] + simage[si1 + 2] + simage[si1 + 5]) >> 2);
+            }
+            else
+            {
+                for (int dci = 0; dci < dc; dci++)
+                {
+                    dimage[di + dci] = (uint16_t)((simage[si0 + dci] + simage[si0 + 3 + dci] + simage[si1 + dci] + simage[si1 + 3 + dci] + 2) >> 2);
+                }
+            }
+        }
+    }
+    return;
+}
+
+void image_zoom_in_twice_padding_q_shift(qtp_t *dimage,
+                         int dw,
+                         int dh,
+                         int dc,
+                         uint8_t *simage,
+                         int sw,
+                         int sc,
+                         int tw,
+                         int th, 
+                         int ow, 
+                         int oh,
+                         int shift)
+{
+    assert(shift>=2);
+    int shift_real = shift - 2;
+    for (int dyi = 0; dyi < th; dyi++)
+    {
+        int _di = (dyi + oh) * dw;
+
+        int _si0 = dyi * 2 * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < tw; dxi++)
+        {
+            int di = (_di + dxi + ow) * dc;
+            int si0 = (_si0 + dxi * 2) * sc;
+            int si1 = (_si1 + dxi * 2) * sc;
+
+            if (1 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 1] + simage[si1] + simage[si1 + 1]) << shift_real);
+            }
+            else if (3 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 3] + simage[si1] + simage[si1 + 3]) << shift_real);
+                dimage[di + 1] = (uint16_t)((simage[si0 + 1] + simage[si0 + 4] + simage[si1 + 1] + simage[si1 + 4]) << shift_real);
+                dimage[di + 2] = (uint16_t)((simage[si0 + 2] + simage[si0 + 5] + simage[si1 + 2] + simage[si1 + 5]) << shift_real);
+            }
+            else
+            {
+                for (int dci = 0; dci < dc; dci++)
+                {
+                    dimage[di + dci] = (uint16_t)((simage[si0 + dci] + simage[si0 + 3 + dci] + simage[si1 + dci] + simage[si1 + 3 + dci] + 2) << shift_real);
+                }
+            }
+        }
+    }
+    return;
+}
+
+
+void image_resize_linear_padding_q(qtp_t *dst_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h, 
+                                    int target_w, int target_h, int offset_w, int offset_h, int shift)
+{ /*{{{*/
+    float scale_x = (float)src_w / target_w;
+    float scale_y = (float)src_h / target_h;
+
+    int dst_stride = dst_c * dst_w;
+    int src_stride = dst_c * src_w;
+
+    // int start_offset = (offset_h * dst_stride)+(offset_w * dst_c);
+    // int step_offset = (dst_w - target_w) * dst_c;
+
+    if (fabs(scale_x - 2) <= 1e-6 && fabs(scale_y - 2) <= 1e-6)
+    {
+        image_zoom_in_twice_padding_q_shift(
+            dst_image,
+            dst_w,
+            dst_h,
+            dst_c,
+            src_image,
+            src_w,
+            dst_c,
+            target_w,
+            target_h,
+            offset_w,
+            offset_h,
+            shift
+            );
+    }
+    else
+    {
+        for (int y = 0; y < target_h; y++)
+        {
+            float fy[2];
+            fy[0] = (float)((y + 0.5) * scale_y - 0.5); // y
+            int src_y = (int)fy[0];                     // y1
+            fy[0] -= src_y;                             // y - y1
+            fy[1] = 1 - fy[0];                          // y2 - y
+            src_y = DL_IMAGE_MAX(0, src_y);
+            src_y = DL_IMAGE_MIN(src_y, src_h - 2);
+
+            for (int x = 0; x < target_w; x++)
+            {
+                float fx[2];
+                fx[0] = (float)((x + 0.5) * scale_x - 0.5); // x
+                int src_x = (int)fx[0];                     // x1
+                fx[0] -= src_x;                             // x - x1
+                if (src_x < 0)
+                {
+                    fx[0] = 0;
+                    src_x = 0;
+                }
+                if (src_x > src_w - 2)
+                {
+                    fx[0] = 0;
+                    src_x = src_w - 2;
+                }
+                fx[1] = 1 - fx[0]; // x2 - x
+
+                for (int c = 0; c < dst_c; c++)
+                {
+                    dst_image[(y + offset_h) * dst_stride + (x + offset_w) * dst_c + c] = ((qtp_t)(round(src_image[src_y * src_stride + src_x * dst_c + c] * fx[1] * fy[1] + src_image[src_y * src_stride + (src_x + 1) * dst_c + c] * fx[0] * fy[1] + src_image[(src_y + 1) * src_stride + src_x * dst_c + c] * fx[1] * fy[0] + src_image[(src_y + 1) * src_stride + (src_x + 1) * dst_c + c] * fx[0] * fy[0])))<<shift;
+                }
+            }
+        }
+    }
+} /*}}}*/
+
+
+// dl_matrix3dq_t *od_image_preporcess(uint8_t *image, int input_w, int input_h, int target_size, int exponent, int process_mode)
+// {
+//     int shift = (-exponent)-8;
+//     assert(shift>=0);
+//     if(input_w >= input_h){
+//         if(input_w == target_size){
+//             int padding_num = (target_size - input_h)/2;
+//             dl_matrix3dq_t *out_image = dl_matrix3dq_alloc(1, target_size, target_size, 3, exponent);
+
+//             int count = input_w*input_h*3;
+//             qtp_t *tmp = out_image->item;
+//             tmp += (padding_num*out_image->stride);
+
+//             for(int i=0; i<count; i++){
+//                 *tmp++ = ((qtp_t)(image[i]))<<shift;
+//             }
+//             return out_image;
+//         }else{
+//             float scale = (float)target_size/input_w;
+//             int nw = target_size;
+//             int nh = scale*input_h;
+//             int padding_num = (target_size - nh)/2;
+//             dl_matrix3dq_t *out_image = dl_matrix3dq_alloc(1, target_size, target_size, 3, exponent);
+//             qtp_t *tmp = out_image->item; 
+//             tmp += (padding_num*out_image->stride);
+//             image_resize_linear_q(tmp, image, nw, nh, 3, input_w, input_h, shift);
+//             return out_image;
+//         }   
+//     }else{
+//         printf("not supported !");
+//         return NULL;
+//     }
+
+// }
+
+
+dl_matrix3dq_t *od_image_preporcess(uint8_t *image, int input_w, int input_h, int target_size, int exponent, int process_mode)
+{
+    int c = 3;
+    int shift = (-exponent)-8;
+    assert(shift>=0);
+    float scale = 0.0;
+    int target_w, target_h = 0;
+    //int dw, dh = 0;
+    if(input_w >= input_h){
+        scale = (float)target_size / input_w;
+        target_w = target_size;
+        target_h = (int)(input_h*scale);
+        //dh = (target_size - target_h)/2;
+    }else{
+        scale = (float)target_size / input_h;
+        target_w = (int)(input_w*scale);
+        target_h = target_size;
+        //dw = (target_size - target_w)/2;
+    }
+    if(process_mode == 0){ //w = h, padding right bottom
+        dl_matrix3dq_t *out_image = dl_matrix3dq_alloc(1, target_size, target_size, c, exponent);
+        int padding_num = target_size - target_w;
+        qtp_t *tmp = out_image->item;
+        if(scale == 1.0){
+            int count = 0; 
+            for(int i=0;i<input_h;i++){
+                for(int j=0;j<input_w;j++){
+                    for(int k=0;k<c; k++){
+                        *tmp++ = ((qtp_t)(image[count++]))<<shift;
+                    }
+                }
+                tmp += (padding_num * c);
+            }
+        }else{
+            image_resize_linear_padding_q(tmp, image, out_image->w, out_image->h, out_image->c, input_w, input_h, 
+                                    target_w, target_h, 0, 0, shift);
+        }
+        return out_image;
+    }else{// no padding , just resize,  w != h
+        dl_matrix3dq_t *out_image = dl_matrix3dq_alloc(1, target_w, target_h, c, exponent);
+        qtp_t *tmp = out_image->item;
+        if(scale == 1.0){
+            int count = input_w*input_h*c;
+            for(int i=0; i<count; i++){
+                *tmp++ = ((qtp_t)(image[i]))<<shift;
+            }
+        }else{
+            image_resize_linear_q(tmp, image, out_image->w, out_image->h, out_image->c, input_w, input_h, shift);
+        }
+        return out_image;
+    }
+}
+
+    
+void od_image_sort_insert_by_score(od_image_list_t *image_sorted_list, const od_image_list_t *insert_list)
+{ /*{{{*/
+    if (insert_list == NULL || insert_list->head == NULL)
+        return;
+    od_image_box_t *box = insert_list->head;
+    if (NULL == image_sorted_list->head)
+    {
+        image_sorted_list->head = insert_list->head;
+        box = insert_list->head->next;
+        image_sorted_list->head->next = NULL;
+    }
+    od_image_box_t *head = image_sorted_list->head;
+
+    while (box)
+    {
+        // insert in head
+        if (box->score > head->score)
+        {
+            od_image_box_t *tmp = box;
+            box = box->next;
+            tmp->next = head;
+            head = tmp;
+        }
+        else
+        {
+            od_image_box_t *curr = head->next;
+            od_image_box_t *prev = head;
+            while (curr)
+            {
+                if (box->score > curr->score)
+                {
+                    od_image_box_t *tmp = box;
+                    box = box->next;
+                    tmp->next = curr;
+                    prev->next = tmp;
+                    break;
+                }
+                prev = curr;
+                curr = curr->next;
+            }
+            // insert in tail
+            if (NULL == curr)
+            {
+                od_image_box_t *tmp = box;
+                box = box->next;
+                tmp->next = NULL;
+                prev->next = tmp;
+            }
+        }
+    }
+    image_sorted_list->head = head;
+    image_sorted_list->len += insert_list->len;
+} /*}}}*/
+
+od_image_list_t *od_image_get_valid_boxes(fptp_t *score,
+                                    fptp_t *cls,
+                                    fptp_t *boxes,
+                                    int height,
+                                    int width,
+                                    int anchor_number,
+                                    fptp_t score_threshold,
+                                    fptp_t resize_scale,
+                                    int padding_w,
+                                    int padding_h)
+{ /*{{{*/
+    typedef struct
+    {
+        int x;
+        int y;
+        int index;
+        uc_t anchor_index;
+    } valid_index_t;
+    valid_index_t *valid_indexes = (valid_index_t *)dl_lib_calloc(width * height, sizeof(valid_index_t), 0);
+    int valid_count = 0;
+    int index = 0;
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (size_t c = 0; c < anchor_number; c++)
+            {
+                if (score[index] > score_threshold)
+                {
+                    valid_indexes[valid_count].x = x;
+                    valid_indexes[valid_count].y = y;
+                    valid_indexes[valid_count].index = index;
+                    valid_indexes[valid_count].anchor_index = c;
+                    valid_count++;
+                }
+                index++;
+            }
+        }
+    }
+
+    if (0 == valid_count)
+    {
+        dl_lib_free(valid_indexes);
+        return NULL;
+    }
+
+    od_image_box_t *valid_box = (od_image_box_t *)dl_lib_calloc(valid_count, sizeof(od_image_box_t), 0);
+    od_image_list_t *valid_list = (od_image_list_t *)dl_lib_calloc(1, sizeof(od_image_list_t), 0);
+    valid_list->head = valid_box;
+    valid_list->origin_head = valid_box;
+    valid_list->len = valid_count;
+
+    for (int i = 0; i < valid_count; i++)
+    {
+        valid_box[i].score = score[valid_indexes[i].index];
+
+        valid_box[i].box.box_p[0] = ((boxes[4*valid_indexes[i].index] - 0.5*boxes[4*valid_indexes[i].index + 2])-padding_w)/resize_scale;
+        valid_box[i].box.box_p[1] = ((boxes[4*valid_indexes[i].index + 1] - 0.5*boxes[4*valid_indexes[i].index + 3])-padding_h)/resize_scale;
+        valid_box[i].box.box_p[2] = ((boxes[4*valid_indexes[i].index] + 0.5*boxes[4*valid_indexes[i].index + 2])-padding_w)/resize_scale;
+        valid_box[i].box.box_p[3] = ((boxes[4*valid_indexes[i].index + 1] + 0.5*boxes[4*valid_indexes[i].index + 3])-padding_h)/resize_scale;
+
+        valid_box[i].cls = (qtp_t)cls[valid_indexes[i].index];
+
+        valid_box[i].next = &(valid_box[i + 1]);
+    }
+    valid_box[valid_count - 1].next = NULL;
+
+    dl_lib_free(valid_indexes);
+
+    return valid_list;
+} /*}}}*/
+
+void od_image_nms_process(od_image_list_t *image_list, fptp_t nms_threshold, int same_area)
+{ /*{{{*/
+    /**** Init ****/
+    int num_supressed = 0;
+    od_image_box_t *head = image_list->head;
+
+    /**** Compute Box Area ****/
+    fptp_t kept_box_area = 0;
+    fptp_t other_box_area = 0;
+    if (same_area)
+    {
+        od_image_get_area(&(head->box), &kept_box_area);
+        other_box_area = kept_box_area;
+    }
+
+    /**** Compare IOU ****/
+    od_image_box_t *kept_box = head;
+    while (kept_box)
+    {
+        od_image_box_t *other_box = kept_box->next;
+        od_image_box_t *prev = kept_box;
+        while (other_box)
+        {
+
+            box_t inter_box;
+            inter_box.box_p[0] = DL_IMAGE_MAX(kept_box->box.box_p[0], other_box->box.box_p[0]);
+            inter_box.box_p[1] = DL_IMAGE_MAX(kept_box->box.box_p[1], other_box->box.box_p[1]);
+            inter_box.box_p[2] = DL_IMAGE_MIN(kept_box->box.box_p[2], other_box->box.box_p[2]);
+            inter_box.box_p[3] = DL_IMAGE_MIN(kept_box->box.box_p[3], other_box->box.box_p[3]);
+
+            fptp_t inter_w, inter_h;
+            od_image_get_width_and_height(&inter_box, &inter_w, &inter_h);
+
+            if (inter_w > 0 && inter_h > 0)
+            {
+                if (!same_area)
+                {
+                    od_image_get_area(&(kept_box->box), &kept_box_area);
+                    od_image_get_area(&(other_box->box), &other_box_area);
+                }
+                fptp_t inter_area = inter_w * inter_h;
+                fptp_t iou = inter_area / (kept_box_area + other_box_area - inter_area);
+                if (iou > nms_threshold)
+                {
+                    num_supressed++;
+                    // Delete duplicated box
+                    // Here we cannot free a single box, because these boxes are allocated by calloc, we need to free all the calloced memory together.
+                    prev->next = other_box->next;
+                    other_box = other_box->next;
+                    continue;
+                }
+            }
+            prev = other_box;
+            other_box = other_box->next;
+        }
+        kept_box = kept_box->next;
+    }
+
+    image_list->len -= num_supressed;
+} /*}}}*/
+
+
+void image_resize_n_shift(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int n, int shift)
+{
+    assert(shift >= 2);
+    int shift_real = shift - 2;
+    for (int dyi = 0; dyi < dh; dyi++)
+    {
+        int _di = dyi * dw;
+
+        int _si0 = dyi * n * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < dw; dxi++)
+        {
+            int di = (_di + dxi) * dc;
+            int si0 = (_si0 + dxi * n);
+            int si1 = (_si1 + dxi * n);
+
+            if (1 == dc)
+            {
+                dimage[di] = (uint16_t)((simage[si0] + simage[si0 + 1] + simage[si1] + simage[si1 + 1]) << shift_real);
+            }
+            else if (3 == dc)
+            {
+                uint16_t in[4*3] = {0};
+                uint16_t in_tmp;
+                in_tmp = simage[si0];
+                in_tmp = (in_tmp & 0xFF) << 8 | (in_tmp & 0xFF00) >> 8;
+                in[0] = (in_tmp & RGB565_MASK_BLUE) << 3;  // blue
+                in[1] = (in_tmp & RGB565_MASK_GREEN) >> 3; // green
+                in[2] = (in_tmp & RGB565_MASK_RED) >> 8;   // red
+                in_tmp = simage[si0 + 1];
+                in_tmp = (in_tmp & 0xFF) << 8 | (in_tmp & 0xFF00) >> 8;
+                in[3] = (in_tmp & RGB565_MASK_BLUE) << 3;  // blue
+                in[4] = (in_tmp & RGB565_MASK_GREEN) >> 3; // green
+                in[5] = (in_tmp & RGB565_MASK_RED) >> 8;   // red
+                in_tmp = simage[si1];
+                in_tmp = (in_tmp & 0xFF) << 8 | (in_tmp & 0xFF00) >> 8;
+                in[6] = (in_tmp & RGB565_MASK_BLUE) << 3;  // blue
+                in[7] = (in_tmp & RGB565_MASK_GREEN) >> 3; // green
+                in[8] = (in_tmp & RGB565_MASK_RED) >> 8;   // red
+                in_tmp = simage[si1 + 1];
+                in_tmp = (in_tmp & 0xFF) << 8 | (in_tmp & 0xFF00) >> 8;
+                in[9] = (in_tmp & RGB565_MASK_BLUE) << 3;  // blue
+                in[10] = (in_tmp & RGB565_MASK_GREEN) >> 3; // green
+                in[11] = (in_tmp & RGB565_MASK_RED) >> 8;   // red
+
+                // dimage[di] = (((in[0] + in[3] + in[6] + in[9]) >> 2));
+                // dimage[di + 1] = ((in[1] + in[4] + in[7] + in[10]) >> 2);
+                // dimage[di + 2] = ((in[2] + in[5] + in[8] + in[11]) >> 2);
+                dimage[di] = ((in[0] + in[3] + in[6] + in[9]) << shift_real);
+                dimage[di + 1] = ((in[1] + in[4] + in[7] + in[10]) << shift_real);
+                dimage[di + 2] = ((in[2] + in[5] + in[8] + in[11]) << shift_real);
+            }
+            else
+            {
+                for (int dci = 0; dci < dc; dci++)
+                {
+                    dimage[di + dci] = (uint16_t)((simage[si0 + dci] + simage[si0 + 3 + dci] + simage[si1 + dci] + simage[si1 + 3 + dci] + 2) << shift_real);
+                }
+            }
+        }
+    }
+}
+
+void image_resize_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift)
+{
+    assert(shift>=2);
+    assert(dc == 3);
+    int shift_real = shift - 2;
+    float ratio_w = (float)sw / tw;
+    float ratio_h = (float)sh / th;
+    // printf("ratio: %f, %f\n", ratio_w, ratio_h);
+    uint16_t dst[12];
+    for (int dyi = 0; dyi < th; dyi++)
+    {
+        int _di = dyi * dw;
+
+        int _si0 = dyi * ratio_h * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < tw; dxi++)
+        {
+            int di = (_di + dxi) * dc;
+            int si0 = (_si0 + dxi * ratio_w);
+            int si1 = (_si1 + dxi * ratio_w);
+            // ets_printf("s: %d, %d  d: %d, %d, %d\n", si0, si1, dyi, dxi, di);
+            rgb565_to_888(simage[si0], dst);
+            rgb565_to_888(simage[si0+1], dst + 3);
+            rgb565_to_888(simage[si1], dst + 6);
+            rgb565_to_888(simage[si1+1], dst + 9);
+            dimage[di] = ((dst[0]+dst[3]+dst[6]+dst[9]) << shift_real);
+            dimage[di+1] = ((dst[1]+dst[4]+dst[7]+dst[10]) << shift_real);
+            dimage[di+2] = ((dst[2]+dst[5]+dst[8]+dst[11]) << shift_real);
+        }
+    }
+    return;
+}
+
+
+void image_resize_nearest_shift(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift)
+{
+    assert(shift>=2);
+    assert(dc == 3);
+    int shift_real = shift - 2;
+    float ratio_w = (float)sw / tw;
+    float ratio_h = (float)sh / th;
+    // printf("ratio: %f, %f\n", ratio_w, ratio_h);
+    uc_t dst[12];
+    for (int dyi = 0; dyi < th; dyi++)
+    {
+        int _di = dyi * dw;
+
+        float _si0 = dyi * ratio_h * sw;
+
+        for (int dxi = 0; dxi < tw; dxi++)
+        {
+            int di = (_di + dxi) * dc;
+            int si0 = rintf(_si0 + dxi * ratio_w);
+            rgb565_to_888(simage[si0], dst);
+            dimage[di] = ((uint16_t)(dst[0]) << shift_real);
+            dimage[di+1] = ((uint16_t)(dst[1]) << shift_real);
+            dimage[di+2] = ((uint16_t)(dst[2]) << shift_real);
+        }
+    }
+    return;
+}

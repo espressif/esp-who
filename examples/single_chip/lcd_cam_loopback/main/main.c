@@ -17,6 +17,7 @@
 #include "lcd.h"
 #include "jpeg.h"
 #include "lssh_forward.h"
+#include "pe_forward.h"
 #include "image_util.h"
 #include "input.h"
 #include "lssh_human_face_mn2_q.h"
@@ -92,6 +93,62 @@ static int rgb_printf(dl_matrix3du_t *image_matrix, uint32_t color, const char *
     }
     return len;
 }
+
+void draw_rectangle_od_rgb565(uint16_t *buf, od_box_array_t *boxes, int width)
+{ /*{{{*/
+    uint16_t p[14];
+    for (int i = 0; i < boxes->len; i++)
+    {
+        // rectangle box
+        for (int j = 0; j < 4; j++)
+            p[j] = (uint16_t)boxes->box[i].box_p[j];
+
+        // landmark
+        // for (int j = 0; j < 10; j++)
+        //     p[j + 4] = (uint16_t)boxes->landmark[i].landmark_p[j];
+
+        if ((p[2] < p[0]) || (p[3] < p[1]))
+            return;
+
+#define RGB565_GREEN_REVERSE 0xE007
+#define RGB565_RED_REVERSE 0xF8
+        // rectangle box
+        for (int w = p[0]; w < p[2] + 1; w++)
+        {
+            int x1 = (p[1] * width + w);
+            int x2 = (p[3] * width + w);
+            buf[x1] = RGB565_GREEN_REVERSE;
+            buf[x2] = RGB565_GREEN_REVERSE;
+        }
+        for (int h = p[1]; h < p[3] + 1; h++)
+        {
+            int y1 = (h * width + p[0]);
+            int y2 = (h * width + p[2]);
+            buf[y1] = RGB565_GREEN_REVERSE;
+            buf[y2] = RGB565_GREEN_REVERSE;
+        }
+
+        // landmark
+#if 0
+        for (int j = 0; j < 10; j += 2)
+        {
+            int x = p[j + 5] * width + p[j + 4];
+            buf[x] = RGB565_RED_REVERSE;
+            buf[x + 1] = RGB565_RED_REVERSE;
+            buf[x + 2] = RGB565_RED_REVERSE;
+
+            buf[width + x] = RGB565_RED_REVERSE;
+            buf[width + x + 1] = RGB565_RED_REVERSE;
+            buf[width + x + 2] = RGB565_RED_REVERSE;
+
+            buf[2 * width + x] = RGB565_RED_REVERSE;
+            buf[2 * width + x + 1] = RGB565_RED_REVERSE;
+            buf[2 * width + x + 2] = RGB565_RED_REVERSE;
+        }
+#endif
+    }
+} /*}}}*/
+
 typedef struct
 {
     float score;          /// score threshold for filter candidates by score
@@ -169,6 +226,32 @@ void face_detection(dl_matrix3dq_t *image_mat, uint16_t *cam_buf, lssh_config_t 
     // int t2 = esp_timer_get_time();
     // printf("count: %d, time: %dms\n", (c2 - c1)/1000, (t2 - t1) / 1000);
 }
+
+
+void hand_detection(uint16_t *cam_buf, hd_config_t hd_config) {
+    int t1 = esp_timer_get_time();
+    int32_t c1 = get_count();
+    dl_matrix3dq_t *image = dl_matrix3dq_alloc(1, hd_config.target_size, hd_config.target_size, 3, -10);
+    // image_resize_n_shift(image->item, cam_buf, 320/4, 240/4, 3, 320, 4, 2);
+    image_resize_shift_fast(image->item, cam_buf, hd_config.target_size, 3, 320, 240, hd_config.target_size, hd_config.target_size*240/320, 2);
+    od_box_array_t *hd_boxes = hand_detection_forward(image, hd_config);
+    // dl_matrix3du_t *image = dl_matrix3du_alloc(1, 240, 320, 3);
+    // transform_input_image(image->item, cam_buf, 240*320);
+    // dl_matrix3dq_t *hd_image_resize = od_image_preporcess(image->item, 320, 240, hd_config.target_size, -10, 0);
+    // // printf("input size: %d, %d, %d, %d\n", hd_image_resize->n, hd_image_resize->h,hd_image_resize->w,hd_image_resize->c);
+    // dl_matrix3du_free(image);
+    // od_box_array_t *hd_boxes = hand_detection_forward(hd_image_resize, hd_config);
+    if (hd_boxes)
+    {
+        draw_rectangle_od_rgb565(cam_buf, hd_boxes, CAM_WIDTH);
+        dl_lib_free(hd_boxes->cls);
+        dl_lib_free(hd_boxes->score);
+        dl_lib_free(hd_boxes->box);
+        dl_lib_free(hd_boxes);
+    }
+    // pe_test();
+}
+
 
 static void cam_task(void *arg)
 {
@@ -248,13 +331,25 @@ static void cam_task(void *arg)
     //dl_matrix3du_t *image_mat = dl_matrix3du_alloc(1, CAM_WIDTH, CAM_HIGH, 3);
     int n = 3;
 
-    lssh_config_t lssh_config = lssh_get_config(lssh_human_face_mn2, 16*n, 10, 0.3, 240, 320, false, DL_TIE_IMPL);
-    dl_matrix3dq_t *image_mat = dl_matrix3dq_alloc(1, 320/n, 320/n, 3, 0);
+    // lssh_config_t lssh_config = lssh_get_config(lssh_human_face_mn2, 16*n, 10, 0.3, 240, 320, false, DL_TIE_IMPL);
+    // dl_matrix3dq_t *image_mat = dl_matrix3dq_alloc(1, 240/n, 320/n, 3, 0);
 
     fb_data_t fb;
     fb.width = 320;
     fb.height = 240;
     fb.bytes_per_pixel = 2;
+
+    hd_config_t hd_config = {0};
+    hd_config.target_size = 80;
+    hd_config.preprocess_mode = 0;
+    hd_config.input_w = fb.width;
+    hd_config.input_h = fb.height;
+    hd_config.free_input = 1;
+    hd_config.resize_scale = (float)hd_config.target_size/320.0;
+    hd_config.score_threshold = 0.5;
+    hd_config.nms_threshold = 0.45;
+    hd_config.mode = 2;
+
 
     int last_time = esp_timer_get_time();
 
@@ -264,10 +359,11 @@ static void cam_task(void *arg)
         size_t recv_len = cam_take(&cam_buf);
 
         int t1 = esp_timer_get_time();
-        face_detection(image_mat, cam_buf, lssh_config, n);
+        // face_detection(image_mat, cam_buf, lssh_config, n);
+        hand_detection(cam_buf, hd_config);
         int t2 = esp_timer_get_time();
         fb.data = cam_buf;
-        int fps = 1e6 / (t2 - last_time);
+        int fps = 1e6 / (t2 - t1);
         char buf[10];
         snprintf(buf, 10, "FPS: %d\n", fps);
         fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
@@ -304,6 +400,11 @@ static void cam_task(void *arg)
 
 void app_main() 
 {
+    // char *tasklist = malloc(1024);
     SET_PERI_REG_MASK(SYSTEM_CPU_PER_CONF_REG, SYSTEM_CPU_WAIT_MODE_FORCE_ON); // fix two core issue
     xTaskCreatePinnedToCore(cam_task, "cam_task", 2*4096, NULL, 5, NULL, 1);
+    // while(1){
+    //     vTaskGetRunTimeStats(tasklist);
+    //     vTaskDelay(1000);
+    // }
 }

@@ -51,7 +51,7 @@ extern "C"
 
     typedef struct
     {
-        int box_p[4];
+        float box_p[4];
     } box_t;
 
     typedef struct tag_box_list
@@ -90,6 +90,19 @@ extern "C"
     {
         int w, h;
         image_get_width_and_height(box, &w, &h);
+        *area = w * h;
+    }
+
+    static inline void od_image_get_width_and_height(box_t *box, float *w, float *h)
+    {
+        *w = box->box_p[2] - box->box_p[0] + 1;
+        *h = box->box_p[3] - box->box_p[1] + 1;
+    }
+
+    static inline void od_image_get_area(box_t *box, float *area)
+    {
+        float w, h;
+        od_image_get_width_and_height(box, &w, &h);
         *area = w * h;
     }
 
@@ -172,7 +185,7 @@ extern "C"
         }
     }
 
-    static inline void rgb565_to_888(uint16_t in, uint8_t *dst)
+    static inline void rgb565_to_888(uint16_t in, uint16_t *dst)
     { /*{{{*/
         in = (in & 0xFF) << 8 | (in & 0xFF00) >> 8;
         dst[0] = (in & RGB565_MASK_BLUE) << 3;  // blue
@@ -348,6 +361,57 @@ extern "C"
     void matrix_free(Matrix *m);
     Matrix *get_similarity_matrix(float *srcx, float *srcy, float *dstx, float *dsty, int num);
     void warp_affine(dl_matrix3du_t *img, dl_matrix3du_t *crop, Matrix *M);
+    Matrix *get_affine_transform(float *srcx, float *srcy, float *dstx, float *dsty);
+
+    
+    typedef struct tag_od_box_list
+    {
+        fptp_t *score;
+        qtp_t *cls;
+        box_t *box;
+        int len;
+    } od_box_array_t;
+
+    typedef struct tag_od_image_box
+    {
+        struct tag_od_image_box *next;
+        fptp_t score;
+        qtp_t cls;
+        box_t box;
+    } od_image_box_t;
+
+    typedef struct tag_od_image_list
+    {
+        od_image_box_t *head;
+        od_image_box_t *origin_head;
+        int len;
+    } od_image_list_t;
+
+    void image_zoom_in_twice_q(qtp_t *dimage,
+                         int dw,
+                         int dh,
+                         int dc,
+                         uint8_t *simage,
+                         int sw,
+                         int sc);
+    void image_resize_linear_q(qtp_t *dst_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h, int shift);
+    dl_matrix3dq_t *od_image_preporcess(uint8_t *image, int input_w, int input_h, int target_size, int exponent, int process_mode);
+    void od_image_sort_insert_by_score(od_image_list_t *image_sorted_list, const od_image_list_t *insert_list);
+    od_image_list_t *od_image_get_valid_boxes(fptp_t *score,
+                                    fptp_t *cls,
+                                    fptp_t *boxes,
+                                    int height,
+                                    int width,
+                                    int anchor_number,
+                                    fptp_t score_threshold,
+                                    fptp_t resize_scale,
+                                    int padding_w,
+                                    int padding_h);
+    void od_image_nms_process(od_image_list_t *image_list, fptp_t nms_threshold, int same_area);
+    void image_resize_n_shift(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int n, int shift);
+    void image_resize_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift);
+    void image_resize_nearest_shift(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift);
+
 
 #ifdef __cplusplus
 }
