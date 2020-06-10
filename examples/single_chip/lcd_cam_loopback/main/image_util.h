@@ -185,7 +185,19 @@ extern "C"
         }
     }
 
-    static inline void rgb565_to_888(uint16_t in, uint16_t *dst)
+    static inline void rgb565_to_888_2(uint16_t in, uint16_t *dst)
+    { /*{{{*/
+        in = (in & 0xFF) << 8 | (in & 0xFF00) >> 8;
+        dst[0] = (in & RGB565_MASK_BLUE) << 3;  // blue
+        dst[1] = (in & RGB565_MASK_GREEN) >> 3; // green
+        dst[2] = (in & RGB565_MASK_RED) >> 8;   // red
+
+        // dst[0] = (in & 0x1F00) >> 5;
+        // dst[1] = ((in & 0x7) << 5) | ((in & 0xE000) >> 11);
+        // dst[2] = in & 0xF8;
+    } /*}}}*/
+
+    static inline void rgb565_to_888(uint16_t in, uint8_t *dst)
     { /*{{{*/
         in = (in & 0xFF) << 8 | (in & 0xFF00) >> 8;
         dst[0] = (in & RGB565_MASK_BLUE) << 3;  // blue
@@ -411,6 +423,7 @@ extern "C"
     void image_resize_n_shift(qtp_t *dimage, uint16_t *simage, int dw, int dh, int dc, int sw, int n, int shift);
     void image_resize_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift);
     void image_resize_nearest_shift(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift);
+    void image_crop_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int sw, int sh, int x1, int y1, int x2, int y2, int shift);
 
 
 #ifdef __cplusplus

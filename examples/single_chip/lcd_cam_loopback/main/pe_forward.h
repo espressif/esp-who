@@ -62,7 +62,9 @@ extern "C"
     
     od_box_array_t *hand_detection_forward(dl_matrix3dq_t *image, hd_config_t hd_config);
     dl_matrix3d_t *handpose_estimation_forward(dl_matrix3du_t *image, int target_size, od_box_array_t *od_boxes, int mode);
+    dl_matrix3d_t *handpose_estimation_forward2(uint16_t *simage, od_box_array_t *od_boxes, int dw, int sw, int sh, int mode);
     void pe_test();
+    void pe_test2();
 
 #if __cplusplus
 }

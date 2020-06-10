@@ -22,6 +22,7 @@
 #include "input.h"
 #include "lssh_human_face_mn2_q.h"
 #include "fb_gfx.h"
+#include "zbar.h"
 
 static const char *TAG = "main";
 
@@ -37,13 +38,13 @@ static const char *TAG = "main";
 #define LCD_CS    GPIO_NUM_11
 #define LCD_BK    GPIO_NUM_6
 
-#define CAM_XCLK  GPIO_NUM_0
+#define CAM_XCLK  GPIO_NUM_4
 #define CAM_PCLK  GPIO_NUM_1
-#define CAM_VSYNC GPIO_NUM_3
-#define CAM_HSYNC GPIO_NUM_2
+#define CAM_VSYNC GPIO_NUM_2
+#define CAM_HSYNC GPIO_NUM_3
 
-#define CAM_D0    GPIO_NUM_46
-#define CAM_D1    GPIO_NUM_45
+#define CAM_D0    GPIO_NUM_10
+#define CAM_D1    GPIO_NUM_12
 #define CAM_D2    GPIO_NUM_41
 #define CAM_D3    GPIO_NUM_42
 #define CAM_D4    GPIO_NUM_39
@@ -94,7 +95,7 @@ static int rgb_printf(dl_matrix3du_t *image_matrix, uint32_t color, const char *
     return len;
 }
 
-void draw_rectangle_od_rgb565(uint16_t *buf, od_box_array_t *boxes, int width)
+void draw_rectangle_od_rgb565(uint16_t *buf, od_box_array_t *boxes, int width, int height)
 { /*{{{*/
     uint16_t p[14];
     for (int i = 0; i < boxes->len; i++)
@@ -109,6 +110,10 @@ void draw_rectangle_od_rgb565(uint16_t *buf, od_box_array_t *boxes, int width)
 
         if ((p[2] < p[0]) || (p[3] < p[1]))
             return;
+        p[0] = max(0, p[0]);
+        p[1] = max(0, p[1]);
+        p[2] = min(width-1, p[2]);
+        p[3] = min(height-1, p[3]);
 
 #define RGB565_GREEN_REVERSE 0xE007
 #define RGB565_RED_REVERSE 0xF8
@@ -146,6 +151,36 @@ void draw_rectangle_od_rgb565(uint16_t *buf, od_box_array_t *boxes, int width)
             buf[2 * width + x + 2] = RGB565_RED_REVERSE;
         }
 #endif
+    }
+} /*}}}*/
+
+void draw_landmarks_rgb565(uint16_t *buf, dl_matrix3d_t *landmarks, int width, int height)
+{ /*{{{*/
+    int count = 0;
+    int len = width*height;
+    for (int i = 0; i < landmarks->n; i++)
+    {
+        for(int j=0;j<landmarks->h;j++){
+            int x = (int)(landmarks->item[count+1]) * width + (int)(landmarks->item[count]);
+            if((x+2)<len){
+                buf[x] = RGB565_RED_REVERSE;
+                buf[x + 1] = RGB565_RED_REVERSE;
+                buf[x + 2] = RGB565_RED_REVERSE;
+            }
+            x = x + width;
+            if((x+2)<len){
+                buf[x] = RGB565_RED_REVERSE;
+                buf[x + 1] = RGB565_RED_REVERSE;
+                buf[x + 2] = RGB565_RED_REVERSE;
+            }
+            x = x + width;
+            if((x+2)<len){
+                buf[x] = RGB565_RED_REVERSE;
+                buf[x + 1] = RGB565_RED_REVERSE;
+                buf[x + 2] = RGB565_RED_REVERSE;
+            }
+            count += 2;
+        }
     }
 } /*}}}*/
 
@@ -235,21 +270,49 @@ void hand_detection(uint16_t *cam_buf, hd_config_t hd_config) {
     // image_resize_n_shift(image->item, cam_buf, 320/4, 240/4, 3, 320, 4, 2);
     image_resize_shift_fast(image->item, cam_buf, hd_config.target_size, 3, 320, 240, hd_config.target_size, hd_config.target_size*240/320, 2);
     od_box_array_t *hd_boxes = hand_detection_forward(image, hd_config);
-    // dl_matrix3du_t *image = dl_matrix3du_alloc(1, 240, 320, 3);
+    // dl_matrix3du_t *image = dl_matrix3du_alloc(1, 320, 240, 3);
     // transform_input_image(image->item, cam_buf, 240*320);
     // dl_matrix3dq_t *hd_image_resize = od_image_preporcess(image->item, 320, 240, hd_config.target_size, -10, 0);
     // // printf("input size: %d, %d, %d, %d\n", hd_image_resize->n, hd_image_resize->h,hd_image_resize->w,hd_image_resize->c);
-    // dl_matrix3du_free(image);
     // od_box_array_t *hd_boxes = hand_detection_forward(hd_image_resize, hd_config);
     if (hd_boxes)
     {
-        draw_rectangle_od_rgb565(cam_buf, hd_boxes, CAM_WIDTH);
+        draw_rectangle_od_rgb565(cam_buf, hd_boxes, CAM_WIDTH, CAM_HIGH);
+        // dl_matrix3d_t *hand_landmarks = handpose_estimation_forward2(cam_buf, hd_boxes, 112, 320, 240, 2);
+        // dl_matrix3d_t *hand_landmarks = handpose_estimation_forward(image, 112, hd_boxes, 2);
+        // draw_landmarks_rgb565(cam_buf, hand_landmarks, CAM_WIDTH, CAM_HIGH);
+        // dl_matrix3d_free(hand_landmarks);
         dl_lib_free(hd_boxes->cls);
         dl_lib_free(hd_boxes->score);
         dl_lib_free(hd_boxes->box);
         dl_lib_free(hd_boxes);
     }
-    // pe_test();
+    // dl_matrix3du_free(image);
+    // pe_test2();
+}
+
+bool rgb565togray(uint8_t* rgb_buf, uint8_t* gray_buf, int len)
+{
+    int r,g,b,y;
+    uint8_t hb, lb;
+    for(int k=0; k<len; k++){
+        hb = *rgb_buf++;
+        lb = *rgb_buf++;
+        b = (lb & 0x1F) << 3;
+        g = (hb & 0x07) << 5 | (lb & 0xE0) >> 3;
+        r = hb & 0xF8;
+
+        // r = ((*(int16_t *)rgb_buf) & 0xF800) >> 8;
+        // g = ((*(int16_t *)rgb_buf) & 0x07E0) >> 3;   
+        // b = ((*(int16_t *)rgb_buf) & 0x001F) << 3;  
+
+
+        y = (r*77)+(g*151)+(b*28);
+         *gray_buf++ = (y>>8);
+
+        // gray_buf[k] = 0.3 * rgb_buf[k * 3] + 0.59 * rgb_buf[k * 3 + 1] + 0.11 * rgb_buf[k * 3 + 2];
+    }
+    return true;
 }
 
 
@@ -340,7 +403,7 @@ static void cam_task(void *arg)
     fb.bytes_per_pixel = 2;
 
     hd_config_t hd_config = {0};
-    hd_config.target_size = 80;
+    hd_config.target_size = 112;
     hd_config.preprocess_mode = 0;
     hd_config.input_w = fb.width;
     hd_config.input_h = fb.height;
@@ -355,6 +418,9 @@ static void cam_task(void *arg)
 
     /* Load configuration for detection */
     while (1) {
+        // printf("Start free RAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT));
+        // printf("SPI RAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM));
+        // printf("SRAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL));
         uint8_t *cam_buf = NULL;
         size_t recv_len = cam_take(&cam_buf);
 
@@ -365,10 +431,53 @@ static void cam_task(void *arg)
         fb.data = cam_buf;
         int fps = 1e6 / (t2 - t1);
         char buf[10];
-        snprintf(buf, 10, "FPS: %d\n", fps);
-        fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
+        // snprintf(buf, 10, "FPS: %d\n", fps);
+        // fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
         last_time = t2;
 
+
+        // printf("Get frame in %d ms.\n", (int)(end_time - init_time) / 1000);
+        
+        zbar_image_scanner_t *scanner = NULL;
+        scanner = zbar_image_scanner_create();
+
+        /* configure the reader */
+        zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
+
+        int width = fb.width;
+        int height = fb.height;
+        int len = width * height;
+        uint8_t *image_data = heap_caps_malloc(len, MALLOC_CAP_SPIRAM);
+        // memcpy(image_data, qrcode_png, width * height);
+
+        rgb565togray(cam_buf, image_data, len);
+        // memcpy(image_data, fb.buf, fb.width * fb.height);
+
+
+        zbar_image_t *image = zbar_image_create();
+        zbar_image_set_format(image, *(int*)"GREY");
+        zbar_image_set_size(image, width, height);
+        zbar_image_set_data(image, image_data, width * height, zbar_image_free_data);
+        
+        // scan the image for barcodes
+        int n = zbar_scan_image(scanner, image);
+
+        // extract results 
+        const zbar_symbol_t *symbol = zbar_image_first_symbol(image);
+        for(; symbol; symbol = zbar_symbol_next(symbol)) {
+            // do something useful with results 
+            zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
+            const char *data = zbar_symbol_get_data(symbol);
+
+            printf("decoded %s symbol \"%s\"\n\n",
+                   zbar_get_symbol_name(typ), data);
+            // ESP_LOGI(TAG, "Scan image in %d ms.", (int)(esp_timer_get_time() - init_time) / 1000);
+        }
+        // clean up
+        zbar_image_destroy(image);
+        zbar_image_scanner_destroy(scanner);
+        free(image_data);
+        
 #if JPEG_MODE
         int w, h;
         uint8_t *img = jpeg_decode(cam_buf, &w, &h);
@@ -391,7 +500,8 @@ static void cam_task(void *arg)
         //         1000000 / (t3 - t1), fps);
         // 使用逻辑分析仪观察帧率
         gpio_set_level(LCD_BK, 1);
-        gpio_set_level(LCD_BK, 0);  
+        gpio_set_level(LCD_BK, 0); 
+ 
     }
 #endif
     //dl_matrix3du_free(image_mat);

@@ -2235,19 +2235,20 @@ void image_resize_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int dc, in
     {
         int _di = dyi * dw;
 
-        int _si0 = dyi * ratio_h * sw;
+        int _si0 = (int)(dyi * ratio_h) * sw;
         int _si1 = _si0 + sw;
 
         for (int dxi = 0; dxi < tw; dxi++)
         {
             int di = (_di + dxi) * dc;
-            int si0 = (_si0 + dxi * ratio_w);
-            int si1 = (_si1 + dxi * ratio_w);
+    
+            int si0 = (_si0 + (int)(dxi * ratio_w));
+            int si1 = (_si1 + (int)(dxi * ratio_w));
             // ets_printf("s: %d, %d  d: %d, %d, %d\n", si0, si1, dyi, dxi, di);
-            rgb565_to_888(simage[si0], dst);
-            rgb565_to_888(simage[si0+1], dst + 3);
-            rgb565_to_888(simage[si1], dst + 6);
-            rgb565_to_888(simage[si1+1], dst + 9);
+            rgb565_to_888_2(simage[si0], dst);
+            rgb565_to_888_2(simage[si0+1], dst + 3);
+            rgb565_to_888_2(simage[si1], dst + 6);
+            rgb565_to_888_2(simage[si1+1], dst + 9);
             dimage[di] = ((dst[0]+dst[3]+dst[6]+dst[9]) << shift_real);
             dimage[di+1] = ((dst[1]+dst[4]+dst[7]+dst[10]) << shift_real);
             dimage[di+2] = ((dst[2]+dst[5]+dst[8]+dst[11]) << shift_real);
@@ -2265,18 +2266,18 @@ void image_resize_nearest_shift(qtp_t *dimage, uint16_t *simage, int dw, int dc,
     float ratio_w = (float)sw / tw;
     float ratio_h = (float)sh / th;
     // printf("ratio: %f, %f\n", ratio_w, ratio_h);
-    uc_t dst[12];
+    uint16_t dst[3];
     for (int dyi = 0; dyi < th; dyi++)
     {
         int _di = dyi * dw;
 
-        float _si0 = dyi * ratio_h * sw;
+        float _si0 = (int)(dyi * ratio_h) * sw;
 
         for (int dxi = 0; dxi < tw; dxi++)
         {
             int di = (_di + dxi) * dc;
             int si0 = rintf(_si0 + dxi * ratio_w);
-            rgb565_to_888(simage[si0], dst);
+            rgb565_to_888_2(simage[si0], dst);
             dimage[di] = ((uint16_t)(dst[0]) << shift_real);
             dimage[di+1] = ((uint16_t)(dst[1]) << shift_real);
             dimage[di+2] = ((uint16_t)(dst[2]) << shift_real);
@@ -2284,3 +2285,93 @@ void image_resize_nearest_shift(qtp_t *dimage, uint16_t *simage, int dw, int dc,
     }
     return;
 }
+
+void image_crop_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int sw, int sh, int x1, int y1, int x2, int y2, int shift)
+{
+    assert(shift>=2);
+    int shift_real = shift - 2;
+    uint16_t dst[12];
+
+    int w = x2 - x1;
+    int h = y2 - y1;
+    int tw, th = 0;
+    float scale = 0.0;
+    if(w >= h){
+        scale = (float)w / dw;
+        tw = dw;
+        th = (int)(h / scale);
+    }else{
+        scale = (float)h / dw;
+        tw = (int)(w / scale);
+        th = dw;
+    }
+    ets_printf("tw: %d, th: %d\n", tw, th);
+    for (int dyi = 0; dyi < th; dyi++)
+    {
+        int _di = dyi * dw;
+
+        int _si0 = ((int)(dyi * scale) + y1) * sw;
+        int _si1 = _si0 + sw;
+
+        for (int dxi = 0; dxi < tw; dxi++)
+        {
+            int di = (_di + dxi) * 3;
+    
+            int si0 = (_si0 + (int)(dxi * scale) + x1);
+            int si1 = (_si1 + (int)(dxi * scale) + x1);
+            // ets_printf("s: %d, %d  d: %d, %d, %d\n", si0, si1, dyi, dxi, di);
+            rgb565_to_888_2(simage[si0], dst);
+            rgb565_to_888_2(simage[si0+1], dst + 3);
+            rgb565_to_888_2(simage[si1], dst + 6);
+            rgb565_to_888_2(simage[si1+1], dst + 9);
+            dimage[di] = ((dst[0]+dst[3]+dst[6]+dst[9]) << shift_real);
+            dimage[di+1] = ((dst[1]+dst[4]+dst[7]+dst[10]) << shift_real);
+            dimage[di+2] = ((dst[2]+dst[5]+dst[8]+dst[11]) << shift_real);
+        }
+    }
+    return;
+}
+
+
+// void warp_affine_shift_fast(qtp_t *dimage, dl_matrix3du_t *crop, int sw, int sh, int sc, Matrix *M)
+// {
+//     Matrix *M_inv = get_inv_affine_matrix(M);
+//     uint8_t *dst = crop->item;
+//     int stride = sw * sc;
+//     int c = sc;
+
+//     float x_src = 0.0;
+//     float y_src = 0.0;
+//     int x1 = 0;
+//     int x2 = 0;
+//     int y1 = 0;
+//     int y2 = 0;
+
+//     for (int i = 0; i < crop->h; i++)
+//     {
+//         for (int j = 0; j < crop->w; j++)
+//         {
+//             x_src = M_inv->array[0][0] * j + M_inv->array[0][1] * i + M_inv->array[0][2];
+//             y_src = M_inv->array[1][0] * j + M_inv->array[1][1] * i + M_inv->array[1][2];
+//             if ((x_src < 0) || (y_src < 0) || (x_src >= (img->w - 1)) || (y_src >= (img->h - 1)))
+//             {
+//                 for (int k = 0; k < crop->c; k++)
+//                 {
+//                     *dst++ = 0;
+//                 }
+//             }
+//             else
+//             {
+//                 x1 = floor(x_src);
+//                 x2 = x1 + 1;
+//                 y1 = floor(y_src);
+//                 y2 = y1 + 1;
+//                 for (int k = 0; k < crop->c; k++)
+//                 {
+//                     *dst++ = (uint8_t)rintf(((img->item[y1 * stride + x1 * c + k]) * (x2 - x_src) * (y2 - y_src)) + ((img->item[y1 * stride + x2 * c + k]) * (x_src - x1) * (y2 - y_src)) + ((img->item[y2 * stride + x1 * c + k]) * (x2 - x_src) * (y_src - y1)) + ((img->item[y2 * stride + x2 * c + k]) * (x_src - x1) * (y_src - y1)));
+//                 }
+//             }
+//         }
+//     }
+//     matrix_free(M_inv);
+// }
