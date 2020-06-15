@@ -17,6 +17,8 @@ typedef struct {
         uint32_t val;
     } pin;
     uint8_t pin_data[16];
+    uint8_t vsync_invert;
+    uint8_t hsync_invert;
     union {
         struct {
             uint32_t width:   16;
@@ -25,6 +27,7 @@ typedef struct {
         uint32_t val;
     } size;
     uint32_t max_buffer_size; // DMA used
+    uint32_t task_stack;
     uint8_t task_pri;
     union {
         struct {
@@ -40,6 +43,7 @@ void cam_start(void);
 void cam_stop(void);
 size_t cam_take(uint8_t **buffer_p);
 void cam_give(uint8_t *buffer);
+void cam_deinit();
 int cam_init(const cam_config_t *config);
 
 #ifdef __cplusplus

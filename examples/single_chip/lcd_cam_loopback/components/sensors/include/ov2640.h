@@ -98,11 +98,7 @@ extern "C" {
 #define OV2640_SENSOR_HISTO_LOW  0x61
 #define OV2640_SENSOR_HISTO_HIGH 0x62
 
-
-
-
 uint8_t OV2640_Init(uint8_t mode, uint8_t fre_double_en);
-void OV2640_YUV_Mode(void);
 void OV2640_JPEG_Mode(void);
 void OV2640_RGB565_Mode(uint8_t byte_swap_en);
 void OV2640_Auto_Exposure(uint8_t level);

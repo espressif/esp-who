@@ -14,6 +14,8 @@
 #include "esp_timer.h"
 #include "cam.h"
 #include "ov2640.h"
+#include "ov3660.h"
+#include "sensor.h"
 #include "lcd.h"
 #include "jpeg.h"
 #include "lssh_forward.h"
@@ -51,6 +53,10 @@ static const char *TAG = "main";
 #define CAM_D5    GPIO_NUM_40
 #define CAM_D6    GPIO_NUM_21
 #define CAM_D7    GPIO_NUM_38
+
+#define CAM_SCL   GPIO_NUM_7
+#define CAM_SDA   GPIO_NUM_8
+
 
 //box_array_t *onet_forward(dl_matrix3du_t *image, box_array_t *net_boxes, net_config_t *config);
 //face_id_list id_list = {0};
@@ -360,33 +366,100 @@ static void cam_task(void *arg)
             .hsync = CAM_HSYNC,
         },
         .pin_data = {CAM_D0, CAM_D1, CAM_D2, CAM_D3, CAM_D4, CAM_D5, CAM_D6, CAM_D7},
+        .vsync_invert = true,
+        .hsync_invert = false,
         .size = {
             .width = CAM_WIDTH,
             .high  = CAM_HIGH,
         },
-        .max_buffer_size = 32 * 1024, // max 32KBytes
-        .task_pri = 10
+        .max_buffer_size = 32 * 1024,
+        .task_stack = 1024,
+        .task_pri = configMAX_PRIORITIES
     };
-
     // 使用PingPang buffer，帧率更高， 也可以单独使用一个buffer节省内存
     cam_config.frame1_buffer = (uint8_t *)heap_caps_malloc(CAM_WIDTH * CAM_HIGH * 2 * sizeof(uint8_t), MALLOC_CAP_SPIRAM);
     cam_config.frame2_buffer = (uint8_t *)heap_caps_malloc(CAM_WIDTH * CAM_HIGH * 2 * sizeof(uint8_t), MALLOC_CAP_SPIRAM);
-
-    cam_init(&cam_config);
-    if (OV2640_Init(0, 1) == 1) {
-        vTaskDelete(NULL);
-        return;
-    }
-    if (cam_config.mode.jpeg) {
-        OV2640_JPEG_Mode();
-    } else {
-        OV2640_RGB565_Mode(false);	//RGB565模式
-    }
     
-    OV2640_ImageSize_Set(800, 600);
-    OV2640_ImageWin_Set(0, 0, 800, 600);
-  	OV2640_OutSize_Set(CAM_WIDTH, CAM_HIGH); 
+
+    cam_config_t cam_config_sl = {
+        .bit_width = 8,
+        .mode.jpeg = JPEG_MODE,
+        .xclk_fre = 4 * 1000 * 1000,
+        .pin = {
+            .xclk  = CAM_XCLK,
+            .pclk  = CAM_PCLK,
+            .vsync = CAM_VSYNC,
+            .hsync = CAM_HSYNC,
+        },
+        .pin_data = {CAM_D0, CAM_D1, CAM_D2, CAM_D3, CAM_D4, CAM_D5, CAM_D6, CAM_D7},
+        .vsync_invert = true,
+        .hsync_invert = false,
+        .size = {
+            .width = CAM_WIDTH,
+            .high  = CAM_HIGH,
+        },
+        .max_buffer_size = 32 * 1024,
+        .task_stack = 1024,
+        .task_pri = configMAX_PRIORITIES
+    };
+    // 使用PingPang buffer，帧率更高， 也可以单独使用一个buffer节省内存
+    cam_config_sl.frame1_buffer = (uint8_t *)heap_caps_malloc(CAM_WIDTH * CAM_HIGH * 2 * sizeof(uint8_t), MALLOC_CAP_SPIRAM);
+    cam_config_sl.frame2_buffer = (uint8_t *)heap_caps_malloc(CAM_WIDTH * CAM_HIGH * 2 * sizeof(uint8_t), MALLOC_CAP_SPIRAM);
+    
+
+    
+    cam_init(&cam_config);
+
+    sensor_t sensor;
+    SCCB_Init(CAM_SDA, CAM_SCL);
+    sensor.slv_addr = SCCB_Probe();
+    ESP_LOGI(TAG, "sensor_id: 0x%x\n", sensor.slv_addr);
+
+    int detect_flag = 0;
+
+    if (sensor.slv_addr == 0x30) { // OV2640
+        // cam_init(&cam_config);
+
+        if (OV2640_Init(0, 1) != 0) {
+            goto fail;
+        }
+        if (cam_config.mode.jpeg) {
+            OV2640_JPEG_Mode();
+        } else {
+            OV2640_RGB565_Mode(false);	//RGB565模式
+        }
+        
+        OV2640_ImageSize_Set(800, 600);
+        OV2640_ImageWin_Set(0, 0, 800, 600);
+        OV2640_OutSize_Set(CAM_WIDTH, CAM_HIGH); 
+        detect_flag = 1;
+    } else if (sensor.slv_addr == 0x3C) { // OV3660
+        cam_deinit();
+        cam_init(&cam_config_sl);
+
+        ov3660_init(&sensor);
+        sensor.init_status(&sensor);
+        if (sensor.reset(&sensor) != 0) {
+            goto fail;
+        }
+        if (cam_config.mode.jpeg) {
+            sensor.set_pixformat(&sensor, PIXFORMAT_JPEG);
+        } else {
+            sensor.set_pixformat(&sensor, PIXFORMAT_RGB565);
+        }
+        // sensor.set_framesize(&sensor, FRAMESIZE_QVGA);
+        sensor.set_res_raw(&sensor, 0, 0, 2079, 1547, 8, 2, 1920, 800, CAM_WIDTH, CAM_HIGH, true, true);
+        sensor.set_vflip(&sensor, 1);
+        sensor.set_hmirror(&sensor, 1);
+        sensor.set_pll(&sensor, false, 15, 1, 0, false, 0, true, 5); // 39 fps
+    } else {
+        ESP_LOGE(TAG, "sensor is temporarily not supported\n");
+        goto fail;
+    }
+
+    
     ESP_LOGI(TAG, "camera init done\n");
+    vTaskDelay(100 / portTICK_RATE_MS);
     cam_start();
 
     dl_matrix3dq_op_init();
@@ -403,7 +476,7 @@ static void cam_task(void *arg)
     fb.bytes_per_pixel = 2;
 
     hd_config_t hd_config = {0};
-    hd_config.target_size = 112;
+    hd_config.target_size = 128;
     hd_config.preprocess_mode = 0;
     hd_config.input_w = fb.width;
     hd_config.input_h = fb.height;
@@ -424,59 +497,60 @@ static void cam_task(void *arg)
         uint8_t *cam_buf = NULL;
         size_t recv_len = cam_take(&cam_buf);
 
-        int t1 = esp_timer_get_time();
-        // face_detection(image_mat, cam_buf, lssh_config, n);
-        hand_detection(cam_buf, hd_config);
-        int t2 = esp_timer_get_time();
-        fb.data = cam_buf;
-        int fps = 1e6 / (t2 - t1);
-        char buf[10];
-        // snprintf(buf, 10, "FPS: %d\n", fps);
-        // fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
-        last_time = t2;
+        if(detect_flag){
+            int t1 = esp_timer_get_time();
+            // face_detection(image_mat, cam_buf, lssh_config, n);
+            hand_detection(cam_buf, hd_config);
+            int t2 = esp_timer_get_time();
+            fb.data = cam_buf;
+            int fps = 1e6 / (t2 - t1);
+            char buf[10];
+            // snprintf(buf, 10, "FPS: %d\n", fps);
+            // fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
+            last_time = t2;
+        }else{
+            zbar_image_scanner_t *scanner = NULL;
+            scanner = zbar_image_scanner_create();
+
+            /* configure the reader */
+            zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
+
+            int width = fb.width;
+            int height = fb.height;
+            int len = width * height;
+            uint8_t *image_data = heap_caps_malloc(len, MALLOC_CAP_SPIRAM);
+            // memcpy(image_data, qrcode_png, width * height);
+
+            rgb565togray(cam_buf, image_data, len);
+            // memcpy(image_data, fb.buf, fb.width * fb.height);
 
 
-        // printf("Get frame in %d ms.\n", (int)(end_time - init_time) / 1000);
-        
-        zbar_image_scanner_t *scanner = NULL;
-        scanner = zbar_image_scanner_create();
+            zbar_image_t *image = zbar_image_create();
+            zbar_image_set_format(image, *(int*)"GREY");
+            zbar_image_set_size(image, width, height);
+            zbar_image_set_data(image, image_data, width * height, zbar_image_free_data);
+            
+            // scan the image for barcodes
+            int n = zbar_scan_image(scanner, image);
 
-        /* configure the reader */
-        zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
+            // extract results 
+            const zbar_symbol_t *symbol = zbar_image_first_symbol(image);
+            for(; symbol; symbol = zbar_symbol_next(symbol)) {
+                // do something useful with results 
+                zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
+                const char *data = zbar_symbol_get_data(symbol);
 
-        int width = fb.width;
-        int height = fb.height;
-        int len = width * height;
-        uint8_t *image_data = heap_caps_malloc(len, MALLOC_CAP_SPIRAM);
-        // memcpy(image_data, qrcode_png, width * height);
-
-        rgb565togray(cam_buf, image_data, len);
-        // memcpy(image_data, fb.buf, fb.width * fb.height);
-
-
-        zbar_image_t *image = zbar_image_create();
-        zbar_image_set_format(image, *(int*)"GREY");
-        zbar_image_set_size(image, width, height);
-        zbar_image_set_data(image, image_data, width * height, zbar_image_free_data);
-        
-        // scan the image for barcodes
-        int n = zbar_scan_image(scanner, image);
-
-        // extract results 
-        const zbar_symbol_t *symbol = zbar_image_first_symbol(image);
-        for(; symbol; symbol = zbar_symbol_next(symbol)) {
-            // do something useful with results 
-            zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
-            const char *data = zbar_symbol_get_data(symbol);
-
-            printf("decoded %s symbol \"%s\"\n\n",
-                   zbar_get_symbol_name(typ), data);
-            // ESP_LOGI(TAG, "Scan image in %d ms.", (int)(esp_timer_get_time() - init_time) / 1000);
+                printf("decoded %s symbol \"%s\"\n\n",
+                    zbar_get_symbol_name(typ), data);
+                // ESP_LOGI(TAG, "Scan image in %d ms.", (int)(esp_timer_get_time() - init_time) / 1000);
+            }
+            // clean up
+            zbar_image_destroy(image);
+            zbar_image_scanner_destroy(scanner);
+            free(image_data);
         }
-        // clean up
-        zbar_image_destroy(image);
-        zbar_image_scanner_destroy(scanner);
-        free(image_data);
+        
+        
         
 #if JPEG_MODE
         int w, h;
@@ -505,6 +579,10 @@ static void cam_task(void *arg)
     }
 #endif
     //dl_matrix3du_free(image_mat);
+fail:
+    free(cam_config.frame1_buffer);
+    free(cam_config.frame2_buffer);
+    cam_deinit();
     vTaskDelete(NULL);
 }
 

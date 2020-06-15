@@ -568,6 +568,19 @@ static int esp_mfi_i2c_write_byte(uint8_t data, uint16_t retrytimes)
     return -ETIME;
 }
 
+int esp_mfi_i2c_probe(uint8_t slvaddr)
+{
+    i2c_master_start();
+
+    /**< Send write address of the CP */
+    if (esp_mfi_i2c_write_byte(slvaddr, MFI_CP_BUSY_RETRY_TIMES) != 0) {
+        return -ETIME;
+    }
+    i2c_master_stop();
+
+    return 0;
+}
+
 /**
  * @brief write data buffer to slave
  */
@@ -632,6 +645,97 @@ int esp_mfi_i2c_read(uint8_t slvaddr, uint8_t regaddr, uint8_t *buff, uint32_t l
     /**< Send register address to slave */
     if (esp_mfi_i2c_write_byte(regaddr, 0) != 0) {
         ESP_LOGE(TAG, "Write register address[0x%02x] to slave.", regaddr);
+        return -ENODATA;
+    }
+    i2c_master_stop();
+
+    i2c_master_wait(4000);
+
+    i2c_master_start();
+
+    /**< Send read address of the CP */
+    if (esp_mfi_i2c_write_byte((slvaddr + 1), MFI_CP_BUSY_RETRY_TIMES) != 0) {
+        ESP_LOGE(TAG, "Slave is busy, time out.");
+        return -ETIME;
+    }
+
+    for (i = 0; i < len; ++i) {
+        buff[i] = i2c_master_readByte();
+
+        i2c_master_setAck((i == (len - 1)) ? 1 : 0);
+    }
+
+    i2c_master_stop();
+
+    return 0;
+}
+
+int esp_mfi_i2c_write16(uint8_t slvaddr, uint16_t regaddr, uint8_t *buff, uint32_t len)
+{
+    uint16_t i;
+
+    if (!buff)
+        return -EINVAL;
+
+    ESP_LOGI(TAG, "Writing to SW I2C");
+
+    i2c_master_start();
+
+    /**< Send write address of the CP */
+    if (esp_mfi_i2c_write_byte(slvaddr, MFI_CP_BUSY_RETRY_TIMES) != 0) {
+        ESP_LOGE(TAG, "Slave is busy, time out.");
+        return -ETIME;
+    }
+
+    if (len > 0) {
+        /**< Send register address to slave */
+        if (esp_mfi_i2c_write_byte(regaddr >> 8, 0) != 0) {
+            ESP_LOGE(TAG, "Write register address[0x%02x] to slave.", regaddr >> 8);
+            return -ENODATA;
+        }
+        if (esp_mfi_i2c_write_byte(regaddr & 0xff, 0) != 0) {
+            ESP_LOGE(TAG, "Write register address[0x%02x] to slave.", regaddr & 0xff);
+            return -ENODATA;
+        }
+
+        /**< Send data out */
+        for (i = 0; i < len; ++i) {
+            if (esp_mfi_i2c_write_byte(*buff++, 0) != 0) {
+                ESP_LOGE(TAG, "Write data[0x%02x] to slave.", *buff);
+                return -ENODATA;
+            }
+        }
+    }
+
+    i2c_master_stop();
+
+    return 0;
+}
+
+int esp_mfi_i2c_read16(uint8_t slvaddr, uint16_t regaddr, uint8_t *buff, uint32_t len)
+{
+    uint16_t i;
+
+    if (!buff)
+        return -EINVAL;
+
+    ESP_LOGI(TAG, "Reading from SW I2C");
+
+    i2c_master_start();
+
+    /**< Send write address of the CP */
+    if (esp_mfi_i2c_write_byte(slvaddr, MFI_CP_BUSY_RETRY_TIMES) != 0) {
+        ESP_LOGE(TAG, "Slave is busy, time out.");
+        return -ETIME;
+    }
+
+    /**< Send register address to slave */
+    if (esp_mfi_i2c_write_byte(regaddr >> 8, 0) != 0) {
+        ESP_LOGE(TAG, "Write register address[0x%02x] to slave.", regaddr >> 8);
+        return -ENODATA;
+    }
+    if (esp_mfi_i2c_write_byte(regaddr & 0xff, 0) != 0) {
+        ESP_LOGE(TAG, "Write register address[0x%02x] to slave.", regaddr & 0xff);
         return -ENODATA;
     }
     i2c_master_stop();

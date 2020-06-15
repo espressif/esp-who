@@ -351,13 +351,19 @@ static void lcd_set_pin(lcd_config_t *config)
 void lcd_dma_config(lcd_config_t *config) 
 {
     int cnt = 0;
-    lcd_obj->dma_size = LCD_DMA_MAX_SIZE;
-    for (cnt = 0;;cnt++) { // 寻找可以整除dma_size的buffer大小
-        if ((config->max_buffer_size - cnt) % lcd_obj->dma_size == 0) {
-            break;
+    if (config->max_buffer_size >= LCD_DMA_MAX_SIZE * 2) {
+        lcd_obj->dma_size = LCD_DMA_MAX_SIZE;
+        for (cnt = 0;;cnt++) { // 寻找可以整除dma_size的buffer大小
+            if ((config->max_buffer_size - cnt) % lcd_obj->dma_size == 0) {
+                break;
+            }
         }
+        lcd_obj->buffer_size = config->max_buffer_size - cnt;
+    } else {
+        lcd_obj->dma_size = config->max_buffer_size / 2;
+        lcd_obj->buffer_size = lcd_obj->dma_size * 2;
     }
-    lcd_obj->buffer_size = config->max_buffer_size - cnt;
+    
     lcd_obj->half_buffer_size = lcd_obj->buffer_size / 2;
 
     lcd_obj->node_cnt = (lcd_obj->buffer_size) / lcd_obj->dma_size; // DMA节点个数

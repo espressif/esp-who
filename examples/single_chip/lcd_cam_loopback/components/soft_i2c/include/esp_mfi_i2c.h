@@ -37,6 +37,8 @@ int esp_mfi_i2c_init(void);
  */
 int esp_mfi_i2c_end(void);
 
+int esp_mfi_i2c_probe(uint8_t slvaddr);
+
 /**
  * @brief write data buffer to slave
  */
@@ -46,6 +48,16 @@ int esp_mfi_i2c_write(uint8_t slvaddr, uint8_t regaddr, uint8_t *buff, uint32_t 
  * @brief read data form slave
  */
 int esp_mfi_i2c_read(uint8_t slvaddr, uint8_t regaddr, uint8_t *buff, uint32_t len);
+
+/**
+ * @brief write data buffer to slave
+ */
+int esp_mfi_i2c_write16(uint8_t slvaddr, uint16_t regaddr, uint8_t *buff, uint32_t len);
+
+/**
+ * @brief read data form slave
+ */
+int esp_mfi_i2c_read16(uint8_t slvaddr, uint16_t regaddr, uint8_t *buff, uint32_t len);
 
 #ifdef __cplusplus
 }
