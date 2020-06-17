@@ -476,7 +476,7 @@ static void cam_task(void *arg)
     fb.bytes_per_pixel = 2;
 
     hd_config_t hd_config = {0};
-    hd_config.target_size = 128;
+    hd_config.target_size = 80;
     hd_config.preprocess_mode = 0;
     hd_config.input_w = fb.width;
     hd_config.input_h = fb.height;

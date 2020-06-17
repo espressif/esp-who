@@ -174,7 +174,7 @@ od_box_array_t *hand_detection_forward(dl_matrix3dq_t *image, hd_config_t hd_con
      * 
      */
     
-    detection_result_t **hd_results = hd_nano1_q(image, mode);
+    detection_result_t **hd_results = hd_lite1_q(image, mode);
 
     /**
      * @brief filter by score
