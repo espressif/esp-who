@@ -60,8 +60,8 @@ static char *START = "start";
 #define CAM_SCL   GPIO_NUM_7
 #define CAM_SDA   GPIO_NUM_8
 
-#define ECHO_TEST_TXD  (1)
-#define ECHO_TEST_RXD  (3)
+#define ECHO_TEST_TXD  (43)
+#define ECHO_TEST_RXD  (44)
 #define ECHO_TEST_RTS  (UART_PIN_NO_CHANGE)
 #define ECHO_TEST_CTS  (UART_PIN_NO_CHANGE)
 #define BUF_SIZE (1024)
