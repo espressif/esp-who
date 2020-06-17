@@ -413,7 +413,8 @@ static void cam_task(void *arg)
         .data_bits = UART_DATA_8_BITS,
         .parity    = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_APB
     };
 
     uart_param_config(UART_NUM_1, &uart_config);
@@ -514,6 +515,10 @@ static void cam_task(void *arg)
         int len = uart_read_bytes(UART_NUM_1, data, BUF_SIZE, 100 / portTICK_RATE_MS);
         if (len > 0) 
         {
+            printf("len: %d\n", len);
+            char buf[20];
+            snprintf(buf, 20, "len: %d\n", len);
+            fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
             if (strncmp((char *)data, GET_FLAG, 3) == 0) 
             {
                     printf("get start flag \n");
