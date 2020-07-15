@@ -543,6 +543,21 @@ dl_matrix3dq_t *dl_matrix3duq_conv_3x3_with_bias_prelu(dl_matrix3du_t *input,
                                                        int exponent,
                                                        char *name);
 
+/**
+ * @brief Do 3x3 convolution with a 16-bit quantized matrix
+ * 
+ * @param input  Input matrix, size (1, w, h, c)
+ * @param filter 
+ * @param bias 
+ * @param prelu 
+ * @param stride_x 
+ * @param stride_y 
+ * @param padding 
+ * @param exponent 
+ * @param mode 
+ * @param name 
+ * @return dl_matrix3dq_t* 
+ */
 dl_matrix3dq_t *dl_matrix3dqq_conv_3x3_with_bias_prelu(dl_matrix3dq_t *input,
                                                        dl_matrix3dq_t *filter,
                                                        dl_matrix3dq_t *bias,

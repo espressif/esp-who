@@ -18,6 +18,7 @@ extern "C"
 
     detection_result_t **hd_nano1_q(dl_matrix3dq_t *in, int mode);
     detection_result_t **hd_lite1_q(dl_matrix3dq_t *in, int mode);
+    detection_result_t **hd_lite1_q_preload(dl_matrix3dq_t *in, int mode);
     void detection_result_free(detection_result_t *m);
     void detection_results_free(detection_result_t **m, int length);
     void hd_test();

@@ -10,9 +10,9 @@ register_component()
 
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${COMPONENT_TARGET}
-    fd
-    pe
-    lssh
-    dl
+    fd_tie
+    pe_tie
+    lssh_tie
+    dl_tie
     )
 

@@ -33,26 +33,26 @@ static const char *TAG = "main";
 #define CAM_WIDTH   (320)
 #define CAM_HIGH    (240)
 
-#define LCD_CLK   GPIO_NUM_15
-#define LCD_MOSI  GPIO_NUM_9
-#define LCD_DC    GPIO_NUM_13
-#define LCD_RST   GPIO_NUM_16
-#define LCD_CS    GPIO_NUM_11
-#define LCD_BK    GPIO_NUM_6
+#define LCD_CLK GPIO_NUM_15
+#define LCD_MOSI GPIO_NUM_9
+#define LCD_DC GPIO_NUM_13
+#define LCD_RST GPIO_NUM_16
+#define LCD_CS GPIO_NUM_11
+#define LCD_BK GPIO_NUM_6
 
-#define CAM_XCLK  GPIO_NUM_4
-#define CAM_PCLK  GPIO_NUM_1
+#define CAM_XCLK GPIO_NUM_1
+#define CAM_PCLK GPIO_NUM_18
 #define CAM_VSYNC GPIO_NUM_2
 #define CAM_HSYNC GPIO_NUM_3
 
-#define CAM_D0    GPIO_NUM_10
-#define CAM_D1    GPIO_NUM_12
-#define CAM_D2    GPIO_NUM_41
-#define CAM_D3    GPIO_NUM_42
-#define CAM_D4    GPIO_NUM_39
-#define CAM_D5    GPIO_NUM_40
-#define CAM_D6    GPIO_NUM_21
-#define CAM_D7    GPIO_NUM_38
+#define CAM_D0 GPIO_NUM_46
+#define CAM_D1 GPIO_NUM_45
+#define CAM_D2 GPIO_NUM_41
+#define CAM_D3 GPIO_NUM_42
+#define CAM_D4 GPIO_NUM_39
+#define CAM_D5 GPIO_NUM_40
+#define CAM_D6 GPIO_NUM_21
+#define CAM_D7 GPIO_NUM_38
 
 #define CAM_SCL   GPIO_NUM_7
 #define CAM_SDA   GPIO_NUM_8
@@ -269,32 +269,36 @@ void face_detection(dl_matrix3dq_t *image_mat, uint16_t *cam_buf, lssh_config_t 
 }
 
 
-void hand_detection(uint16_t *cam_buf, hd_config_t hd_config) {
-    int t1 = esp_timer_get_time();
+void hand_detection(fb_data_t *fb, uint16_t *cam_buf, hd_config_t hd_config) {
+    // int t1 = esp_timer_get_time();
     int32_t c1 = get_count();
+    static char pose_old[16];
     dl_matrix3dq_t *image = dl_matrix3dq_alloc(1, hd_config.target_size, hd_config.target_size, 3, -10);
-    // image_resize_n_shift(image->item, cam_buf, 320/4, 240/4, 3, 320, 4, 2);
     image_resize_shift_fast(image->item, cam_buf, hd_config.target_size, 3, 320, 240, hd_config.target_size, hd_config.target_size*240/320, 2);
     od_box_array_t *hd_boxes = hand_detection_forward(image, hd_config);
+
     // dl_matrix3du_t *image = dl_matrix3du_alloc(1, 320, 240, 3);
     // transform_input_image(image->item, cam_buf, 240*320);
     // dl_matrix3dq_t *hd_image_resize = od_image_preporcess(image->item, 320, 240, hd_config.target_size, -10, 0);
-    // // printf("input size: %d, %d, %d, %d\n", hd_image_resize->n, hd_image_resize->h,hd_image_resize->w,hd_image_resize->c);
+    // // ets_printf("input size: %d, %d, %d, %d\n", hd_image_resize->n, hd_image_resize->h,hd_image_resize->w,hd_image_resize->c);
     // od_box_array_t *hd_boxes = hand_detection_forward(hd_image_resize, hd_config);
     if (hd_boxes)
     {
         draw_rectangle_od_rgb565(cam_buf, hd_boxes, CAM_WIDTH, CAM_HIGH);
-        // dl_matrix3d_t *hand_landmarks = handpose_estimation_forward2(cam_buf, hd_boxes, 112, 320, 240, 2);
-        // dl_matrix3d_t *hand_landmarks = handpose_estimation_forward(image, 112, hd_boxes, 2);
-        // draw_landmarks_rgb565(cam_buf, hand_landmarks, CAM_WIDTH, CAM_HIGH);
-        // dl_matrix3d_free(hand_landmarks);
+        dl_matrix3d_t *hand_landmarks = handpose_estimation_forward2(cam_buf, hd_boxes, 128, 320, 240, 2);
+        draw_landmarks_rgb565(cam_buf, hand_landmarks, CAM_WIDTH, CAM_HIGH);
+        char *pose = pose_estimation_with_lmks(hand_landmarks);
+        if(strcmp(pose_old, pose) == 0){
+            fb_gfx_print(fb, 20, 20, RGB565_MASK_GREEN, pose);
+        };
+        strcpy(pose_old, pose);
+        free(pose);
+        dl_matrix3d_free(hand_landmarks);
         dl_lib_free(hd_boxes->cls);
         dl_lib_free(hd_boxes->score);
         dl_lib_free(hd_boxes->box);
         dl_lib_free(hd_boxes);
     }
-    // dl_matrix3du_free(image);
-    // pe_test2();
 }
 
 bool rgb565togray(uint8_t* rgb_buf, uint8_t* gray_buf, int len)
@@ -406,8 +410,6 @@ static void cam_task(void *arg)
     cam_config_sl.frame1_buffer = (uint8_t *)heap_caps_malloc(CAM_WIDTH * CAM_HIGH * 2 * sizeof(uint8_t), MALLOC_CAP_SPIRAM);
     cam_config_sl.frame2_buffer = (uint8_t *)heap_caps_malloc(CAM_WIDTH * CAM_HIGH * 2 * sizeof(uint8_t), MALLOC_CAP_SPIRAM);
     
-
-    
     cam_init(&cam_config);
 
     sensor_t sensor;
@@ -476,7 +478,7 @@ static void cam_task(void *arg)
     fb.bytes_per_pixel = 2;
 
     hd_config_t hd_config = {0};
-    hd_config.target_size = 80;
+    hd_config.target_size = 112;
     hd_config.preprocess_mode = 0;
     hd_config.input_w = fb.width;
     hd_config.input_h = fb.height;
@@ -487,27 +489,34 @@ static void cam_task(void *arg)
     hd_config.mode = 2;
 
 
-    int last_time = esp_timer_get_time();
+    // int last_time = esp_timer_get_time();
 
     /* Load configuration for detection */
+    uint32_t time0;
+    uint32_t time1;
     while (1) {
-        // printf("Start free RAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT));
-        // printf("SPI RAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM));
-        // printf("SRAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL));
+        // ets_printf("Start free RAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT));
+        // ets_printf("SPI RAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM));
+        // ets_printf("SRAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL));
         uint8_t *cam_buf = NULL;
         size_t recv_len = cam_take(&cam_buf);
+        // ets_printf("%d\n", recv_len);
 
         if(detect_flag){
-            int t1 = esp_timer_get_time();
+            // int t1 = esp_timer_get_time();
             // face_detection(image_mat, cam_buf, lssh_config, n);
-            hand_detection(cam_buf, hd_config);
-            int t2 = esp_timer_get_time();
+            RSR(CCOUNT, time0);
+            hand_detection(&fb, cam_buf, hd_config);
+            RSR(CCOUNT, time1);
+            // ets_printf("time: %d\n", (time1 - time0));
+            // int t2 = esp_timer_get_time();
             fb.data = cam_buf;
-            int fps = 1e6 / (t2 - t1);
+            // int fps = 1e6 / (t2 - t1);
             char buf[10];
+
             // snprintf(buf, 10, "FPS: %d\n", fps);
             // fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
-            last_time = t2;
+            // last_time = t2;
         }else{
             zbar_image_scanner_t *scanner = NULL;
             scanner = zbar_image_scanner_create();
@@ -540,7 +549,7 @@ static void cam_task(void *arg)
                 zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
                 const char *data = zbar_symbol_get_data(symbol);
 
-                printf("decoded %s symbol \"%s\"\n\n",
+                ets_printf("decoded %s symbol \"%s\"\n\n",
                     zbar_get_symbol_name(typ), data);
                 // ESP_LOGI(TAG, "Scan image in %d ms.", (int)(esp_timer_get_time() - init_time) / 1000);
             }
@@ -556,7 +565,7 @@ static void cam_task(void *arg)
         int w, h;
         uint8_t *img = jpeg_decode(cam_buf, &w, &h);
         if (img) {
-            printf("jpeg: w: %d, h: %d\n", w, h);
+            ets_printf("jpeg: w: %d, h: %d\n", w, h);
             lcd_set_index(0, 0, w - 1, h - 1);
             lcd_write_data(img, w * h * sizeof(uint16_t));
             free(img);
@@ -565,7 +574,7 @@ static void cam_task(void *arg)
         lcd_set_index(0, 0, CAM_WIDTH - 1, CAM_HIGH - 1);
         lcd_write_data(cam_buf, CAM_WIDTH * CAM_HIGH * 2);
 #endif
-        cam_give(cam_buf);   
+        cam_give(cam_buf);
         // int t3 = esp_timer_get_time();
         // printf("time: %d + %d = %dms, fps: %d, %d\n",
         //         (t2 - t1) / 1000,
@@ -591,6 +600,7 @@ void app_main()
     // char *tasklist = malloc(1024);
     SET_PERI_REG_MASK(SYSTEM_CPU_PER_CONF_REG, SYSTEM_CPU_WAIT_MODE_FORCE_ON); // fix two core issue
     xTaskCreatePinnedToCore(cam_task, "cam_task", 2*4096, NULL, 5, NULL, 1);
+    // ets_printf("hhhhhhh\n");
     // while(1){
     //     vTaskGetRunTimeStats(tasklist);
     //     vTaskDelay(1000);

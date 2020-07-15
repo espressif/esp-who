@@ -31,31 +31,31 @@ static const char *TAG = "main";
 static char *GET_FLAG = "get";
 static char *START = "start";
 
-#define JPEG_MODE 0
+#define JPEG_MODE 1
 
-#define CAM_WIDTH   (320)
-#define CAM_HIGH    (240)
+#define CAM_WIDTH   (640)
+#define CAM_HIGH    (480)
 
-#define LCD_CLK   GPIO_NUM_15
-#define LCD_MOSI  GPIO_NUM_9
-#define LCD_DC    GPIO_NUM_13
-#define LCD_RST   GPIO_NUM_16
-#define LCD_CS    GPIO_NUM_11
-#define LCD_BK    GPIO_NUM_6
+#define LCD_CLK GPIO_NUM_15
+#define LCD_MOSI GPIO_NUM_9
+#define LCD_DC GPIO_NUM_13
+#define LCD_RST GPIO_NUM_16
+#define LCD_CS GPIO_NUM_11
+#define LCD_BK GPIO_NUM_6
 
-#define CAM_XCLK  GPIO_NUM_4
-#define CAM_PCLK  GPIO_NUM_1
+#define CAM_XCLK GPIO_NUM_1
+#define CAM_PCLK GPIO_NUM_33
 #define CAM_VSYNC GPIO_NUM_2
 #define CAM_HSYNC GPIO_NUM_3
 
-#define CAM_D0    GPIO_NUM_10
-#define CAM_D1    GPIO_NUM_12
-#define CAM_D2    GPIO_NUM_41
-#define CAM_D3    GPIO_NUM_42
-#define CAM_D4    GPIO_NUM_39
-#define CAM_D5    GPIO_NUM_40
-#define CAM_D6    GPIO_NUM_21
-#define CAM_D7    GPIO_NUM_38
+#define CAM_D0 GPIO_NUM_46
+#define CAM_D1 GPIO_NUM_45
+#define CAM_D2 GPIO_NUM_41
+#define CAM_D3 GPIO_NUM_42
+#define CAM_D4 GPIO_NUM_39
+#define CAM_D5 GPIO_NUM_40
+#define CAM_D6 GPIO_NUM_21
+#define CAM_D7 GPIO_NUM_38
 
 #define CAM_SCL   GPIO_NUM_7
 #define CAM_SDA   GPIO_NUM_8
@@ -269,7 +269,7 @@ bool rgb565togray(uint8_t* rgb_buf, uint8_t* gray_buf, int len)
 
 static void cam_task(void *arg)
 {
-#if 1
+#if 0
     lcd_config_t lcd_config = {
         .clk_fre = 80 * 1000 * 1000,
         .pin_clk = LCD_CLK,
@@ -402,10 +402,15 @@ static void cam_task(void *arg)
         goto fail;
     }
 
-    
+    fb_data_t fb;
+    fb.width = CAM_WIDTH;
+    fb.height = CAM_HIGH;
+    fb.bytes_per_pixel = 1;
+
     ESP_LOGI(TAG, "camera init done\n");
     vTaskDelay(100 / portTICK_RATE_MS);
     cam_start();
+    
 
     uart_config_t uart_config = 
     {
@@ -426,10 +431,9 @@ static void cam_task(void *arg)
     uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
 
     //send buffer
-    uint8_t *cache = (uint8_t *) malloc(BUF_SIZE * 15);
+    uint8_t *cache = (uint8_t *) malloc(BUF_SIZE * 40);
     //add start flag.
     memcpy(cache, START, 5);
-
 
     dl_matrix3dq_op_init();
 
@@ -439,17 +443,10 @@ static void cam_task(void *arg)
     // lssh_config_t lssh_config = lssh_get_config(lssh_human_face_mn2, 16*n, 10, 0.3, 240, 320, false, DL_TIE_IMPL);
     // dl_matrix3dq_t *image_mat = dl_matrix3dq_alloc(1, 240/n, 320/n, 3, 0);
 
-    uint32_t fb_len;
-    fb_data_t fb;
-    fb.width = 320;
-    fb.height = 240;
-    fb.bytes_per_pixel = 2;
-    fb_len = fb.width*fb.height*fb.bytes_per_pixel;
-
     
 
 
-    int last_time = esp_timer_get_time();
+    // int last_time = esp_timer_get_time();
 
     /* Load configuration for detection */
     while (1) {
@@ -458,89 +455,40 @@ static void cam_task(void *arg)
         // printf("SRAM size: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL));
         uint8_t *cam_buf = NULL;
         size_t recv_len = cam_take(&cam_buf);
-
-        // if(detect_flag){
-        //     int t1 = esp_timer_get_time();
-        //     // face_detection(image_mat, cam_buf, lssh_config, n);
-        //     hand_detection(cam_buf, hd_config);
-        //     int t2 = esp_timer_get_time();
-        //     fb.data = cam_buf;
-        //     int fps = 1e6 / (t2 - t1);
-        //     char buf[10];
-        //     // snprintf(buf, 10, "FPS: %d\n", fps);
-        //     // fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
-        //     last_time = t2;
-        // }else{
-        //     zbar_image_scanner_t *scanner = NULL;
-        //     scanner = zbar_image_scanner_create();
-
-        //     /* configure the reader */
-        //     zbar_image_scanner_set_config(scanner, 0, ZBAR_CFG_ENABLE, 1);
-
-        //     int width = fb.width;
-        //     int height = fb.height;
-        //     int len = width * height;
-        //     uint8_t *image_data = heap_caps_malloc(len, MALLOC_CAP_SPIRAM);
-        //     // memcpy(image_data, qrcode_png, width * height);
-
-        //     rgb565togray(cam_buf, image_data, len);
-        //     // memcpy(image_data, fb.buf, fb.width * fb.height);
-
-
-        //     zbar_image_t *image = zbar_image_create();
-        //     zbar_image_set_format(image, *(int*)"GREY");
-        //     zbar_image_set_size(image, width, height);
-        //     zbar_image_set_data(image, image_data, width * height, zbar_image_free_data);
-            
-        //     // scan the image for barcodes
-        //     int n = zbar_scan_image(scanner, image);
-
-        //     // extract results 
-        //     const zbar_symbol_t *symbol = zbar_image_first_symbol(image);
-        //     for(; symbol; symbol = zbar_symbol_next(symbol)) {
-        //         // do something useful with results 
-        //         zbar_symbol_type_t typ = zbar_symbol_get_type(symbol);
-        //         const char *data = zbar_symbol_get_data(symbol);
-
-        //         printf("decoded %s symbol \"%s\"\n\n",
-        //             zbar_get_symbol_name(typ), data);
-        //         // ESP_LOGI(TAG, "Scan image in %d ms.", (int)(esp_timer_get_time() - init_time) / 1000);
-        //     }
-        //     // clean up
-        //     zbar_image_destroy(image);
-        //     zbar_image_scanner_destroy(scanner);
-        //     free(image_data);
-        // }
+        // ESP_LOGI(TAG, "%d\n", recv_len);
 
         int len = uart_read_bytes(UART_NUM_1, data, BUF_SIZE, 100 / portTICK_RATE_MS);
         if (len > 0) 
         {
-            printf("len: %d\n", len);
+            // printf("len: %d\n", len);
             char buf[20];
-            snprintf(buf, 20, "len: %d\n", len);
-            fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
+            // snprintf(buf, 20, "len: %d\n", len);
+            // fb_gfx_print(&fb, 20, 20, RGB565_MASK_GREEN, buf);
             if (strncmp((char *)data, GET_FLAG, 3) == 0) 
             {
-                    printf("get start flag \n");
-                    memcpy(cache + 5, &fb_len, 4);
-                    // memcpy(cache + 5 + 4, cam_buf, fb_len);
-                    uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4);
-                    uart_write_bytes(UART_NUM_1, (char *)cam_buf, fb_len);
+                    // printf("get start flag \n");
+                    memcpy(cache + 5, &recv_len, 4);
+                    memcpy(cache + 5 + 4, cam_buf, recv_len);
+                    // uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4);
+                    // uart_write_bytes(UART_NUM_1, (char *)cam_buf, fb_len);
+                    // memcpy(cache + 5 + 4, cam_buf, recv_len);
+                    uart_write_bytes(UART_NUM_1, (char *)cache, 5 + 4 + recv_len);
+                    // uart_write_bytes(UART_NUM_1, (char *)&recv_len, 4);
             }
         }
         
 #if JPEG_MODE
-        int w, h;
-        uint8_t *img = jpeg_decode(cam_buf, &w, &h);
-        if (img) {
-            printf("jpeg: w: %d, h: %d\n", w, h);
-            lcd_set_index(0, 0, w - 1, h - 1);
-            lcd_write_data(img, w * h * sizeof(uint16_t));
-            free(img);
-        }
+        // int w, h;
+        // uint8_t *img = jpeg_decode(cam_buf, &w, &h);
+        // if (img) {
+        //     printf("jpeg: w: %d, h: %d\n", w, h);
+        //     lcd_set_index(0, 0, w - 1, h - 1);
+        //     lcd_write_data(img, w * h * sizeof(uint16_t));
+        //     free(img);
+        // }
 #else
-        lcd_set_index(0, 0, CAM_WIDTH - 1, CAM_HIGH - 1);
-        lcd_write_data(cam_buf, CAM_WIDTH * CAM_HIGH * 2);
+        // lcd_set_index(0, 0, CAM_WIDTH - 1, CAM_HIGH - 1);
+        // lcd_write_data(cam_buf, CAM_WIDTH * CAM_HIGH * 2);
 #endif
         cam_give(cam_buf);   
         // int t3 = esp_timer_get_time();
@@ -550,8 +498,8 @@ static void cam_task(void *arg)
         //         (t3 - t1) / 1000,
         //         1000000 / (t3 - t1), fps);
         // 使用逻辑分析仪观察帧率
-        gpio_set_level(LCD_BK, 1);
-        gpio_set_level(LCD_BK, 0); 
+        // gpio_set_level(LCD_BK, 1);
+        // gpio_set_level(LCD_BK, 0); 
  
     }
 #endif

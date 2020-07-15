@@ -2063,13 +2063,11 @@ od_image_list_t *od_image_get_valid_boxes(fptp_t *score,
             }
         }
     }
-
     if (0 == valid_count)
     {
         dl_lib_free(valid_indexes);
         return NULL;
     }
-
     od_image_box_t *valid_box = (od_image_box_t *)dl_lib_calloc(valid_count, sizeof(od_image_box_t), 0);
     od_image_list_t *valid_list = (od_image_list_t *)dl_lib_calloc(1, sizeof(od_image_list_t), 0);
     valid_list->head = valid_box;
@@ -2305,12 +2303,13 @@ void image_crop_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int sw, int 
         tw = (int)(w / scale);
         th = dw;
     }
-    ets_printf("tw: %d, th: %d\n", tw, th);
+    // ets_printf("shift: %d | w: %d, h:%d | tw: %d, th: %d\n", shift_real, w, h, tw, th);
     for (int dyi = 0; dyi < th; dyi++)
     {
         int _di = dyi * dw;
 
         int _si0 = ((int)(dyi * scale) + y1) * sw;
+        // ets_printf("%d|%d ", (int)(dyi * scale) + y1, sw);
         int _si1 = _si0 + sw;
 
         for (int dxi = 0; dxi < tw; dxi++)
@@ -2327,8 +2326,10 @@ void image_crop_shift_fast(qtp_t *dimage, uint16_t *simage, int dw, int sw, int 
             dimage[di] = ((dst[0]+dst[3]+dst[6]+dst[9]) << shift_real);
             dimage[di+1] = ((dst[1]+dst[4]+dst[7]+dst[10]) << shift_real);
             dimage[di+2] = ((dst[2]+dst[5]+dst[8]+dst[11]) << shift_real);
+            // ets_printf("%d|%d|%d ", dst[0]+dst[3]+dst[6]+dst[9], dst[1]+dst[4]+dst[7]+dst[10], dst[2]+dst[5]+dst[8]+dst[11]);
         }
     }
+    // printf("\n");
     return;
 }
 
