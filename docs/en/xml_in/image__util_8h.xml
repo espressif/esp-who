@@ -1,0 +1,2548 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="image__util_8h" kind="file" language="C++">
+    <compoundname>image_util.h</compoundname>
+    <includes local="no">stdint.h</includes>
+    <includes local="no">math.h</includes>
+    <includes refid="mtmn_8h" local="yes">mtmn.h</includes>
+    <includedby refid="fd__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h</includedby>
+    <includedby refid="fr__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h</includedby>
+    <includedby refid="lssh__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h</includedby>
+    <includedby refid="pe__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h</includedby>
+    <incdepgraph>
+      <node id="33">
+        <label>assert.h</label>
+      </node>
+      <node id="26">
+        <label>stdint.h</label>
+      </node>
+      <node id="31">
+        <label>stdlib.h</label>
+      </node>
+      <node id="32">
+        <label>string.h</label>
+      </node>
+      <node id="34">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>math.h</label>
+      </node>
+      <node id="28">
+        <label>mtmn.h</label>
+        <link refid="mtmn_8h_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>stdio.h</label>
+      </node>
+      <node id="25">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h</label>
+        <link refid="image_util.h"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="36">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h</label>
+        <link refid="fd__forward_8h_source"/>
+      </node>
+      <node id="37">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h</label>
+        <link refid="fr__forward_8h_source"/>
+      </node>
+      <node id="38">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h</label>
+        <link refid="lssh__forward_8h_source"/>
+      </node>
+      <node id="39">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h</label>
+        <link refid="pe__forward_8h_source"/>
+      </node>
+      <node id="35">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h</label>
+        <link refid="image_util.h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structlandmark__t" prot="public">landmark_t</innerclass>
+    <innerclass refid="structbox__t" prot="public">box_t</innerclass>
+    <innerclass refid="structtag__box__list" prot="public">tag_box_list</innerclass>
+    <innerclass refid="structtag__image__box" prot="public">tag_image_box</innerclass>
+    <innerclass refid="structtag__image__list" prot="public">tag_image_list</innerclass>
+    <innerclass refid="structMatrix" prot="public">Matrix</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="image__util_8h_1aad9808813c0de3c073b75f0c8f2edb80" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void rgb565_to_888</definition>
+        <argsstring>(uint16_t in, uint8_t *dst)</argsstring>
+        <name>rgb565_to_888</name>
+        <param>
+          <type>uint16_t</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <briefdescription>
+<para>Convert RGB565 image to RGB888 image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input RGB565 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resulting RGB888 image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="217" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="217" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1ace1ea430e48ba170a64b8d8bd479a123" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void rgb565_to_888_q16</definition>
+        <argsstring>(uint16_t in, int16_t *dst)</argsstring>
+        <name>rgb565_to_888_q16</name>
+        <param>
+          <type>uint16_t</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>int16_t *</type>
+          <declname>dst</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="229" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="229" bodyend="239"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="image__util_8h_1adbb97797b74e36823ca2f3cfb1f374ec" prot="public" static="no">
+        <name>LANDMARKS_NUM</name>
+        <initializer>(10)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="33" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="image__util_8h_1abcfffa3fefab6a967894ff879006452a" prot="public" static="no">
+        <name>MAX_VALID_COUNT_PER_IMAGE</name>
+        <initializer>(30)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="35" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="image__util_8h_1a77b189003433adb37884b87fee67b73b" prot="public" static="no">
+        <name>DL_IMAGE_MIN</name>
+        <param><defname>A</defname></param>
+        <param><defname>B</defname></param>
+        <initializer>((A) &lt; (B) ? (A) : (B))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="37" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="image__util_8h_1a101a540ba1d5e60197102fc8ddc241ec" prot="public" static="no">
+        <name>DL_IMAGE_MAX</name>
+        <param><defname>A</defname></param>
+        <param><defname>B</defname></param>
+        <initializer>((A) &lt; (B) ? (B) : (A))</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="38" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="image__util_8h_1a587fa1ac44d5db706b5c2e6e8bd1fef7" prot="public" static="no">
+        <name>RGB565_MASK_RED</name>
+        <initializer>0xF800</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="40" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="image__util_8h_1adcd5d3ee8c352e5efd099128931f42d7" prot="public" static="no">
+        <name>RGB565_MASK_GREEN</name>
+        <initializer>0x07E0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="41" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="image__util_8h_1a49c955fa56dc234f2946899ebfaae8e5" prot="public" static="no">
+        <name>RGB565_MASK_BLUE</name>
+        <initializer>0x001F</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="42" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="image__util_8h_1adf25a75fc481cdae922509ebe2eb1fec" prot="public" static="no">
+        <name>en_threshold_mode</name>
+        <enumvalue id="image__util_8h_1adf25a75fc481cdae922509ebe2eb1fecaecafbc1299672a8c1521cc0d5f1ae986" prot="public">
+          <name>BINARY</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>binary </para>          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="45" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="44" bodyend="47"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="image__util_8h_1a35a3b8b6802104ac3d79c7578bd49109" prot="public" static="no">
+        <type>struct <ref refid="structtag__box__list" kindref="compound">tag_box_list</ref></type>
+        <definition>typedef struct tag_box_list  box_array_t</definition>
+        <argsstring></argsstring>
+        <name>box_array_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="64" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="image__util_8h_1a6296b5a77300a11c95daa57980064e70" prot="public" static="no">
+        <type>struct <ref refid="structtag__image__box" kindref="compound">tag_image_box</ref></type>
+        <definition>typedef struct tag_image_box  image_box_t</definition>
+        <argsstring></argsstring>
+        <name>image_box_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="image__util_8h_1a81477d1da3f6fb740d11109c5730133e" prot="public" static="no">
+        <type>struct <ref refid="structtag__image__list" kindref="compound">tag_image_list</ref></type>
+        <definition>typedef struct tag_image_list  image_list_t</definition>
+        <argsstring></argsstring>
+        <name>image_list_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="80" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="image__util_8h_1a9c14f9f63e0f31496f3c37137322315d" prot="public" static="no">
+        <type>float</type>
+        <definition>typedef float matrixType</definition>
+        <argsstring></argsstring>
+        <name>matrixType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="419" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="419" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="image__util_8h_1a0a1e1990c56c5a2fd28d17e247f2cc63" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void image_get_width_and_height</definition>
+        <argsstring>(box_t *box, float *w, float *h)</argsstring>
+        <name>image_get_width_and_height</name>
+        <param>
+          <type><ref refid="structbox__t" kindref="compound">box_t</ref> *</type>
+          <declname>box</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+<para>Get the width and height of the box. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input box </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resulting width of the box </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resulting height of the box </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="90" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="90" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1addd755e19d4afe2521453dd5369b7a3c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void image_get_area</definition>
+        <argsstring>(box_t *box, float *area)</argsstring>
+        <name>image_get_area</name>
+        <param>
+          <type><ref refid="structbox__t" kindref="compound">box_t</ref> *</type>
+          <declname>box</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>area</declname>
+        </param>
+        <briefdescription>
+<para>Get the area of the box. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>box</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input box </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>area</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resulting area of the box </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="103" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="103" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1ae8dd10477e0fbf2251941bef239fb656" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void image_calibrate_by_offset</definition>
+        <argsstring>(image_list_t *image_list, int image_height, int image_width)</argsstring>
+        <name>image_calibrate_by_offset</name>
+        <param>
+          <type><ref refid="structtag__image__list" kindref="compound">image_list_t</ref> *</type>
+          <declname>image_list</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>image_height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>image_width</declname>
+        </param>
+        <briefdescription>
+<para>calibrate the boxes by offset </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input boxes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the original image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the original image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="118" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="118" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1aaf776988a2f27fd39a01f1b0dd635862" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void image_landmark_calibrate</definition>
+        <argsstring>(image_list_t *image_list)</argsstring>
+        <name>image_landmark_calibrate</name>
+        <param>
+          <type><ref refid="structtag__image__list" kindref="compound">image_list_t</ref> *</type>
+          <declname>image_list</declname>
+        </param>
+        <briefdescription>
+<para>calibrate the landmarks </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input landmarks </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="146" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="146" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a5c24d697bad369c53e9194f43adabb20" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void image_rect2sqr</definition>
+        <argsstring>(box_array_t *boxes, int width, int height)</argsstring>
+        <name>image_rect2sqr</name>
+        <param>
+          <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+          <declname>boxes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+<para>Convert a rectangular box into a square box. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>boxes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input box </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the orignal image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>height of the orignal image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="176" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="176" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1ad3dc00bd6367bd724400a0dd01c6fa92" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void rgb888_to_565</definition>
+        <argsstring>(uint16_t *in, uint8_t r, uint8_t g, uint8_t b)</argsstring>
+        <name>rgb888_to_565</name>
+        <param>
+          <type>uint16_t *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>g</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Convert RGB888 image to RGB565 image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resulting RGB565 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The red channel of the Input RGB888 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>g</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The green channel of the Input RGB888 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The blue channel of the Input RGB888 image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="250" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="250" bodyend="258"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a4f1ed825263d739f06f0960877efb088" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structtag__image__list" kindref="compound">image_list_t</ref> *</type>
+        <definition>image_list_t* image_get_valid_boxes</definition>
+        <argsstring>(fptp_t *score, fptp_t *offset, fptp_t *landmark, int width, int height, int anchor_number, int *anchors_size, fptp_t score_threshold, int stride, fptp_t resized_height_scale, fptp_t resized_width_scale, bool do_regression)</argsstring>
+        <name>image_get_valid_boxes</name>
+        <param>
+          <type>fptp_t *</type>
+          <declname>score</declname>
+        </param>
+        <param>
+          <type>fptp_t *</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>fptp_t *</type>
+          <declname>landmark</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>anchor_number</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>anchors_size</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>score_threshold</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>stride</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>resized_height_scale</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>resized_width_scale</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>do_regression</declname>
+        </param>
+        <briefdescription>
+<para>Filter out the resulting boxes whose confidence score is lower than the threshold and convert the boxes to the actual boxes on the original image.((x, y, w, h) -&gt; (x1, y1, x2, y2)) </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>score</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Confidence score of the boxes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>offset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The predicted anchor-based offset </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>landmark</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The landmarks corresponding to the box </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the original image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the original image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>anchor_number</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Anchor number of the detection output feature map </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>anchors_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The anchor size </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>score_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Threshold of the confidence score </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>stride</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>resized_height_scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>resized_width_scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>do_regression</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>image_list_t* </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="278" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1aaaa6c0f8d9122f667c54ae87bc322b64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_sort_insert_by_score</definition>
+        <argsstring>(image_list_t *image_sorted_list, const image_list_t *insert_list)</argsstring>
+        <name>image_sort_insert_by_score</name>
+        <param>
+          <type><ref refid="structtag__image__list" kindref="compound">image_list_t</ref> *</type>
+          <declname>image_sorted_list</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structtag__image__list" kindref="compound">image_list_t</ref> *</type>
+          <declname>insert_list</declname>
+        </param>
+        <briefdescription>
+<para>Sort the resulting box lists by their confidence score. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_sorted_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sorted box list. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>insert_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The box list that have not been sorted. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="296" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1afffcabb71c9d65762962260541db476b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_nms_process</definition>
+        <argsstring>(image_list_t *image_list, fptp_t nms_threshold, int same_area)</argsstring>
+        <name>image_nms_process</name>
+        <param>
+          <type><ref refid="structtag__image__list" kindref="compound">image_list_t</ref> *</type>
+          <declname>image_list</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>nms_threshold</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>same_area</declname>
+        </param>
+        <briefdescription>
+<para>Run NMS algorithm. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input boxes list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nms_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>NMS threshold </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>same_area</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The flag of boxes with same area </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="305" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a3e48cceaa00a7ddd5cbd6b669c217db0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_zoom_in_twice</definition>
+        <argsstring>(uint8_t *dimage, int dw, int dh, int dc, uint8_t *simage, int sw, int sc)</argsstring>
+        <name>image_zoom_in_twice</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dimage</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dh</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dc</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>simage</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sc</declname>
+        </param>
+        <briefdescription>
+<para>Resize an image to half size. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dimage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>simage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the source image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="318" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1aae2560aa830d43e8d11a0801f57638bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_resize_linear</definition>
+        <argsstring>(uint8_t *dst_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h)</argsstring>
+        <name>image_resize_linear</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst_image</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src_image</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_c</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <briefdescription>
+<para>Resize the image in RGB888 format via bilinear interpolation. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dst_image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst_c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the source image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="337" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a8e79747bb8130e6e8ae3b5b7167fced4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_cropper</definition>
+        <argsstring>(uint8_t *corp_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h, float rotate_angle, float ratio, float *center)</argsstring>
+        <name>image_cropper</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>corp_image</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src_image</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_c</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>rotate_angle</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>ratio</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>center</declname>
+        </param>
+        <briefdescription>
+<para>Crop， rotate and zoom the image in RGB888 format,. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>corp_image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rotate_angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rotate angle </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ratio</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>scaling ratio </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>center</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Center of rotation </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="348" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a58a07581dcd0f097a597bca75d8e37da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_rgb565_to_888</definition>
+        <argsstring>(uint8_t *m, uint16_t *bmp, int count)</argsstring>
+        <name>image_rgb565_to_888</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>uint16_t *</type>
+          <declname>bmp</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Convert the rgb565 image to the rgb888 image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output rgb888 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>bmp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input rgb565 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total pixels of the rgb565 image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="357" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1aeed4c98d9d77d68cef950ff649810504" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_rgb888_to_565</definition>
+        <argsstring>(uint16_t *bmp, uint8_t *m, int count)</argsstring>
+        <name>image_rgb888_to_565</name>
+        <param>
+          <type>uint16_t *</type>
+          <declname>bmp</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>m</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Convert the rgb888 image to the rgb565 image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>bmp</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output rgb565 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input rgb888 image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total pixels of the rgb565 image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="366" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1ad2bf72e5be5c7605b4ee684ed6b98111" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void draw_rectangle_rgb565</definition>
+        <argsstring>(uint16_t *buf, box_array_t *boxes, int width)</argsstring>
+        <name>draw_rectangle_rgb565</name>
+        <param>
+          <type>uint16_t *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+          <declname>boxes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <briefdescription>
+<para>draw rectangle on the rgb565 image </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>buf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>boxes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rectangle Boxes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="375" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a2f2aaf6f4b191816f067aa618691ab76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void draw_rectangle_rgb888</definition>
+        <argsstring>(uint8_t *buf, box_array_t *boxes, int width)</argsstring>
+        <name>draw_rectangle_rgb888</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>buf</declname>
+        </param>
+        <param>
+          <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+          <declname>boxes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <briefdescription>
+<para>draw rectangle on the rgb888 image </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>buf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>boxes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rectangle Boxes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="384" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1aff5ba1a26d1abad58cd4e7e3285f9566" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_abs_diff</definition>
+        <argsstring>(uint8_t *dst, uint8_t *src1, uint8_t *src2, int count)</argsstring>
+        <name>image_abs_diff</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src1</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src2</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Get the pixel difference of two images. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output pixel difference </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image 1 </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image 2 </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total pixels of the input image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="394" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a5913cdfdc77488922b2dff286015bc08" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_threshold</definition>
+        <argsstring>(uint8_t *dst, uint8_t *src, int threshold, int value, int count, en_threshold_mode mode)</argsstring>
+        <name>image_threshold</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>threshold</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>count</declname>
+        </param>
+        <param>
+          <type>en_threshold_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Binarize an image to 0 and value. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Threshold of binarization </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The value of binarization </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Total pixels of the input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Threshold mode </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="406" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a913315d40211d642212425b36f5c880f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_erode</definition>
+        <argsstring>(uint8_t *dst, uint8_t *src, int src_w, int src_h, int src_c)</argsstring>
+        <name>image_erode</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_c</declname>
+        </param>
+        <briefdescription>
+<para>Erode the image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the source image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the source image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="417" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a501dd559dceeb2356ad6a0bba80ce989" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structMatrix" kindref="compound">Matrix</ref> *</type>
+        <definition>Matrix* matrix_alloc</definition>
+        <argsstring>(int h, int w)</argsstring>
+        <name>matrix_alloc</name>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <briefdescription>
+<para>Allocate a 2d matrix. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of matrix </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of matrix </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Matrix* 2d matrix </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="434" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a8e7cf1507ce317450f07737f4c5c6638" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void matrix_free</definition>
+        <argsstring>(Matrix *m)</argsstring>
+        <name>matrix_free</name>
+        <param>
+          <type><ref refid="structMatrix" kindref="compound">Matrix</ref> *</type>
+          <declname>m</declname>
+        </param>
+        <briefdescription>
+<para>Free a 2d matrix. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>m</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>2d matrix </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="441" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1abce1eb77aba8e36acdaa0465ff75a404" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structMatrix" kindref="compound">Matrix</ref> *</type>
+        <definition>Matrix* get_similarity_matrix</definition>
+        <argsstring>(float *srcx, float *srcy, float *dstx, float *dsty, int num)</argsstring>
+        <name>get_similarity_matrix</name>
+        <param>
+          <type>float *</type>
+          <declname>srcx</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>srcy</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>dstx</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>dsty</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>num</declname>
+        </param>
+        <briefdescription>
+<para>Get the similarity matrix of similarity transformation. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>srcx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source x coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>srcy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source y coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dstx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Destination x coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dsty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Destination y coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>num</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The number of the coordinates </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Matrix* The resulting transformation matrix </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="453" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a893395cd577d4c4392b2b73138174548" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structMatrix" kindref="compound">Matrix</ref> *</type>
+        <definition>Matrix* get_affine_transform</definition>
+        <argsstring>(float *srcx, float *srcy, float *dstx, float *dsty)</argsstring>
+        <name>get_affine_transform</name>
+        <param>
+          <type>float *</type>
+          <declname>srcx</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>srcy</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>dstx</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>dsty</declname>
+        </param>
+        <briefdescription>
+<para>Get the affine transformation matrix. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>srcx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source x coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>srcy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Source y coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dstx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Destination x coordinates </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dsty</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Destination y coordinates </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Matrix* The resulting transformation matrix </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="464" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1ae520873bea279f907f3d6a4f1c8aa9d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void warp_affine</definition>
+        <argsstring>(dl_matrix3du_t *img, dl_matrix3du_t *crop, Matrix *M)</argsstring>
+        <name>warp_affine</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>img</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>crop</declname>
+        </param>
+        <param>
+          <type><ref refid="structMatrix" kindref="compound">Matrix</ref> *</type>
+          <declname>M</declname>
+        </param>
+        <briefdescription>
+<para>Applies an affine transformation to an image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>img</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>crop</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dst output image that has the size dsize and the same type as src </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>M</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Affine transformation matrix </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="473" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a653ff73f2fe9cab2b4cda44465a21741" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_resize_linear_q</definition>
+        <argsstring>(qtp_t *dst_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h, int shift)</argsstring>
+        <name>image_resize_linear_q</name>
+        <param>
+          <type>qtp_t *</type>
+          <declname>dst_image</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>src_image</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_c</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Resize the image in RGB888 format via bilinear interpolation, and quantify the output image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dst_image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Quantized output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dst_c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the output image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Shift parameter of quantization. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="489" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a77b387dc88087f8f6a65feeb31f39c3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* image_resize_normalize_quantize</definition>
+        <argsstring>(uint8_t *image, int input_w, int input_h, int target_size, int exponent, int process_mode)</argsstring>
+        <name>image_resize_normalize_quantize</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>input_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>target_size</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>exponent</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>process_mode</declname>
+        </param>
+        <briefdescription>
+<para>Preprocess the input image of object detection model. The process is like this: resize -&gt; normalize -&gt; quantify. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image, RGB888 format. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>input_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>target_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target size of the model input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>exponent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Exponent of the quantized model input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>process_mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Process mode. 0: resize with padding to keep height == width. 1: resize without padding, height != width. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>dl_matrix3dq_t* The resulting preprocessed image. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="502" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a95f38512f1738cdeb3d86f45632f6eee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_resize_shift_fast</definition>
+        <argsstring>(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift)</argsstring>
+        <name>image_resize_shift_fast</name>
+        <param>
+          <type>qtp_t *</type>
+          <declname>dimage</declname>
+        </param>
+        <param>
+          <type>uint16_t *</type>
+          <declname>simage</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dc</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sh</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>tw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>th</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Resize the image in RGB565 format via mean neighbour interpolation, and quantify the output image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dimage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Quantized output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>simage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the allocated output image memory. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the allocated output image memory. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target width of the output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>th</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target height of the output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Shift parameter of quantization. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="518" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1afbb29c77ff3f25ca7577267b1c975992" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_resize_nearest_shift</definition>
+        <argsstring>(qtp_t *dimage, uint16_t *simage, int dw, int dc, int sw, int sh, int tw, int th, int shift)</argsstring>
+        <name>image_resize_nearest_shift</name>
+        <param>
+          <type>qtp_t *</type>
+          <declname>dimage</declname>
+        </param>
+        <param>
+          <type>uint16_t *</type>
+          <declname>simage</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dc</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sh</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>tw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>th</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Resize the image in RGB565 format via nearest neighbour interpolation, and quantify the output image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dimage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Quantized output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>simage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the allocated output image memory. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Channel of the allocated output image memory. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target width of the output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>th</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target height of the output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Shift parameter of quantization. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="533" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="image__util_8h_1a1d02e88c403499c3bf628664314fcf16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void image_crop_shift_fast</definition>
+        <argsstring>(qtp_t *dimage, uint16_t *simage, int dw, int sw, int sh, int x1, int y1, int x2, int y2, int shift)</argsstring>
+        <name>image_crop_shift_fast</name>
+        <param>
+          <type>qtp_t *</type>
+          <declname>dimage</declname>
+        </param>
+        <param>
+          <type>uint16_t *</type>
+          <declname>simage</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sw</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>sh</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>x1</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y1</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>x2</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y2</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>shift</declname>
+        </param>
+        <briefdescription>
+<para>Crop the image in RGB565 format and resize it to target size, then quantify the output image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dimage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Quantized output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>simage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Target size of the output image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sw</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the input image. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>x1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The x coordinate of the upper left corner of the cropped area </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>y1</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The y coordinate of the upper left corner of the cropped area </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>x2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The x coordinate of the lower right corner of the cropped area </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>y2</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The y coordinate of the lower right corner of the cropped area </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>shift</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Shift parameter of quantization. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="549" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/><sp/>*<sp/>ESPRESSIF<sp/>MIT<sp/>License</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/>*<sp/>Copyright<sp/>(c)<sp/>2018<sp/>&lt;ESPRESSIF<sp/>SYSTEMS<sp/>(SHANGHAI)<sp/>PTE<sp/>LTD&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/><sp/>*<sp/>Permission<sp/>is<sp/>hereby<sp/>granted<sp/>for<sp/>use<sp/>on<sp/>ESPRESSIF<sp/>SYSTEMS<sp/>products<sp/>only,<sp/>in<sp/>which<sp/>case,</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/>*<sp/>it<sp/>is<sp/>free<sp/>of<sp/>charge,<sp/>to<sp/>any<sp/>person<sp/>obtaining<sp/>a<sp/>copy<sp/>of<sp/>this<sp/>software<sp/>and<sp/>associated</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/><sp/>*<sp/>documentation<sp/>files<sp/>(the<sp/>&quot;Software&quot;),<sp/>to<sp/>deal<sp/>in<sp/>the<sp/>Software<sp/>without<sp/>restriction,<sp/>including</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/>*<sp/>without<sp/>limitation<sp/>the<sp/>rights<sp/>to<sp/>use,<sp/>copy,<sp/>modify,<sp/>merge,<sp/>publish,<sp/>distribute,<sp/>sublicense,</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/>*<sp/>and/or<sp/>sell<sp/>copies<sp/>of<sp/>the<sp/>Software,<sp/>and<sp/>to<sp/>permit<sp/>persons<sp/>to<sp/>whom<sp/>the<sp/>Software<sp/>is<sp/>furnished</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/>*<sp/>to<sp/>do<sp/>so,<sp/>subject<sp/>to<sp/>the<sp/>following<sp/>conditions:</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/>*<sp/>The<sp/>above<sp/>copyright<sp/>notice<sp/>and<sp/>this<sp/>permission<sp/>notice<sp/>shall<sp/>be<sp/>included<sp/>in<sp/>all<sp/>copies<sp/>or</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/>*<sp/>substantial<sp/>portions<sp/>of<sp/>the<sp/>Software.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/>*<sp/>THE<sp/>SOFTWARE<sp/>IS<sp/>PROVIDED<sp/>&quot;AS<sp/>IS&quot;,<sp/>WITHOUT<sp/>WARRANTY<sp/>OF<sp/>ANY<sp/>KIND,<sp/>EXPRESS<sp/>OR</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/>*<sp/>IMPLIED,<sp/>INCLUDING<sp/>BUT<sp/>NOT<sp/>LIMITED<sp/>TO<sp/>THE<sp/>WARRANTIES<sp/>OF<sp/>MERCHANTABILITY,<sp/>FITNESS</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/>*<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE<sp/>AND<sp/>NONINFRINGEMENT.<sp/>IN<sp/>NO<sp/>EVENT<sp/>SHALL<sp/>THE<sp/>AUTHORS<sp/>OR</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/>*<sp/>COPYRIGHT<sp/>HOLDERS<sp/>BE<sp/>LIABLE<sp/>FOR<sp/>ANY<sp/>CLAIM,<sp/>DAMAGES<sp/>OR<sp/>OTHER<sp/>LIABILITY,<sp/>WHETHER</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/><sp/>*<sp/>IN<sp/>AN<sp/>ACTION<sp/>OF<sp/>CONTRACT,<sp/>TORT<sp/>OR<sp/>OTHERWISE,<sp/>ARISING<sp/>FROM,<sp/>OUT<sp/>OF<sp/>OR<sp/>IN</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/><sp/>*<sp/>CONNECTION<sp/>WITH<sp/>THE<sp/>SOFTWARE<sp/>OR<sp/>THE<sp/>USE<sp/>OR<sp/>OTHER<sp/>DEALINGS<sp/>IN<sp/>THE<sp/>SOFTWARE.</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;stdint.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;math.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;mtmn.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LANDMARKS_NUM<sp/>(10)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>MAX_VALID_COUNT_PER_IMAGE<sp/>(30)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DL_IMAGE_MIN(A,<sp/>B)<sp/>((A)<sp/>&lt;<sp/>(B)<sp/>?<sp/>(A)<sp/>:<sp/>(B))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>DL_IMAGE_MAX(A,<sp/>B)<sp/>((A)<sp/>&lt;<sp/>(B)<sp/>?<sp/>(B)<sp/>:<sp/>(A))</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RGB565_MASK_RED<sp/>0xF800</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RGB565_MASK_GREEN<sp/>0x07E0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RGB565_MASK_BLUE<sp/>0x001F</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>BINARY,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>en_threshold_mode;</highlight></codeline>
+<codeline lineno="48" refid="structlandmark__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="50" refid="structlandmark__t_1a35e7a48b9c162cf42e0fa74106296d55" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>landmark_p[LANDMARKS_NUM];<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structlandmark__t" kindref="compound">landmark_t</ref>;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53" refid="structbox__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="55" refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>box_p[4];<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structbox__t" kindref="compound">box_t</ref>;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58" refid="structtag__box__list" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__box__list" kindref="compound">tag_box_list</ref></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="60" refid="structtag__box__list_1a998af69f8cb372b1d7cc278825b529b2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>*<ref refid="structtag__box__list_1a998af69f8cb372b1d7cc278825b529b2" kindref="member">score</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="61" refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structbox__t" kindref="compound">box_t</ref><sp/>*<ref refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" kindref="member">box</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="62" refid="structtag__box__list_1a57e231efbf6860f68aa4771c979209a5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structlandmark__t" kindref="compound">landmark_t</ref><sp/>*<ref refid="structtag__box__list_1a57e231efbf6860f68aa4771c979209a5" kindref="member">landmark</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="63" refid="structtag__box__list_1a74a848a667470ddc91b38a25dad84492" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structtag__box__list_1a74a848a667470ddc91b38a25dad84492" kindref="member">len</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__box__list" kindref="compound">box_array_t</ref>;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66" refid="structtag__image__box" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__image__box" kindref="compound">tag_image_box</ref></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="68" refid="structtag__image__box_1a41c964433d469bfb9c9ea71ecc3a044c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__image__box" kindref="compound">tag_image_box</ref><sp/>*<ref refid="structtag__image__box_1a41c964433d469bfb9c9ea71ecc3a044c" kindref="member">next</ref>;<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="69" refid="structtag__image__box_1abbf108457f4e057160303eee6d7236ba" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/><ref refid="structtag__image__box_1abbf108457f4e057160303eee6d7236ba" kindref="member">score</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="70" refid="structtag__image__box_1a5e70f17d7a5d824cc6f23e833d1aba36" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structbox__t" kindref="compound">box_t</ref><sp/><ref refid="structtag__image__box_1a5e70f17d7a5d824cc6f23e833d1aba36" kindref="member">box</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="71" refid="structtag__image__box_1aa2c56de6b652ead006f8252e2d60238e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structbox__t" kindref="compound">box_t</ref><sp/><ref refid="structtag__image__box_1aa2c56de6b652ead006f8252e2d60238e" kindref="member">offset</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="72" refid="structtag__image__box_1a716aed52d6aec36be497ac219d46cbc9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structlandmark__t" kindref="compound">landmark_t</ref><sp/><ref refid="structtag__image__box_1a716aed52d6aec36be497ac219d46cbc9" kindref="member">landmark</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__image__box" kindref="compound">image_box_t</ref>;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75" refid="structtag__image__list" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__image__list" kindref="compound">tag_image_list</ref></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="77" refid="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structtag__image__box" kindref="compound">image_box_t</ref><sp/>*<ref refid="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" kindref="member">head</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="78" refid="structtag__image__list_1aafd19b61bae8d0e37d63810363784020" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structtag__image__box" kindref="compound">image_box_t</ref><sp/>*<ref refid="structtag__image__list_1aafd19b61bae8d0e37d63810363784020" kindref="member">origin_head</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="79" refid="structtag__image__list_1a31a4fbe1c850eb6f8a6b0c1f21b12e46" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structtag__image__list_1a31a4fbe1c850eb6f8a6b0c1f21b12e46" kindref="member">len</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__image__list" kindref="compound">image_list_t</ref>;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_get_width_and_height(<ref refid="structbox__t" kindref="compound">box_t</ref><sp/>*<ref refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" kindref="member">box</ref>,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*w,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*h)</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*w<sp/>=<sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[2]<sp/>-<sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[0]<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*h<sp/>=<sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[3]<sp/>-<sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[1]<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_get_area(<ref refid="structbox__t" kindref="compound">box_t</ref><sp/>*<ref refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" kindref="member">box</ref>,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*area)</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>w,<sp/>h;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>image_get_width_and_height(box,<sp/>&amp;w,<sp/>&amp;h);</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*area<sp/>=<sp/>w<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_calibrate_by_offset(<ref refid="structtag__image__list" kindref="compound">image_list_t</ref><sp/>*image_list,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>image_height,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>image_width)</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="structtag__image__box" kindref="compound">image_box_t</ref><sp/>*head<sp/>=<sp/>image_list-&gt;<ref refid="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" kindref="member">head</ref>;<sp/>head;<sp/>head<sp/>=<sp/>head-&gt;<ref refid="structtag__image__box_1a41c964433d469bfb9c9ea71ecc3a044c" kindref="member">next</ref>)</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>w,<sp/>h;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>image_get_width_and_height(&amp;(head-&gt;box),<sp/>&amp;w,<sp/>&amp;h);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[0]<sp/>=<sp/>DL_IMAGE_MAX(0,<sp/>head-&gt;box.box_p[0]<sp/>+<sp/>head-&gt;offset.box_p[0]<sp/>*<sp/>w);</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[1]<sp/>=<sp/>DL_IMAGE_MAX(0,<sp/>head-&gt;box.box_p[1]<sp/>+<sp/>head-&gt;offset.box_p[1]<sp/>*<sp/>w);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[2]<sp/>+=<sp/>head-&gt;offset.box_p[2]<sp/>*<sp/>w;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(head-&gt;box.box_p[2]<sp/>&gt;<sp/>image_width)</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[2]<sp/>=<sp/>image_width<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[0]<sp/>=<sp/>image_width<sp/>-<sp/>w;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[3]<sp/>+=<sp/>head-&gt;offset.box_p[3]<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(head-&gt;box.box_p[3]<sp/>&gt;<sp/>image_height)</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[3]<sp/>=<sp/>image_height<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;box.box_p[1]<sp/>=<sp/>image_height<sp/>-<sp/>h;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_landmark_calibrate(<ref refid="structtag__image__list" kindref="compound">image_list_t</ref><sp/>*image_list)</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="structtag__image__box" kindref="compound">image_box_t</ref><sp/>*head<sp/>=<sp/>image_list-&gt;<ref refid="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" kindref="member">head</ref>;<sp/>head;<sp/>head<sp/>=<sp/>head-&gt;<ref refid="structtag__image__box_1a41c964433d469bfb9c9ea71ecc3a044c" kindref="member">next</ref>)</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>w,<sp/>h;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>image_get_width_and_height(&amp;(head-&gt;box),<sp/>&amp;w,<sp/>&amp;h);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[0]<sp/>=<sp/>head-&gt;box.box_p[0]<sp/>+<sp/>head-&gt;landmark.landmark_p[0]<sp/>*<sp/>w;</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[1]<sp/>=<sp/>head-&gt;box.box_p[1]<sp/>+<sp/>head-&gt;landmark.landmark_p[1]<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[2]<sp/>=<sp/>head-&gt;box.box_p[0]<sp/>+<sp/>head-&gt;landmark.landmark_p[2]<sp/>*<sp/>w;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[3]<sp/>=<sp/>head-&gt;box.box_p[1]<sp/>+<sp/>head-&gt;landmark.landmark_p[3]<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[4]<sp/>=<sp/>head-&gt;box.box_p[0]<sp/>+<sp/>head-&gt;landmark.landmark_p[4]<sp/>*<sp/>w;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[5]<sp/>=<sp/>head-&gt;box.box_p[1]<sp/>+<sp/>head-&gt;landmark.landmark_p[5]<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[6]<sp/>=<sp/>head-&gt;box.box_p[0]<sp/>+<sp/>head-&gt;landmark.landmark_p[6]<sp/>*<sp/>w;</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[7]<sp/>=<sp/>head-&gt;box.box_p[1]<sp/>+<sp/>head-&gt;landmark.landmark_p[7]<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[8]<sp/>=<sp/>head-&gt;box.box_p[0]<sp/>+<sp/>head-&gt;landmark.landmark_p[8]<sp/>*<sp/>w;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head-&gt;landmark.landmark_p[9]<sp/>=<sp/>head-&gt;box.box_p[1]<sp/>+<sp/>head-&gt;landmark.landmark_p[9]<sp/>*<sp/>h;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_rect2sqr(<ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*boxes,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height)</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>boxes-&gt;<ref refid="structtag__box__list_1a74a848a667470ddc91b38a25dad84492" kindref="member">len</ref>;<sp/>i++)</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structbox__t" kindref="compound">box_t</ref><sp/>*box<sp/>=<sp/>&amp;(boxes-&gt;<ref refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" kindref="member">box</ref>[i]);</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"></highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>x1<sp/>=<sp/>round(box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[0]);</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>y1<sp/>=<sp/>round(box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[1]);</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>x2<sp/>=<sp/>round(box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[2]);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>y2<sp/>=<sp/>round(box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[3]);</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>w<sp/>=<sp/>x2<sp/>-<sp/>x1<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>h<sp/>=<sp/>y2<sp/>-<sp/>y1<sp/>+<sp/>1;</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>l<sp/>=<sp/>DL_IMAGE_MAX(w,<sp/>h);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[0]<sp/>=<sp/>DL_IMAGE_MAX(round(DL_IMAGE_MAX(0,<sp/>x1)<sp/>+<sp/>0.5<sp/>*<sp/>(w<sp/>-<sp/>l)),<sp/>0);</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[1]<sp/>=<sp/>DL_IMAGE_MAX(round(DL_IMAGE_MAX(0,<sp/>y1)<sp/>+<sp/>0.5<sp/>*<sp/>(h<sp/>-<sp/>l)),<sp/>0);</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[2]<sp/>=<sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[0]<sp/>+<sp/>l<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[2]<sp/>&gt;<sp/>width)</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[2]<sp/>=<sp/>width<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[0]<sp/>=<sp/>width<sp/>-<sp/>l;</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[3]<sp/>=<sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[1]<sp/>+<sp/>l<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[3]<sp/>&gt;<sp/>height)</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[3]<sp/>=<sp/>height<sp/>-<sp/>1;</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>box-&gt;<ref refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kindref="member">box_p</ref>[1]<sp/>=<sp/>height<sp/>-<sp/>l;</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>rgb565_to_888(uint16_t<sp/>in,<sp/>uint8_t<sp/>*dst)</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="comment">/*{{{*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>in<sp/>=<sp/>(in<sp/>&amp;<sp/>0xFF)<sp/>&lt;&lt;<sp/>8<sp/>|<sp/>(in<sp/>&amp;<sp/>0xFF00)<sp/>&gt;&gt;<sp/>8;</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dst[0]<sp/>=<sp/>(in<sp/>&amp;<sp/>RGB565_MASK_BLUE)<sp/>&lt;&lt;<sp/>3;<sp/><sp/></highlight><highlight class="comment">//<sp/>blue</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dst[1]<sp/>=<sp/>(in<sp/>&amp;<sp/>RGB565_MASK_GREEN)<sp/>&gt;&gt;<sp/>3;<sp/></highlight><highlight class="comment">//<sp/>green</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dst[2]<sp/>=<sp/>(in<sp/>&amp;<sp/>RGB565_MASK_RED)<sp/>&gt;&gt;<sp/>8;<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>red</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dst[0]<sp/>=<sp/>(in<sp/>&amp;<sp/>0x1F00)<sp/>&gt;&gt;<sp/>5;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dst[1]<sp/>=<sp/>((in<sp/>&amp;<sp/>0x7)<sp/>&lt;&lt;<sp/>5)<sp/>|<sp/>((in<sp/>&amp;<sp/>0xE000)<sp/>&gt;&gt;<sp/>11);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dst[2]<sp/>=<sp/>in<sp/>&amp;<sp/>0xF8;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">/*}}}*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>rgb565_to_888_q16(uint16_t<sp/>in,<sp/>int16_t<sp/>*dst)</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="comment">/*{{{*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>in<sp/>=<sp/>(in<sp/>&amp;<sp/>0xFF)<sp/>&lt;&lt;<sp/>8<sp/>|<sp/>(in<sp/>&amp;<sp/>0xFF00)<sp/>&gt;&gt;<sp/>8;</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dst[0]<sp/>=<sp/>(in<sp/>&amp;<sp/>RGB565_MASK_BLUE)<sp/>&lt;&lt;<sp/>3;<sp/><sp/></highlight><highlight class="comment">//<sp/>blue</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dst[1]<sp/>=<sp/>(in<sp/>&amp;<sp/>RGB565_MASK_GREEN)<sp/>&gt;&gt;<sp/>3;<sp/></highlight><highlight class="comment">//<sp/>green</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dst[2]<sp/>=<sp/>(in<sp/>&amp;<sp/>RGB565_MASK_RED)<sp/>&gt;&gt;<sp/>8;<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>red</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="235"><highlight class="normal"></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dst[0]<sp/>=<sp/>(in<sp/>&amp;<sp/>0x1F00)<sp/>&gt;&gt;<sp/>5;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dst[1]<sp/>=<sp/>((in<sp/>&amp;<sp/>0x7)<sp/>&lt;&lt;<sp/>5)<sp/>|<sp/>((in<sp/>&amp;<sp/>0xE000)<sp/>&gt;&gt;<sp/>11);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>dst[2]<sp/>=<sp/>in<sp/>&amp;<sp/>0xF8;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">/*}}}*/</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>rgb888_to_565(uint16_t<sp/>*in,<sp/>uint8_t<sp/>r,<sp/>uint8_t<sp/>g,<sp/>uint8_t<sp/>b)</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/>{<sp/></highlight><highlight class="comment">/*{{{*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/>rgb565<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rgb565<sp/>=<sp/>((r<sp/>&gt;&gt;<sp/>3)<sp/>&lt;&lt;<sp/>11);</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rgb565<sp/>|=<sp/>((g<sp/>&gt;&gt;<sp/>2)<sp/>&lt;&lt;<sp/>5);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rgb565<sp/>|=<sp/>(b<sp/>&gt;&gt;<sp/>3);</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>rgb565<sp/>=<sp/>(rgb565<sp/>&amp;<sp/>0xFF)<sp/>&lt;&lt;<sp/>8<sp/>|<sp/>(rgb565<sp/>&amp;<sp/>0xFF00)<sp/>&gt;&gt;<sp/>8;</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*in<sp/>=<sp/>rgb565;</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="comment">/*}}}*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structtag__image__list" kindref="compound">image_list_t</ref><sp/>*image_get_valid_boxes(fptp_t<sp/>*<ref refid="structtag__box__list_1a998af69f8cb372b1d7cc278825b529b2" kindref="member">score</ref>,</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>*offset,</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>*<ref refid="structtag__box__list_1a57e231efbf6860f68aa4771c979209a5" kindref="member">landmark</ref>,</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width,</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height,</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>anchor_number,</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>*anchors_size,</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>score_threshold,</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>stride,</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>resized_height_scale,</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>resized_width_scale,</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>do_regression);</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_sort_insert_by_score(<ref refid="structtag__image__list" kindref="compound">image_list_t</ref><sp/>*image_sorted_list,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structtag__image__list" kindref="compound">image_list_t</ref><sp/>*insert_list);</highlight></codeline>
+<codeline lineno="297"><highlight class="normal"></highlight></codeline>
+<codeline lineno="305"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_nms_process(<ref refid="structtag__image__list" kindref="compound">image_list_t</ref><sp/>*image_list,<sp/>fptp_t<sp/>nms_threshold,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>same_area);</highlight></codeline>
+<codeline lineno="306"><highlight class="normal"></highlight></codeline>
+<codeline lineno="318"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_zoom_in_twice(uint8_t<sp/>*dimage,</highlight></codeline>
+<codeline lineno="319"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dw,</highlight></codeline>
+<codeline lineno="320"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dh,</highlight></codeline>
+<codeline lineno="321"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dc,</highlight></codeline>
+<codeline lineno="322"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/>*simage,</highlight></codeline>
+<codeline lineno="323"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sw,</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sc);</highlight></codeline>
+<codeline lineno="325"><highlight class="normal"></highlight></codeline>
+<codeline lineno="337"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_resize_linear(uint8_t<sp/>*dst_image,<sp/>uint8_t<sp/>*src_image,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_c,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_h);</highlight></codeline>
+<codeline lineno="338"><highlight class="normal"></highlight></codeline>
+<codeline lineno="348"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_cropper(uint8_t<sp/>*corp_image,<sp/>uint8_t<sp/>*src_image,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_c,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_h,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>rotate_angle,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>ratio,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*center);</highlight></codeline>
+<codeline lineno="349"><highlight class="normal"></highlight></codeline>
+<codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_rgb565_to_888(uint8_t<sp/>*m,<sp/>uint16_t<sp/>*bmp,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>count);</highlight></codeline>
+<codeline lineno="358"><highlight class="normal"></highlight></codeline>
+<codeline lineno="366"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_rgb888_to_565(uint16_t<sp/>*bmp,<sp/>uint8_t<sp/>*m,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>count);</highlight></codeline>
+<codeline lineno="367"><highlight class="normal"></highlight></codeline>
+<codeline lineno="375"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>draw_rectangle_rgb565(uint16_t<sp/>*buf,<sp/><ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*boxes,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width);</highlight></codeline>
+<codeline lineno="376"><highlight class="normal"></highlight></codeline>
+<codeline lineno="384"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>draw_rectangle_rgb888(uint8_t<sp/>*buf,<sp/><ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*boxes,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width);</highlight></codeline>
+<codeline lineno="385"><highlight class="normal"></highlight></codeline>
+<codeline lineno="394"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_abs_diff(uint8_t<sp/>*dst,<sp/>uint8_t<sp/>*src1,<sp/>uint8_t<sp/>*src2,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>count);</highlight></codeline>
+<codeline lineno="395"><highlight class="normal"></highlight></codeline>
+<codeline lineno="406"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_threshold(uint8_t<sp/>*dst,<sp/>uint8_t<sp/>*src,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>threshold,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>value,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>count,<sp/>en_threshold_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="407"><highlight class="normal"></highlight></codeline>
+<codeline lineno="417"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_erode(uint8_t<sp/>*dst,<sp/>uint8_t<sp/>*src,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_c);</highlight></codeline>
+<codeline lineno="418"><highlight class="normal"></highlight></codeline>
+<codeline lineno="419"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>matrixType;</highlight></codeline>
+<codeline lineno="420" refid="structMatrix" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="421"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="422" refid="structMatrix_1abb3704d5d60a7e8c996f7ba175d61e75" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structMatrix_1abb3704d5d60a7e8c996f7ba175d61e75" kindref="member">w</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="423" refid="structMatrix_1af2a8ad17021ab601cde1f7ed5d9d944f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structMatrix_1af2a8ad17021ab601cde1f7ed5d9d944f" kindref="member">h</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="424" refid="structMatrix_1aaaf51fc9b7cb2d8c6d317d3ee6feb675" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>matrixType<sp/>**<ref refid="structMatrix_1aaaf51fc9b7cb2d8c6d317d3ee6feb675" kindref="member">array</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="425"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structMatrix" kindref="compound">Matrix</ref>;</highlight></codeline>
+<codeline lineno="426"><highlight class="normal"></highlight></codeline>
+<codeline lineno="434"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMatrix" kindref="compound">Matrix</ref><sp/>*matrix_alloc(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>w);</highlight></codeline>
+<codeline lineno="435"><highlight class="normal"></highlight></codeline>
+<codeline lineno="441"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>matrix_free(<ref refid="structMatrix" kindref="compound">Matrix</ref><sp/>*m);</highlight></codeline>
+<codeline lineno="442"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="453"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMatrix" kindref="compound">Matrix</ref><sp/>*get_similarity_matrix(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*srcx,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*srcy,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*dstx,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*dsty,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num);</highlight></codeline>
+<codeline lineno="454"><highlight class="normal"></highlight></codeline>
+<codeline lineno="464"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structMatrix" kindref="compound">Matrix</ref><sp/>*get_affine_transform(</highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*srcx,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*srcy,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*dstx,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>*dsty);</highlight></codeline>
+<codeline lineno="465"><highlight class="normal"></highlight></codeline>
+<codeline lineno="473"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>warp_affine(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*img,<sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*crop,<sp/><ref refid="structMatrix" kindref="compound">Matrix</ref><sp/>*M);</highlight></codeline>
+<codeline lineno="474"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="475"><highlight class="normal"></highlight></codeline>
+<codeline lineno="476"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="489"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_resize_linear_q(qtp_t<sp/>*dst_image,<sp/>uint8_t<sp/>*src_image,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dst_c,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>src_h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>shift);</highlight></codeline>
+<codeline lineno="490"><highlight class="normal"></highlight></codeline>
+<codeline lineno="502"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*image_resize_normalize_quantize(uint8_t<sp/>*image,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>input_w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>input_h,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>target_size,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>exponent,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>process_mode);</highlight></codeline>
+<codeline lineno="503"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="504"><highlight class="normal"></highlight></codeline>
+<codeline lineno="518"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_resize_shift_fast(qtp_t<sp/>*dimage,<sp/>uint16_t<sp/>*simage,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dc,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sh,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>tw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>th,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>shift);</highlight></codeline>
+<codeline lineno="519"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="533"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_resize_nearest_shift(qtp_t<sp/>*dimage,<sp/>uint16_t<sp/>*simage,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dc,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sh,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>tw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>th,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>shift);</highlight></codeline>
+<codeline lineno="534"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="549"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>image_crop_shift_fast(qtp_t<sp/>*dimage,<sp/>uint16_t<sp/>*simage,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>dw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sw,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sh,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>x1,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>y1,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>x2,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>y2,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>shift);</highlight></codeline>
+<codeline lineno="550"><highlight class="normal"></highlight></codeline>
+<codeline lineno="551"><highlight class="normal"></highlight></codeline>
+<codeline lineno="552"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="553"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="554"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h"/>
+  </compounddef>
+</doxygen>

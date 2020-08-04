@@ -4,4 +4,4 @@ set(EXTRA_COMPONENT_DIRS ../../../components)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
-project(detection_with_command_line)
+project(hand_detection_with_command_line)

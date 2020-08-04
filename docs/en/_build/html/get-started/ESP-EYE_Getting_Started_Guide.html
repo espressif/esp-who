@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ESP-EYE Getting Started Guide &mdash; Audio Development Framework v0.9.4-41-g18ce2e6 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Audio Development Framework
+          
+
+          
+            
+            <img src="../_static/espressif-logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v0.9.4-41-g18ce2e6
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../COPYRIGHT.html">Copyrights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Audio Development Framework</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ESP-EYE Getting Started Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/get-started/ESP-EYE_Getting_Started_Guide.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="esp-eye-getting-started-guide">
+<h1>ESP-EYE Getting Started Guide<a class="headerlink" href="#esp-eye-getting-started-guide" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="../../zh_CN/get-started/ESP-EYE_Getting_Started_Guide">[中文]</a></p>
+<div class="section" id="what-you-need">
+<h2>What You Need<a class="headerlink" href="#what-you-need" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>1 × ESP-EYE V2.1 board</li>
+<li>1 × Micro USB cable</li>
+<li>1 × PC with Windows, Linux or Mac OS</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>ESP-EYE is an ESP32-based development board that integrates a digital microphone, an 8 MB PSRAM and a 4 MB flash, while also providing an external 2-Megapixel camera. These features make the board ideal for applications relating to face detection, face recognition and speech recognition. Besides, the board can also support image transmission over Wi-Fi and debugging through a Micro USB port, which enables the development of advanced AI solutions.</p>
+</div>
+<div class="section" id="hardware-preparation">
+<h2>Hardware Preparation<a class="headerlink" href="#hardware-preparation" title="Permalink to this headline">¶</a></h2>
+<p>The list and figure below describe the key components, interfaces and functions of the ESP-EYE development board:</p>
+<p><img alt="ESP-EYE image" src="../_images/esp-eye_callout.png" /></p>
+<ul>
+<li><p class="first"><strong>3D_PIFA Antenna</strong></p>
+<p>A 3D PIFA antenna. With the R14 resistor users can select the external IPEX antenna, whereas with the R15 resistor they can select the 3D antenna.</p>
+</li>
+<li><p class="first"><strong>IPEX Connector</strong></p>
+<p>Used for connecting the external IPEX antenna. With the R14 resistor users can select the external IPEX antenna, whereas with the R15 resistor they can select the 3D antenna.</p>
+</li>
+<li><p class="first"><strong>ESP32 Chip</strong></p>
+<p>A 2.4 GHz Wi-Fi and Bluetooth combo chip.</p>
+</li>
+<li><p class="first"><strong>Crystal Oscillator</strong></p>
+<p>Provides an external clock to ESP32.</p>
+</li>
+<li><p class="first"><strong>Flash &amp; PSRAM</strong></p>
+<p>Provides memory for storing applications.</p>
+</li>
+<li><p class="first"><strong>CP2102 USB-to-UART Chip</strong></p>
+<p>Converts the USB signals to UART signals.</p>
+</li>
+<li><p class="first"><strong>USB Port</strong></p>
+<p>Provides power supply to the whole system.</p>
+</li>
+<li><p class="first"><strong>LDO Power Supply</strong></p>
+<p>Provides the required power supply to the ESP32 chip, camera and LED indicators.</p>
+</li>
+<li><p class="first"><strong>Side Tactile Button</strong></p>
+<p>A function key.</p>
+</li>
+<li><p class="first"><strong>Top Tactile Button</strong></p>
+<p>Reset/Boot button. We recommend that you do not configure this button for other uses.</p>
+</li>
+<li><p class="first"><strong>LED Indicators</strong></p>
+<p>The board has a red and a white indicator. Different flashing combinations of the red and white indicators reflect the different statuses of the board, e.g. waking up, networking, face detection, face recognition, face enrollment and face recognition.</p>
+</li>
+<li><p class="first"><strong>Camera</strong></p>
+<p>An external 2-Megapixel camera module for face detection, face recognition and Face ID enrollment.</p>
+</li>
+<li><p class="first"><strong>Camera Connector</strong></p>
+<p>Used for connecting the external camera.</p>
+</li>
+<li><p class="first"><strong>MIC</strong></p>
+<p>A digital microphone for voice control functions.</p>
+</li>
+<li><p class="first"><strong>SPI Port</strong></p>
+<p>A reserved port for data transmission.</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2016 - 2019, Espressif Systems (Shanghai) CO., LTD
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

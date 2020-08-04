@@ -1,0 +1,121 @@
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h:35: warning: Compound tag_face_id_node is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h:50: warning: Compound face_id_list is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:421: warning: Compound Matrix is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h:68: warning: Compound tag_od_box_list is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:49: warning: Compound landmark_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:48: warning: Compound lssh_module_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:60: warning: Compound dl_matrix3dq_blazeblock_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h:76: warning: Compound tag_od_image_box is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:53: warning: Compound dl_matrix3d_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h:56: warning: Compound mtmn_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hd_model.h:12: warning: Compound detection_result_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:59: warning: Compound tag_box_list is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:76: warning: Compound tag_image_list is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:35: warning: Compound lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h:42: warning: Compound face_id_name_list is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:67: warning: Compound tag_image_box is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h:49: warning: Compound net_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:61: warning: Compound lssh_module_result_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h:42: warning: Compound threshold_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h:47: warning: Compound hd_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h:84: warning: Compound tag_od_image_list is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:79: warning: Compound dl_matrix3d_mobilenet_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:63: warning: Compound dl_matrix3du_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:55: warning: Compound lssh_modules_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:54: warning: Compound box_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:8: warning: Found unknown command `\Warning'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:36: warning: Member resized_height (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:37: warning: Member resized_width (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:38: warning: Member y_resize_scale (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:39: warning: Member x_resize_scale (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:40: warning: Member enabled_top_k (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:41: warning: Member score_threshold (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:42: warning: Member nms_threshold (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:44: warning: Member mode (variable) of class lssh_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:49: warning: Member anchor_size (variable) of class lssh_module_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:50: warning: Member stride (variable) of class lssh_module_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:51: warning: Member boundary (variable) of class lssh_module_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:62: warning: Member category (variable) of class lssh_module_result_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:63: warning: Member box_offset (variable) of class lssh_module_result_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:64: warning: Member landmark_offset (variable) of class lssh_module_result_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:56: warning: Member module_config (variable) of class lssh_modules_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h:57: warning: Member number (variable) of class lssh_modules_config_t is not documented.
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:8: warning: Found unknown command `\Warning'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h:146: warning: argument 'enroll_confirm_times' of command @param is not found in the argument list of enroll_face(face_id_list *l, dl_matrix3du_t *aligned_face)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h:348: warning: The following parameters of image_cropper(uint8_t *corp_image, uint8_t *src_image, int dst_w, int dst_h, int dst_c, int src_w, int src_h, float rotate_angle, float ratio, float *center) are not documented:
+  parameter 'dst_w'
+  parameter 'dst_h'
+  parameter 'dst_c'
+  parameter 'src_w'
+  parameter 'src_h'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:251: warning: argument 'in' of command @param is not found in the argument list of dl_matrix3d_softmax(dl_matrix3d_t *m)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:255: warning: The following parameters of dl_matrix3d_softmax(dl_matrix3d_t *m) are not documented:
+  parameter 'm'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:350: warning: argument 'Offset' of command @param is not found in the argument list of dl_matrix3d_batch_normalize(dl_matrix3d_t *m, dl_matrix3d_t *scale, dl_matrix3d_t *offset)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:356: warning: The following parameters of dl_matrix3d_batch_normalize(dl_matrix3d_t *m, dl_matrix3d_t *scale, dl_matrix3d_t *offset) are not documented:
+  parameter 'offset'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:438: warning: The following parameters of dl_matrix3d_mobilefaceblock(dl_matrix3d_t *in, dl_matrix3d_t *pw, dl_matrix3d_t *pw_bn_scale, dl_matrix3d_t *pw_bn_offset, dl_matrix3d_t *dw, dl_matrix3d_t *dw_bn_scale, dl_matrix3d_t *dw_bn_offset, dl_matrix3d_t *pw_linear, dl_matrix3d_t *pw_linear_bn_scale, dl_matrix3d_t *pw_linear_bn_offset, int stride_x, int stride_y, int padding, int mode, int shortcut) are not documented:
+  parameter 'shortcut'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:476: warning: The following parameters of dl_matrix3d_mobilefaceblock_split(dl_matrix3d_t *in, dl_matrix3d_t *pw_1, dl_matrix3d_t *pw_2, dl_matrix3d_t *pw_bn_scale, dl_matrix3d_t *pw_bn_offset, dl_matrix3d_t *dw, dl_matrix3d_t *dw_bn_scale, dl_matrix3d_t *dw_bn_offset, dl_matrix3d_t *pw_linear_1, dl_matrix3d_t *pw_linear_2, dl_matrix3d_t *pw_linear_bn_scale, dl_matrix3d_t *pw_linear_bn_offset, int stride_x, int stride_y, int padding, int mode, int shortcut) are not documented:
+  parameter 'shortcut'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:523: warning: argument 'in' of command @param is not found in the argument list of dl_matrix3d_relu_clip(dl_matrix3d_t *m, fptp_t clip)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:528: warning: The following parameters of dl_matrix3d_relu_clip(dl_matrix3d_t *m, fptp_t clip) are not documented:
+  parameter 'm'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:539: warning: argument 'in' of command @param is not found in the argument list of dl_matrix3d_leaky_relu(dl_matrix3d_t *m, fptp_t alpha)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:544: warning: The following parameters of dl_matrix3d_leaky_relu(dl_matrix3d_t *m, fptp_t alpha) are not documented:
+  parameter 'm'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:617: warning: argument 'input' of command @param is not found in the argument list of dl_matrix3dff_conv_3x3(dl_matrix3d_t *in, dl_matrix3d_t *filter, dl_matrix3d_t *bias, int stride_x, int stride_y, dl_padding_type padding)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:627: warning: The following parameters of dl_matrix3dff_conv_3x3(dl_matrix3d_t *in, dl_matrix3d_t *filter, dl_matrix3d_t *bias, int stride_x, int stride_y, dl_padding_type padding) are not documented:
+  parameter 'in'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:730: warning: argument 'mode' of command @param is not found in the argument list of dl_matrix3dff_depthwise_conv_common(dl_matrix3d_t *in, dl_matrix3d_t *filter, int stride_x, int stride_y, dl_padding_type padding)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:751: warning: argument 'bias' of command @param is not found in the argument list of dl_matrix3dff_fc(dl_matrix3d_t *out, dl_matrix3d_t *in, dl_matrix3d_t *filter)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:758: warning: The following parameters of dl_matrix3dff_fc(dl_matrix3d_t *out, dl_matrix3d_t *in, dl_matrix3d_t *filter) are not documented:
+  parameter 'out'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:780: warning: argument 'filter' of command @param is not found in the argument list of dl_matrix3dff_mobilenet(dl_matrix3d_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:780: warning: argument 'stride_x' of command @param is not found in the argument list of dl_matrix3dff_mobilenet(dl_matrix3d_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:780: warning: argument 'stride_y' of command @param is not found in the argument list of dl_matrix3dff_mobilenet(dl_matrix3d_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:780: warning: argument 'padding' of command @param is not found in the argument list of dl_matrix3dff_mobilenet(dl_matrix3d_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:780: warning: argument 'mode' of command @param is not found in the argument list of dl_matrix3dff_mobilenet(dl_matrix3d_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:791: warning: The following parameters of dl_matrix3dff_mobilenet(dl_matrix3d_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config) are not documented:
+  parameter 'dilate_filter'
+  parameter 'dilate_prelu'
+  parameter 'depthwise_filter'
+  parameter 'depthwise_prelu'
+  parameter 'compress_filter'
+  parameter 'bias'
+  parameter 'config'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:801: warning: argument 'filter' of command @param is not found in the argument list of dl_matrix3duf_mobilenet(dl_matrix3du_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:801: warning: argument 'stride_x' of command @param is not found in the argument list of dl_matrix3duf_mobilenet(dl_matrix3du_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:801: warning: argument 'stride_y' of command @param is not found in the argument list of dl_matrix3duf_mobilenet(dl_matrix3du_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:801: warning: argument 'padding' of command @param is not found in the argument list of dl_matrix3duf_mobilenet(dl_matrix3du_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:801: warning: argument 'mode' of command @param is not found in the argument list of dl_matrix3duf_mobilenet(dl_matrix3du_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h:812: warning: The following parameters of dl_matrix3duf_mobilenet(dl_matrix3du_t *in, dl_matrix3d_t *dilate_filter, dl_matrix3d_t *dilate_prelu, dl_matrix3d_t *depthwise_filter, dl_matrix3d_t *depthwise_prelu, dl_matrix3d_t *compress_filter, dl_matrix3d_t *bias, dl_matrix3d_mobilenet_config_t config) are not documented:
+  parameter 'dilate_filter'
+  parameter 'dilate_prelu'
+  parameter 'depthwise_filter'
+  parameter 'depthwise_prelu'
+  parameter 'compress_filter'
+  parameter 'bias'
+  parameter 'config'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:582: warning: The following parameters of dl_matrix3dqq_conv_common(dl_matrix3dq_t *in, dl_matrix3dq_t *filter, dl_matrix3dq_t *bias, int stride_x, int stride_y, dl_padding_type padding, int exponent, dl_conv_mode mode) are not documented:
+  parameter 'exponent'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:604: warning: The following parameters of dl_matrix3duq_conv_common(dl_matrix3du_t *in, dl_matrix3dq_t *filter, dl_matrix3dq_t *bias, int stride_x, int stride_y, dl_padding_type padding, int exponent, dl_conv_mode mode) are not documented:
+  parameter 'exponent'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:1313: warning: argument 'depthwise_prelu' of command @param is not found in the argument list of dl_matrix3dqq_mobilenet(dl_matrix3dq_t *in, dl_matrix3dq_t *dilate, dl_matrix3dq_t *dilate_prelu, dl_matrix3dq_t *depthwise, dl_matrix3dq_t *depth_prelu, dl_matrix3dq_t *compress, dl_matrix3dq_t *bias, dl_matrix3dq_mobilenet_config_t config, char *name)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:1326: warning: The following parameters of dl_matrix3dqq_mobilenet(dl_matrix3dq_t *in, dl_matrix3dq_t *dilate, dl_matrix3dq_t *dilate_prelu, dl_matrix3dq_t *depthwise, dl_matrix3dq_t *depth_prelu, dl_matrix3dq_t *compress, dl_matrix3dq_t *bias, dl_matrix3dq_mobilenet_config_t config, char *name) are not documented:
+  parameter 'depth_prelu'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:1337: warning: argument 'depthwise_prelu' of command @param is not found in the argument list of dl_matrix3duq_mobilenet(dl_matrix3du_t *in, dl_matrix3dq_t *dilate, dl_matrix3dq_t *dilate_prelu, dl_matrix3dq_t *depthwise, dl_matrix3dq_t *depth_prelu, dl_matrix3dq_t *compress, dl_matrix3dq_t *bias, dl_matrix3dq_mobilenet_config_t config, char *name)
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h:1350: warning: The following parameters of dl_matrix3duq_mobilenet(dl_matrix3du_t *in, dl_matrix3dq_t *dilate, dl_matrix3dq_t *dilate_prelu, dl_matrix3dq_t *depthwise, dl_matrix3dq_t *depth_prelu, dl_matrix3dq_t *compress, dl_matrix3dq_t *bias, dl_matrix3dq_mobilenet_config_t config, char *name) are not documented:
+  parameter 'depth_prelu'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h:94: warning: The following parameters of pnet_lite_q(dl_matrix3du_t *in, dl_conv_mode mode) are not documented:
+  parameter 'mode'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h:103: warning: The following parameters of rnet_lite_q_with_score_verify(dl_matrix3du_t *in, float threshold, dl_conv_mode mode) are not documented:
+  parameter 'mode'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h:112: warning: The following parameters of onet_lite_q_with_score_verify(dl_matrix3du_t *in, float threshold, dl_conv_mode mode) are not documented:
+  parameter 'mode'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h:120: warning: The following parameters of pnet_heavy_q(dl_matrix3du_t *in, dl_conv_mode mode) are not documented:
+  parameter 'mode'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h:129: warning: The following parameters of rnet_heavy_q_with_score_verify(dl_matrix3du_t *in, float threshold, dl_conv_mode mode) are not documented:
+  parameter 'mode'
+/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h:138: warning: The following parameters of onet_heavy_q_with_score_verify(dl_matrix3du_t *in, float threshold, dl_conv_mode mode) are not documented:
+  parameter 'mode'

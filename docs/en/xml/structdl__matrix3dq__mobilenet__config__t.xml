@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structdl__matrix3dq__mobilenet__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>dl_matrix3dq_mobilenet_config_t</compoundname>
+    <includes refid="dl__lib__matrix3dq_8h" local="no">dl_lib_matrix3dq.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1a28fb5d4545e4dd7183da653ff0ca2911" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_mobilenet_config_t::stride_x</definition>
+        <argsstring></argsstring>
+        <name>stride_x</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Strides of width </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="50" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1a4bd05eac31f7331b92789883e96350b9" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_mobilenet_config_t::stride_y</definition>
+        <argsstring></argsstring>
+        <name>stride_y</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Strides of height </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="51" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1af52fa82a602f79af99c0e050d4f38a07" prot="public" static="no" mutable="no">
+        <type>dl_padding_type</type>
+        <definition>dl_padding_type dl_matrix3dq_mobilenet_config_t::padding</definition>
+        <argsstring></argsstring>
+        <name>padding</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Padding type </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="52" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1a34c2dab915fbe0720143a8a0bc21afbc" prot="public" static="no" mutable="no">
+        <type>dl_conv_mode</type>
+        <definition>dl_conv_mode dl_matrix3dq_mobilenet_config_t::mode</definition>
+        <argsstring></argsstring>
+        <name>mode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Implementation mode </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="53" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1a149b8a541c1ec2879cf4cdd82b8a0ae3" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_mobilenet_config_t::dilate_exponent</definition>
+        <argsstring></argsstring>
+        <name>dilate_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of dilation filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="54" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1a10348ab9845614879ee601f04e0b18a3" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_mobilenet_config_t::depthwise_exponent</definition>
+        <argsstring></argsstring>
+        <name>depthwise_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of depthwise filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="55" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__mobilenet__config__t_1a3b97ff81aabb91333fbd0e3ed0fc5268" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_mobilenet_config_t::compress_exponent</definition>
+        <argsstring></argsstring>
+        <name>compress_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of compress filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="56" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Configuration of mobilenet operation </para>    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="49" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="48" bodyend="57"/>
+    <listofallmembers>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1a3b97ff81aabb91333fbd0e3ed0fc5268" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>compress_exponent</name></member>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1a10348ab9845614879ee601f04e0b18a3" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>depthwise_exponent</name></member>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1a149b8a541c1ec2879cf4cdd82b8a0ae3" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>dilate_exponent</name></member>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1a34c2dab915fbe0720143a8a0bc21afbc" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>mode</name></member>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1af52fa82a602f79af99c0e050d4f38a07" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>padding</name></member>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1a28fb5d4545e4dd7183da653ff0ca2911" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>stride_x</name></member>
+      <member refid="structdl__matrix3dq__mobilenet__config__t_1a4bd05eac31f7331b92789883e96350b9" prot="public" virt="non-virtual"><scope>dl_matrix3dq_mobilenet_config_t</scope><name>stride_y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

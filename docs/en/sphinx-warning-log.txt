@@ -1,0 +1,6 @@
+[31;01m/home/yuanjiong/esp/dl/dl_master/esp-who/docs/en/index.rst:25: WARNING: toctree contains reference to nonexisting document u'get-started/index'[39;49;00m
+[31;01m/home/yuanjiong/esp/dl/dl_master/esp-who/docs/en/index.rst:25: WARNING: toctree contains reference to nonexisting document u'api-reference/index'[39;49;00m
+[31;01m/home/yuanjiong/esp/dl/dl_master/esp-who/docs/en/index.rst:25: WARNING: toctree contains reference to nonexisting document u'design-guide/index'[39;49;00m
+[31;01m/home/yuanjiong/esp/dl/dl_master/esp-who/docs/en/Camera_connections.md: WARNING: document isn't included in any toctree[39;49;00m
+[31;01m/home/yuanjiong/esp/dl/dl_master/esp-who/docs/en/get-started/ESP-EYE_Getting_Started_Guide.md: WARNING: document isn't included in any toctree[39;49;00m
+[31;01m/home/yuanjiong/esp/dl/dl_master/esp-who/docs/en/get-started/ESP-EYE_Getting_Started_Guide.md:3: WARNING: None:any reference target not found: ../../zh_CN/get-started/ESP-EYE_Getting_Started_Guide[39;49;00m

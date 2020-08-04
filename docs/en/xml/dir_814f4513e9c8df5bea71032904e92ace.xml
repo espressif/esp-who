@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="dir_814f4513e9c8df5bea71032904e92ace" kind="dir">
+    <compoundname>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include</compoundname>
+    <innerfile refid="dl__lib__matrix3d_8h">dl_lib_matrix3d.h</innerfile>
+    <innerfile refid="dl__lib__matrix3dq_8h">dl_lib_matrix3dq.h</innerfile>
+    <innerfile refid="frmn_8h">frmn.h</innerfile>
+    <innerfile refid="hd__model_8h">hd_model.h</innerfile>
+    <innerfile refid="hp__model_8h">hp_model.h</innerfile>
+    <innerfile refid="lssh_8h">lssh.h</innerfile>
+    <innerfile refid="mtmn_8h">mtmn.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/"/>
+  </compounddef>
+</doxygen>

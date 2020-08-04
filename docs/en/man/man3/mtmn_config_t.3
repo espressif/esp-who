@@ -1,0 +1,53 @@
+.TH "mtmn_config_t" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mtmn_config_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "float \fBmin_face\fP"
+.br
+.ti -1c
+.RI "float \fBpyramid\fP"
+.br
+.ti -1c
+.RI "int \fBpyramid_times\fP"
+.br
+.ti -1c
+.RI "\fBthreshold_config_t\fP \fBp_threshold\fP"
+.br
+.ti -1c
+.RI "\fBthreshold_config_t\fP \fBr_threshold\fP"
+.br
+.ti -1c
+.RI "\fBthreshold_config_t\fP \fBo_threshold\fP"
+.br
+.ti -1c
+.RI "mtmn_resize_type \fBtype\fP"
+.br
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "float mtmn_config_t::min_face"
+The minimum size of a detectable face 
+.SS "\fBthreshold_config_t\fP mtmn_config_t::o_threshold"
+The thresholds for O-Net\&. For details, see the definition of \fBthreshold_config_t\fP 
+.SS "\fBthreshold_config_t\fP mtmn_config_t::p_threshold"
+The thresholds for P-Net\&. For details, see the definition of \fBthreshold_config_t\fP 
+.SS "float mtmn_config_t::pyramid"
+The scale of the gradient scaling for the input images 
+.SS "int mtmn_config_t::pyramid_times"
+The pyramid resizing times 
+.SS "\fBthreshold_config_t\fP mtmn_config_t::r_threshold"
+The thresholds for R-Net\&. For details, see the definition of \fBthreshold_config_t\fP 
+.SS "mtmn_resize_type mtmn_config_t::type"
+The image resize type\&. 'pyramid' will lose efficacy, when 'type'==FAST\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

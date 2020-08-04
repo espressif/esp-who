@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structthreshold__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>threshold_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float threshold_config_t::score</definition>
+        <argsstring></argsstring>
+        <name>score</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>score threshold for filter candidates by score </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="43" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float threshold_config_t::nms</definition>
+        <argsstring></argsstring>
+        <name>nms</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>nms threshold for nms process </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="44" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int threshold_config_t::candidate_number</definition>
+        <argsstring></argsstring>
+        <name>candidate_number</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>candidate number limitation for each net </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="45" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="42" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="41" bodyend="46"/>
+    <listofallmembers>
+      <member refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" prot="public" virt="non-virtual"><scope>threshold_config_t</scope><name>candidate_number</name></member>
+      <member refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" prot="public" virt="non-virtual"><scope>threshold_config_t</scope><name>nms</name></member>
+      <member refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" prot="public" virt="non-virtual"><scope>threshold_config_t</scope><name>score</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

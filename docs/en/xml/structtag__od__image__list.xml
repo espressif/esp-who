@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structtag__od__image__list" kind="struct" language="C++" prot="public">
+    <compoundname>tag_od_image_list</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structtag__od__image__list_1a4cfc6b5d08bc489cfcc77e47fe19064b" prot="public" static="no" mutable="no">
+        <type><ref refid="structtag__od__image__box" kindref="compound">od_image_box_t</ref> *</type>
+        <definition>od_image_box_t* tag_od_image_list::head</definition>
+        <argsstring></argsstring>
+        <name>head</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current head of the od_image_list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="85" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__od__image__list_1a00af62e64f598a880b02eb83863c9628" prot="public" static="no" mutable="no">
+        <type><ref refid="structtag__od__image__box" kindref="compound">od_image_box_t</ref> *</type>
+        <definition>od_image_box_t* tag_od_image_list::origin_head</definition>
+        <argsstring></argsstring>
+        <name>origin_head</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The original head of the od_image_list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="86" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__od__image__list_1a3b646051f150aff6d0e8966b952a5275" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int tag_od_image_list::len</definition>
+        <argsstring></argsstring>
+        <name>len</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Length of the od_image_list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="87" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="73">
+        <label>tag_od_image_box</label>
+        <link refid="structtag__od__image__box"/>
+        <childnode refid="73" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+        <childnode refid="74" relation="usage">
+          <edgelabel>box</edgelabel>
+        </childnode>
+      </node>
+      <node id="72">
+        <label>tag_od_image_list</label>
+        <link refid="structtag__od__image__list"/>
+        <childnode refid="73" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>origin_head</edgelabel>
+        </childnode>
+      </node>
+      <node id="74">
+        <label>box_t</label>
+        <link refid="structbox__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="84" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="83" bodyend="88"/>
+    <listofallmembers>
+      <member refid="structtag__od__image__list_1a4cfc6b5d08bc489cfcc77e47fe19064b" prot="public" virt="non-virtual"><scope>tag_od_image_list</scope><name>head</name></member>
+      <member refid="structtag__od__image__list_1a3b646051f150aff6d0e8966b952a5275" prot="public" virt="non-virtual"><scope>tag_od_image_list</scope><name>len</name></member>
+      <member refid="structtag__od__image__list_1a00af62e64f598a880b02eb83863c9628" prot="public" virt="non-virtual"><scope>tag_od_image_list</scope><name>origin_head</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

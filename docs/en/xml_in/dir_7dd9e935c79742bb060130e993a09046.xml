@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="dir_7dd9e935c79742bb060130e993a09046" kind="dir">
+    <compoundname>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition</compoundname>
+    <innerdir refid="dir_dba3fe0e1ddee6645c880a885a0fc22a">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/"/>
+  </compounddef>
+</doxygen>

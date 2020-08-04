@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structdl__matrix3d__mobilenet__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>dl_matrix3d_mobilenet_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdl__matrix3d__mobilenet__config__t_1a9e6126298d55c45fb88ec74dcb7751b8" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3d_mobilenet_config_t::stride_x</definition>
+        <argsstring></argsstring>
+        <name>stride_x</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Strides of width </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="80" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3d__mobilenet__config__t_1a0f86c641d3d06a43df28d964df02e7d7" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3d_mobilenet_config_t::stride_y</definition>
+        <argsstring></argsstring>
+        <name>stride_y</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Strides of height </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="81" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3d__mobilenet__config__t_1abf3a23e533dc319126b457c164a680b2" prot="public" static="no" mutable="no">
+        <type>dl_padding_type</type>
+        <definition>dl_padding_type dl_matrix3d_mobilenet_config_t::padding</definition>
+        <argsstring></argsstring>
+        <name>padding</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Padding type </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="82" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="79" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="78" bodyend="83"/>
+    <listofallmembers>
+      <member refid="structdl__matrix3d__mobilenet__config__t_1abf3a23e533dc319126b457c164a680b2" prot="public" virt="non-virtual"><scope>dl_matrix3d_mobilenet_config_t</scope><name>padding</name></member>
+      <member refid="structdl__matrix3d__mobilenet__config__t_1a9e6126298d55c45fb88ec74dcb7751b8" prot="public" virt="non-virtual"><scope>dl_matrix3d_mobilenet_config_t</scope><name>stride_x</name></member>
+      <member refid="structdl__matrix3d__mobilenet__config__t_1a0f86c641d3d06a43df28d964df02e7d7" prot="public" virt="non-virtual"><scope>dl_matrix3d_mobilenet_config_t</scope><name>stride_y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

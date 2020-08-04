@@ -1,0 +1,38 @@
+.TH "detection_result_t" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+detection_result_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBnum\fP"
+.br
+.ti -1c
+.RI "\fBdl_matrix3d_t\fP * \fBcls\fP"
+.br
+.ti -1c
+.RI "\fBdl_matrix3d_t\fP * \fBscore\fP"
+.br
+.ti -1c
+.RI "\fBdl_matrix3d_t\fP * \fBboxes\fP"
+.br
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdl_matrix3d_t\fP* detection_result_t::boxes"
+(x, y, w, h) of the boxes\&. x and y are the center coordinates\&. size:(height, width, anchor_num, 4) 
+.SS "\fBdl_matrix3d_t\fP* detection_result_t::cls"
+The class feature map corresponding to the box\&. size: (height, width, anchor_num, 1) 
+.SS "int detection_result_t::num"
+The total number of the boxes 
+.SS "\fBdl_matrix3d_t\fP* detection_result_t::score"
+The confidence score feature map of the class corresponding to the box\&. size: (height, width, anchor_num, 1) 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

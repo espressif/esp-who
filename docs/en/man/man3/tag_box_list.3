@@ -1,0 +1,38 @@
+.TH "tag_box_list" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tag_box_list \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "fptp_t * \fBscore\fP"
+.br
+.ti -1c
+.RI "\fBbox_t\fP * \fBbox\fP"
+.br
+.ti -1c
+.RI "\fBlandmark_t\fP * \fBlandmark\fP"
+.br
+.ti -1c
+.RI "int \fBlen\fP"
+.br
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBbox_t\fP* tag_box_list::box"
+Anchor boxes or predicted boxes 
+.SS "\fBlandmark_t\fP* tag_box_list::landmark"
+The landmarks corresponding to the box 
+.SS "int tag_box_list::len"
+The num of the boxes 
+.SS "fptp_t* tag_box_list::score"
+The confidence score of the class corresponding to the box 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

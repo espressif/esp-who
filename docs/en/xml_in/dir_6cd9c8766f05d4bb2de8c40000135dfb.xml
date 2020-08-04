@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="dir_6cd9c8766f05d4bb2de8c40000135dfb" kind="dir">
+    <compoundname>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection</compoundname>
+    <innerdir refid="dir_e7b7571b7e8bf80d8f8a071fa95b6c55">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/"/>
+  </compounddef>
+</doxygen>

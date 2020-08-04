@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structtag__od__image__box" kind="struct" language="C++" prot="public">
+    <compoundname>tag_od_image_box</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structtag__od__image__box_1a1b5331f9fc7f6141656d53751d4853c2" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structtag__od__image__box" kindref="compound">tag_od_image_box</ref> *</type>
+        <definition>struct tag_od_image_box* tag_od_image_box::next</definition>
+        <argsstring></argsstring>
+        <name>next</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Next od_image_box_t </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="77" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__od__image__box_1a7add7a87737cb1bcd56b13b79ee3126f" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t tag_od_image_box::score</definition>
+        <argsstring></argsstring>
+        <name>score</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The confidence score of the class corresponding to the box </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="78" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__od__image__box_1a5ee25df95ff24f6f781a2ffcbd8e58ee" prot="public" static="no" mutable="no">
+        <type>qtp_t</type>
+        <definition>qtp_t tag_od_image_box::cls</definition>
+        <argsstring></argsstring>
+        <name>cls</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The class corresponding to the box </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="79" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__od__image__box_1a291c338b5b27ecaf4fdfdfcee2d57c17" prot="public" static="no" mutable="no">
+        <type><ref refid="structbox__t" kindref="compound">box_t</ref></type>
+        <definition>box_t tag_od_image_box::box</definition>
+        <argsstring></argsstring>
+        <name>box</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>(x1, y1, x2, y2) of the boxes </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="80" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="69">
+        <label>tag_od_image_box</label>
+        <link refid="structtag__od__image__box"/>
+        <childnode refid="69" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+        <childnode refid="70" relation="usage">
+          <edgelabel>box</edgelabel>
+        </childnode>
+      </node>
+      <node id="70">
+        <label>box_t</label>
+        <link refid="structbox__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="76" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="75" bodyend="81"/>
+    <listofallmembers>
+      <member refid="structtag__od__image__box_1a291c338b5b27ecaf4fdfdfcee2d57c17" prot="public" virt="non-virtual"><scope>tag_od_image_box</scope><name>box</name></member>
+      <member refid="structtag__od__image__box_1a5ee25df95ff24f6f781a2ffcbd8e58ee" prot="public" virt="non-virtual"><scope>tag_od_image_box</scope><name>cls</name></member>
+      <member refid="structtag__od__image__box_1a1b5331f9fc7f6141656d53751d4853c2" prot="public" virt="non-virtual"><scope>tag_od_image_box</scope><name>next</name></member>
+      <member refid="structtag__od__image__box_1a7add7a87737cb1bcd56b13b79ee3126f" prot="public" virt="non-virtual"><scope>tag_od_image_box</scope><name>score</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

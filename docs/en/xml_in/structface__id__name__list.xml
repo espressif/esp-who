@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structface__id__name__list" kind="struct" language="C++" prot="public">
+    <compoundname>face_id_name_list</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structface__id__name__list_1a5b87c9352d3a401632ac3328d89159f0" prot="public" static="no" mutable="no">
+        <type><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref> *</type>
+        <definition>face_id_node* face_id_name_list::head</definition>
+        <argsstring></argsstring>
+        <name>head</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>head pointer of the id list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="43" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structface__id__name__list_1a79e16aedc607e3ae0f7d969f061341e0" prot="public" static="no" mutable="no">
+        <type><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref> *</type>
+        <definition>face_id_node* face_id_name_list::tail</definition>
+        <argsstring></argsstring>
+        <name>tail</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>tail pointer of the id list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="44" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structface__id__name__list_1ac3514ea47c8d2d13a9525c4ab4b5a474" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t face_id_name_list::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>number of enrolled ids </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="45" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structface__id__name__list_1a02035a83240b1a2b4cf9119783d6b9da" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t face_id_name_list::confirm_times</definition>
+        <argsstring></argsstring>
+        <name>confirm_times</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>images needed for one enrolling </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="46" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="22">
+        <label>tag_face_id_node</label>
+        <link refid="structtag__face__id__node"/>
+        <childnode refid="23" relation="usage">
+          <edgelabel>id_vec</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>dl_matrix3d_t</label>
+        <link refid="structdl__matrix3d__t"/>
+      </node>
+      <node id="21">
+        <label>face_id_name_list</label>
+        <link refid="structface__id__name__list"/>
+        <childnode refid="22" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>tail</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="42" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="41" bodyend="47"/>
+    <listofallmembers>
+      <member refid="structface__id__name__list_1a02035a83240b1a2b4cf9119783d6b9da" prot="public" virt="non-virtual"><scope>face_id_name_list</scope><name>confirm_times</name></member>
+      <member refid="structface__id__name__list_1ac3514ea47c8d2d13a9525c4ab4b5a474" prot="public" virt="non-virtual"><scope>face_id_name_list</scope><name>count</name></member>
+      <member refid="structface__id__name__list_1a5b87c9352d3a401632ac3328d89159f0" prot="public" virt="non-virtual"><scope>face_id_name_list</scope><name>head</name></member>
+      <member refid="structface__id__name__list_1a79e16aedc607e3ae0f7d969f061341e0" prot="public" virt="non-virtual"><scope>face_id_name_list</scope><name>tail</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

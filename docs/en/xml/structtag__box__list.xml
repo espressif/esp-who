@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structtag__box__list" kind="struct" language="C++" prot="public">
+    <compoundname>tag_box_list</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structtag__box__list_1a998af69f8cb372b1d7cc278825b529b2" prot="public" static="no" mutable="no">
+        <type>fptp_t *</type>
+        <definition>fptp_t* tag_box_list::score</definition>
+        <argsstring></argsstring>
+        <name>score</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The confidence score of the class corresponding to the box </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="60" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" prot="public" static="no" mutable="no">
+        <type><ref refid="structbox__t" kindref="compound">box_t</ref> *</type>
+        <definition>box_t* tag_box_list::box</definition>
+        <argsstring></argsstring>
+        <name>box</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Anchor boxes or predicted boxes </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="61" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__box__list_1a57e231efbf6860f68aa4771c979209a5" prot="public" static="no" mutable="no">
+        <type><ref refid="structlandmark__t" kindref="compound">landmark_t</ref> *</type>
+        <definition>landmark_t* tag_box_list::landmark</definition>
+        <argsstring></argsstring>
+        <name>landmark</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The landmarks corresponding to the box </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="62" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__box__list_1a74a848a667470ddc91b38a25dad84492" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int tag_box_list::len</definition>
+        <argsstring></argsstring>
+        <name>len</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The num of the boxes </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="63" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="51">
+        <label>landmark_t</label>
+        <link refid="structlandmark__t"/>
+      </node>
+      <node id="50">
+        <label>tag_box_list</label>
+        <link refid="structtag__box__list"/>
+        <childnode refid="51" relation="usage">
+          <edgelabel>landmark</edgelabel>
+        </childnode>
+        <childnode refid="52" relation="usage">
+          <edgelabel>box</edgelabel>
+        </childnode>
+      </node>
+      <node id="52">
+        <label>box_t</label>
+        <link refid="structbox__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="59" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="58" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" prot="public" virt="non-virtual"><scope>tag_box_list</scope><name>box</name></member>
+      <member refid="structtag__box__list_1a57e231efbf6860f68aa4771c979209a5" prot="public" virt="non-virtual"><scope>tag_box_list</scope><name>landmark</name></member>
+      <member refid="structtag__box__list_1a74a848a667470ddc91b38a25dad84492" prot="public" virt="non-virtual"><scope>tag_box_list</scope><name>len</name></member>
+      <member refid="structtag__box__list_1a998af69f8cb372b1d7cc278825b529b2" prot="public" virt="non-virtual"><scope>tag_box_list</scope><name>score</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

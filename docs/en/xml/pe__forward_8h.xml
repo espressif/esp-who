@@ -1,0 +1,600 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="pe__forward_8h" kind="file" language="C++">
+    <compoundname>pe_forward.h</compoundname>
+    <includes refid="image__util_8h" local="yes">image_util.h</includes>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="hd__model_8h" local="yes">hd_model.h</includes>
+    <includes refid="hp__model_8h" local="yes">hp_model.h</includes>
+    <incdepgraph>
+      <node id="161">
+        <label>assert.h</label>
+      </node>
+      <node id="154">
+        <label>stdint.h</label>
+      </node>
+      <node id="159">
+        <label>stdlib.h</label>
+      </node>
+      <node id="160">
+        <label>string.h</label>
+      </node>
+      <node id="162">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="157" relation="include">
+        </childnode>
+      </node>
+      <node id="157">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="154" relation="include">
+        </childnode>
+        <childnode refid="158" relation="include">
+        </childnode>
+        <childnode refid="159" relation="include">
+        </childnode>
+        <childnode refid="160" relation="include">
+        </childnode>
+        <childnode refid="155" relation="include">
+        </childnode>
+        <childnode refid="161" relation="include">
+        </childnode>
+      </node>
+      <node id="152">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h</label>
+        <link refid="pe_forward.h"/>
+        <childnode refid="153" relation="include">
+        </childnode>
+        <childnode refid="157" relation="include">
+        </childnode>
+        <childnode refid="163" relation="include">
+        </childnode>
+        <childnode refid="164" relation="include">
+        </childnode>
+      </node>
+      <node id="155">
+        <label>math.h</label>
+      </node>
+      <node id="156">
+        <label>mtmn.h</label>
+        <link refid="mtmn_8h_source"/>
+        <childnode refid="157" relation="include">
+        </childnode>
+        <childnode refid="162" relation="include">
+        </childnode>
+      </node>
+      <node id="164">
+        <label>hp_model.h</label>
+        <link refid="hp__model_8h_source"/>
+        <childnode refid="157" relation="include">
+        </childnode>
+        <childnode refid="162" relation="include">
+        </childnode>
+      </node>
+      <node id="163">
+        <label>hd_model.h</label>
+        <link refid="hd__model_8h_source"/>
+        <childnode refid="157" relation="include">
+        </childnode>
+        <childnode refid="162" relation="include">
+        </childnode>
+      </node>
+      <node id="158">
+        <label>stdio.h</label>
+      </node>
+      <node id="153">
+        <label>image_util.h</label>
+        <link refid="image__util_8h_source"/>
+        <childnode refid="154" relation="include">
+        </childnode>
+        <childnode refid="155" relation="include">
+        </childnode>
+        <childnode refid="156" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structhd__config__t" prot="public">hd_config_t</innerclass>
+    <innerclass refid="structtag__od__box__list" prot="public">tag_od_box_list</innerclass>
+    <innerclass refid="structtag__od__image__box" prot="public">tag_od_image_box</innerclass>
+    <innerclass refid="structtag__od__image__list" prot="public">tag_od_image_list</innerclass>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="pe__forward_8h_1a2aae8813c5b6377d6040544a28eb8d38" prot="public" static="no">
+        <name>INPUT_EXPONENT</name>
+        <initializer>-10</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="36" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="pe__forward_8h_1aa17a0d79991b9f667cf1f8fb04e26946" prot="public" static="no">
+        <name>SCORE_THRESHOLD</name>
+        <initializer>0.5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="37" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="pe__forward_8h_1a647e83f36b4fec70389d00c57b66b110" prot="public" static="no">
+        <name>NMS_THRESHOLD</name>
+        <initializer>0.45</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="38" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="pe__forward_8h_1a38878ac8311bd22cada28a57593b6190" prot="public" static="no">
+        <name>HP_TARGET_SIZE</name>
+        <initializer>128</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="43" column="12" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="pe__forward_8h_1a9b4d05ee0d6bbb8be90f848dccee7ae1" prot="public" static="no">
+        <type>struct <ref refid="structtag__od__box__list" kindref="compound">tag_od_box_list</ref></type>
+        <definition>typedef struct tag_od_box_list  od_box_array_t</definition>
+        <argsstring></argsstring>
+        <name>od_box_array_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="73" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="pe__forward_8h_1a46dfeb1ca35741a2d96020be6bc3c0ca" prot="public" static="no">
+        <type>struct <ref refid="structtag__od__image__box" kindref="compound">tag_od_image_box</ref></type>
+        <definition>typedef struct tag_od_image_box  od_image_box_t</definition>
+        <argsstring></argsstring>
+        <name>od_image_box_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="81" column="1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="pe__forward_8h_1a69ec913fe9c7534b5be5d7be5a0a3d1b" prot="public" static="no">
+        <type>struct <ref refid="structtag__od__image__list" kindref="compound">tag_od_image_list</ref></type>
+        <definition>typedef struct tag_od_image_list  od_image_list_t</definition>
+        <argsstring></argsstring>
+        <name>od_image_list_t</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="88" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="pe__forward_8h_1ac7ffd081f1a192e39c396440a5235dbc" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref></type>
+        <definition>static hd_config_t hd_init_config</definition>
+        <argsstring>()</argsstring>
+        <name>hd_init_config</name>
+        <briefdescription>
+<para>Get the default hand detection network configuration. </para>        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref> The default configuration </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="58" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="58" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="pe__forward_8h_1a9271318bf6837575b5b0f8c77d9dfc4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void od_image_sort_insert_by_score</definition>
+        <argsstring>(od_image_list_t *image_sorted_list, const od_image_list_t *insert_list)</argsstring>
+        <name>od_image_sort_insert_by_score</name>
+        <param>
+          <type><ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref> *</type>
+          <declname>image_sorted_list</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref> *</type>
+          <declname>insert_list</declname>
+        </param>
+        <briefdescription>
+<para>Sort the resulting box lists by their confidence score. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_sorted_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sorted box list. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>insert_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The box list that have not been sorted. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="96" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="pe__forward_8h_1aaf15cc51b4239282f838b9bee303b02d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref> *</type>
+        <definition>od_image_list_t* od_image_get_valid_boxes</definition>
+        <argsstring>(fptp_t *score, fptp_t *cls, fptp_t *boxes, int height, int width, int anchor_number, fptp_t score_threshold, fptp_t resize_scale, int padding_w, int padding_h)</argsstring>
+        <name>od_image_get_valid_boxes</name>
+        <param>
+          <type>fptp_t *</type>
+          <declname>score</declname>
+        </param>
+        <param>
+          <type>fptp_t *</type>
+          <declname>cls</declname>
+        </param>
+        <param>
+          <type>fptp_t *</type>
+          <declname>boxes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>anchor_number</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>score_threshold</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>resize_scale</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>padding_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>padding_h</declname>
+        </param>
+        <briefdescription>
+<para>Filter out the resulting boxes whose confidence score is lower than the threshold and convert the boxes to the actual boxes on the original image.((x, y, w, h) -&gt; (x1, y1, x2, y2)) </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>score</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Confidence score of the boxes. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cls</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Class of the boxes. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>boxes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>(x, y, w, h) of the boxes. x and y are the center coordinates. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height of the detection output feature map. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width of the detection output feature map. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>anchor_number</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Anchor number of the detection output feature map. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>score_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Threshold of the confidence score. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>resize_scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resize scale: target_size/orignal_size. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>padding_w</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Width padding in preporcess. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>padding_h</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Height padding in preporcess. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>od_image_list_t* Resulting valid boxes. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="113" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="pe__forward_8h_1a29a7a8373e7ad66bac5b288691f3bb1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void od_image_nms_process</definition>
+        <argsstring>(od_image_list_t *image_list, fptp_t nms_threshold)</argsstring>
+        <name>od_image_nms_process</name>
+        <param>
+          <type><ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref> *</type>
+          <declname>image_list</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>nms_threshold</declname>
+        </param>
+        <briefdescription>
+<para>Run NMS algorithm. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_list</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input boxes list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nms_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>NMS threshold </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="130" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="pe__forward_8h_1a35f6611a57da752d68196b3703092f2a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structtag__od__box__list" kindref="compound">od_box_array_t</ref> *</type>
+        <definition>od_box_array_t* hand_detection_forward</definition>
+        <argsstring>(dl_matrix3du_t *image, hd_config_t hd_config)</argsstring>
+        <name>hand_detection_forward</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref></type>
+          <declname>hd_config</declname>
+        </param>
+        <briefdescription>
+<para>Do hand detection, return box infomation. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>hd_config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Configuration of hand detection </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>od_box_array_t* A list of boxes, score and class. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="139" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="pe__forward_8h_1a4434caf6b5bf7b5d1d7bf531447575b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* handpose_estimation_forward</definition>
+        <argsstring>(dl_matrix3du_t *image, od_box_array_t *od_boxes, int target_size)</argsstring>
+        <name>handpose_estimation_forward</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type><ref refid="structtag__od__box__list" kindref="compound">od_box_array_t</ref> *</type>
+          <declname>od_boxes</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>target_size</declname>
+        </param>
+        <briefdescription>
+<para>Do hand pose estimation, return 21 landmarks of each hand. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>od_boxes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output of the hand detection network </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>target_size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The input size of hand pose estimation network </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>dl_matrix3d_t* The coordinates of 21 landmarks on the input image for each hand, size (n, 1, 21, 2) </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="149" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/><sp/>*<sp/>ESPRESSIF<sp/>MIT<sp/>License</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/>*<sp/>Copyright<sp/>(c)<sp/>2018<sp/>&lt;ESPRESSIF<sp/>SYSTEMS<sp/>(SHANGHAI)<sp/>PTE<sp/>LTD&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/><sp/>*<sp/>Permission<sp/>is<sp/>hereby<sp/>granted<sp/>for<sp/>use<sp/>on<sp/>ESPRESSIF<sp/>SYSTEMS<sp/>products<sp/>only,<sp/>in<sp/>which<sp/>case,</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/>*<sp/>it<sp/>is<sp/>free<sp/>of<sp/>charge,<sp/>to<sp/>any<sp/>person<sp/>obtaining<sp/>a<sp/>copy<sp/>of<sp/>this<sp/>software<sp/>and<sp/>associated</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/><sp/>*<sp/>documentation<sp/>files<sp/>(the<sp/>&quot;Software&quot;),<sp/>to<sp/>deal<sp/>in<sp/>the<sp/>Software<sp/>without<sp/>restriction,<sp/>including</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/>*<sp/>without<sp/>limitation<sp/>the<sp/>rights<sp/>to<sp/>use,<sp/>copy,<sp/>modify,<sp/>merge,<sp/>publish,<sp/>distribute,<sp/>sublicense,</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/>*<sp/>and/or<sp/>sell<sp/>copies<sp/>of<sp/>the<sp/>Software,<sp/>and<sp/>to<sp/>permit<sp/>persons<sp/>to<sp/>whom<sp/>the<sp/>Software<sp/>is<sp/>furnished</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/>*<sp/>to<sp/>do<sp/>so,<sp/>subject<sp/>to<sp/>the<sp/>following<sp/>conditions:</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/>*<sp/>The<sp/>above<sp/>copyright<sp/>notice<sp/>and<sp/>this<sp/>permission<sp/>notice<sp/>shall<sp/>be<sp/>included<sp/>in<sp/>all<sp/>copies<sp/>or</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/>*<sp/>substantial<sp/>portions<sp/>of<sp/>the<sp/>Software.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/>*<sp/>THE<sp/>SOFTWARE<sp/>IS<sp/>PROVIDED<sp/>&quot;AS<sp/>IS&quot;,<sp/>WITHOUT<sp/>WARRANTY<sp/>OF<sp/>ANY<sp/>KIND,<sp/>EXPRESS<sp/>OR</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/>*<sp/>IMPLIED,<sp/>INCLUDING<sp/>BUT<sp/>NOT<sp/>LIMITED<sp/>TO<sp/>THE<sp/>WARRANTIES<sp/>OF<sp/>MERCHANTABILITY,<sp/>FITNESS</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/>*<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE<sp/>AND<sp/>NONINFRINGEMENT.<sp/>IN<sp/>NO<sp/>EVENT<sp/>SHALL<sp/>THE<sp/>AUTHORS<sp/>OR</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/>*<sp/>COPYRIGHT<sp/>HOLDERS<sp/>BE<sp/>LIABLE<sp/>FOR<sp/>ANY<sp/>CLAIM,<sp/>DAMAGES<sp/>OR<sp/>OTHER<sp/>LIABILITY,<sp/>WHETHER</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/><sp/>*<sp/>IN<sp/>AN<sp/>ACTION<sp/>OF<sp/>CONTRACT,<sp/>TORT<sp/>OR<sp/>OTHERWISE,<sp/>ARISING<sp/>FROM,<sp/>OUT<sp/>OF<sp/>OR<sp/>IN</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/><sp/>*<sp/>CONNECTION<sp/>WITH<sp/>THE<sp/>SOFTWARE<sp/>OR<sp/>THE<sp/>USE<sp/>OR<sp/>OTHER<sp/>DEALINGS<sp/>IN<sp/>THE<sp/>SOFTWARE.</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;image_util.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;hd_model.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;hp_model.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>INPUT_EXPONENT<sp/>-10</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SCORE_THRESHOLD<sp/>0.5</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NMS_THRESHOLD<sp/>0.45</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>CONFIG_HD_LITE1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>HP_TARGET_SIZE<sp/>128<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/>#define<sp/>HP_TARGET_SIZE<sp/>128</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46" refid="structhd__config__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="48" refid="structhd__config__t_1a8aca571d002f64c25f735c199119c4c9" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structhd__config__t_1a8aca571d002f64c25f735c199119c4c9" kindref="member">target_size</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="49" refid="structhd__config__t_1adbd047e9e788433d90f99a5a503bd996" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/><ref refid="structhd__config__t_1adbd047e9e788433d90f99a5a503bd996" kindref="member">score_threshold</ref>;<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="50" refid="structhd__config__t_1a26bfcc8ff3b0ec2769f2c76f87b13dcf" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/><ref refid="structhd__config__t_1a26bfcc8ff3b0ec2769f2c76f87b13dcf" kindref="member">nms_threshold</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref>;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref><sp/>hd_init_config()</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref><sp/>hd_config;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hd_config.<ref refid="structhd__config__t_1a8aca571d002f64c25f735c199119c4c9" kindref="member">target_size</ref><sp/>=<sp/>96;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hd_config.<ref refid="structhd__config__t_1adbd047e9e788433d90f99a5a503bd996" kindref="member">score_threshold</ref><sp/>=<sp/>SCORE_THRESHOLD;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>hd_config.<ref refid="structhd__config__t_1a26bfcc8ff3b0ec2769f2c76f87b13dcf" kindref="member">nms_threshold</ref><sp/>=<sp/>NMS_THRESHOLD;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>hd_config;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="67" refid="structtag__od__box__list" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__od__box__list" kindref="compound">tag_od_box_list</ref></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="69" refid="structtag__od__box__list_1a80b3977ff7c506ab76d3b64116bedc46" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>*<ref refid="structtag__od__box__list_1a80b3977ff7c506ab76d3b64116bedc46" kindref="member">score</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="70" refid="structtag__od__box__list_1a5ead9dc1ffc1f6caa6f7f2b3f7752315" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qtp_t<sp/>*<ref refid="structtag__od__box__list_1a5ead9dc1ffc1f6caa6f7f2b3f7752315" kindref="member">cls</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="71" refid="structtag__od__box__list_1a01642c27462b7e0ef67b95b4fb05317c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structbox__t" kindref="compound">box_t</ref><sp/>*<ref refid="structtag__od__box__list_1a01642c27462b7e0ef67b95b4fb05317c" kindref="member">box</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="72" refid="structtag__od__box__list_1a2c19264624bf3e554c428709b94855d6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structtag__od__box__list_1a2c19264624bf3e554c428709b94855d6" kindref="member">len</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__od__box__list" kindref="compound">od_box_array_t</ref>;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75" refid="structtag__od__image__box" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__od__image__box" kindref="compound">tag_od_image_box</ref></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="77" refid="structtag__od__image__box_1a1b5331f9fc7f6141656d53751d4853c2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__od__image__box" kindref="compound">tag_od_image_box</ref><sp/>*<ref refid="structtag__od__image__box_1a1b5331f9fc7f6141656d53751d4853c2" kindref="member">next</ref>;<sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="78" refid="structtag__od__image__box_1a7add7a87737cb1bcd56b13b79ee3126f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/><ref refid="structtag__od__image__box_1a7add7a87737cb1bcd56b13b79ee3126f" kindref="member">score</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="79" refid="structtag__od__image__box_1a5ee25df95ff24f6f781a2ffcbd8e58ee" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qtp_t<sp/><ref refid="structtag__od__image__box_1a5ee25df95ff24f6f781a2ffcbd8e58ee" kindref="member">cls</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="80" refid="structtag__od__image__box_1a291c338b5b27ecaf4fdfdfcee2d57c17" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structbox__t" kindref="compound">box_t</ref><sp/><ref refid="structtag__od__image__box_1a291c338b5b27ecaf4fdfdfcee2d57c17" kindref="member">box</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__od__image__box" kindref="compound">od_image_box_t</ref>;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83" refid="structtag__od__image__list" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__od__image__list" kindref="compound">tag_od_image_list</ref></highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="85" refid="structtag__od__image__list_1a4cfc6b5d08bc489cfcc77e47fe19064b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structtag__od__image__box" kindref="compound">od_image_box_t</ref><sp/>*<ref refid="structtag__od__image__list_1a4cfc6b5d08bc489cfcc77e47fe19064b" kindref="member">head</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="86" refid="structtag__od__image__list_1a00af62e64f598a880b02eb83863c9628" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structtag__od__image__box" kindref="compound">od_image_box_t</ref><sp/>*<ref refid="structtag__od__image__list_1a00af62e64f598a880b02eb83863c9628" kindref="member">origin_head</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="87" refid="structtag__od__image__list_1a3b646051f150aff6d0e8966b952a5275" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structtag__od__image__list_1a3b646051f150aff6d0e8966b952a5275" kindref="member">len</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref>;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>od_image_sort_insert_by_score(<ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref><sp/>*image_sorted_list,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref><sp/>*insert_list);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref><sp/>*od_image_get_valid_boxes(fptp_t<sp/>*<ref refid="structtag__od__box__list_1a80b3977ff7c506ab76d3b64116bedc46" kindref="member">score</ref>,</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>*<ref refid="structtag__od__box__list_1a5ead9dc1ffc1f6caa6f7f2b3f7752315" kindref="member">cls</ref>,</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>*boxes,</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height,</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width,</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>anchor_number,</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>score_threshold,</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fptp_t<sp/>resize_scale,</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>padding_w,</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>padding_h);</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>od_image_nms_process(<ref refid="structtag__od__image__list" kindref="compound">od_image_list_t</ref><sp/>*image_list,<sp/>fptp_t<sp/>nms_threshold);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structtag__od__box__list" kindref="compound">od_box_array_t</ref><sp/>*hand_detection_forward(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*image,<sp/><ref refid="structhd__config__t" kindref="compound">hd_config_t</ref><sp/>hd_config);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*handpose_estimation_forward(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*image,<sp/><ref refid="structtag__od__box__list" kindref="compound">od_box_array_t</ref><sp/>*od_boxes,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>target_size);</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h"/>
+  </compounddef>
+</doxygen>

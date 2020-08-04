@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="fd__forward_8h" kind="file" language="C++">
+    <compoundname>fd_forward.h</compoundname>
+    <includes refid="image__util_8h" local="yes">image_util.h</includes>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="mtmn_8h" local="yes">mtmn.h</includes>
+    <incdepgraph>
+      <node id="0">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h</label>
+        <link refid="fd_forward.h"/>
+        <childnode refid="1" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>assert.h</label>
+      </node>
+      <node id="2">
+        <label>stdint.h</label>
+      </node>
+      <node id="7">
+        <label>stdlib.h</label>
+      </node>
+      <node id="8">
+        <label>string.h</label>
+      </node>
+      <node id="10">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>math.h</label>
+      </node>
+      <node id="4">
+        <label>mtmn.h</label>
+        <link refid="mtmn_8h_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>stdio.h</label>
+      </node>
+      <node id="1">
+        <label>image_util.h</label>
+        <link refid="image__util_8h_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structthreshold__config__t" prot="public">threshold_config_t</innerclass>
+    <innerclass refid="structnet__config__t" prot="public">net_config_t</innerclass>
+    <innerclass refid="structmtmn__config__t" prot="public">mtmn_config_t</innerclass>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="fd__forward_8h_1ac36e929f333af4d9f2cd561b8bfdfd39" prot="public" static="no">
+        <name>mtmn_resize_type</name>
+        <enumvalue id="fd__forward_8h_1ac36e929f333af4d9f2cd561b8bfdfd39af84c11ba888e499a8a282a3e6f5de7de" prot="public">
+          <name>FAST</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>fast resize type </para>          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="fd__forward_8h_1ac36e929f333af4d9f2cd561b8bfdfd39a50d1448013c6f17125caee18aa418af7" prot="public">
+          <name>NORMAL</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+<para>normal resize type </para>          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="36" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="35" bodyend="39"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="fd__forward_8h_1a1fe0bac3b311526ec71417232c31df57" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref></type>
+        <definition>static mtmn_config_t mtmn_init_config</definition>
+        <argsstring>()</argsstring>
+        <name>mtmn_init_config</name>
+        <briefdescription>
+<para>Get the initial MTMN model configuration. </para>        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref> MTMN configuration </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="71" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="71" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="fd__forward_8h_1a4a6259b5a5f0b3437b26727784628f4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+        <definition>box_array_t* face_detect</definition>
+        <argsstring>(dl_matrix3du_t *image_matrix, mtmn_config_t *config)</argsstring>
+        <name>face_detect</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>image_matrix</declname>
+        </param>
+        <param>
+          <type><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref> *</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Do MTMN face detection, return box and landmark infomation. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image_matrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Configuration of MTMN i.e. score threshold, nms threshold, candidate number threshold, pyramid, min face size </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>box_array_t* A list of boxes and score. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="98" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/><sp/>*<sp/>ESPRESSIF<sp/>MIT<sp/>License</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/>*<sp/>Copyright<sp/>(c)<sp/>2018<sp/>&lt;ESPRESSIF<sp/>SYSTEMS<sp/>(SHANGHAI)<sp/>PTE<sp/>LTD&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/><sp/>*<sp/>Permission<sp/>is<sp/>hereby<sp/>granted<sp/>for<sp/>use<sp/>on<sp/>ESPRESSIF<sp/>SYSTEMS<sp/>products<sp/>only,<sp/>in<sp/>which<sp/>case,</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/>*<sp/>it<sp/>is<sp/>free<sp/>of<sp/>charge,<sp/>to<sp/>any<sp/>person<sp/>obtaining<sp/>a<sp/>copy<sp/>of<sp/>this<sp/>software<sp/>and<sp/>associated</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/><sp/>*<sp/>documentation<sp/>files<sp/>(the<sp/>&quot;Software&quot;),<sp/>to<sp/>deal<sp/>in<sp/>the<sp/>Software<sp/>without<sp/>restriction,<sp/>including</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/>*<sp/>without<sp/>limitation<sp/>the<sp/>rights<sp/>to<sp/>use,<sp/>copy,<sp/>modify,<sp/>merge,<sp/>publish,<sp/>distribute,<sp/>sublicense,</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/>*<sp/>and/or<sp/>sell<sp/>copies<sp/>of<sp/>the<sp/>Software,<sp/>and<sp/>to<sp/>permit<sp/>persons<sp/>to<sp/>whom<sp/>the<sp/>Software<sp/>is<sp/>furnished</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/>*<sp/>to<sp/>do<sp/>so,<sp/>subject<sp/>to<sp/>the<sp/>following<sp/>conditions:</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/>*<sp/>The<sp/>above<sp/>copyright<sp/>notice<sp/>and<sp/>this<sp/>permission<sp/>notice<sp/>shall<sp/>be<sp/>included<sp/>in<sp/>all<sp/>copies<sp/>or</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/>*<sp/>substantial<sp/>portions<sp/>of<sp/>the<sp/>Software.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/>*<sp/>THE<sp/>SOFTWARE<sp/>IS<sp/>PROVIDED<sp/>&quot;AS<sp/>IS&quot;,<sp/>WITHOUT<sp/>WARRANTY<sp/>OF<sp/>ANY<sp/>KIND,<sp/>EXPRESS<sp/>OR</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/>*<sp/>IMPLIED,<sp/>INCLUDING<sp/>BUT<sp/>NOT<sp/>LIMITED<sp/>TO<sp/>THE<sp/>WARRANTIES<sp/>OF<sp/>MERCHANTABILITY,<sp/>FITNESS</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/>*<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE<sp/>AND<sp/>NONINFRINGEMENT.<sp/>IN<sp/>NO<sp/>EVENT<sp/>SHALL<sp/>THE<sp/>AUTHORS<sp/>OR</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/>*<sp/>COPYRIGHT<sp/>HOLDERS<sp/>BE<sp/>LIABLE<sp/>FOR<sp/>ANY<sp/>CLAIM,<sp/>DAMAGES<sp/>OR<sp/>OTHER<sp/>LIABILITY,<sp/>WHETHER</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/><sp/>*<sp/>IN<sp/>AN<sp/>ACTION<sp/>OF<sp/>CONTRACT,<sp/>TORT<sp/>OR<sp/>OTHERWISE,<sp/>ARISING<sp/>FROM,<sp/>OUT<sp/>OF<sp/>OR<sp/>IN</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/><sp/>*<sp/>CONNECTION<sp/>WITH<sp/>THE<sp/>SOFTWARE<sp/>OR<sp/>THE<sp/>USE<sp/>OR<sp/>OTHER<sp/>DEALINGS<sp/>IN<sp/>THE<sp/>SOFTWARE.</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;image_util.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;mtmn.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FAST<sp/>=<sp/>0,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>NORMAL<sp/>=<sp/>1,<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>mtmn_resize_type;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41" refid="structthreshold__config__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="43" refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" kindref="member">score</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="44" refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" kindref="member">nms</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="45" refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" kindref="member">candidate_number</ref>;<sp/></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref>;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48" refid="structnet__config__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="50" refid="structnet__config__t_1a3f9bd00953d9c684dd983affc4f6f177" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structnet__config__t_1a3f9bd00953d9c684dd983affc4f6f177" kindref="member">w</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="51" refid="structnet__config__t_1ae3141d026b731284fdaa4f596ac5ebf5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structnet__config__t_1ae3141d026b731284fdaa4f596ac5ebf5" kindref="member">h</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="52" refid="structnet__config__t_1a40c3de0dfa1ff1d0d112330fd47db799" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref><sp/><ref refid="structnet__config__t_1a40c3de0dfa1ff1d0d112330fd47db799" kindref="member">threshold</ref>;<sp/></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structnet__config__t" kindref="compound">net_config_t</ref>;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55" refid="structmtmn__config__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="57" refid="structmtmn__config__t_1a0d6021a3604af36c95c3494b35477448" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="structmtmn__config__t_1a0d6021a3604af36c95c3494b35477448" kindref="member">min_face</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="58" refid="structmtmn__config__t_1a648afd9fd7a3752276c7be0ec1822a53" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/><ref refid="structmtmn__config__t_1a648afd9fd7a3752276c7be0ec1822a53" kindref="member">pyramid</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="59" refid="structmtmn__config__t_1aa3c0368e1a610694f9d77c178a8fa7a3" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structmtmn__config__t_1aa3c0368e1a610694f9d77c178a8fa7a3" kindref="member">pyramid_times</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="60" refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref><sp/><ref refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" kindref="member">p_threshold</ref>;<sp/></highlight></codeline>
+<codeline lineno="61" refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref><sp/><ref refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" kindref="member">r_threshold</ref>;<sp/></highlight></codeline>
+<codeline lineno="62" refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref><sp/><ref refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" kindref="member">o_threshold</ref>;<sp/></highlight></codeline>
+<codeline lineno="63" refid="structmtmn__config__t_1a8f3538b015c16c9e9319116005d00f92" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_resize_type<sp/><ref refid="structmtmn__config__t_1a8f3538b015c16c9e9319116005d00f92" kindref="member">type</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref>;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref><sp/>mtmn_init_config()</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref><sp/>mtmn_config;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a8f3538b015c16c9e9319116005d00f92" kindref="member">type</ref><sp/>=<sp/>FAST;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a0d6021a3604af36c95c3494b35477448" kindref="member">min_face</ref><sp/>=<sp/>80;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a648afd9fd7a3752276c7be0ec1822a53" kindref="member">pyramid</ref><sp/>=<sp/>0.707;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1aa3c0368e1a610694f9d77c178a8fa7a3" kindref="member">pyramid_times</ref><sp/>=<sp/>4;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" kindref="member">p_threshold</ref>.<ref refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" kindref="member">score</ref><sp/>=<sp/>0.6;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" kindref="member">p_threshold</ref>.<ref refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" kindref="member">nms</ref><sp/>=<sp/>0.7;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" kindref="member">p_threshold</ref>.<ref refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" kindref="member">candidate_number</ref><sp/>=<sp/>20;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" kindref="member">r_threshold</ref>.<ref refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" kindref="member">score</ref><sp/>=<sp/>0.7;</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" kindref="member">r_threshold</ref>.<ref refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" kindref="member">nms</ref><sp/>=<sp/>0.7;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" kindref="member">r_threshold</ref>.<ref refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" kindref="member">candidate_number</ref><sp/>=<sp/>10;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" kindref="member">o_threshold</ref>.<ref refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" kindref="member">score</ref><sp/>=<sp/>0.7;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" kindref="member">o_threshold</ref>.<ref refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" kindref="member">nms</ref><sp/>=<sp/>0.7;</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>mtmn_config.<ref refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" kindref="member">o_threshold</ref>.<ref refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" kindref="member">candidate_number</ref><sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mtmn_config;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*face_detect(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*image_matrix,</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structmtmn__config__t" kindref="compound">mtmn_config_t</ref><sp/>*config);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h"/>
+  </compounddef>
+</doxygen>

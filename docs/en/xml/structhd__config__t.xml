@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structhd__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>hd_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structhd__config__t_1a8aca571d002f64c25f735c199119c4c9" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int hd_config_t::target_size</definition>
+        <argsstring></argsstring>
+        <name>target_size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The input size of hand detection network </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="48" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structhd__config__t_1adbd047e9e788433d90f99a5a503bd996" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t hd_config_t::score_threshold</definition>
+        <argsstring></argsstring>
+        <name>score_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>score threshold， used to filter candidates by score </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="49" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structhd__config__t_1a26bfcc8ff3b0ec2769f2c76f87b13dcf" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t hd_config_t::nms_threshold</definition>
+        <argsstring></argsstring>
+        <name>nms_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>nms threshold， used to filter out overlapping boxes </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="50" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" line="47" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h" bodystart="46" bodyend="51"/>
+    <listofallmembers>
+      <member refid="structhd__config__t_1a26bfcc8ff3b0ec2769f2c76f87b13dcf" prot="public" virt="non-virtual"><scope>hd_config_t</scope><name>nms_threshold</name></member>
+      <member refid="structhd__config__t_1adbd047e9e788433d90f99a5a503bd996" prot="public" virt="non-virtual"><scope>hd_config_t</scope><name>score_threshold</name></member>
+      <member refid="structhd__config__t_1a8aca571d002f64c25f735c199119c4c9" prot="public" virt="non-virtual"><scope>hd_config_t</scope><name>target_size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

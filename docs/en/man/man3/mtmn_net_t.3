@@ -1,0 +1,51 @@
+.TH "mtmn_net_t" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+mtmn_net_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mtmn\&.h>\fP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBdl_matrix3d_t\fP * \fBcategory\fP"
+.br
+.ti -1c
+.RI "\fBdl_matrix3d_t\fP * \fBoffset\fP"
+.br
+.ti -1c
+.RI "\fBdl_matrix3d_t\fP * \fBlandmark\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Detection results with MTMN\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdl_matrix3d_t\fP* mtmn_net_t::category"
+Classification result after softmax, channel is 2 
+.SS "\fBdl_matrix3d_t\fP* mtmn_net_t::landmark"
+Offsets of 5 landmarks:
+.IP "\(bu" 2
+Left eye
+.IP "\(bu" 2
+Mouth leftside
+.IP "\(bu" 2
+Nose
+.IP "\(bu" 2
+Right eye
+.IP "\(bu" 2
+Mouth rightside
+.PP
+.PP
+channel is 10 
+.SS "\fBdl_matrix3d_t\fP* mtmn_net_t::offset"
+Bounding box offset of 2 points: top-left and bottom-right, channel is 4 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

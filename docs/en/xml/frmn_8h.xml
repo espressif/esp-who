@@ -1,0 +1,277 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="frmn_8h" kind="file" language="C++">
+    <compoundname>frmn.h</compoundname>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="dl__lib__matrix3dq_8h" local="yes">dl_lib_matrix3dq.h</includes>
+    <includedby refid="fr__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h</includedby>
+    <incdepgraph>
+      <node id="85">
+        <label>assert.h</label>
+      </node>
+      <node id="80">
+        <label>stdint.h</label>
+      </node>
+      <node id="82">
+        <label>stdlib.h</label>
+      </node>
+      <node id="83">
+        <label>string.h</label>
+      </node>
+      <node id="86">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="79" relation="include">
+        </childnode>
+      </node>
+      <node id="79">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+      </node>
+      <node id="84">
+        <label>math.h</label>
+      </node>
+      <node id="78">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h</label>
+        <link refid="frmn.h"/>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+      </node>
+      <node id="81">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="88">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h</label>
+        <link refid="fr__forward_8h_source"/>
+      </node>
+      <node id="87">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h</label>
+        <link refid="frmn.h"/>
+        <childnode refid="88" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="frmn_8h_1a7c45ec044f128fc30ab7c3e1d46a73f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* frmn_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>frmn_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the face recognition process with specified model. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format, size is 56x56, normalized </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0: C implement; 1: handwrite xtensa instruction implement </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Face ID feature vector, size is 512 </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="frmn_8h_1a2749780a366baec3258f0a7c3f4839f2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* frmn2p_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>frmn2p_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="frmn_8h_1a8dd84122639f10b3c28c35fbffd2d8bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* mfn56_42m_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>mfn56_42m_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="31" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="frmn_8h_1a83db35ab9f09edb20afbe541c04eb283" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* mfn56_72m_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>mfn56_72m_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="frmn_8h_1aabb28e0317fdb05c5498f1375eb7af8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* mfn56_112m_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>mfn56_112m_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="35" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="frmn_8h_1ac764a393ead19aa5adc7634da07f2f11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+        <definition>dl_matrix3dq_t* mfn56_156m_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>mfn56_156m_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="37" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="frmn_8h_1a9fb3d471be3e358fa1d69ad2fdde94c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* frmn</definition>
+        <argsstring>(dl_matrix3d_t *in)</argsstring>
+        <name>frmn</name>
+        <param>
+          <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <briefdescription>
+<para>Forward the face recognition process with frmn model. Calculate in float. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format, size is 56x56, normalized </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>dl_matrix3d_t* Face ID feature vector, size is 512 </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h" line="17" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3dq.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*frmn(<ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*in);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*frmn_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*frmn2p_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*mfn56_42m_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*mfn56_72m_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*mfn56_112m_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*mfn56_156m_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/frmn.h"/>
+  </compounddef>
+</doxygen>

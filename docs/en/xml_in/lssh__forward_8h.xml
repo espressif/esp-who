@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="lssh__forward_8h" kind="file" language="C++">
+    <compoundname>lssh_forward.h</compoundname>
+    <includes refid="image__util_8h" local="yes">image_util.h</includes>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="lssh_8h" local="yes">lssh.h</includes>
+    <incdepgraph>
+      <node id="147">
+        <label>assert.h</label>
+      </node>
+      <node id="150">
+        <label>freertos/FreeRTOS.h</label>
+      </node>
+      <node id="140">
+        <label>stdint.h</label>
+      </node>
+      <node id="145">
+        <label>stdlib.h</label>
+      </node>
+      <node id="149">
+        <label>lssh.h</label>
+        <link refid="lssh_8h_source"/>
+        <childnode refid="143" relation="include">
+        </childnode>
+        <childnode refid="148" relation="include">
+        </childnode>
+        <childnode refid="150" relation="include">
+        </childnode>
+      </node>
+      <node id="138">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h</label>
+        <link refid="lssh_forward.h"/>
+        <childnode refid="139" relation="include">
+        </childnode>
+        <childnode refid="143" relation="include">
+        </childnode>
+        <childnode refid="149" relation="include">
+        </childnode>
+      </node>
+      <node id="146">
+        <label>string.h</label>
+      </node>
+      <node id="148">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="143" relation="include">
+        </childnode>
+      </node>
+      <node id="143">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="140" relation="include">
+        </childnode>
+        <childnode refid="144" relation="include">
+        </childnode>
+        <childnode refid="145" relation="include">
+        </childnode>
+        <childnode refid="146" relation="include">
+        </childnode>
+        <childnode refid="141" relation="include">
+        </childnode>
+        <childnode refid="147" relation="include">
+        </childnode>
+      </node>
+      <node id="141">
+        <label>math.h</label>
+      </node>
+      <node id="142">
+        <label>mtmn.h</label>
+        <link refid="mtmn_8h_source"/>
+        <childnode refid="143" relation="include">
+        </childnode>
+        <childnode refid="148" relation="include">
+        </childnode>
+      </node>
+      <node id="144">
+        <label>stdio.h</label>
+      </node>
+      <node id="139">
+        <label>image_util.h</label>
+        <link refid="image__util_8h_source"/>
+        <childnode refid="140" relation="include">
+        </childnode>
+        <childnode refid="141" relation="include">
+        </childnode>
+        <childnode refid="142" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="lssh__forward_8h_1a037bae78e9fc7868d90880157f2be35e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref></type>
+        <definition>lssh_config_t lssh_get_config</definition>
+        <argsstring>(fptp_t min_face, fptp_t score_threshold, fptp_t nms_threshold, int image_height, int image_width)</argsstring>
+        <name>lssh_get_config</name>
+        <param>
+          <type>fptp_t</type>
+          <declname>min_face</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>score_threshold</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>nms_threshold</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>image_height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>image_width</declname>
+        </param>
+        <briefdescription>
+<para>Get the min_face, score_threshold, nms_threshold and shape of input image. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>min_face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The minimun face that can be detected </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>score_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold， used to filter candidates by score </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nms_threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>NMS threshold， used to filter out overlapping boxes </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image height </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image width </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref> Lssh configuration </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h" line="45" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="lssh__forward_8h_1aacdbd27bcc5209360b8e46a7c6b1b044" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void lssh_update_config</definition>
+        <argsstring>(lssh_config_t *config, fptp_t min_face, int image_height, int image_width)</argsstring>
+        <name>lssh_update_config</name>
+        <param>
+          <type><ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref> *</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>fptp_t</type>
+          <declname>min_face</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>image_height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>image_width</declname>
+        </param>
+        <briefdescription>
+<para>Update config once the input image shape is changeed. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Original configuration </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>min_face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The minimun face that can be detected </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_height</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image height </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_width</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image width </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h" line="55" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="lssh__forward_8h_1a480e6ae06ddd905273788ff05b3c82f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+        <definition>box_array_t* lssh_detect_object</definition>
+        <argsstring>(dl_matrix3du_t *image, lssh_config_t config)</argsstring>
+        <name>lssh_detect_object</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>image</declname>
+        </param>
+        <param>
+          <type><ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+<para>Do lssh forward to detect object. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>image</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input image </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Lssh configuration </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>box_array_t* The detection result </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h" line="64" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/><sp/>*<sp/>ESPRESSIF<sp/>MIT<sp/>License</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/>*<sp/>Copyright<sp/>(c)<sp/>2018<sp/>&lt;ESPRESSIF<sp/>SYSTEMS<sp/>(SHANGHAI)<sp/>PTE<sp/>LTD&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/><sp/>*<sp/>Permission<sp/>is<sp/>hereby<sp/>granted<sp/>for<sp/>use<sp/>on<sp/>ESPRESSIF<sp/>SYSTEMS<sp/>products<sp/>only,<sp/>in<sp/>which<sp/>case,</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/>*<sp/>it<sp/>is<sp/>free<sp/>of<sp/>charge,<sp/>to<sp/>any<sp/>person<sp/>obtaining<sp/>a<sp/>copy<sp/>of<sp/>this<sp/>software<sp/>and<sp/>associated</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/><sp/>*<sp/>documentation<sp/>files<sp/>(the<sp/>&quot;Software&quot;),<sp/>to<sp/>deal<sp/>in<sp/>the<sp/>Software<sp/>without<sp/>restriction,<sp/>including</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/>*<sp/>without<sp/>limitation<sp/>the<sp/>rights<sp/>to<sp/>use,<sp/>copy,<sp/>modify,<sp/>merge,<sp/>publish,<sp/>distribute,<sp/>sublicense,</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/>*<sp/>and/or<sp/>sell<sp/>copies<sp/>of<sp/>the<sp/>Software,<sp/>and<sp/>to<sp/>permit<sp/>persons<sp/>to<sp/>whom<sp/>the<sp/>Software<sp/>is<sp/>furnished</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/>*<sp/>to<sp/>do<sp/>so,<sp/>subject<sp/>to<sp/>the<sp/>following<sp/>conditions:</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/>*<sp/>The<sp/>above<sp/>copyright<sp/>notice<sp/>and<sp/>this<sp/>permission<sp/>notice<sp/>shall<sp/>be<sp/>included<sp/>in<sp/>all<sp/>copies<sp/>or</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/>*<sp/>substantial<sp/>portions<sp/>of<sp/>the<sp/>Software.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/>*<sp/>THE<sp/>SOFTWARE<sp/>IS<sp/>PROVIDED<sp/>&quot;AS<sp/>IS&quot;,<sp/>WITHOUT<sp/>WARRANTY<sp/>OF<sp/>ANY<sp/>KIND,<sp/>EXPRESS<sp/>OR</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/>*<sp/>IMPLIED,<sp/>INCLUDING<sp/>BUT<sp/>NOT<sp/>LIMITED<sp/>TO<sp/>THE<sp/>WARRANTIES<sp/>OF<sp/>MERCHANTABILITY,<sp/>FITNESS</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/>*<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE<sp/>AND<sp/>NONINFRINGEMENT.<sp/>IN<sp/>NO<sp/>EVENT<sp/>SHALL<sp/>THE<sp/>AUTHORS<sp/>OR</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/>*<sp/>COPYRIGHT<sp/>HOLDERS<sp/>BE<sp/>LIABLE<sp/>FOR<sp/>ANY<sp/>CLAIM,<sp/>DAMAGES<sp/>OR<sp/>OTHER<sp/>LIABILITY,<sp/>WHETHER</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/><sp/>*<sp/>IN<sp/>AN<sp/>ACTION<sp/>OF<sp/>CONTRACT,<sp/>TORT<sp/>OR<sp/>OTHERWISE,<sp/>ARISING<sp/>FROM,<sp/>OUT<sp/>OF<sp/>OR<sp/>IN</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/><sp/>*<sp/>CONNECTION<sp/>WITH<sp/>THE<sp/>SOFTWARE<sp/>OR<sp/>THE<sp/>USE<sp/>OR<sp/>OTHER<sp/>DEALINGS<sp/>IN<sp/>THE<sp/>SOFTWARE.</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;image_util.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lssh.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref><sp/>lssh_get_config(fptp_t<sp/>min_face,<sp/>fptp_t<sp/>score_threshold,<sp/>fptp_t<sp/>nms_threshold,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>image_height,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>image_width);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>lssh_update_config(<ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref><sp/>*config,<sp/>fptp_t<sp/>min_face,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>image_height,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>image_width);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*lssh_detect_object(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*image,<sp/><ref refid="structlssh__config__t" kindref="compound">lssh_config_t</ref><sp/>config);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h"/>
+  </compounddef>
+</doxygen>

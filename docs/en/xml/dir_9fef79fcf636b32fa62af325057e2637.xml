@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="dir_9fef79fcf636b32fa62af325057e2637" kind="dir">
+    <compoundname>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face</compoundname>
+    <innerdir refid="dir_6cd9c8766f05d4bb2de8c40000135dfb">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection</innerdir>
+    <innerdir refid="dir_7dd9e935c79742bb060130e993a09046">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition</innerdir>
+    <innerdir refid="dir_c66195c1b2e4694702ecc77b24538dec">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util</innerdir>
+    <innerdir refid="dir_b5e3f3068a9b64acebd03cda81d28711">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib</innerdir>
+    <innerdir refid="dir_eb37a087707241a60955df9e2ced5435">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection</innerdir>
+    <innerdir refid="dir_b0f01478337d96be4d08350087682c29">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/"/>
+  </compounddef>
+</doxygen>

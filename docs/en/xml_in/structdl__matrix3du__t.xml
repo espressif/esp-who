@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structdl__matrix3du__t" kind="struct" language="C++" prot="public">
+    <compoundname>dl_matrix3du_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdl__matrix3du__t_1ae2f610578bd83ca809473e55d8b65ef4" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3du_t::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Width </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="64" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3du__t_1ac0de84feb578bd57356617e553017988" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3du_t::h</definition>
+        <argsstring></argsstring>
+        <name>h</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Height </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="65" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3du__t_1a46067e847845faf59a732a4df8c7e255" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3du_t::c</definition>
+        <argsstring></argsstring>
+        <name>c</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Channel </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="66" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3du__t_1a7f561eea613524f5341a1d88aaa4980d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3du_t::n</definition>
+        <argsstring></argsstring>
+        <name>n</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Number of filter, input and output must be 1 </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="67" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3du__t_1abfa682ab49e6db32be67018cb3f95dc2" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3du_t::stride</definition>
+        <argsstring></argsstring>
+        <name>stride</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Step between lines </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="68" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3du__t_1a5abbe164b8de24c82d3f9462f677fa6c" prot="public" static="no" mutable="no">
+        <type>uc_t *</type>
+        <definition>uc_t* dl_matrix3du_t::item</definition>
+        <argsstring></argsstring>
+        <name>item</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Data </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="69" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" line="63" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3d.h" bodystart="62" bodyend="70"/>
+    <listofallmembers>
+      <member refid="structdl__matrix3du__t_1a46067e847845faf59a732a4df8c7e255" prot="public" virt="non-virtual"><scope>dl_matrix3du_t</scope><name>c</name></member>
+      <member refid="structdl__matrix3du__t_1ac0de84feb578bd57356617e553017988" prot="public" virt="non-virtual"><scope>dl_matrix3du_t</scope><name>h</name></member>
+      <member refid="structdl__matrix3du__t_1a5abbe164b8de24c82d3f9462f677fa6c" prot="public" virt="non-virtual"><scope>dl_matrix3du_t</scope><name>item</name></member>
+      <member refid="structdl__matrix3du__t_1a7f561eea613524f5341a1d88aaa4980d" prot="public" virt="non-virtual"><scope>dl_matrix3du_t</scope><name>n</name></member>
+      <member refid="structdl__matrix3du__t_1abfa682ab49e6db32be67018cb3f95dc2" prot="public" virt="non-virtual"><scope>dl_matrix3du_t</scope><name>stride</name></member>
+      <member refid="structdl__matrix3du__t_1ae2f610578bd83ca809473e55d8b65ef4" prot="public" virt="non-virtual"><scope>dl_matrix3du_t</scope><name>w</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

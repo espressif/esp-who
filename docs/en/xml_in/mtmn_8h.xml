@@ -1,0 +1,520 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="mtmn_8h" kind="file" language="C++">
+    <compoundname>mtmn.h</compoundname>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="dl__lib__matrix3dq_8h" local="yes">dl_lib_matrix3dq.h</includes>
+    <includedby refid="fd__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h</includedby>
+    <includedby refid="image__util_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h</includedby>
+    <incdepgraph>
+      <node id="130">
+        <label>assert.h</label>
+      </node>
+      <node id="125">
+        <label>stdint.h</label>
+      </node>
+      <node id="127">
+        <label>stdlib.h</label>
+      </node>
+      <node id="128">
+        <label>string.h</label>
+      </node>
+      <node id="131">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="124" relation="include">
+        </childnode>
+      </node>
+      <node id="124">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="125" relation="include">
+        </childnode>
+        <childnode refid="126" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+        <childnode refid="128" relation="include">
+        </childnode>
+        <childnode refid="129" relation="include">
+        </childnode>
+        <childnode refid="130" relation="include">
+        </childnode>
+      </node>
+      <node id="129">
+        <label>math.h</label>
+      </node>
+      <node id="123">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h</label>
+        <link refid="mtmn.h"/>
+        <childnode refid="124" relation="include">
+        </childnode>
+        <childnode refid="131" relation="include">
+        </childnode>
+      </node>
+      <node id="126">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="133">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h</label>
+        <link refid="fd__forward_8h_source"/>
+      </node>
+      <node id="135">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h</label>
+        <link refid="fr__forward_8h_source"/>
+      </node>
+      <node id="136">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include/lssh_forward.h</label>
+        <link refid="lssh__forward_8h_source"/>
+      </node>
+      <node id="137">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h</label>
+        <link refid="pe__forward_8h_source"/>
+      </node>
+      <node id="132">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h</label>
+        <link refid="mtmn.h"/>
+        <childnode refid="133" relation="include">
+        </childnode>
+        <childnode refid="134" relation="include">
+        </childnode>
+      </node>
+      <node id="134">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h</label>
+        <link refid="image__util_8h_source"/>
+        <childnode refid="133" relation="include">
+        </childnode>
+        <childnode refid="135" relation="include">
+        </childnode>
+        <childnode refid="136" relation="include">
+        </childnode>
+        <childnode refid="137" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structmtmn__net__t" prot="public">mtmn_net_t</innerclass>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="mtmn_8h_1a466b88b7165dd6c79834dcb23de1977e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void mtmn_net_t_free</definition>
+        <argsstring>(mtmn_net_t *p)</argsstring>
+        <name>mtmn_net_t_free</name>
+        <param>
+          <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+<para>Free a <ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref>. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A <ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> pointer </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="60" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1ab8453289fce31fb9c09b74924b26a6c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* pnet_lite_f</definition>
+        <argsstring>(dl_matrix3du_t *in)</argsstring>
+        <name>pnet_lite_f</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <briefdescription>
+<para>Forward the pnet process, coarse detection. Calculate in float. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format, size is 320x240 </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every pixel, and box offset with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="68" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1af6ab35987a47e7411fac8d7bdd6df502" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* rnet_lite_f_with_score_verify</definition>
+        <argsstring>(dl_matrix3du_t *in, float threshold)</argsstring>
+        <name>rnet_lite_f_with_score_verify</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>threshold</declname>
+        </param>
+        <briefdescription>
+<para>Forward the rnet process, fine determine the boxes from pnet. Calculate in float. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold to detect human face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every box, and box offset with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="77" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1a2a58cb0b8de195a6cb3a513940cc8883" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* onet_lite_f_with_score_verify</definition>
+        <argsstring>(dl_matrix3du_t *in, float threshold)</argsstring>
+        <name>onet_lite_f_with_score_verify</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>threshold</declname>
+        </param>
+        <briefdescription>
+<para>Forward the onet process, fine determine the boxes from rnet. Calculate in float. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold to detect human face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every box, box offset, and landmark with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="86" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1a6ae762ee1d61f2c450f60ad1d5b97160" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* pnet_lite_q</definition>
+        <argsstring>(dl_matrix3du_t *in, dl_conv_mode mode)</argsstring>
+        <name>pnet_lite_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the pnet process, coarse detection. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format, size is 320x240 </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every pixel, and box offset with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1a227242678e5676598f1b5a90289714be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* rnet_lite_q_with_score_verify</definition>
+        <argsstring>(dl_matrix3du_t *in, float threshold, dl_conv_mode mode)</argsstring>
+        <name>rnet_lite_q_with_score_verify</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>threshold</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the rnet process, fine determine the boxes from pnet. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold to detect human face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every box, and box offset with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="103" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1a5cfda68f920f82c54b2b5d3f70a3ce6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* onet_lite_q_with_score_verify</definition>
+        <argsstring>(dl_matrix3du_t *in, float threshold, dl_conv_mode mode)</argsstring>
+        <name>onet_lite_q_with_score_verify</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>threshold</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the onet process, fine determine the boxes from rnet. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold to detect human face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every box, box offset, and landmark with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="112" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1a1edf3cc56a9a4aba0ceb8d6494943c6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* pnet_heavy_q</definition>
+        <argsstring>(dl_matrix3du_t *in, dl_conv_mode mode)</argsstring>
+        <name>pnet_heavy_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the pnet process, coarse detection. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format, size is 320x240 </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every pixel, and box offset with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="120" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1a9d9c7bc8aa0e49b912fdf5096fd40b6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* rnet_heavy_q_with_score_verify</definition>
+        <argsstring>(dl_matrix3du_t *in, float threshold, dl_conv_mode mode)</argsstring>
+        <name>rnet_heavy_q_with_score_verify</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>threshold</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the rnet process, fine determine the boxes from pnet. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold to detect human face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every box, and box offset with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="129" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="mtmn_8h_1afbf480578b17e157b6b05a63248b0ec2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref> *</type>
+        <definition>mtmn_net_t* onet_heavy_q_with_score_verify</definition>
+        <argsstring>(dl_matrix3du_t *in, float threshold, dl_conv_mode mode)</argsstring>
+        <name>onet_heavy_q_with_score_verify</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>threshold</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the onet process, fine determine the boxes from rnet. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>threshold</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Score threshold to detect human face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scores for every box, box offset, and landmark with respect. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="138" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/><sp/>*<sp/>ESPRESSIF<sp/>MIT<sp/>License</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/><sp/>*<sp/>Copyright<sp/>(c)<sp/>2018<sp/>&lt;ESPRESSIF<sp/>SYSTEMS<sp/>(SHANGHAI)<sp/>PTE<sp/>LTD&gt;</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/><sp/>*<sp/>Permission<sp/>is<sp/>hereby<sp/>granted<sp/>for<sp/>use<sp/>on<sp/>ESPRESSIF<sp/>SYSTEMS<sp/>products<sp/>only,<sp/>in<sp/>which<sp/>case,</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/><sp/>*<sp/>it<sp/>is<sp/>free<sp/>of<sp/>charge,<sp/>to<sp/>any<sp/>person<sp/>obtaining<sp/>a<sp/>copy<sp/>of<sp/>this<sp/>software<sp/>and<sp/>associated</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/><sp/>*<sp/>documentation<sp/>files<sp/>(the<sp/>&quot;Software&quot;),<sp/>to<sp/>deal<sp/>in<sp/>the<sp/>Software<sp/>without<sp/>restriction,<sp/>including</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/><sp/>*<sp/>without<sp/>limitation<sp/>the<sp/>rights<sp/>to<sp/>use,<sp/>copy,<sp/>modify,<sp/>merge,<sp/>publish,<sp/>distribute,<sp/>sublicense,</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/><sp/>*<sp/>and/or<sp/>sell<sp/>copies<sp/>of<sp/>the<sp/>Software,<sp/>and<sp/>to<sp/>permit<sp/>persons<sp/>to<sp/>whom<sp/>the<sp/>Software<sp/>is<sp/>furnished</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"><sp/><sp/>*<sp/>to<sp/>do<sp/>so,<sp/>subject<sp/>to<sp/>the<sp/>following<sp/>conditions:</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/>*<sp/>The<sp/>above<sp/>copyright<sp/>notice<sp/>and<sp/>this<sp/>permission<sp/>notice<sp/>shall<sp/>be<sp/>included<sp/>in<sp/>all<sp/>copies<sp/>or</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/>*<sp/>substantial<sp/>portions<sp/>of<sp/>the<sp/>Software.</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/>*<sp/>THE<sp/>SOFTWARE<sp/>IS<sp/>PROVIDED<sp/>&quot;AS<sp/>IS&quot;,<sp/>WITHOUT<sp/>WARRANTY<sp/>OF<sp/>ANY<sp/>KIND,<sp/>EXPRESS<sp/>OR</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/>*<sp/>IMPLIED,<sp/>INCLUDING<sp/>BUT<sp/>NOT<sp/>LIMITED<sp/>TO<sp/>THE<sp/>WARRANTIES<sp/>OF<sp/>MERCHANTABILITY,<sp/>FITNESS</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/>*<sp/>FOR<sp/>A<sp/>PARTICULAR<sp/>PURPOSE<sp/>AND<sp/>NONINFRINGEMENT.<sp/>IN<sp/>NO<sp/>EVENT<sp/>SHALL<sp/>THE<sp/>AUTHORS<sp/>OR</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/>*<sp/>COPYRIGHT<sp/>HOLDERS<sp/>BE<sp/>LIABLE<sp/>FOR<sp/>ANY<sp/>CLAIM,<sp/>DAMAGES<sp/>OR<sp/>OTHER<sp/>LIABILITY,<sp/>WHETHER</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/><sp/>*<sp/>IN<sp/>AN<sp/>ACTION<sp/>OF<sp/>CONTRACT,<sp/>TORT<sp/>OR<sp/>OTHERWISE,<sp/>ARISING<sp/>FROM,<sp/>OUT<sp/>OF<sp/>OR<sp/>IN</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/><sp/>*<sp/>CONNECTION<sp/>WITH<sp/>THE<sp/>SOFTWARE<sp/>OR<sp/>THE<sp/>USE<sp/>OR<sp/>OTHER<sp/>DEALINGS<sp/>IN<sp/>THE<sp/>SOFTWARE.</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/><sp/>*</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3dq.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37" refid="structmtmn__net__t" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="39" refid="structmtmn__net__t_1afe8da5c65474b55658f5743be97147f8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*<ref refid="structmtmn__net__t_1afe8da5c65474b55658f5743be97147f8" kindref="member">category</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="40" refid="structmtmn__net__t_1a53bbafabccad2a6468eafc7eb0775000" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*<ref refid="structmtmn__net__t_1a53bbafabccad2a6468eafc7eb0775000" kindref="member">offset</ref>;<sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="41" refid="structmtmn__net__t_1aa0f9c681435e990a9d43063bf6b66dfe" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*<ref refid="structmtmn__net__t_1aa0f9c681435e990a9d43063bf6b66dfe" kindref="member">landmark</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref>;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>mtmn_net_t_free(<ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*p);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*pnet_lite_f(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*rnet_lite_f_with_score_verify(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>threshold);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*onet_lite_f_with_score_verify(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>threshold);</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*pnet_lite_q(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*rnet_lite_q_with_score_verify(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>threshold,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*onet_lite_q_with_score_verify(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>threshold,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*pnet_heavy_q(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*rnet_heavy_q_with_score_verify(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>threshold,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structmtmn__net__t" kindref="compound">mtmn_net_t</ref><sp/>*onet_heavy_q_with_score_verify(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*in,<sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>threshold,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h"/>
+  </compounddef>
+</doxygen>

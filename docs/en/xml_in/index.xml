@@ -1,0 +1,501 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.11">
+  <compound refid="structbox__t" kind="struct"><name>box_t</name>
+    <member refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" kind="variable"><name>box_p</name></member>
+  </compound>
+  <compound refid="structdetection__result__t" kind="struct"><name>detection_result_t</name>
+    <member refid="structdetection__result__t_1a6779fedc07da143d4dcd42d11a8c0fc9" kind="variable"><name>num</name></member>
+    <member refid="structdetection__result__t_1aae3db2604b456bc373c94937f07c5c23" kind="variable"><name>cls</name></member>
+    <member refid="structdetection__result__t_1ac11052eff4ea24dce4d07dbe70649958" kind="variable"><name>score</name></member>
+    <member refid="structdetection__result__t_1a660a256dc017636cb5ba3ba303a22451" kind="variable"><name>boxes</name></member>
+  </compound>
+  <compound refid="structdl__matrix3d__mobilenet__config__t" kind="struct"><name>dl_matrix3d_mobilenet_config_t</name>
+    <member refid="structdl__matrix3d__mobilenet__config__t_1a9e6126298d55c45fb88ec74dcb7751b8" kind="variable"><name>stride_x</name></member>
+    <member refid="structdl__matrix3d__mobilenet__config__t_1a0f86c641d3d06a43df28d964df02e7d7" kind="variable"><name>stride_y</name></member>
+    <member refid="structdl__matrix3d__mobilenet__config__t_1abf3a23e533dc319126b457c164a680b2" kind="variable"><name>padding</name></member>
+  </compound>
+  <compound refid="structdl__matrix3d__t" kind="struct"><name>dl_matrix3d_t</name>
+    <member refid="structdl__matrix3d__t_1a39e056719d118793292a5d6e3beb971f" kind="variable"><name>w</name></member>
+    <member refid="structdl__matrix3d__t_1a676ea8d7f69063b9892a8f205b58b2b2" kind="variable"><name>h</name></member>
+    <member refid="structdl__matrix3d__t_1a2b660ca19d83d57dcbfc07592c427911" kind="variable"><name>c</name></member>
+    <member refid="structdl__matrix3d__t_1a7d475a2558bcdf0416bbeaa301080154" kind="variable"><name>n</name></member>
+    <member refid="structdl__matrix3d__t_1a9dd7ccaa76fff5e5fdf1ecec98e65a95" kind="variable"><name>stride</name></member>
+    <member refid="structdl__matrix3d__t_1af3ed0e0fc239be5f4cbe8fd2bb560689" kind="variable"><name>item</name></member>
+  </compound>
+  <compound refid="structdl__matrix3dq__blazeblock__config__t" kind="struct"><name>dl_matrix3dq_blazeblock_config_t</name>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1aadc2939c713e93760e6dfadbc6392bee" kind="variable"><name>stride_x</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1a3dc1eca612902e6f384c7679a4477b68" kind="variable"><name>stride_y</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1ab17e266bfec78f4d9f4d8555fd29090a" kind="variable"><name>padding</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1af3748578fd33e24f91cbea3f02072dec" kind="variable"><name>mode</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1a9582f112c6950f9d0f055946180b0267" kind="variable"><name>dw1_exponent</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1add6c8e25d73d6f0f53fdb76663694d5d" kind="variable"><name>pw1_exponent</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1a6f96e07c624e724d20d6f628fd8eddcf" kind="variable"><name>dw2_exponent</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1ac3213773f7d13f92e0f6df09668a85a4" kind="variable"><name>pw2_exponent</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1accb475e783097843a096d0ff8948e8cf" kind="variable"><name>shortcut</name></member>
+    <member refid="structdl__matrix3dq__blazeblock__config__t_1a7bb5f4f3b1ce14aae271b1af1ec7cb0b" kind="variable"><name>save_input</name></member>
+  </compound>
+  <compound refid="structdl__matrix3dq__mobilenet__config__t" kind="struct"><name>dl_matrix3dq_mobilenet_config_t</name>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1a28fb5d4545e4dd7183da653ff0ca2911" kind="variable"><name>stride_x</name></member>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1a4bd05eac31f7331b92789883e96350b9" kind="variable"><name>stride_y</name></member>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1af52fa82a602f79af99c0e050d4f38a07" kind="variable"><name>padding</name></member>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1a34c2dab915fbe0720143a8a0bc21afbc" kind="variable"><name>mode</name></member>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1a149b8a541c1ec2879cf4cdd82b8a0ae3" kind="variable"><name>dilate_exponent</name></member>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1a10348ab9845614879ee601f04e0b18a3" kind="variable"><name>depthwise_exponent</name></member>
+    <member refid="structdl__matrix3dq__mobilenet__config__t_1a3b97ff81aabb91333fbd0e3ed0fc5268" kind="variable"><name>compress_exponent</name></member>
+  </compound>
+  <compound refid="structdl__matrix3dq__t" kind="struct"><name>dl_matrix3dq_t</name>
+    <member refid="structdl__matrix3dq__t_1ae6a8391907091b2c07af1ef3905fd9c7" kind="variable"><name>w</name></member>
+    <member refid="structdl__matrix3dq__t_1a192a936a7a579127ed02bdde49cfd42f" kind="variable"><name>h</name></member>
+    <member refid="structdl__matrix3dq__t_1af27b1086dc3980059284d2f8c109a98a" kind="variable"><name>c</name></member>
+    <member refid="structdl__matrix3dq__t_1a4cd28e7c8bc392253cf950cc5a6e4eb8" kind="variable"><name>n</name></member>
+    <member refid="structdl__matrix3dq__t_1a1fd20ca847419b9ec13215131cdbf2e9" kind="variable"><name>stride</name></member>
+    <member refid="structdl__matrix3dq__t_1a7cfcaaadf968f2288d6d81f18b475953" kind="variable"><name>exponent</name></member>
+    <member refid="structdl__matrix3dq__t_1adf4dcad61fd27251938e9487a57fcef9" kind="variable"><name>item</name></member>
+  </compound>
+  <compound refid="structdl__matrix3du__t" kind="struct"><name>dl_matrix3du_t</name>
+    <member refid="structdl__matrix3du__t_1ae2f610578bd83ca809473e55d8b65ef4" kind="variable"><name>w</name></member>
+    <member refid="structdl__matrix3du__t_1ac0de84feb578bd57356617e553017988" kind="variable"><name>h</name></member>
+    <member refid="structdl__matrix3du__t_1a46067e847845faf59a732a4df8c7e255" kind="variable"><name>c</name></member>
+    <member refid="structdl__matrix3du__t_1a7f561eea613524f5341a1d88aaa4980d" kind="variable"><name>n</name></member>
+    <member refid="structdl__matrix3du__t_1abfa682ab49e6db32be67018cb3f95dc2" kind="variable"><name>stride</name></member>
+    <member refid="structdl__matrix3du__t_1a5abbe164b8de24c82d3f9462f677fa6c" kind="variable"><name>item</name></member>
+  </compound>
+  <compound refid="structface__id__list" kind="struct"><name>face_id_list</name>
+    <member refid="structface__id__list_1a44e216b594f83a0f5367288afa03da80" kind="variable"><name>head</name></member>
+    <member refid="structface__id__list_1ab0e672cfe36ae0c4f6625ff062a4ab58" kind="variable"><name>tail</name></member>
+    <member refid="structface__id__list_1abcc6469afed569568c289a1bc483ec16" kind="variable"><name>count</name></member>
+    <member refid="structface__id__list_1a1ea4d50bbdca9fc1027b9f9fbdfccdd2" kind="variable"><name>size</name></member>
+    <member refid="structface__id__list_1a83189b63de089f1ad761bdb7388cd654" kind="variable"><name>confirm_times</name></member>
+    <member refid="structface__id__list_1a69af91734e100e9e6b97089cbe64bf8f" kind="variable"><name>id_list</name></member>
+  </compound>
+  <compound refid="structface__id__name__list" kind="struct"><name>face_id_name_list</name>
+    <member refid="structface__id__name__list_1a5b87c9352d3a401632ac3328d89159f0" kind="variable"><name>head</name></member>
+    <member refid="structface__id__name__list_1a79e16aedc607e3ae0f7d969f061341e0" kind="variable"><name>tail</name></member>
+    <member refid="structface__id__name__list_1ac3514ea47c8d2d13a9525c4ab4b5a474" kind="variable"><name>count</name></member>
+    <member refid="structface__id__name__list_1a02035a83240b1a2b4cf9119783d6b9da" kind="variable"><name>confirm_times</name></member>
+  </compound>
+  <compound refid="structhd__config__t" kind="struct"><name>hd_config_t</name>
+    <member refid="structhd__config__t_1a8aca571d002f64c25f735c199119c4c9" kind="variable"><name>target_size</name></member>
+    <member refid="structhd__config__t_1adbd047e9e788433d90f99a5a503bd996" kind="variable"><name>score_threshold</name></member>
+    <member refid="structhd__config__t_1a26bfcc8ff3b0ec2769f2c76f87b13dcf" kind="variable"><name>nms_threshold</name></member>
+  </compound>
+  <compound refid="structlandmark__t" kind="struct"><name>landmark_t</name>
+    <member refid="structlandmark__t_1a35e7a48b9c162cf42e0fa74106296d55" kind="variable"><name>landmark_p</name></member>
+  </compound>
+  <compound refid="structlssh__config__t" kind="struct"><name>lssh_config_t</name>
+    <member refid="structlssh__config__t_1a68288734da9db766e9f944611d0ccc27" kind="variable"><name>resized_height</name></member>
+    <member refid="structlssh__config__t_1af189752407a5c9b73418d1d5e2165520" kind="variable"><name>resized_width</name></member>
+    <member refid="structlssh__config__t_1ae6cff65abab02888b658ffd20990c211" kind="variable"><name>y_resize_scale</name></member>
+    <member refid="structlssh__config__t_1ac1ccf2ad4fd44d91a69c552d8185b1a2" kind="variable"><name>x_resize_scale</name></member>
+    <member refid="structlssh__config__t_1a82f722904a1f3c8bac411d1dd702d9e7" kind="variable"><name>enabled_top_k</name></member>
+    <member refid="structlssh__config__t_1aeabf8113d07e8142161cf5c752e8ff92" kind="variable"><name>score_threshold</name></member>
+    <member refid="structlssh__config__t_1a8fc908f96a1d1cfe559375de501dd3f5" kind="variable"><name>nms_threshold</name></member>
+    <member refid="structlssh__config__t_1ae0283858dd070f00e9646ff8a7a059f3" kind="variable"><name>mode</name></member>
+  </compound>
+  <compound refid="structlssh__module__config__t" kind="struct"><name>lssh_module_config_t</name>
+    <member refid="structlssh__module__config__t_1a33812319b8cb82b5047f88d27f21d91c" kind="variable"><name>anchor_size</name></member>
+    <member refid="structlssh__module__config__t_1a8bf9e3251b691f9110376de85a58dce6" kind="variable"><name>stride</name></member>
+    <member refid="structlssh__module__config__t_1a08e22e0e22db5777f027c0072e8ee7d2" kind="variable"><name>boundary</name></member>
+  </compound>
+  <compound refid="structlssh__module__result__t" kind="struct"><name>lssh_module_result_t</name>
+    <member refid="structlssh__module__result__t_1aab34d480dd4f35a27d413b87033c3797" kind="variable"><name>category</name></member>
+    <member refid="structlssh__module__result__t_1a30d98853f54649a46707786e86e1974c" kind="variable"><name>box_offset</name></member>
+    <member refid="structlssh__module__result__t_1a0d32baa8bf791440327cbaddd334b0e5" kind="variable"><name>landmark_offset</name></member>
+  </compound>
+  <compound refid="structlssh__modules__config__t" kind="struct"><name>lssh_modules_config_t</name>
+    <member refid="structlssh__modules__config__t_1a4877050bcce30c7404d5a75e8060d7d7" kind="variable"><name>module_config</name></member>
+    <member refid="structlssh__modules__config__t_1ad8a738f7cb649b3be17bac803d018e97" kind="variable"><name>number</name></member>
+  </compound>
+  <compound refid="structMatrix" kind="struct"><name>Matrix</name>
+    <member refid="structMatrix_1abb3704d5d60a7e8c996f7ba175d61e75" kind="variable"><name>w</name></member>
+    <member refid="structMatrix_1af2a8ad17021ab601cde1f7ed5d9d944f" kind="variable"><name>h</name></member>
+    <member refid="structMatrix_1aaaf51fc9b7cb2d8c6d317d3ee6feb675" kind="variable"><name>array</name></member>
+  </compound>
+  <compound refid="structmtmn__config__t" kind="struct"><name>mtmn_config_t</name>
+    <member refid="structmtmn__config__t_1a0d6021a3604af36c95c3494b35477448" kind="variable"><name>min_face</name></member>
+    <member refid="structmtmn__config__t_1a648afd9fd7a3752276c7be0ec1822a53" kind="variable"><name>pyramid</name></member>
+    <member refid="structmtmn__config__t_1aa3c0368e1a610694f9d77c178a8fa7a3" kind="variable"><name>pyramid_times</name></member>
+    <member refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" kind="variable"><name>p_threshold</name></member>
+    <member refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" kind="variable"><name>r_threshold</name></member>
+    <member refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" kind="variable"><name>o_threshold</name></member>
+    <member refid="structmtmn__config__t_1a8f3538b015c16c9e9319116005d00f92" kind="variable"><name>type</name></member>
+  </compound>
+  <compound refid="structmtmn__net__t" kind="struct"><name>mtmn_net_t</name>
+    <member refid="structmtmn__net__t_1afe8da5c65474b55658f5743be97147f8" kind="variable"><name>category</name></member>
+    <member refid="structmtmn__net__t_1a53bbafabccad2a6468eafc7eb0775000" kind="variable"><name>offset</name></member>
+    <member refid="structmtmn__net__t_1aa0f9c681435e990a9d43063bf6b66dfe" kind="variable"><name>landmark</name></member>
+  </compound>
+  <compound refid="structnet__config__t" kind="struct"><name>net_config_t</name>
+    <member refid="structnet__config__t_1a3f9bd00953d9c684dd983affc4f6f177" kind="variable"><name>w</name></member>
+    <member refid="structnet__config__t_1ae3141d026b731284fdaa4f596ac5ebf5" kind="variable"><name>h</name></member>
+    <member refid="structnet__config__t_1a40c3de0dfa1ff1d0d112330fd47db799" kind="variable"><name>threshold</name></member>
+  </compound>
+  <compound refid="structtag__box__list" kind="struct"><name>tag_box_list</name>
+    <member refid="structtag__box__list_1a998af69f8cb372b1d7cc278825b529b2" kind="variable"><name>score</name></member>
+    <member refid="structtag__box__list_1a4e437a34b8cdb3a691ffbe5a394aec19" kind="variable"><name>box</name></member>
+    <member refid="structtag__box__list_1a57e231efbf6860f68aa4771c979209a5" kind="variable"><name>landmark</name></member>
+    <member refid="structtag__box__list_1a74a848a667470ddc91b38a25dad84492" kind="variable"><name>len</name></member>
+  </compound>
+  <compound refid="structtag__face__id__node" kind="struct"><name>tag_face_id_node</name>
+    <member refid="structtag__face__id__node_1a34ea80580ae0d009d9cc67661bff14d7" kind="variable"><name>next</name></member>
+    <member refid="structtag__face__id__node_1a4152a8adab1f1c8771f5815a1db52993" kind="variable"><name>id_name</name></member>
+    <member refid="structtag__face__id__node_1a704f52e8039f328fac666e9ca9e52650" kind="variable"><name>id_vec</name></member>
+  </compound>
+  <compound refid="structtag__image__box" kind="struct"><name>tag_image_box</name>
+    <member refid="structtag__image__box_1a41c964433d469bfb9c9ea71ecc3a044c" kind="variable"><name>next</name></member>
+    <member refid="structtag__image__box_1abbf108457f4e057160303eee6d7236ba" kind="variable"><name>score</name></member>
+    <member refid="structtag__image__box_1a5e70f17d7a5d824cc6f23e833d1aba36" kind="variable"><name>box</name></member>
+    <member refid="structtag__image__box_1aa2c56de6b652ead006f8252e2d60238e" kind="variable"><name>offset</name></member>
+    <member refid="structtag__image__box_1a716aed52d6aec36be497ac219d46cbc9" kind="variable"><name>landmark</name></member>
+  </compound>
+  <compound refid="structtag__image__list" kind="struct"><name>tag_image_list</name>
+    <member refid="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" kind="variable"><name>head</name></member>
+    <member refid="structtag__image__list_1aafd19b61bae8d0e37d63810363784020" kind="variable"><name>origin_head</name></member>
+    <member refid="structtag__image__list_1a31a4fbe1c850eb6f8a6b0c1f21b12e46" kind="variable"><name>len</name></member>
+  </compound>
+  <compound refid="structtag__od__box__list" kind="struct"><name>tag_od_box_list</name>
+    <member refid="structtag__od__box__list_1a80b3977ff7c506ab76d3b64116bedc46" kind="variable"><name>score</name></member>
+    <member refid="structtag__od__box__list_1a5ead9dc1ffc1f6caa6f7f2b3f7752315" kind="variable"><name>cls</name></member>
+    <member refid="structtag__od__box__list_1a01642c27462b7e0ef67b95b4fb05317c" kind="variable"><name>box</name></member>
+    <member refid="structtag__od__box__list_1a2c19264624bf3e554c428709b94855d6" kind="variable"><name>len</name></member>
+  </compound>
+  <compound refid="structtag__od__image__box" kind="struct"><name>tag_od_image_box</name>
+    <member refid="structtag__od__image__box_1a1b5331f9fc7f6141656d53751d4853c2" kind="variable"><name>next</name></member>
+    <member refid="structtag__od__image__box_1a7add7a87737cb1bcd56b13b79ee3126f" kind="variable"><name>score</name></member>
+    <member refid="structtag__od__image__box_1a5ee25df95ff24f6f781a2ffcbd8e58ee" kind="variable"><name>cls</name></member>
+    <member refid="structtag__od__image__box_1a291c338b5b27ecaf4fdfdfcee2d57c17" kind="variable"><name>box</name></member>
+  </compound>
+  <compound refid="structtag__od__image__list" kind="struct"><name>tag_od_image_list</name>
+    <member refid="structtag__od__image__list_1a4cfc6b5d08bc489cfcc77e47fe19064b" kind="variable"><name>head</name></member>
+    <member refid="structtag__od__image__list_1a00af62e64f598a880b02eb83863c9628" kind="variable"><name>origin_head</name></member>
+    <member refid="structtag__od__image__list_1a3b646051f150aff6d0e8966b952a5275" kind="variable"><name>len</name></member>
+  </compound>
+  <compound refid="structthreshold__config__t" kind="struct"><name>threshold_config_t</name>
+    <member refid="structthreshold__config__t_1a76aabcbe7226e1aa609a3820b6056060" kind="variable"><name>score</name></member>
+    <member refid="structthreshold__config__t_1a697b773e63c2045c88f1da72844348a0" kind="variable"><name>nms</name></member>
+    <member refid="structthreshold__config__t_1ae672d51698fc4cd983d1155da2d4c513" kind="variable"><name>candidate_number</name></member>
+  </compound>
+  <compound refid="fd__forward_8h" kind="file"><name>fd_forward.h</name>
+    <member refid="fd__forward_8h_1ac36e929f333af4d9f2cd561b8bfdfd39" kind="enum"><name>mtmn_resize_type</name></member>
+    <member refid="fd__forward_8h_1ac36e929f333af4d9f2cd561b8bfdfd39af84c11ba888e499a8a282a3e6f5de7de" kind="enumvalue"><name>FAST</name></member>
+    <member refid="fd__forward_8h_1ac36e929f333af4d9f2cd561b8bfdfd39a50d1448013c6f17125caee18aa418af7" kind="enumvalue"><name>NORMAL</name></member>
+    <member refid="fd__forward_8h_1a1fe0bac3b311526ec71417232c31df57" kind="function"><name>mtmn_init_config</name></member>
+    <member refid="fd__forward_8h_1a4a6259b5a5f0b3437b26727784628f4e" kind="function"><name>face_detect</name></member>
+  </compound>
+  <compound refid="fr__forward_8h" kind="file"><name>fr_forward.h</name>
+    <member refid="fr__forward_8h_1ac8dbcf5e3be0321aa091122bf2d3b47b" kind="function"><name>align_face_rot</name></member>
+    <member refid="fr__forward_8h_1a8e71aa771e78b363ab8b745aff07b900" kind="function"><name>align_face_sim</name></member>
+    <member refid="fr__forward_8h_1a75e0311e61ee390e15a4c3bd4766035a" kind="function"><name>align_face</name></member>
+    <member refid="fr__forward_8h_1a1aaf4002f77b5308e94b18468fe17df1" kind="define"><name>FACE_WIDTH</name></member>
+    <member refid="fr__forward_8h_1af8604502b9c2b373b8c053effd261de8" kind="define"><name>FACE_HEIGHT</name></member>
+    <member refid="fr__forward_8h_1a4a1456eb555d827e462019f7d0682c82" kind="define"><name>FACE_ID_SIZE</name></member>
+    <member refid="fr__forward_8h_1a8dfc9c5f8698aa209a5e5e2c57be0c85" kind="define"><name>FACE_REC_THRESHOLD</name></member>
+    <member refid="fr__forward_8h_1a3e2c1d80355b8e7e2dd53f88e6db03b5" kind="define"><name>LEFT_EYE_X</name></member>
+    <member refid="fr__forward_8h_1a7136c038e7ed45371d8d3029b41ad857" kind="define"><name>LEFT_EYE_Y</name></member>
+    <member refid="fr__forward_8h_1aecdf930eb32177a982bd750338e39aac" kind="define"><name>RIGHT_EYE_X</name></member>
+    <member refid="fr__forward_8h_1a5669814cf7d907ea16590c1487a70339" kind="define"><name>RIGHT_EYE_Y</name></member>
+    <member refid="fr__forward_8h_1a915d43beaca5d33e18ba340bc25adddb" kind="define"><name>NOSE_X</name></member>
+    <member refid="fr__forward_8h_1a8fb055757ce702fb64469cc38f245ded" kind="define"><name>NOSE_Y</name></member>
+    <member refid="fr__forward_8h_1a696872fe435fa093d8a505672b062baf" kind="define"><name>LEFT_MOUTH_X</name></member>
+    <member refid="fr__forward_8h_1a7ba13ba81ddd58f75296c4ff0b8a83ee" kind="define"><name>LEFT_MOUTH_Y</name></member>
+    <member refid="fr__forward_8h_1af9a533749d7f068b305cd827edec389b" kind="define"><name>RIGHT_MOUTH_X</name></member>
+    <member refid="fr__forward_8h_1ab6e8e15a723bd92ed1678d615626ba5d" kind="define"><name>RIGHT_MOUTH_Y</name></member>
+    <member refid="fr__forward_8h_1a5b8479eb392b8fb1d4a1e0019e33eae2" kind="define"><name>EYE_DIST_SET</name></member>
+    <member refid="fr__forward_8h_1abc53e86bdcc7d2cf0cb062c23d81ac38" kind="define"><name>NOSE_EYE_RATIO_THRES_MIN</name></member>
+    <member refid="fr__forward_8h_1a75823f43494a4a16a7675e9c6c4ec617" kind="define"><name>NOSE_EYE_RATIO_THRES_MAX</name></member>
+    <member refid="fr__forward_8h_1a699d3796ba654436e2c5ed99ba7319b6" kind="define"><name>ENROLL_NAME_LEN</name></member>
+    <member refid="fr__forward_8h_1ac297fa7d5777de8be299f763ee4d0e04" kind="typedef"><name>face_id_node</name></member>
+    <member refid="fr__forward_8h_1a4de8c2348533dfc1f89be0629ccf5fc5" kind="function"><name>face_id_init</name></member>
+    <member refid="fr__forward_8h_1a277167bc00a7fa5a940d9599529043e0" kind="function"><name>face_id_name_init</name></member>
+    <member refid="fr__forward_8h_1aa4dd035815d45b12afe41955b9ab8a6d" kind="function"><name>aligned_face_alloc</name></member>
+    <member refid="fr__forward_8h_1a8c08fe76fb9aceaa168b06b6048d8321" kind="function"><name>get_face_id</name></member>
+    <member refid="fr__forward_8h_1ae3800ad577e63dc70f6016aee3eae1c2" kind="function"><name>add_face_id</name></member>
+    <member refid="fr__forward_8h_1a0bd86a87f2f5966229b861a341124cd6" kind="function"><name>recognize_face</name></member>
+    <member refid="fr__forward_8h_1a6fdf81cad4c60406e020b5be449a5675" kind="function"><name>recognize_face_with_name</name></member>
+    <member refid="fr__forward_8h_1a2d9c6be0f6bb06094d03019da23542c1" kind="function"><name>enroll_face</name></member>
+    <member refid="fr__forward_8h_1a4117ab81f0d6186fff3f9a4424e85317" kind="function"><name>enroll_face_with_name</name></member>
+    <member refid="fr__forward_8h_1aa26e3b8b45aaa4f470c9ba9961f07229" kind="function"><name>delete_face</name></member>
+    <member refid="fr__forward_8h_1aedfdd1d1ed9503cccc6ccb2e9fb076e6" kind="function"><name>delete_face_with_name</name></member>
+    <member refid="fr__forward_8h_1ac4b39112aad89346b72b5841dcd92585" kind="function"><name>delete_face_all_with_name</name></member>
+  </compound>
+  <compound refid="image__util_8h" kind="file"><name>image_util.h</name>
+    <member refid="image__util_8h_1aad9808813c0de3c073b75f0c8f2edb80" kind="function"><name>rgb565_to_888</name></member>
+    <member refid="image__util_8h_1ace1ea430e48ba170a64b8d8bd479a123" kind="function"><name>rgb565_to_888_q16</name></member>
+    <member refid="image__util_8h_1adbb97797b74e36823ca2f3cfb1f374ec" kind="define"><name>LANDMARKS_NUM</name></member>
+    <member refid="image__util_8h_1abcfffa3fefab6a967894ff879006452a" kind="define"><name>MAX_VALID_COUNT_PER_IMAGE</name></member>
+    <member refid="image__util_8h_1a77b189003433adb37884b87fee67b73b" kind="define"><name>DL_IMAGE_MIN</name></member>
+    <member refid="image__util_8h_1a101a540ba1d5e60197102fc8ddc241ec" kind="define"><name>DL_IMAGE_MAX</name></member>
+    <member refid="image__util_8h_1a587fa1ac44d5db706b5c2e6e8bd1fef7" kind="define"><name>RGB565_MASK_RED</name></member>
+    <member refid="image__util_8h_1adcd5d3ee8c352e5efd099128931f42d7" kind="define"><name>RGB565_MASK_GREEN</name></member>
+    <member refid="image__util_8h_1a49c955fa56dc234f2946899ebfaae8e5" kind="define"><name>RGB565_MASK_BLUE</name></member>
+    <member refid="image__util_8h_1adf25a75fc481cdae922509ebe2eb1fec" kind="enum"><name>en_threshold_mode</name></member>
+    <member refid="image__util_8h_1adf25a75fc481cdae922509ebe2eb1fecaecafbc1299672a8c1521cc0d5f1ae986" kind="enumvalue"><name>BINARY</name></member>
+    <member refid="image__util_8h_1a35a3b8b6802104ac3d79c7578bd49109" kind="typedef"><name>box_array_t</name></member>
+    <member refid="image__util_8h_1a6296b5a77300a11c95daa57980064e70" kind="typedef"><name>image_box_t</name></member>
+    <member refid="image__util_8h_1a81477d1da3f6fb740d11109c5730133e" kind="typedef"><name>image_list_t</name></member>
+    <member refid="image__util_8h_1a9c14f9f63e0f31496f3c37137322315d" kind="typedef"><name>matrixType</name></member>
+    <member refid="image__util_8h_1a0a1e1990c56c5a2fd28d17e247f2cc63" kind="function"><name>image_get_width_and_height</name></member>
+    <member refid="image__util_8h_1addd755e19d4afe2521453dd5369b7a3c" kind="function"><name>image_get_area</name></member>
+    <member refid="image__util_8h_1ae8dd10477e0fbf2251941bef239fb656" kind="function"><name>image_calibrate_by_offset</name></member>
+    <member refid="image__util_8h_1aaf776988a2f27fd39a01f1b0dd635862" kind="function"><name>image_landmark_calibrate</name></member>
+    <member refid="image__util_8h_1a5c24d697bad369c53e9194f43adabb20" kind="function"><name>image_rect2sqr</name></member>
+    <member refid="image__util_8h_1ad3dc00bd6367bd724400a0dd01c6fa92" kind="function"><name>rgb888_to_565</name></member>
+    <member refid="image__util_8h_1a4f1ed825263d739f06f0960877efb088" kind="function"><name>image_get_valid_boxes</name></member>
+    <member refid="image__util_8h_1aaaa6c0f8d9122f667c54ae87bc322b64" kind="function"><name>image_sort_insert_by_score</name></member>
+    <member refid="image__util_8h_1afffcabb71c9d65762962260541db476b" kind="function"><name>image_nms_process</name></member>
+    <member refid="image__util_8h_1a3e48cceaa00a7ddd5cbd6b669c217db0" kind="function"><name>image_zoom_in_twice</name></member>
+    <member refid="image__util_8h_1aae2560aa830d43e8d11a0801f57638bd" kind="function"><name>image_resize_linear</name></member>
+    <member refid="image__util_8h_1a8e79747bb8130e6e8ae3b5b7167fced4" kind="function"><name>image_cropper</name></member>
+    <member refid="image__util_8h_1a58a07581dcd0f097a597bca75d8e37da" kind="function"><name>image_rgb565_to_888</name></member>
+    <member refid="image__util_8h_1aeed4c98d9d77d68cef950ff649810504" kind="function"><name>image_rgb888_to_565</name></member>
+    <member refid="image__util_8h_1ad2bf72e5be5c7605b4ee684ed6b98111" kind="function"><name>draw_rectangle_rgb565</name></member>
+    <member refid="image__util_8h_1a2f2aaf6f4b191816f067aa618691ab76" kind="function"><name>draw_rectangle_rgb888</name></member>
+    <member refid="image__util_8h_1aff5ba1a26d1abad58cd4e7e3285f9566" kind="function"><name>image_abs_diff</name></member>
+    <member refid="image__util_8h_1a5913cdfdc77488922b2dff286015bc08" kind="function"><name>image_threshold</name></member>
+    <member refid="image__util_8h_1a913315d40211d642212425b36f5c880f" kind="function"><name>image_erode</name></member>
+    <member refid="image__util_8h_1a501dd559dceeb2356ad6a0bba80ce989" kind="function"><name>matrix_alloc</name></member>
+    <member refid="image__util_8h_1a8e7cf1507ce317450f07737f4c5c6638" kind="function"><name>matrix_free</name></member>
+    <member refid="image__util_8h_1abce1eb77aba8e36acdaa0465ff75a404" kind="function"><name>get_similarity_matrix</name></member>
+    <member refid="image__util_8h_1a893395cd577d4c4392b2b73138174548" kind="function"><name>get_affine_transform</name></member>
+    <member refid="image__util_8h_1ae520873bea279f907f3d6a4f1c8aa9d5" kind="function"><name>warp_affine</name></member>
+    <member refid="image__util_8h_1a653ff73f2fe9cab2b4cda44465a21741" kind="function"><name>image_resize_linear_q</name></member>
+    <member refid="image__util_8h_1a77b387dc88087f8f6a65feeb31f39c3c" kind="function"><name>image_resize_normalize_quantize</name></member>
+    <member refid="image__util_8h_1a95f38512f1738cdeb3d86f45632f6eee" kind="function"><name>image_resize_shift_fast</name></member>
+    <member refid="image__util_8h_1afbb29c77ff3f25ca7577267b1c975992" kind="function"><name>image_resize_nearest_shift</name></member>
+    <member refid="image__util_8h_1a1d02e88c403499c3bf628664314fcf16" kind="function"><name>image_crop_shift_fast</name></member>
+  </compound>
+  <compound refid="dl__lib__matrix3d_8h" kind="file"><name>dl_lib_matrix3d.h</name>
+    <member refid="dl__lib__matrix3d_8h_1ab89fc221f14bb89eb4b574662a9d066d" kind="define"><name>DL_SPIRAM_SUPPORT</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ac39d9cef6a5e030ba8d9e11121054268" kind="define"><name>max</name></member>
+    <member refid="dl__lib__matrix3d_8h_1abb702d8b501669a23aa0ab3b281b9384" kind="define"><name>min</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a3e7cf00b9fe0dc3333e3009e306e5ab7" kind="enum"><name>dl_error_type</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a3e7cf00b9fe0dc3333e3009e306e5ab7aeff6794ef905297e45a6073f5e3ec970" kind="enumvalue"><name>DL_SUCCESS</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a3e7cf00b9fe0dc3333e3009e306e5ab7a0ade8b9e7037863f763d3568b7f05330" kind="enumvalue"><name>DL_FAIL</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae4680cb4e918a01c3c1d0cbab6f55eec" kind="enum"><name>dl_padding_type</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae4680cb4e918a01c3c1d0cbab6f55eeca1481b43461762d3d102c5b9df4cbed5a" kind="enumvalue"><name>PADDING_VALID</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae4680cb4e918a01c3c1d0cbab6f55eecab86bb0563b33b2a44b577e2a133f8248" kind="enumvalue"><name>PADDING_SAME</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae4680cb4e918a01c3c1d0cbab6f55eeca9c14a90c5155a58fed6d37b99026a1c1" kind="enumvalue"><name>PADDING_SAME_DONT_FREE_INPUT</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae4680cb4e918a01c3c1d0cbab6f55eeca005de2efde988e97d44ef93545e050f1" kind="enumvalue"><name>PADDING_SAME_MXNET</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a80be6de615fafbd591a37732be864c0e" kind="enum"><name>dl_pooling_type</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a80be6de615fafbd591a37732be864c0ea0e6da51c5fc37e2ae59e7f5b43a9ef9d" kind="enumvalue"><name>DL_POOLING_MAX</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a80be6de615fafbd591a37732be864c0ea761847097c04158d651f96f96e501b92" kind="enumvalue"><name>DL_POOLING_AVG</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a3b9d77eceac3421d34bb1e817addbd5f" kind="enum"><name>dl_upsample_type</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a3b9d77eceac3421d34bb1e817addbd5fa5fec43364bd12dd6b894883153945c91" kind="enumvalue"><name>UPSAMPLE_NEAREST_NEIGHBOR</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a3b9d77eceac3421d34bb1e817addbd5fa9f8f989439f506eaae6582fddc7388bb" kind="enumvalue"><name>UPSAMPLE_BILINEAR</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a6c093b6c7cfd9bf3f3393af489aae89f" kind="typedef"><name>fptp_t</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a39577bf95c36f4a03d0a1ca925804090" kind="typedef"><name>uc_t</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a8abfbd0383d81f2c0e174ee132fef9d7" kind="function"><name>dl_lib_calloc</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ad1b6252c13f764410f28b69d99894a61" kind="function"><name>dl_lib_free</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a96a510f05460325cf980c8928fe71a56" kind="function"><name>dl_matrix3d_alloc</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ab7d205c86896ae274d8227abee6e6e50" kind="function"><name>dl_matrix3du_alloc</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a5e1f858efcfb3d794dd04329d6fcae62" kind="function"><name>dl_matrix3d_free</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a261d9a241dd396aed723c95bf146db8a" kind="function"><name>dl_matrix3du_free</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ab84d23f0331c7501894376a4df3ffd9d" kind="function"><name>dl_matrix3dff_dot_product</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a8422d34da81877ef0e7ee385274b9f20" kind="function"><name>dl_matrix3d_softmax</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ab1b96aabf331ab3fd42ca39ca6c89e6d" kind="function"><name>dl_matrix3d_slice_copy</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ab75f236cdf97577c1247f3ebff16070d" kind="function"><name>dl_matrix3du_slice_copy</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a9b3383a2cdad266a8a36f94bf5c04825" kind="function"><name>dl_matrix3d_sliced_transform_nchw</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a8031918df4be62845212b919e91bb6f7" kind="function"><name>dl_matrix3d_conv</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a7b568cb329391843f223ff1c7d717334" kind="function"><name>dl_matrix3d_global_pool</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ab7c162f4f5ff911089948e3b0e494e26" kind="function"><name>dl_matrix3d_pooling</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ad8bfd39f3b2bddb79e7160965f9e1643" kind="function"><name>dl_matrix3d_batch_normalize</name></member>
+    <member refid="dl__lib__matrix3d_8h_1aabcdf51b16f9d70cb93ed726eab2dad7" kind="function"><name>dl_matrix3d_add</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a60e454255ddba3330bf1eecd4e88d09b" kind="function"><name>dl_matrix3d_concat</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae901ce302a6114ff30f323551ebcf989" kind="function"><name>dl_matrix3d_concat_4</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ac1a6c4e7b8ff3bd95936ff19870697c7" kind="function"><name>dl_matrix3d_concat_8</name></member>
+    <member refid="dl__lib__matrix3d_8h_1aaffe50f7c093c3d746d081a226c68873" kind="function"><name>dl_matrix3d_mobilefaceblock</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a8aa3dcc8b866f87aa35be084cf67cca6" kind="function"><name>dl_matrix3d_mobilefaceblock_split</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a16bdaff028f072f8a8bc7501a8f48666" kind="function"><name>dl_matrix3d_init_bias</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae97cac033b8b163c0d0d6d2bdee94d87" kind="function"><name>dl_matrix3d_multiply</name></member>
+    <member refid="dl__lib__matrix3d_8h_1acfab2dd3032531f5f87025e696c0fc90" kind="function"><name>dl_matrix3d_relu</name></member>
+    <member refid="dl__lib__matrix3d_8h_1acbd3c6b7edb7f8bfad1888cf7b9c62b1" kind="function"><name>dl_matrix3d_relu_clip</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ac605a5e365a1fbed6f4a51b1c8d50f4d" kind="function"><name>dl_matrix3d_p_relu</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a0257afbb9a1aef4b907bbfc445808ec4" kind="function"><name>dl_matrix3d_leaky_relu</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a0cfebc88f4dd9073f79a43e049185631" kind="function"><name>dl_matrix3dff_conv_1x1</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a8f130395f5260ab02ed4464b5726d51c" kind="function"><name>dl_matrix3dff_conv_1x1_with_bias</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a044f24c072f4c79995046188bdb9d019" kind="function"><name>dl_matrix3duf_conv_1x1</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a05a3622472f6c67b23733864719028ed" kind="function"><name>dl_matrix3duf_conv_1x1_with_bias</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a5fd722c9e0bf37636cbd9c91a140497b" kind="function"><name>dl_matrix3dff_conv_3x3_op</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a42b20495fcf8e498f2cd3e3d35709a6f" kind="function"><name>dl_matrix3dff_conv_3x3</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ab2d26bf8c829656c19903c4d5d87befe" kind="function"><name>dl_matrix3duf_conv_common</name></member>
+    <member refid="dl__lib__matrix3d_8h_1af06e2667f56320c2b9bd13adf5de34cc" kind="function"><name>dl_matrix3dff_conv_common</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a4896ce73e16f3c43f31a339f01ae9134" kind="function"><name>dl_matrix3dff_depthwise_conv_3x3</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae13d958dcdf8483cc113efb17e610743" kind="function"><name>dl_matrix3duf_depthwise_conv_3x3</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae420d94d7fb60ab00b71a6a6f97fb624" kind="function"><name>dl_matrix3dff_depthwise_conv_3x3_op</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae19a3792dad1493a86eb78f92244d2da" kind="function"><name>dl_matrix3dff_depthwise_conv_common</name></member>
+    <member refid="dl__lib__matrix3d_8h_1ae81159da304b47be9af23b8be66c4fcd" kind="function"><name>dl_matrix3dff_fc</name></member>
+    <member refid="dl__lib__matrix3d_8h_1adbf286c86ea62db6732c398b46468c1d" kind="function"><name>dl_matrix3dff_fc_with_bias</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a959b6fc7dd1bcffb54df3293c6291897" kind="function"><name>dl_matrix3dff_mobilenet</name></member>
+    <member refid="dl__lib__matrix3d_8h_1a8062895252258eb7c35b8bcbdcca4c9f" kind="function"><name>dl_matrix3duf_mobilenet</name></member>
+  </compound>
+  <compound refid="dl__lib__matrix3dq_8h" kind="file"><name>dl_lib_matrix3dq.h</name>
+    <member refid="dl__lib__matrix3dq_8h_1a1a5f2fef154ceecf650cb442cc9d74ee" kind="function"><name>dl_matrix3dqq_mobilefaceblock_prelu_split_2_2</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aed6671bcee8136c66f097816c65f02bf" kind="function"><name>dl_matrix3dqq_mobilefaceblock_prelu_split_4_4</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a5bc95e3c874aa3b5d999bfcbf65cfd08" kind="function"><name>dl_matrix3dqq_mobilefaceblock_prelu_split_1_2</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a0d224dae0d736f5ec6467628971c267f" kind="function"><name>dl_matrix3dqq_padding</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aca095db7813529d650eac44405eb6bad" kind="function"><name>dl_matrix3duq_padding</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6bf6389c35c16b885187a76bb60f8622" kind="define"><name>DL_QTP_SHIFT</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1abf9ea9be83710bd5cd2be3c109b7c4d4" kind="define"><name>DL_ITMQ</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ace31a936ee1f6fb2818ec2aa01daf847" kind="define"><name>DL_QTP_RANGE</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6b9abb20c9f512e0e106dc083ec900b1" kind="define"><name>DL_QTP_MAX</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a84a22fe68330e06b3ba9d47ea5d11670" kind="define"><name>DL_QTP_MIN</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a88e32d9f7e85d71fbe1e33403b743813" kind="define"><name>DL_QTP_EXP_NA</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1af694720b56c563b960b790c546b98680" kind="define"><name>DL_SHIFT_AUTO</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6e69079b40a562d2c331200590e31b0e" kind="enum"><name>dl_conv_mode</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6e69079b40a562d2c331200590e31b0eabd1e92c27a013fc7f6f59f735690431a" kind="enumvalue"><name>DL_C_IMPL</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6e69079b40a562d2c331200590e31b0eaa48c3207cbfc2628eccf6da7aaec6a54" kind="enumvalue"><name>DL_XTENSA_IMPL</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a05de1400c1d039759812bbda72fbf734" kind="typedef"><name>qtp_t</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a8331e530a1dffd8aa34c3c0cdd1b862a" kind="function"><name>dl_matrix3dq_alloc</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a961f99d85ab28a6ea5a4a2a64fe1102b" kind="function"><name>dl_matrix3dq_free</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ae04b840e0402e0f08fc75264fee68d02" kind="function"><name>dl_matrix3dq_slice_copy</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a7645749e1cac00a5d12f66150c6381f2" kind="function"><name>dl_matrix3dq_sliced_transform_nchw</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ad0e851ba83a438a2921dcfade1eead86" kind="function"><name>dl_matrix3d_from_matrixq</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6ee377fc3e7f1c5b621e5118010d5a4f" kind="function"><name>dl_matrixq_from_matrix3d_qmf</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a35bab949aa1ef9eeac32ca87d657bcf9" kind="function"><name>dl_matrixq_from_matrix3d</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ad3307c7cff1343d3ea3506724f8cb664" kind="function"><name>dl_matrix3dq_quant_range_exceeded_checking</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1abd6b7446e9c3b64b0534301e9dc1189f" kind="function"><name>dl_matrix3dq_shift_exponent</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a7d4ac00c47c6ce0ad58f70f0fd710e29" kind="function"><name>dl_matrix3dq_batch_normalize</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aea1a735457d08b2ea8f5be06803da408" kind="function"><name>dl_matrix3dq_add</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a830e08ffdf0274c26a78181351fd7cd5" kind="function"><name>dl_matrix3dq_add_channel_diff</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1adfddea48354a66eb63f90596fcbe42a1" kind="function"><name>dl_matrix3dq_relu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a9d2ca2316c73883de547081bc794d7ee" kind="function"><name>dl_matrix3dq_relu_clip</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aeb92cfc7e7a56d5afde0ee95f1853f50" kind="function"><name>dl_matrix3dq_leaky_relu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6b1b1f9e3fafa2affed96e52434b6924" kind="function"><name>dl_matrix3dq_p_relu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1af4750a0eca96005dfe1e7925b44066b3" kind="function"><name>dl_matrix3dq_concat</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a09198bab09923b9dffbc28856b04f55f" kind="function"><name>dl_matrix3dq_concat_4</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ae8cea6d68947961c12a89b1e3e79a900" kind="function"><name>dl_matrix3dq_concat_8</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1afcd5c3207a0c794b850c1f4e3602b695" kind="function"><name>dl_matrix3dqq_conv_1x1</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a43df523053eecfa23e00094e08536a5d" kind="function"><name>dl_matrix3dqq_conv_1x1_with_relu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a97a46bd57644a140355070849751ef28" kind="function"><name>dl_matrix3dqq_conv_1x1_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aca83a0c9fd8f3fbdbe941a6769ae542e" kind="function"><name>dl_matrix3dqq_conv_1x1_with_bias_relu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a504844d7fbd4bca99300e8f2778852c4" kind="function"><name>dl_matrix3dqq_conv_1x1_with_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a89ecd7c616cf6e2b26f3b1adc1fa4844" kind="function"><name>dl_matrix3duq_conv_1x1</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ac43d74f482ba8334af5931396d9f1e18" kind="function"><name>dl_matrix3duq_conv_1x1_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aaf8df4f07ce25979489943667b97c365" kind="function"><name>dl_matrix3dqq_conv_3x3</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1af206892239ab3d55a6675745e5353fe3" kind="function"><name>dl_matrix3dqq_conv_3x3_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aab2cec78b9f2455692d1b5e625f0d3d4" kind="function"><name>dl_matrix3dqq_conv_3x3_with_bias_relu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ad1b9b52ed9043d5e37baae3d73ba3bb9" kind="function"><name>dl_matrix3duq_conv_3x3_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1addfb67f1c68464db8eb26c1b406a01d1" kind="function"><name>dl_matrix3duq_conv_3x3_with_bias_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1abf94379e4f6f240d3c2c171414fdfb5e" kind="function"><name>dl_matrix3dqq_conv_3x3_with_bias_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6855443a7913bd1aff26685db4036231" kind="function"><name>dl_matrix3dqq_conv_common</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a3c125128cc670151ae6d21324ed068fa" kind="function"><name>dl_matrix3duq_conv_common</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aa004039fa40a03f08f17628ba10d5aa2" kind="function"><name>dl_matrix3duq_depthwise_conv_3x3</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a396412be607c50a68c67573fe39bf8ef" kind="function"><name>dl_matrix3dqq_depthwise_conv_3x3</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a3b9fe43f18212e923cc168027aebbcce" kind="function"><name>dl_matrix3dqq_depthwise_conv_3x3_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a79214bd4ac1cfe74512443ffa2045c04" kind="function"><name>dl_matrix3dqq_depthwise_conv_3x3s1_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a7069da592fc8937e14c20adeb5d33598" kind="function"><name>dl_matrix3dqq_depthwise_conv_3x3_with_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aa8c336f3814a6ffebc5bde9e93f4010c" kind="function"><name>dl_matrix3dqq_depthwise_conv_3x3_with_bias_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ae46676e93df0fa6f5ad83e9d9411031e" kind="function"><name>dl_matrix3dqq_global_depthwise_conv_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a4ad796a0d72d5bd9aad923c0bbdba010" kind="function"><name>dl_matrix3dqq_depthwise_conv_2x2</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a3fc2568af44466d736ad27f87edf9af6" kind="function"><name>dl_matrix3dqq_depthwise_conv_2x2_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a5ff8d7c889d6d3fe47af911cb5bdc45c" kind="function"><name>dl_matrix3dqq_depthwise_conv_2x2_with_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a3b73faf7f40179f3442a408af669164e" kind="function"><name>dl_matrix3dqq_depthwise_conv_2x2_with_bias_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ae2133ec28ac9c5dc209998a36cc31cfd" kind="function"><name>dl_matrix3dqq_depthwise_conv_5x5</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ad93bf2b4ae440c37c994a79932d39e10" kind="function"><name>dl_matrix3dqq_depthwise_conv_5x5_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1aea707cfc2e428aa288b31442c40509dc" kind="function"><name>dl_matrix3dqq_depthwise_conv_5x5_with_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a1d872a2bbf2412748e31a5aa76175394" kind="function"><name>dl_matrix3dqq_depthwise_conv_5x5_with_bias_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a290ba2bcceb03a1668cd5b8f29d6692d" kind="function"><name>dl_matrix3dqq_dot_product</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ae83f1e00d2483cb644da46c44d5bee40" kind="function"><name>dl_matrix3dqq_fc</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a4bca8f4820e57fecc2cf90bc9f73c8d3" kind="function"><name>dl_matrix3dqq_fc_with_bias</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a810c4ba551a13712b7a124ac7b7a4781" kind="function"><name>dl_matrix3dqq_mobilefaceblock_split</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a6c0833fd9c8d67dc8571e8a249340c1a" kind="function"><name>dl_matrix3dqq_mobilefaceblock</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a0e351f38ff780f524b541dcbc04bc145" kind="function"><name>dl_matrix3dqq_mobilefaceblock_prelu</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a30eabdcd235586c5dab8cd08cae99f48" kind="function"><name>dl_matrix3dqq_blazeblock</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a168295009f282f243da8f64c684b0271" kind="function"><name>dl_matrix3dqq_double_blazeblock</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1ac299f1ee60163f7b65e21aff183a1567" kind="function"><name>dl_matrix3dqq_mobilenet</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a5f8a41e5c7e145a7e85ce8ab6cbc1e44" kind="function"><name>dl_matrix3duq_mobilenet</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a26011cab475c6decd29f6dcfcbcc8ae0" kind="function"><name>dl_matrix3dqq_upsample_2x</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a8bc934ebd5778c5608970875309ad670" kind="function"><name>dl_matrix3dq_global_pool</name></member>
+    <member refid="dl__lib__matrix3dq_8h_1a29337ba54f95e0691bddd3aed3d453b5" kind="function"><name>dl_matrix3dq_pooling</name></member>
+  </compound>
+  <compound refid="frmn_8h" kind="file"><name>frmn.h</name>
+    <member refid="frmn_8h_1a7c45ec044f128fc30ab7c3e1d46a73f8" kind="function"><name>frmn_q</name></member>
+    <member refid="frmn_8h_1a2749780a366baec3258f0a7c3f4839f2" kind="function"><name>frmn2p_q</name></member>
+    <member refid="frmn_8h_1a8dd84122639f10b3c28c35fbffd2d8bc" kind="function"><name>mfn56_42m_q</name></member>
+    <member refid="frmn_8h_1a83db35ab9f09edb20afbe541c04eb283" kind="function"><name>mfn56_72m_q</name></member>
+    <member refid="frmn_8h_1aabb28e0317fdb05c5498f1375eb7af8c" kind="function"><name>mfn56_112m_q</name></member>
+    <member refid="frmn_8h_1ac764a393ead19aa5adc7634da07f2f11" kind="function"><name>mfn56_156m_q</name></member>
+    <member refid="frmn_8h_1a9fb3d471be3e358fa1d69ad2fdde94c8" kind="function"><name>frmn</name></member>
+  </compound>
+  <compound refid="hd__model_8h" kind="file"><name>hd_model.h</name>
+    <member refid="hd__model_8h_1a3936b38e9eb2310937829b72c925c1b8" kind="function"><name>hd_nano1_q</name></member>
+    <member refid="hd__model_8h_1a249bd463ea554543f29c9c8f1d53ab91" kind="function"><name>hd_lite1_q</name></member>
+    <member refid="hd__model_8h_1aa79165fea9f9267d6f55be865d77e7aa" kind="function"><name>detection_result_free</name></member>
+    <member refid="hd__model_8h_1ac568447db7473da2873725a4bb036d2e" kind="function"><name>detection_results_free</name></member>
+    <member refid="hd__model_8h_1aead0b0596f044e181d4c67fd693fbacc" kind="function"><name>hd_test</name></member>
+    <member refid="hd__model_8h_1a5a56959e5a0a92ca8e8fb056e289e4f9" kind="function"><name>hd_time_test</name></member>
+  </compound>
+  <compound refid="hp__model_8h" kind="file"><name>hp_model.h</name>
+    <member refid="hp__model_8h_1aed20e59df73a97b5b7d8f20a8a8e4594" kind="function"><name>hp_nano1_ls16_q</name></member>
+    <member refid="hp__model_8h_1ac542a8f827fb3d1d99c0c0970dda89db" kind="function"><name>hp_lite1_q</name></member>
+    <member refid="hp__model_8h_1aeabb0a6304d33c03b43c5bc77dee985a" kind="function"><name>hp_test</name></member>
+    <member refid="hp__model_8h_1adec2a022727491dc4ff676a58df98f56" kind="function"><name>hp_time_test</name></member>
+  </compound>
+  <compound refid="lssh_8h" kind="file"><name>lssh.h</name>
+    <member refid="lssh_8h_1a313e1adebed62fcb816814acab428f5a" kind="variable"><name>sparse_mn_5_modules_config</name></member>
+    <member refid="lssh_8h_1a14966f5bfc0b32fa7951d3564f31cc9a" kind="function"><name>lssh_module_result_free</name></member>
+    <member refid="lssh_8h_1a42874ad460049cd59b32fd880b830133" kind="function"><name>lssh_module_results_free</name></member>
+    <member refid="lssh_8h_1af58ef13c2139b8287acaacca89b4de7b" kind="function"><name>sparse_mn_5_q_without_landmark</name></member>
+    <member refid="lssh_8h_1a9f6688eb11bde6cdcd18f60db3240c1a" kind="function"><name>sparse_mn_5_q_with_landmark</name></member>
+  </compound>
+  <compound refid="mtmn_8h" kind="file"><name>mtmn.h</name>
+    <member refid="mtmn_8h_1a466b88b7165dd6c79834dcb23de1977e" kind="function"><name>mtmn_net_t_free</name></member>
+    <member refid="mtmn_8h_1ab8453289fce31fb9c09b74924b26a6c0" kind="function"><name>pnet_lite_f</name></member>
+    <member refid="mtmn_8h_1af6ab35987a47e7411fac8d7bdd6df502" kind="function"><name>rnet_lite_f_with_score_verify</name></member>
+    <member refid="mtmn_8h_1a2a58cb0b8de195a6cb3a513940cc8883" kind="function"><name>onet_lite_f_with_score_verify</name></member>
+    <member refid="mtmn_8h_1a6ae762ee1d61f2c450f60ad1d5b97160" kind="function"><name>pnet_lite_q</name></member>
+    <member refid="mtmn_8h_1a227242678e5676598f1b5a90289714be" kind="function"><name>rnet_lite_q_with_score_verify</name></member>
+    <member refid="mtmn_8h_1a5cfda68f920f82c54b2b5d3f70a3ce6f" kind="function"><name>onet_lite_q_with_score_verify</name></member>
+    <member refid="mtmn_8h_1a1edf3cc56a9a4aba0ceb8d6494943c6d" kind="function"><name>pnet_heavy_q</name></member>
+    <member refid="mtmn_8h_1a9d9c7bc8aa0e49b912fdf5096fd40b6c" kind="function"><name>rnet_heavy_q_with_score_verify</name></member>
+    <member refid="mtmn_8h_1afbf480578b17e157b6b05a63248b0ec2" kind="function"><name>onet_heavy_q_with_score_verify</name></member>
+  </compound>
+  <compound refid="lssh__forward_8h" kind="file"><name>lssh_forward.h</name>
+    <member refid="lssh__forward_8h_1a037bae78e9fc7868d90880157f2be35e" kind="function"><name>lssh_get_config</name></member>
+    <member refid="lssh__forward_8h_1aacdbd27bcc5209360b8e46a7c6b1b044" kind="function"><name>lssh_update_config</name></member>
+    <member refid="lssh__forward_8h_1a480e6ae06ddd905273788ff05b3c82f8" kind="function"><name>lssh_detect_object</name></member>
+  </compound>
+  <compound refid="pe__forward_8h" kind="file"><name>pe_forward.h</name>
+    <member refid="pe__forward_8h_1a2aae8813c5b6377d6040544a28eb8d38" kind="define"><name>INPUT_EXPONENT</name></member>
+    <member refid="pe__forward_8h_1aa17a0d79991b9f667cf1f8fb04e26946" kind="define"><name>SCORE_THRESHOLD</name></member>
+    <member refid="pe__forward_8h_1a647e83f36b4fec70389d00c57b66b110" kind="define"><name>NMS_THRESHOLD</name></member>
+    <member refid="pe__forward_8h_1a38878ac8311bd22cada28a57593b6190" kind="define"><name>HP_TARGET_SIZE</name></member>
+    <member refid="pe__forward_8h_1a9b4d05ee0d6bbb8be90f848dccee7ae1" kind="typedef"><name>od_box_array_t</name></member>
+    <member refid="pe__forward_8h_1a46dfeb1ca35741a2d96020be6bc3c0ca" kind="typedef"><name>od_image_box_t</name></member>
+    <member refid="pe__forward_8h_1a69ec913fe9c7534b5be5d7be5a0a3d1b" kind="typedef"><name>od_image_list_t</name></member>
+    <member refid="pe__forward_8h_1ac7ffd081f1a192e39c396440a5235dbc" kind="function"><name>hd_init_config</name></member>
+    <member refid="pe__forward_8h_1a9271318bf6837575b5b0f8c77d9dfc4b" kind="function"><name>od_image_sort_insert_by_score</name></member>
+    <member refid="pe__forward_8h_1aaf15cc51b4239282f838b9bee303b02d" kind="function"><name>od_image_get_valid_boxes</name></member>
+    <member refid="pe__forward_8h_1a29a7a8373e7ad66bac5b288691f3bb1a" kind="function"><name>od_image_nms_process</name></member>
+    <member refid="pe__forward_8h_1a35f6611a57da752d68196b3703092f2a" kind="function"><name>hand_detection_forward</name></member>
+    <member refid="pe__forward_8h_1a4434caf6b5bf7b5d1d7bf531447575b9" kind="function"><name>handpose_estimation_forward</name></member>
+  </compound>
+  <compound refid="dir_409f97388efe006bc3438b95e9edef48" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components</name>
+  </compound>
+  <compound refid="dir_9fef79fcf636b32fa62af325057e2637" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face</name>
+  </compound>
+  <compound refid="dir_6cd9c8766f05d4bb2de8c40000135dfb" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection</name>
+  </compound>
+  <compound refid="dir_7dd9e935c79742bb060130e993a09046" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition</name>
+  </compound>
+  <compound refid="dir_c66195c1b2e4694702ecc77b24538dec" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util</name>
+  </compound>
+  <compound refid="dir_6f72c39ca69224b66540743246ecc782" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include</name>
+  </compound>
+  <compound refid="dir_6a054e3a5e93b9c38f29463fa548eab9" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection/include</name>
+  </compound>
+  <compound refid="dir_814f4513e9c8df5bea71032904e92ace" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include</name>
+  </compound>
+  <compound refid="dir_b955f321caac3006a69c26a40da32433" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include</name>
+  </compound>
+  <compound refid="dir_dba3fe0e1ddee6645c880a885a0fc22a" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include</name>
+  </compound>
+  <compound refid="dir_e7b7571b7e8bf80d8f8a071fa95b6c55" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include</name>
+  </compound>
+  <compound refid="dir_b5e3f3068a9b64acebd03cda81d28711" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib</name>
+  </compound>
+  <compound refid="dir_eb37a087707241a60955df9e2ced5435" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/object_detection</name>
+  </compound>
+  <compound refid="dir_b0f01478337d96be4d08350087682c29" kind="dir"><name>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation</name>
+  </compound>
+</doxygenindex>

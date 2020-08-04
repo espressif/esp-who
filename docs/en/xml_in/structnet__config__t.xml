@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structnet__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>net_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structnet__config__t_1a3f9bd00953d9c684dd983affc4f6f177" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int net_config_t::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>net width </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="50" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnet__config__t_1ae3141d026b731284fdaa4f596ac5ebf5" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int net_config_t::h</definition>
+        <argsstring></argsstring>
+        <name>h</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>net height </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="51" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structnet__config__t_1a40c3de0dfa1ff1d0d112330fd47db799" prot="public" static="no" mutable="no">
+        <type><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref></type>
+        <definition>threshold_config_t net_config_t::threshold</definition>
+        <argsstring></argsstring>
+        <name>threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>threshold of net </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="52" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="47">
+        <label>net_config_t</label>
+        <link refid="structnet__config__t"/>
+        <childnode refid="48" relation="usage">
+          <edgelabel>threshold</edgelabel>
+        </childnode>
+      </node>
+      <node id="48">
+        <label>threshold_config_t</label>
+        <link refid="structthreshold__config__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="49" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="48" bodyend="53"/>
+    <listofallmembers>
+      <member refid="structnet__config__t_1ae3141d026b731284fdaa4f596ac5ebf5" prot="public" virt="non-virtual"><scope>net_config_t</scope><name>h</name></member>
+      <member refid="structnet__config__t_1a40c3de0dfa1ff1d0d112330fd47db799" prot="public" virt="non-virtual"><scope>net_config_t</scope><name>threshold</name></member>
+      <member refid="structnet__config__t_1a3f9bd00953d9c684dd983affc4f6f177" prot="public" virt="non-virtual"><scope>net_config_t</scope><name>w</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

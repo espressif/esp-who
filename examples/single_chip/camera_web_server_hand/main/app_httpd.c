@@ -126,6 +126,7 @@ static int ra_filter_run(ra_filter_t *filter, int value)
 
 #if CONFIG_ESP_HAND_DETECT_ENABLED
 #if CONFIG_ESP_HAND_POSE_ESTIMATION_ENABLED
+#if 0
 static void rgb_print(dl_matrix3du_t *image_matrix, uint32_t color, const char *str)
 {
     fb_data_t fb;
@@ -165,6 +166,7 @@ static int rgb_printf(dl_matrix3du_t *image_matrix, uint32_t color, const char *
     }
     return len;
 }
+#endif
 #endif
 static void draw_boxes(dl_matrix3du_t *image_matrix, od_box_array_t *boxes)
 {

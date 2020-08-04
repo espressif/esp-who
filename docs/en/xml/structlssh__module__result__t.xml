@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structlssh__module__result__t" kind="struct" language="C++" prot="public">
+    <compoundname>lssh_module_result_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structlssh__module__result__t_1aab34d480dd4f35a27d413b87033c3797" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* lssh_module_result_t::category</definition>
+        <argsstring></argsstring>
+        <name>category</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="62" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__module__result__t_1a30d98853f54649a46707786e86e1974c" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* lssh_module_result_t::box_offset</definition>
+        <argsstring></argsstring>
+        <name>box_offset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="63" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__module__result__t_1a0d32baa8bf791440327cbaddd334b0e5" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* lssh_module_result_t::landmark_offset</definition>
+        <argsstring></argsstring>
+        <name>landmark_offset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="64" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="34">
+        <label>dl_matrix3d_t</label>
+        <link refid="structdl__matrix3d__t"/>
+      </node>
+      <node id="33">
+        <label>lssh_module_result_t</label>
+        <link refid="structlssh__module__result__t"/>
+        <childnode refid="34" relation="usage">
+          <edgelabel>landmark_offset</edgelabel>
+          <edgelabel>category</edgelabel>
+          <edgelabel>box_offset</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="61" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="60" bodyend="65"/>
+    <listofallmembers>
+      <member refid="structlssh__module__result__t_1a30d98853f54649a46707786e86e1974c" prot="public" virt="non-virtual"><scope>lssh_module_result_t</scope><name>box_offset</name></member>
+      <member refid="structlssh__module__result__t_1aab34d480dd4f35a27d413b87033c3797" prot="public" virt="non-virtual"><scope>lssh_module_result_t</scope><name>category</name></member>
+      <member refid="structlssh__module__result__t_1a0d32baa8bf791440327cbaddd334b0e5" prot="public" virt="non-virtual"><scope>lssh_module_result_t</scope><name>landmark_offset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

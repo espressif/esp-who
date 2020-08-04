@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structlssh__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>lssh_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structlssh__config__t_1a68288734da9db766e9f944611d0ccc27" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int lssh_config_t::resized_height</definition>
+        <argsstring></argsstring>
+        <name>resized_height</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="36" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1af189752407a5c9b73418d1d5e2165520" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int lssh_config_t::resized_width</definition>
+        <argsstring></argsstring>
+        <name>resized_width</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="37" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1ae6cff65abab02888b658ffd20990c211" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t lssh_config_t::y_resize_scale</definition>
+        <argsstring></argsstring>
+        <name>y_resize_scale</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="38" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1ac1ccf2ad4fd44d91a69c552d8185b1a2" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t lssh_config_t::x_resize_scale</definition>
+        <argsstring></argsstring>
+        <name>x_resize_scale</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="39" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1a82f722904a1f3c8bac411d1dd702d9e7" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int lssh_config_t::enabled_top_k</definition>
+        <argsstring></argsstring>
+        <name>enabled_top_k</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="40" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1aeabf8113d07e8142161cf5c752e8ff92" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t lssh_config_t::score_threshold</definition>
+        <argsstring></argsstring>
+        <name>score_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="41" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1a8fc908f96a1d1cfe559375de501dd3f5" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t lssh_config_t::nms_threshold</definition>
+        <argsstring></argsstring>
+        <name>nms_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="42" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__config__t_1ae0283858dd070f00e9646ff8a7a059f3" prot="public" static="no" mutable="no">
+        <type>dl_conv_mode</type>
+        <definition>dl_conv_mode lssh_config_t::mode</definition>
+        <argsstring></argsstring>
+        <name>mode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="44" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="35" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="34" bodyend="45"/>
+    <listofallmembers>
+      <member refid="structlssh__config__t_1a82f722904a1f3c8bac411d1dd702d9e7" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>enabled_top_k</name></member>
+      <member refid="structlssh__config__t_1ae0283858dd070f00e9646ff8a7a059f3" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>mode</name></member>
+      <member refid="structlssh__config__t_1a8fc908f96a1d1cfe559375de501dd3f5" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>nms_threshold</name></member>
+      <member refid="structlssh__config__t_1a68288734da9db766e9f944611d0ccc27" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>resized_height</name></member>
+      <member refid="structlssh__config__t_1af189752407a5c9b73418d1d5e2165520" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>resized_width</name></member>
+      <member refid="structlssh__config__t_1aeabf8113d07e8142161cf5c752e8ff92" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>score_threshold</name></member>
+      <member refid="structlssh__config__t_1ac1ccf2ad4fd44d91a69c552d8185b1a2" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>x_resize_scale</name></member>
+      <member refid="structlssh__config__t_1ae6cff65abab02888b658ffd20990c211" prot="public" virt="non-virtual"><scope>lssh_config_t</scope><name>y_resize_scale</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

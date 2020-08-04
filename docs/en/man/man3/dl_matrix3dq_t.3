@@ -1,0 +1,58 @@
+.TH "dl_matrix3dq_t" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dl_matrix3dq_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dl_lib_matrix3dq\&.h>\fP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBw\fP"
+.br
+.ti -1c
+.RI "int \fBh\fP"
+.br
+.ti -1c
+.RI "int \fBc\fP"
+.br
+.ti -1c
+.RI "int \fBn\fP"
+.br
+.ti -1c
+.RI "int \fBstride\fP"
+.br
+.ti -1c
+.RI "int \fBexponent\fP"
+.br
+.ti -1c
+.RI "qtp_t * \fBitem\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBMatrix\fP for input, filter, and output : the sequence of variables is fixed, cannot be modified, otherwise there will be errors in some handwrite xtensa instruction functions 
+.SH "Member Data Documentation"
+.PP 
+.SS "int dl_matrix3dq_t::c"
+Channel 
+.SS "int dl_matrix3dq_t::exponent"
+Exponent for quantization 
+.SS "int dl_matrix3dq_t::h"
+Height 
+.SS "qtp_t* dl_matrix3dq_t::item"
+Data 
+.SS "int dl_matrix3dq_t::n"
+Number of filter, input and output must be 1 
+.SS "int dl_matrix3dq_t::stride"
+Step between lines 
+.SS "int dl_matrix3dq_t::w"
+Width 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

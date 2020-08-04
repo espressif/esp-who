@@ -1,0 +1,43 @@
+.TH "tag_image_box" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tag_image_box \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBtag_image_box\fP * \fBnext\fP"
+.br
+.ti -1c
+.RI "fptp_t \fBscore\fP"
+.br
+.ti -1c
+.RI "\fBbox_t\fP \fBbox\fP"
+.br
+.ti -1c
+.RI "\fBbox_t\fP \fBoffset\fP"
+.br
+.ti -1c
+.RI "\fBlandmark_t\fP \fBlandmark\fP"
+.br
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBbox_t\fP tag_image_box::box"
+Anchor boxes or predicted boxes 
+.SS "\fBlandmark_t\fP tag_image_box::landmark"
+The landmarks corresponding to the box 
+.SS "struct \fBtag_image_box\fP* tag_image_box::next"
+Next image_box_t 
+.SS "\fBbox_t\fP tag_image_box::offset"
+The predicted anchor-based offset 
+.SS "fptp_t tag_image_box::score"
+The confidence score of the class corresponding to the box 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

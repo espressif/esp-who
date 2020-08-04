@@ -1,0 +1,942 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="fr__forward_8h" kind="file" language="C++">
+    <compoundname>fr_forward.h</compoundname>
+    <includes refid="image__util_8h" local="yes">image_util.h</includes>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="frmn_8h" local="yes">frmn.h</includes>
+    <incdepgraph>
+      <node id="21">
+        <label>assert.h</label>
+      </node>
+      <node id="12">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h</label>
+        <link refid="fr_forward.h"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>stdint.h</label>
+      </node>
+      <node id="19">
+        <label>stdlib.h</label>
+      </node>
+      <node id="20">
+        <label>string.h</label>
+      </node>
+      <node id="22">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>math.h</label>
+      </node>
+      <node id="23">
+        <label>frmn.h</label>
+        <link refid="frmn_8h_source"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>mtmn.h</label>
+        <link refid="mtmn_8h_source"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>stdio.h</label>
+      </node>
+      <node id="13">
+        <label>image_util.h</label>
+        <link refid="image__util_8h_source"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structtag__face__id__node" prot="public">tag_face_id_node</innerclass>
+    <innerclass refid="structface__id__name__list" prot="public">face_id_name_list</innerclass>
+    <innerclass refid="structface__id__list" prot="public">face_id_list</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="fr__forward_8h_1ac8dbcf5e3be0321aa091122bf2d3b47b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t align_face_rot</definition>
+        <argsstring>(box_array_t *onet_boxes, dl_matrix3du_t *src, dl_matrix3du_t *dest)</argsstring>
+        <name>align_face_rot</name>
+        <param>
+          <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+          <declname>onet_boxes</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>dest</declname>
+        </param>
+        <briefdescription>
+<para>Align detected face to average face according to landmark. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>onet_boxes</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output of MTMN with box and landmark </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Image matrix, rgb888 format </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>dest</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output image </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>ESP_OK Input face is good for recognition </para></simplesect>
+<simplesect kind="return"><para>ESP_FAIL Input face is not good for recognition </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="94" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a8e71aa771e78b363ab8b745aff07b900" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t align_face_sim</definition>
+        <argsstring>(box_array_t *onet_boxes, dl_matrix3du_t *src, dl_matrix3du_t *dest)</argsstring>
+        <name>align_face_sim</name>
+        <param>
+          <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+          <declname>onet_boxes</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>dest</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="98" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a75e0311e61ee390e15a4c3bd4766035a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t align_face</definition>
+        <argsstring>(box_array_t *onet_boxes, dl_matrix3du_t *src, dl_matrix3du_t *dest)</argsstring>
+        <name>align_face</name>
+        <param>
+          <type><ref refid="structtag__box__list" kindref="compound">box_array_t</ref> *</type>
+          <declname>onet_boxes</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>dest</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="102" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="102" bodyend="107"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="fr__forward_8h_1a1aaf4002f77b5308e94b18468fe17df1" prot="public" static="no">
+        <name>FACE_WIDTH</name>
+        <initializer>56</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="12" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1af8604502b9c2b373b8c053effd261de8" prot="public" static="no">
+        <name>FACE_HEIGHT</name>
+        <initializer>56</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="13" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a4a1456eb555d827e462019f7d0682c82" prot="public" static="no">
+        <name>FACE_ID_SIZE</name>
+        <initializer>512</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="14" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a8dfc9c5f8698aa209a5e5e2c57be0c85" prot="public" static="no">
+        <name>FACE_REC_THRESHOLD</name>
+        <initializer>0.55</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="15" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a3e2c1d80355b8e7e2dd53f88e6db03b5" prot="public" static="no">
+        <name>LEFT_EYE_X</name>
+        <initializer>0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="17" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a7136c038e7ed45371d8d3029b41ad857" prot="public" static="no">
+        <name>LEFT_EYE_Y</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="18" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1aecdf930eb32177a982bd750338e39aac" prot="public" static="no">
+        <name>RIGHT_EYE_X</name>
+        <initializer>6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="19" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a5669814cf7d907ea16590c1487a70339" prot="public" static="no">
+        <name>RIGHT_EYE_Y</name>
+        <initializer>7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="20" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a915d43beaca5d33e18ba340bc25adddb" prot="public" static="no">
+        <name>NOSE_X</name>
+        <initializer>4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="21" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a8fb055757ce702fb64469cc38f245ded" prot="public" static="no">
+        <name>NOSE_Y</name>
+        <initializer>5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="22" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a696872fe435fa093d8a505672b062baf" prot="public" static="no">
+        <name>LEFT_MOUTH_X</name>
+        <initializer>2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="23" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a7ba13ba81ddd58f75296c4ff0b8a83ee" prot="public" static="no">
+        <name>LEFT_MOUTH_Y</name>
+        <initializer>3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="24" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1af9a533749d7f068b305cd827edec389b" prot="public" static="no">
+        <name>RIGHT_MOUTH_X</name>
+        <initializer>8</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="25" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1ab6e8e15a723bd92ed1678d615626ba5d" prot="public" static="no">
+        <name>RIGHT_MOUTH_Y</name>
+        <initializer>9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="26" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a5b8479eb392b8fb1d4a1e0019e33eae2" prot="public" static="no">
+        <name>EYE_DIST_SET</name>
+        <initializer>16.5f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="28" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1abc53e86bdcc7d2cf0cb062c23d81ac38" prot="public" static="no">
+        <name>NOSE_EYE_RATIO_THRES_MIN</name>
+        <initializer>0.49f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="29" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a75823f43494a4a16a7675e9c6c4ec617" prot="public" static="no">
+        <name>NOSE_EYE_RATIO_THRES_MAX</name>
+        <initializer>2.04f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="30" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="fr__forward_8h_1a699d3796ba654436e2c5ed99ba7319b6" prot="public" static="no">
+        <name>ENROLL_NAME_LEN</name>
+        <initializer>16</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="33" column="9" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="fr__forward_8h_1ac297fa7d5777de8be299f763ee4d0e04" prot="public" static="no">
+        <type>struct <ref refid="structtag__face__id__node" kindref="compound">tag_face_id_node</ref></type>
+        <definition>typedef struct tag_face_id_node  face_id_node</definition>
+        <argsstring></argsstring>
+        <name>face_id_node</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="39" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="fr__forward_8h_1a4de8c2348533dfc1f89be0629ccf5fc5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void face_id_init</definition>
+        <argsstring>(face_id_list *l, uint8_t size, uint8_t confirm_times)</argsstring>
+        <name>face_id_init</name>
+        <param>
+          <type><ref refid="structface__id__list" kindref="compound">face_id_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>confirm_times</declname>
+        </param>
+        <briefdescription>
+<para>Initialize face id list. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Size of list, one list contains one vector </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>confirm_times</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Enroll times for one id </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="66" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a277167bc00a7fa5a940d9599529043e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void face_id_name_init</definition>
+        <argsstring>(face_id_name_list *l, uint8_t size, uint8_t confirm_times)</argsstring>
+        <name>face_id_name_init</name>
+        <param>
+          <type><ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>confirm_times</declname>
+        </param>
+        <briefdescription>
+<para>Initialize face id list with name. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Size of list, one list contains one vector </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>confirm_times</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Enroll times for one id </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="75" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1aa4dd035815d45b12afe41955b9ab8a6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+        <definition>dl_matrix3du_t* aligned_face_alloc</definition>
+        <argsstring>()</argsstring>
+        <name>aligned_face_alloc</name>
+        <briefdescription>
+<para>Alloc memory for aligned face. </para>        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>dl_matrix3du_t* Size: 1xFACE_WIDTHxFACE_HEIGHTx3 </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="82" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a8c08fe76fb9aceaa168b06b6048d8321" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* get_face_id</definition>
+        <argsstring>(dl_matrix3du_t *aligned_face)</argsstring>
+        <name>get_face_id</name>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>aligned_face</declname>
+        </param>
+        <briefdescription>
+<para>Run the face recognition model to get the face feature. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>aligned_face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A 56x56x3 image, the variable need to do align_face first </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>face_id A 512 vector, size (1, 1, 1, 512) </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="116" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1ae3800ad577e63dc70f6016aee3eae1c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void add_face_id</definition>
+        <argsstring>(dl_matrix3d_t *dest_id, dl_matrix3d_t *src_id)</argsstring>
+        <name>add_face_id</name>
+        <param>
+          <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+          <declname>dest_id</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+          <declname>src_id</declname>
+        </param>
+        <briefdescription>
+<para>Add src_id to dest_id. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>dest_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id after accumulation </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>src_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id to be added </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="124" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a0bd86a87f2f5966229b861a341124cd6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t recognize_face</definition>
+        <argsstring>(face_id_list *l, dl_matrix3du_t *algined_face)</argsstring>
+        <name>recognize_face</name>
+        <param>
+          <type><ref refid="structface__id__list" kindref="compound">face_id_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>algined_face</declname>
+        </param>
+        <briefdescription>
+<para>Match face with the id_list, and return matched_id. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An ID list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>algined_face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An aligned face </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>int8_t Matched face id </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="134" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a6fdf81cad4c60406e020b5be449a5675" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref> *</type>
+        <definition>face_id_node* recognize_face_with_name</definition>
+        <argsstring>(face_id_name_list *l, dl_matrix3d_t *face_id)</argsstring>
+        <name>recognize_face_with_name</name>
+        <param>
+          <type><ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+          <declname>face_id</declname>
+        </param>
+        <briefdescription>
+<para>Match face id with the id_list, and return matched face id node. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>face_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>face_id_node* </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="143" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a2d9c6be0f6bb06094d03019da23542c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t enroll_face</definition>
+        <argsstring>(face_id_list *l, dl_matrix3du_t *aligned_face)</argsstring>
+        <name>enroll_face</name>
+        <param>
+          <type><ref refid="structface__id__list" kindref="compound">face_id_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref> *</type>
+          <declname>aligned_face</declname>
+        </param>
+        <briefdescription>
+<para>Produce face id according to the input aligned face, and save it to dest_id. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>aligned_face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>An aligned face </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>enroll_confirm_times</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Confirm times for each face id enrollment </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>-1 Wrong input enroll_confirm_times </para></simplesect>
+<simplesect kind="return"><para>0 Enrollment finish </para></simplesect>
+<simplesect kind="return"><para>&gt;=1 The left piece of aligned faces should be input </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="155" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1a4117ab81f0d6186fff3f9a4424e85317" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t enroll_face_with_name</definition>
+        <argsstring>(face_id_name_list *l, dl_matrix3d_t *new_id, char *name)</argsstring>
+        <name>enroll_face_with_name</name>
+        <param>
+          <type><ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+          <declname>new_id</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Produce face id according to the input aligned face, and save the id-name pairs to dest_id. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list with name </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>new_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A face id that need to be enrolled </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>name corresponding to the face id </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>int8_t The left piece of aligned faces should be input </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="165" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1aa26e3b8b45aaa4f470c9ba9961f07229" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint8_t</type>
+        <definition>uint8_t delete_face</definition>
+        <argsstring>(face_id_list *l)</argsstring>
+        <name>delete_face</name>
+        <param>
+          <type><ref refid="structface__id__list" kindref="compound">face_id_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <briefdescription>
+<para>Delete the enrolled face IDs. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>uint8_t The number of IDs remaining in face id list </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="175" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1aedfdd1d1ed9503cccc6ccb2e9fb076e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int8_t</type>
+        <definition>int8_t delete_face_with_name</definition>
+        <argsstring>(face_id_name_list *l, char *name)</argsstring>
+        <name>delete_face_with_name</name>
+        <param>
+          <type><ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Delete the enrolled face IDs and associated names. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name that needs to be deleted </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>int8_t The number of IDs remaining in face id list </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="184" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="fr__forward_8h_1ac4b39112aad89346b72b5841dcd92585" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void delete_face_all_with_name</definition>
+        <argsstring>(face_id_name_list *l)</argsstring>
+        <name>delete_face_all_with_name</name>
+        <param>
+          <type><ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref> *</type>
+          <declname>l</declname>
+        </param>
+        <briefdescription>
+<para>Delete all the enrolled face IDs and names paris. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>l</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Face id list with names </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="191" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;image_util.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;frmn.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FACE_WIDTH<sp/>56</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FACE_HEIGHT<sp/>56</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FACE_ID_SIZE<sp/>512</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>FACE_REC_THRESHOLD<sp/>0.55</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LEFT_EYE_X<sp/>0</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LEFT_EYE_Y<sp/>1</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RIGHT_EYE_X<sp/>6</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RIGHT_EYE_Y<sp/>7</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NOSE_X<sp/>4</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NOSE_Y<sp/>5</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LEFT_MOUTH_X<sp/>2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>LEFT_MOUTH_Y<sp/>3</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RIGHT_MOUTH_X<sp/>8</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RIGHT_MOUTH_Y<sp/>9</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>EYE_DIST_SET<sp/>16.5f</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NOSE_EYE_RATIO_THRES_MIN<sp/>0.49f</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NOSE_EYE_RATIO_THRES_MAX<sp/>2.04f</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ENROLL_NAME_LEN<sp/>16</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34" refid="structtag__face__id__node" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__face__id__node" kindref="compound">tag_face_id_node</ref></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="36" refid="structtag__face__id__node_1a34ea80580ae0d009d9cc67661bff14d7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtag__face__id__node" kindref="compound">tag_face_id_node</ref><sp/>*<ref refid="structtag__face__id__node_1a34ea80580ae0d009d9cc67661bff14d7" kindref="member">next</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="37" refid="structtag__face__id__node_1a4152a8adab1f1c8771f5815a1db52993" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/><ref refid="structtag__face__id__node_1a4152a8adab1f1c8771f5815a1db52993" kindref="member">id_name</ref>[ENROLL_NAME_LEN];<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="38" refid="structtag__face__id__node_1a704f52e8039f328fac666e9ca9e52650" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*<ref refid="structtag__face__id__node_1a704f52e8039f328fac666e9ca9e52650" kindref="member">id_vec</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref>;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41" refid="structface__id__name__list" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="43" refid="structface__id__name__list_1a5b87c9352d3a401632ac3328d89159f0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref><sp/>*<ref refid="structface__id__name__list_1a5b87c9352d3a401632ac3328d89159f0" kindref="member">head</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="44" refid="structface__id__name__list_1a79e16aedc607e3ae0f7d969f061341e0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref><sp/>*<ref refid="structface__id__name__list_1a79e16aedc607e3ae0f7d969f061341e0" kindref="member">tail</ref>;<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="45" refid="structface__id__name__list_1ac3514ea47c8d2d13a9525c4ab4b5a474" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__name__list_1ac3514ea47c8d2d13a9525c4ab4b5a474" kindref="member">count</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="46" refid="structface__id__name__list_1a02035a83240b1a2b4cf9119783d6b9da" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__name__list_1a02035a83240b1a2b4cf9119783d6b9da" kindref="member">confirm_times</ref>;<sp/></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref>;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49" refid="structface__id__list" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="51" refid="structface__id__list_1a44e216b594f83a0f5367288afa03da80" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__list_1a44e216b594f83a0f5367288afa03da80" kindref="member">head</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="52" refid="structface__id__list_1ab0e672cfe36ae0c4f6625ff062a4ab58" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__list_1ab0e672cfe36ae0c4f6625ff062a4ab58" kindref="member">tail</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="53" refid="structface__id__list_1abcc6469afed569568c289a1bc483ec16" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__list_1abcc6469afed569568c289a1bc483ec16" kindref="member">count</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="54" refid="structface__id__list_1a1ea4d50bbdca9fc1027b9f9fbdfccdd2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__list_1a1ea4d50bbdca9fc1027b9f9fbdfccdd2" kindref="member">size</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="55" refid="structface__id__list_1a83189b63de089f1ad761bdb7388cd654" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/><ref refid="structface__id__list_1a83189b63de089f1ad761bdb7388cd654" kindref="member">confirm_times</ref>;<sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="56" refid="structface__id__list_1a69af91734e100e9e6b97089cbe64bf8f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>**<ref refid="structface__id__list_1a69af91734e100e9e6b97089cbe64bf8f" kindref="member">id_list</ref>;<sp/></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/><ref refid="structface__id__list" kindref="compound">face_id_list</ref>;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>face_id_init(<ref refid="structface__id__list" kindref="compound">face_id_list</ref><sp/>*l,<sp/>uint8_t<sp/>size,<sp/>uint8_t<sp/>confirm_times);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>face_id_name_init(<ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref><sp/>*l,<sp/>uint8_t<sp/>size,<sp/>uint8_t<sp/>confirm_times);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*aligned_face_alloc();</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>int8_t<sp/>align_face_rot(<ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*onet_boxes,</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*src,</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*dest);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>int8_t<sp/>align_face_sim(<ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*onet_boxes,</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*src,</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*dest);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/>int8_t<sp/>align_face(<ref refid="structtag__box__list" kindref="compound">box_array_t</ref><sp/>*onet_boxes,</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*src,</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*dest)</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>align_face_sim(onet_boxes,<sp/>src,<sp/>dest);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*get_face_id(<ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*aligned_face);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>add_face_id(<ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*dest_id,</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*src_id);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>int8_t<sp/>recognize_face(<ref refid="structface__id__list" kindref="compound">face_id_list</ref><sp/>*l,<sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*algined_face);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structtag__face__id__node" kindref="compound">face_id_node</ref><sp/>*recognize_face_with_name(<ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref><sp/>*l,<sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*face_id);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>int8_t<sp/>enroll_face(<ref refid="structface__id__list" kindref="compound">face_id_list</ref><sp/>*l,<sp/><ref refid="structdl__matrix3du__t" kindref="compound">dl_matrix3du_t</ref><sp/>*aligned_face);</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/>int8_t<sp/>enroll_face_with_name(<ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref><sp/>*l,</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*new_id,</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*name);</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/>uint8_t<sp/>delete_face(<ref refid="structface__id__list" kindref="compound">face_id_list</ref><sp/>*l);</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/>int8_t<sp/>delete_face_with_name(<ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref><sp/>*l,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*name);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>delete_face_all_with_name(<ref refid="structface__id__name__list" kindref="compound">face_id_name_list</ref><sp/>*l);</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h"/>
+  </compounddef>
+</doxygen>

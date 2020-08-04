@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structbox__t" kind="struct" language="C++" prot="public">
+    <compoundname>box_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" prot="public" static="no" mutable="no">
+        <type>fptp_t</type>
+        <definition>fptp_t box_t::box_p[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>box_p</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>box struct </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="55" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="54" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="53" bodyend="56"/>
+    <listofallmembers>
+      <member refid="structbox__t_1a5459c2b4c6f6ac2c8a712981931737c8" prot="public" virt="non-virtual"><scope>box_t</scope><name>box_p</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

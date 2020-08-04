@@ -1,0 +1,33 @@
+.TH "hd_config_t" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+hd_config_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBtarget_size\fP"
+.br
+.ti -1c
+.RI "fptp_t \fBscore_threshold\fP"
+.br
+.ti -1c
+.RI "fptp_t \fBnms_threshold\fP"
+.br
+.in -1c
+.SH "Member Data Documentation"
+.PP 
+.SS "fptp_t hd_config_t::nms_threshold"
+nms threshold， used to filter out overlapping boxes 
+.SS "fptp_t hd_config_t::score_threshold"
+score threshold， used to filter candidates by score 
+.SS "int hd_config_t::target_size"
+The input size of hand detection network 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structdl__matrix3dq__blazeblock__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>dl_matrix3dq_blazeblock_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1aadc2939c713e93760e6dfadbc6392bee" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::stride_x</definition>
+        <argsstring></argsstring>
+        <name>stride_x</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Strides of width </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="61" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1a3dc1eca612902e6f384c7679a4477b68" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::stride_y</definition>
+        <argsstring></argsstring>
+        <name>stride_y</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Strides of height </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="62" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1ab17e266bfec78f4d9f4d8555fd29090a" prot="public" static="no" mutable="no">
+        <type>dl_padding_type</type>
+        <definition>dl_padding_type dl_matrix3dq_blazeblock_config_t::padding</definition>
+        <argsstring></argsstring>
+        <name>padding</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Padding type </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="63" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1af3748578fd33e24f91cbea3f02072dec" prot="public" static="no" mutable="no">
+        <type>dl_conv_mode</type>
+        <definition>dl_conv_mode dl_matrix3dq_blazeblock_config_t::mode</definition>
+        <argsstring></argsstring>
+        <name>mode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Implementation mode </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="64" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1a9582f112c6950f9d0f055946180b0267" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::dw1_exponent</definition>
+        <argsstring></argsstring>
+        <name>dw1_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of dw1 filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="65" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1add6c8e25d73d6f0f53fdb76663694d5d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::pw1_exponent</definition>
+        <argsstring></argsstring>
+        <name>pw1_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of pw1 filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="66" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1a6f96e07c624e724d20d6f628fd8eddcf" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::dw2_exponent</definition>
+        <argsstring></argsstring>
+        <name>dw2_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of dw2 filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="67" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1ac3213773f7d13f92e0f6df09668a85a4" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::pw2_exponent</definition>
+        <argsstring></argsstring>
+        <name>pw2_exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent of pw2 filter </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="68" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1accb475e783097843a096d0ff8948e8cf" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::shortcut</definition>
+        <argsstring></argsstring>
+        <name>shortcut</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Shortcut connection flag </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="69" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__blazeblock__config__t_1a7bb5f4f3b1ce14aae271b1af1ec7cb0b" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_blazeblock_config_t::save_input</definition>
+        <argsstring></argsstring>
+        <name>save_input</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Input save flag </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="70" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="60" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="59" bodyend="71"/>
+    <listofallmembers>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1a9582f112c6950f9d0f055946180b0267" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>dw1_exponent</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1a6f96e07c624e724d20d6f628fd8eddcf" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>dw2_exponent</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1af3748578fd33e24f91cbea3f02072dec" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>mode</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1ab17e266bfec78f4d9f4d8555fd29090a" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>padding</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1add6c8e25d73d6f0f53fdb76663694d5d" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>pw1_exponent</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1ac3213773f7d13f92e0f6df09668a85a4" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>pw2_exponent</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1a7bb5f4f3b1ce14aae271b1af1ec7cb0b" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>save_input</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1accb475e783097843a096d0ff8948e8cf" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>shortcut</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1aadc2939c713e93760e6dfadbc6392bee" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>stride_x</name></member>
+      <member refid="structdl__matrix3dq__blazeblock__config__t_1a3dc1eca612902e6f384c7679a4477b68" prot="public" virt="non-virtual"><scope>dl_matrix3dq_blazeblock_config_t</scope><name>stride_y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

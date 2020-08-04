@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structmtmn__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>mtmn_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structmtmn__config__t_1a0d6021a3604af36c95c3494b35477448" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float mtmn_config_t::min_face</definition>
+        <argsstring></argsstring>
+        <name>min_face</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The minimum size of a detectable face </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="57" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__config__t_1a648afd9fd7a3752276c7be0ec1822a53" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float mtmn_config_t::pyramid</definition>
+        <argsstring></argsstring>
+        <name>pyramid</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The scale of the gradient scaling for the input images </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="58" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__config__t_1aa3c0368e1a610694f9d77c178a8fa7a3" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int mtmn_config_t::pyramid_times</definition>
+        <argsstring></argsstring>
+        <name>pyramid_times</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The pyramid resizing times </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="59" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" prot="public" static="no" mutable="no">
+        <type><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref></type>
+        <definition>threshold_config_t mtmn_config_t::p_threshold</definition>
+        <argsstring></argsstring>
+        <name>p_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The thresholds for P-Net. For details, see the definition of <ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref> </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="60" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" prot="public" static="no" mutable="no">
+        <type><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref></type>
+        <definition>threshold_config_t mtmn_config_t::r_threshold</definition>
+        <argsstring></argsstring>
+        <name>r_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The thresholds for R-Net. For details, see the definition of <ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref> </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="61" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" prot="public" static="no" mutable="no">
+        <type><ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref></type>
+        <definition>threshold_config_t mtmn_config_t::o_threshold</definition>
+        <argsstring></argsstring>
+        <name>o_threshold</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The thresholds for O-Net. For details, see the definition of <ref refid="structthreshold__config__t" kindref="compound">threshold_config_t</ref> </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="62" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__config__t_1a8f3538b015c16c9e9319116005d00f92" prot="public" static="no" mutable="no">
+        <type>mtmn_resize_type</type>
+        <definition>mtmn_resize_type mtmn_config_t::type</definition>
+        <argsstring></argsstring>
+        <name>type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The image resize type. &apos;pyramid&apos; will lose efficacy, when &apos;type&apos;==FAST. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="63" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="41">
+        <label>mtmn_config_t</label>
+        <link refid="structmtmn__config__t"/>
+        <childnode refid="42" relation="usage">
+          <edgelabel>o_threshold</edgelabel>
+          <edgelabel>p_threshold</edgelabel>
+          <edgelabel>r_threshold</edgelabel>
+        </childnode>
+      </node>
+      <node id="42">
+        <label>threshold_config_t</label>
+        <link refid="structthreshold__config__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" line="56" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_detection/include/fd_forward.h" bodystart="55" bodyend="64"/>
+    <listofallmembers>
+      <member refid="structmtmn__config__t_1a0d6021a3604af36c95c3494b35477448" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>min_face</name></member>
+      <member refid="structmtmn__config__t_1a65ee944b7897fdb81405ce78ff4c40f0" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>o_threshold</name></member>
+      <member refid="structmtmn__config__t_1a041d0780f454854f8c95793e71cd700b" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>p_threshold</name></member>
+      <member refid="structmtmn__config__t_1a648afd9fd7a3752276c7be0ec1822a53" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>pyramid</name></member>
+      <member refid="structmtmn__config__t_1aa3c0368e1a610694f9d77c178a8fa7a3" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>pyramid_times</name></member>
+      <member refid="structmtmn__config__t_1aa44826f88b256aea0890c6f0fb9e523a" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>r_threshold</name></member>
+      <member refid="structmtmn__config__t_1a8f3538b015c16c9e9319116005d00f92" prot="public" virt="non-virtual"><scope>mtmn_config_t</scope><name>type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

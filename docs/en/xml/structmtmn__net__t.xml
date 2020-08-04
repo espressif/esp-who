@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structmtmn__net__t" kind="struct" language="C++" prot="public">
+    <compoundname>mtmn_net_t</compoundname>
+    <includes refid="mtmn_8h" local="no">mtmn.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structmtmn__net__t_1afe8da5c65474b55658f5743be97147f8" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* mtmn_net_t::category</definition>
+        <argsstring></argsstring>
+        <name>category</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Classification result after softmax, channel is 2 </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="39" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__net__t_1a53bbafabccad2a6468eafc7eb0775000" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* mtmn_net_t::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Bounding box offset of 2 points: top-left and bottom-right, channel is 4 </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="40" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structmtmn__net__t_1aa0f9c681435e990a9d43063bf6b66dfe" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* mtmn_net_t::landmark</definition>
+        <argsstring></argsstring>
+        <name>landmark</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Offsets of 5 landmarks:<itemizedlist>
+<listitem><para>Left eye</para></listitem><listitem><para>Mouth leftside</para></listitem><listitem><para>Nose</para></listitem><listitem><para>Right eye</para></listitem><listitem><para>Mouth rightside</para></listitem></itemizedlist>
+</para><para>channel is 10 </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="41" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Detection results with MTMN. </para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="45">
+        <label>dl_matrix3d_t</label>
+        <link refid="structdl__matrix3d__t"/>
+      </node>
+      <node id="44">
+        <label>mtmn_net_t</label>
+        <link refid="structmtmn__net__t"/>
+        <childnode refid="45" relation="usage">
+          <edgelabel>offset</edgelabel>
+          <edgelabel>category</edgelabel>
+          <edgelabel>landmark</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" line="38" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/mtmn.h" bodystart="37" bodyend="50"/>
+    <listofallmembers>
+      <member refid="structmtmn__net__t_1afe8da5c65474b55658f5743be97147f8" prot="public" virt="non-virtual"><scope>mtmn_net_t</scope><name>category</name></member>
+      <member refid="structmtmn__net__t_1aa0f9c681435e990a9d43063bf6b66dfe" prot="public" virt="non-virtual"><scope>mtmn_net_t</scope><name>landmark</name></member>
+      <member refid="structmtmn__net__t_1a53bbafabccad2a6468eafc7eb0775000" prot="public" virt="non-virtual"><scope>mtmn_net_t</scope><name>offset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

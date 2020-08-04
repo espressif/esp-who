@@ -1,0 +1,58 @@
+.TH "dl_matrix3dq_mobilenet_config_t" 3 "Mon Aug 3 2020" "Espressif Audio Development Framework (ESP-ADF)" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dl_matrix3dq_mobilenet_config_t \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dl_lib_matrix3dq\&.h>\fP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBstride_x\fP"
+.br
+.ti -1c
+.RI "int \fBstride_y\fP"
+.br
+.ti -1c
+.RI "dl_padding_type \fBpadding\fP"
+.br
+.ti -1c
+.RI "dl_conv_mode \fBmode\fP"
+.br
+.ti -1c
+.RI "int \fBdilate_exponent\fP"
+.br
+.ti -1c
+.RI "int \fBdepthwise_exponent\fP"
+.br
+.ti -1c
+.RI "int \fBcompress_exponent\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Configuration of mobilenet operation 
+.SH "Member Data Documentation"
+.PP 
+.SS "int dl_matrix3dq_mobilenet_config_t::compress_exponent"
+Exponent of compress filter 
+.SS "int dl_matrix3dq_mobilenet_config_t::depthwise_exponent"
+Exponent of depthwise filter 
+.SS "int dl_matrix3dq_mobilenet_config_t::dilate_exponent"
+Exponent of dilation filter 
+.SS "dl_conv_mode dl_matrix3dq_mobilenet_config_t::mode"
+Implementation mode 
+.SS "dl_padding_type dl_matrix3dq_mobilenet_config_t::padding"
+Padding type 
+.SS "int dl_matrix3dq_mobilenet_config_t::stride_x"
+Strides of width 
+.SS "int dl_matrix3dq_mobilenet_config_t::stride_y"
+Strides of height 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Espressif Audio Development Framework (ESP-ADF) from the source code\&.

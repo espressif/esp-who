@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structlssh__module__config__t" kind="struct" language="C++" prot="public">
+    <compoundname>lssh_module_config_t</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structlssh__module__config__t_1a33812319b8cb82b5047f88d27f21d91c" prot="public" static="no" mutable="no">
+        <type>int *</type>
+        <definition>int* lssh_module_config_t::anchor_size</definition>
+        <argsstring></argsstring>
+        <name>anchor_size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="49" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__module__config__t_1a8bf9e3251b691f9110376de85a58dce6" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int lssh_module_config_t::stride</definition>
+        <argsstring></argsstring>
+        <name>stride</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="50" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structlssh__module__config__t_1a08e22e0e22db5777f027c0072e8ee7d2" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int lssh_module_config_t::boundary</definition>
+        <argsstring></argsstring>
+        <name>boundary</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="51" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" line="48" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/lssh.h" bodystart="47" bodyend="52"/>
+    <listofallmembers>
+      <member refid="structlssh__module__config__t_1a33812319b8cb82b5047f88d27f21d91c" prot="public" virt="non-virtual"><scope>lssh_module_config_t</scope><name>anchor_size</name></member>
+      <member refid="structlssh__module__config__t_1a08e22e0e22db5777f027c0072e8ee7d2" prot="public" virt="non-virtual"><scope>lssh_module_config_t</scope><name>boundary</name></member>
+      <member refid="structlssh__module__config__t_1a8bf9e3251b691f9110376de85a58dce6" prot="public" virt="non-virtual"><scope>lssh_module_config_t</scope><name>stride</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

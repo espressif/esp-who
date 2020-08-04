@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structtag__face__id__node" kind="struct" language="C++" prot="public">
+    <compoundname>tag_face_id_node</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structtag__face__id__node_1a34ea80580ae0d009d9cc67661bff14d7" prot="public" static="no" mutable="no">
+        <type>struct <ref refid="structtag__face__id__node" kindref="compound">tag_face_id_node</ref> *</type>
+        <definition>struct tag_face_id_node* tag_face_id_node::next</definition>
+        <argsstring></argsstring>
+        <name>next</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>next face id node </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="36" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__face__id__node_1a4152a8adab1f1c8771f5815a1db52993" prot="public" static="no" mutable="no">
+        <type>char</type>
+        <definition>char tag_face_id_node::id_name[ENROLL_NAME_LEN]</definition>
+        <argsstring>[ENROLL_NAME_LEN]</argsstring>
+        <name>id_name</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name corresponding to the face id </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="37" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__face__id__node_1a704f52e8039f328fac666e9ca9e52650" prot="public" static="no" mutable="no">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* tag_face_id_node::id_vec</definition>
+        <argsstring></argsstring>
+        <name>id_vec</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>face id </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="38" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="54">
+        <label>tag_face_id_node</label>
+        <link refid="structtag__face__id__node"/>
+        <childnode refid="55" relation="usage">
+          <edgelabel>id_vec</edgelabel>
+        </childnode>
+        <childnode refid="54" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+      </node>
+      <node id="55">
+        <label>dl_matrix3d_t</label>
+        <link refid="structdl__matrix3d__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" line="35" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/face_recognition/include/fr_forward.h" bodystart="34" bodyend="39"/>
+    <listofallmembers>
+      <member refid="structtag__face__id__node_1a4152a8adab1f1c8771f5815a1db52993" prot="public" virt="non-virtual"><scope>tag_face_id_node</scope><name>id_name</name></member>
+      <member refid="structtag__face__id__node_1a704f52e8039f328fac666e9ca9e52650" prot="public" virt="non-virtual"><scope>tag_face_id_node</scope><name>id_vec</name></member>
+      <member refid="structtag__face__id__node_1a34ea80580ae0d009d9cc67661bff14d7" prot="public" virt="non-virtual"><scope>tag_face_id_node</scope><name>next</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

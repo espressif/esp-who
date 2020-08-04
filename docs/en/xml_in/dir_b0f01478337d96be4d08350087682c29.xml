@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="dir_b0f01478337d96be4d08350087682c29" kind="dir">
+    <compoundname>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation</compoundname>
+    <innerdir refid="dir_6f72c39ca69224b66540743246ecc782">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/"/>
+  </compounddef>
+</doxygen>

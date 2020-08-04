@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structdl__matrix3dq__t" kind="struct" language="C++" prot="public">
+    <compoundname>dl_matrix3dq_t</compoundname>
+    <includes refid="dl__lib__matrix3dq_8h" local="no">dl_lib_matrix3dq.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1ae6a8391907091b2c07af1ef3905fd9c7" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_t::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Width </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="14" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1a192a936a7a579127ed02bdde49cfd42f" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_t::h</definition>
+        <argsstring></argsstring>
+        <name>h</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Height </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="15" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1af27b1086dc3980059284d2f8c109a98a" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_t::c</definition>
+        <argsstring></argsstring>
+        <name>c</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Channel </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="16" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1a4cd28e7c8bc392253cf950cc5a6e4eb8" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_t::n</definition>
+        <argsstring></argsstring>
+        <name>n</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Number of filter, input and output must be 1 </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="17" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1a1fd20ca847419b9ec13215131cdbf2e9" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_t::stride</definition>
+        <argsstring></argsstring>
+        <name>stride</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Step between lines </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="18" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1a7cfcaaadf968f2288d6d81f18b475953" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int dl_matrix3dq_t::exponent</definition>
+        <argsstring></argsstring>
+        <name>exponent</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Exponent for quantization </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="19" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structdl__matrix3dq__t_1adf4dcad61fd27251938e9487a57fcef9" prot="public" static="no" mutable="no">
+        <type>qtp_t *</type>
+        <definition>qtp_t* dl_matrix3dq_t::item</definition>
+        <argsstring></argsstring>
+        <name>item</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Data </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="20" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="structMatrix" kindref="compound">Matrix</ref> for input, filter, and output : the sequence of variables is fixed, cannot be modified, otherwise there will be errors in some handwrite xtensa instruction functions </para>    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" line="12" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/dl_lib_matrix3dq.h" bodystart="11" bodyend="22"/>
+    <listofallmembers>
+      <member refid="structdl__matrix3dq__t_1af27b1086dc3980059284d2f8c109a98a" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>c</name></member>
+      <member refid="structdl__matrix3dq__t_1a7cfcaaadf968f2288d6d81f18b475953" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>exponent</name></member>
+      <member refid="structdl__matrix3dq__t_1a192a936a7a579127ed02bdde49cfd42f" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>h</name></member>
+      <member refid="structdl__matrix3dq__t_1adf4dcad61fd27251938e9487a57fcef9" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>item</name></member>
+      <member refid="structdl__matrix3dq__t_1a4cd28e7c8bc392253cf950cc5a6e4eb8" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>n</name></member>
+      <member refid="structdl__matrix3dq__t_1a1fd20ca847419b9ec13215131cdbf2e9" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>stride</name></member>
+      <member refid="structdl__matrix3dq__t_1ae6a8391907091b2c07af1ef3905fd9c7" prot="public" virt="non-virtual"><scope>dl_matrix3dq_t</scope><name>w</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

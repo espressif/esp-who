@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="dir_409f97388efe006bc3438b95e9edef48" kind="dir">
+    <compoundname>/home/yuanjiong/esp/dl/dl_master/esp-who/components</compoundname>
+    <innerdir refid="dir_9fef79fcf636b32fa62af325057e2637">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/"/>
+  </compounddef>
+</doxygen>

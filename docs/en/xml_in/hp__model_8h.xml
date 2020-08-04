@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="hp__model_8h" kind="file" language="C++">
+    <compoundname>hp_model.h</compoundname>
+    <includes refid="dl__lib__matrix3d_8h" local="yes">dl_lib_matrix3d.h</includes>
+    <includes refid="dl__lib__matrix3dq_8h" local="yes">dl_lib_matrix3dq.h</includes>
+    <includedby refid="pe__forward_8h" local="yes">/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h</includedby>
+    <incdepgraph>
+      <node id="107">
+        <label>assert.h</label>
+      </node>
+      <node id="102">
+        <label>stdint.h</label>
+      </node>
+      <node id="104">
+        <label>stdlib.h</label>
+      </node>
+      <node id="105">
+        <label>string.h</label>
+      </node>
+      <node id="108">
+        <label>dl_lib_matrix3dq.h</label>
+        <link refid="dl__lib__matrix3dq_8h_source"/>
+        <childnode refid="101" relation="include">
+        </childnode>
+      </node>
+      <node id="101">
+        <label>dl_lib_matrix3d.h</label>
+        <link refid="dl__lib__matrix3d_8h_source"/>
+        <childnode refid="102" relation="include">
+        </childnode>
+        <childnode refid="103" relation="include">
+        </childnode>
+        <childnode refid="104" relation="include">
+        </childnode>
+        <childnode refid="105" relation="include">
+        </childnode>
+        <childnode refid="106" relation="include">
+        </childnode>
+        <childnode refid="107" relation="include">
+        </childnode>
+      </node>
+      <node id="106">
+        <label>math.h</label>
+      </node>
+      <node id="100">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h</label>
+        <link refid="hp_model.h"/>
+        <childnode refid="101" relation="include">
+        </childnode>
+        <childnode refid="108" relation="include">
+        </childnode>
+      </node>
+      <node id="103">
+        <label>stdio.h</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="110">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/pose_estimation/include/pe_forward.h</label>
+        <link refid="pe__forward_8h_source"/>
+      </node>
+      <node id="109">
+        <label>/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h</label>
+        <link refid="hp_model.h"/>
+        <childnode refid="110" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="hp__model_8h_1aed20e59df73a97b5b7d8f20a8a8e4594" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* hp_nano1_ls16_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>hp_nano1_ls16_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the hand pose estimation process with hp_nano1_ls16 model. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A normalized image matrix in rgb888 format, its size is (1, 128, 128, 3). </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0: C implement; 1: handwrite xtensa instruction implement </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>dl_matrix3d_t* The resulting hand joint point coordinates, the size is (1, 1, 21, 2) </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="hp__model_8h_1ac542a8f827fb3d1d99c0c0970dda89db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref> *</type>
+        <definition>dl_matrix3d_t* hp_lite1_q</definition>
+        <argsstring>(dl_matrix3dq_t *in, dl_conv_mode mode)</argsstring>
+        <name>hp_lite1_q</name>
+        <param>
+          <type><ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref> *</type>
+          <declname>in</declname>
+        </param>
+        <param>
+          <type>dl_conv_mode</type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Forward the hand pose estimation process with hp_lite1 model. Calculate in quantization. </para>        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>in</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A normalized image matrix in rgb888 format, its size is (1, 128, 128, 3). </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0: C implement; 1: handwrite xtensa instruction implement </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>dl_matrix3d_t* The resulting hand joint point coordinates, the size is (1, 1, 21, 2) </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h" line="27" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="hp__model_8h_1aeabb0a6304d33c03b43c5bc77dee985a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void hp_test</definition>
+        <argsstring>()</argsstring>
+        <name>hp_test</name>
+        <briefdescription>
+<para>Test the result of hand pose estimation model. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h" line="33" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="hp__model_8h_1adec2a022727491dc4ff676a58df98f56" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void hp_time_test</definition>
+        <argsstring>()</argsstring>
+        <name>hp_time_test</name>
+        <briefdescription>
+<para>Test the forward time of hand pose estimation model. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h" line="39" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/></highlight><highlight class="stringliteral">&quot;C&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3d.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;dl_lib_matrix3dq.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*hp_nano1_ls16_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structdl__matrix3d__t" kindref="compound">dl_matrix3d_t</ref><sp/>*hp_lite1_q(<ref refid="structdl__matrix3dq__t" kindref="compound">dl_matrix3dq_t</ref><sp/>*in,<sp/>dl_conv_mode<sp/>mode);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>hp_test();</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>hp_time_test();</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>__cplusplus</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/lib/include/hp_model.h"/>
+  </compounddef>
+</doxygen>

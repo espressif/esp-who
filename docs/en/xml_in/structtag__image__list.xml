@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.11">
+  <compounddef id="structtag__image__list" kind="struct" language="C++" prot="public">
+    <compoundname>tag_image_list</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" prot="public" static="no" mutable="no">
+        <type><ref refid="structtag__image__box" kindref="compound">image_box_t</ref> *</type>
+        <definition>image_box_t* tag_image_list::head</definition>
+        <argsstring></argsstring>
+        <name>head</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The current head of the image_list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="77" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__image__list_1aafd19b61bae8d0e37d63810363784020" prot="public" static="no" mutable="no">
+        <type><ref refid="structtag__image__box" kindref="compound">image_box_t</ref> *</type>
+        <definition>image_box_t* tag_image_list::origin_head</definition>
+        <argsstring></argsstring>
+        <name>origin_head</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The original head of the image_list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="78" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structtag__image__list_1a31a4fbe1c850eb6f8a6b0c1f21b12e46" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int tag_image_list::len</definition>
+        <argsstring></argsstring>
+        <name>len</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Length of the image_list </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="79" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="63">
+        <label>landmark_t</label>
+        <link refid="structlandmark__t"/>
+      </node>
+      <node id="61">
+        <label>tag_image_list</label>
+        <link refid="structtag__image__list"/>
+        <childnode refid="62" relation="usage">
+          <edgelabel>head</edgelabel>
+          <edgelabel>origin_head</edgelabel>
+        </childnode>
+      </node>
+      <node id="62">
+        <label>tag_image_box</label>
+        <link refid="structtag__image__box"/>
+        <childnode refid="63" relation="usage">
+          <edgelabel>landmark</edgelabel>
+        </childnode>
+        <childnode refid="62" relation="usage">
+          <edgelabel>next</edgelabel>
+        </childnode>
+        <childnode refid="64" relation="usage">
+          <edgelabel>offset</edgelabel>
+          <edgelabel>box</edgelabel>
+        </childnode>
+      </node>
+      <node id="64">
+        <label>box_t</label>
+        <link refid="structbox__t"/>
+      </node>
+    </collaborationgraph>
+    <location file="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" line="76" column="1" bodyfile="/home/yuanjiong/esp/dl/dl_master/esp-who/components/esp-face/image_util/include/image_util.h" bodystart="75" bodyend="80"/>
+    <listofallmembers>
+      <member refid="structtag__image__list_1ae16332f096f9a5b027d9622743c3927b" prot="public" virt="non-virtual"><scope>tag_image_list</scope><name>head</name></member>
+      <member refid="structtag__image__list_1a31a4fbe1c850eb6f8a6b0c1f21b12e46" prot="public" virt="non-virtual"><scope>tag_image_list</scope><name>len</name></member>
+      <member refid="structtag__image__list_1aafd19b61bae8d0e37d63810363784020" prot="public" virt="non-virtual"><scope>tag_image_list</scope><name>origin_head</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
