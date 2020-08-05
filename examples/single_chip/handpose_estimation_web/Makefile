@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := recognition_command_line
+PROJECT_NAME := handpose_estimation_web
 
 SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
 

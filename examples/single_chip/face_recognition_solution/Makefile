@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := camera_web_server_hand
+PROJECT_NAME := face_recognition_solution
 
 SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
 

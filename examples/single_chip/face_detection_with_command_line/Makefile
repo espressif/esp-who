@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := detection_command_line
+PROJECT_NAME := face_detection_command_line
 
 SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
 

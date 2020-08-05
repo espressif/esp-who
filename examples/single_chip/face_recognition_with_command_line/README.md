@@ -1,4 +1,4 @@
-# Recognition with Command Line in Single Chip
+# Face Recognition with Command Line in Single Chip
 
 This example demonstrates **Face Recognition** with a single ESP32 chip (without using any LCD module). ESP32 firstly gets images that are captured by the camera module, then determines if there are any recognized human faces as well as displays its **Recognition Results** in the **Serial Terminal**.
 

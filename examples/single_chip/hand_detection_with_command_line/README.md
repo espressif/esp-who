@@ -1,4 +1,4 @@
-# Camera with Command Line in Single Chip
+# Hand Detection with Command Line in Single Chip
 
 This example demonstrates **Hand Detection** with a single ESP32 chip (without using any LCD module). ESP32 firstly gets images that are captured by the camera module, then determines if there are any human faces as well as displays its **Detection Results** in the **Serial Terminal**. 
 

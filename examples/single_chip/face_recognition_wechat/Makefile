@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := recognition_http
+PROJECT_NAME := face_recognition_wechat
 
 SOLUTION_PATH ?= $(abspath $(shell pwd))/../../..
 
