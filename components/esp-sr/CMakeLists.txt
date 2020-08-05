@@ -5,7 +5,6 @@ set(COMPONENT_ADD_INCLUDEDIRS
     acoustic_algorithm/include
     )
 
-
 register_component()
 
 target_link_libraries(${COMPONENT_TARGET} "-L ${CMAKE_CURRENT_SOURCE_DIR}/lib")
@@ -17,4 +16,6 @@ target_link_libraries(${COMPONENT_TARGET}
     wakenet
     c_speech_features
     dl_lib_sr
+    m
     )
+
