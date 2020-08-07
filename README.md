@@ -38,6 +38,7 @@ To run ESP-WHO, you need to have a development board which integrates a **ESP32 
 
 On how to configure ESP32 module for your applications, please refer to the README.md of each example.
 
+
 ## Software Preparation
 
 ### Image
@@ -104,9 +105,14 @@ idf.py flash -p [PORT]
 ```
 3. Advanced users can modify some options by using the command `idf.py menuconfig`.
 
+The default configuration of all examples is based on [ESP-EYE](https://www.espressif.com/en/products/hardware/esp-eye/overview).
 
 Check README.md of each example for more details.
 
+
+# Default bin
+
+The default bin is [HERE](docs/zh_CN/get-started/default_bin/). You can use [Flash Download Tools](https://www.espressif.com/en/support/download/other-tools) to write the default bin to the ESP-EYE.
 
 # Resources
 
