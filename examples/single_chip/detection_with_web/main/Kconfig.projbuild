@@ -268,9 +268,21 @@ config ESP_FACE_DETECT_ENABLED
     help
         Enables ESP-WHO Face Detection through the web interface.
 
+choice ESP_FACE_DETECT_MODEL
+    bool "Detection Model"
+    depends on ESP_FACE_DETECT_ENABLED
+    default ESP_FACE_DETECT_MTMN
+
+    config ESP_FACE_DETECT_MTMN
+        bool "MTMN"
+        
+    config ESP_FACE_DETECT_LSSH
+        bool "LSSH"
+endchoice
+
 config ESP_FACE_RECOGNITION_ENABLED
     bool "ESP-WHO Face Recognition"
-    depends on ESP_FACE_DETECT_ENABLED
+    depends on ESP_FACE_DETECT_MTMN
     default y
     help
         Enables ESP-WHO Face Recognition through the web interface.
