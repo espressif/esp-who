@@ -93,9 +93,9 @@ The folder of [examples](examples) contains sample applications demonstrating th
 
 Take one Face Detection as an example.
 
-1. Get into one example folder `esp-who/examples/single_chip/detection_with_command_line`.
+1. Get into one example folder `esp-who/examples/single_chip/face_detection_with_command_line`.
 ```
-cd esp-who/examples/single_chip/detection_with_command_line
+cd esp-who/examples/single_chip/face_detection_with_command_line
 ```
 
 2. Compile and flash the project.
