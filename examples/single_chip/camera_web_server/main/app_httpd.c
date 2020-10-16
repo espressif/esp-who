@@ -664,8 +664,10 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     char variable[32];
     char value[32];
 
-    if (parse_get(req, &buf) != ESP_OK ||
-        httpd_query_key_value(buf, "var", variable, sizeof(variable)) != ESP_OK ||
+    if (parse_get(req, &buf) != ESP_OK) {
+        return ESP_FAIL;
+    }
+    if (httpd_query_key_value(buf, "var", variable, sizeof(variable)) != ESP_OK ||
         httpd_query_key_value(buf, "val", value, sizeof(value)) != ESP_OK) {
         free(buf);
         httpd_resp_send_404(req);
@@ -873,8 +875,10 @@ static esp_err_t xclk_handler(httpd_req_t *req)
     char *buf = NULL;
     char _xclk[32];
 
-    if (parse_get(req, &buf) != ESP_OK ||
-        httpd_query_key_value(buf, "xclk", _xclk, sizeof(_xclk)) != ESP_OK) {
+    if (parse_get(req, &buf) != ESP_OK) {
+        return ESP_FAIL;
+    }
+    if (httpd_query_key_value(buf, "xclk", _xclk, sizeof(_xclk)) != ESP_OK) {
         free(buf);
         httpd_resp_send_404(req);
         return ESP_FAIL;
@@ -901,8 +905,10 @@ static esp_err_t reg_handler(httpd_req_t *req)
     char _mask[32];
     char _val[32];
 
-    if (parse_get(req, &buf) != ESP_OK ||
-        httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK ||
+    if (parse_get(req, &buf) != ESP_OK) {
+        return ESP_FAIL;
+    }
+    if (httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK ||
         httpd_query_key_value(buf, "mask", _mask, sizeof(_mask)) != ESP_OK ||
         httpd_query_key_value(buf, "val", _val, sizeof(_val)) != ESP_OK) {
         free(buf);
@@ -932,8 +938,10 @@ static esp_err_t greg_handler(httpd_req_t *req)
     char _reg[32];
     char _mask[32];
 
-    if (parse_get(req, &buf) != ESP_OK ||
-        httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK ||
+    if (parse_get(req, &buf) != ESP_OK) {
+        return ESP_FAIL;
+    }
+    if (httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK ||
         httpd_query_key_value(buf, "mask", _mask, sizeof(_mask)) != ESP_OK) {
         free(buf);
         httpd_resp_send_404(req);
@@ -970,8 +978,6 @@ static esp_err_t pll_handler(httpd_req_t *req)
     char *buf = NULL;
 
     if (parse_get(req, &buf) != ESP_OK) {
-        free(buf);
-        httpd_resp_send_404(req);
         return ESP_FAIL;
     }
 
@@ -1001,8 +1007,6 @@ static esp_err_t win_handler(httpd_req_t *req)
     char *buf = NULL;
 
     if (parse_get(req, &buf) != ESP_OK) {
-        free(buf);
-        httpd_resp_send_404(req);
         return ESP_FAIL;
     }
 
