@@ -45,6 +45,9 @@
 #define PCLK_GPIO_NUM    22
 
 #elif CONFIG_CAMERA_MODEL_ESP32_CAM_BOARD
+// The 18 pin header on the board has Y5 and Y3 swapped
+#define USE_BOARD_HEADER 0
+
 #define CAM_BOARD       "ESP-DEVCAM"
 #define PWDN_GPIO_NUM    32
 #define RESET_GPIO_NUM   33
@@ -56,9 +59,17 @@
 #define Y8_GPIO_NUM      19
 #define Y7_GPIO_NUM      21
 #define Y6_GPIO_NUM      39
+#if USE_BOARD_HEADER
+#define Y5_GPIO_NUM      13
+#else
 #define Y5_GPIO_NUM      35
+#endif
 #define Y4_GPIO_NUM      14
+#if USE_BOARD_HEADER
+#define Y3_GPIO_NUM      35
+#else
 #define Y3_GPIO_NUM      13
+#endif
 #define Y2_GPIO_NUM      34
 #define VSYNC_GPIO_NUM    5
 #define HREF_GPIO_NUM    27
