@@ -728,6 +728,10 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     }
     else if (!strcmp(variable, "quality"))
         res = s->set_quality(s, val);
+    else if (!strcmp(variable, "denoise"))
+        res = s->set_denoise(s, val);
+    else if (!strcmp(variable, "sharpness"))
+        res = s->set_sharpness(s, val);
     else if (!strcmp(variable, "contrast"))
         res = s->set_contrast(s, val);
     else if (!strcmp(variable, "brightness"))
