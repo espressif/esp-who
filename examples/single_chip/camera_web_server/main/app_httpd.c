@@ -449,11 +449,58 @@ static size_t jpg_encode_stream(void *arg, size_t index, const void *data, size_
     return len;
 }
 
+static esp_err_t process_query_string(httpd_req_t *req, sensor_t *s)
+{
+    esp_err_t ret = ESP_OK;
+
+    // Extract query string from the request
+    size_t qs_len = httpd_req_get_url_query_len(req);
+    if (qs_len == 0)
+        return ESP_OK;  // No variables to set
+    char *qs = malloc(qs_len + 1);
+    if (!qs) {
+        ESP_LOGE(TAG, "QS malloc(%d) error", qs_len + 1);
+        httpd_resp_send_500(req);
+        return ESP_FAIL;
+    }
+    ret = httpd_req_get_url_query_str(req, qs, qs_len + 1);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "QS httpd_req_get_url_query_str() error");
+        free(qs);
+        return ret;
+    }
+
+    // Parse and set individual variables
+    char *p, *q = NULL;
+    char *p_token = strtok_r(qs, "&", &p);
+    while (p_token != NULL) {
+        char *variable = strtok_r(p_token, "=", &q);
+        char *val_str = strtok_r(NULL, "=", &q);
+
+        if (variable != NULL && val_str != NULL) {
+            int val = atoi(val_str);
+            ret = set_variable(variable, val, s, true);
+            if (ret != ESP_OK)
+              break;
+        }
+
+        p_token = strtok_r(NULL, "&", &p);
+    }
+    free(qs);
+    return ret;
+}
+
 static esp_err_t capture_handler(httpd_req_t *req)
 {
     camera_fb_t *fb = NULL;
     esp_err_t res = ESP_OK;
     int64_t fr_start = esp_timer_get_time();
+
+    // Parse variables from URL query string
+    sensor_t *sensor = esp_camera_sensor_get();
+    res = process_query_string(req, sensor);
+    if (res != ESP_OK)
+        return res;
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     enable_led(true);
@@ -600,6 +647,12 @@ static esp_err_t stream_handler(httpd_req_t *req)
 
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
     httpd_resp_set_hdr(req, "X-Framerate", "60");
+
+    // Parse variables from URL query string
+    sensor_t *sensor = esp_camera_sensor_get();
+    res = process_query_string(req, sensor);
+    if (res != ESP_OK)
+        return res;
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     enable_led(true);
