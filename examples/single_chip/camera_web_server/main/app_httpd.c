@@ -62,6 +62,11 @@ bool isStreaming = false;
 #endif
 #endif
 
+#define FPS_DEFAULT -1	// -1 = Unlimited FPS
+#define FPS_TO_PERIOD(FPS) (FPS<1?0:(1000000/FPS))
+unsigned int fps_max = FPS_DEFAULT;
+uint64_t fps_period_us = FPS_TO_PERIOD(FPS_DEFAULT);
+
 typedef struct
 {
     httpd_req_t *req;
@@ -289,6 +294,108 @@ void enable_led(bool en)
 }
 #endif
 
+static esp_err_t set_variable(const char *variable, int val, sensor_t *s, bool ignore_unknown)
+{
+    int res = 0;
+
+    ESP_LOGI(TAG, "%s = %d", variable, val);
+
+    if (!strcmp(variable, "framesize")) {
+        if (s->pixformat == PIXFORMAT_JPEG) {
+            res = s->set_framesize(s, (framesize_t)val);
+            if (res == 0) {
+                app_mdns_update_framesize(val);
+            }
+        }
+    }
+    else if (!strcmp(variable, "fps_max")) {
+        fps_max = val;
+        fps_period_us = FPS_TO_PERIOD(fps_max);
+    }
+    else if (!strcmp(variable, "quality"))
+        res = s->set_quality(s, val);
+    else if (!strcmp(variable, "contrast"))
+        res = s->set_contrast(s, val);
+    else if (!strcmp(variable, "brightness"))
+        res = s->set_brightness(s, val);
+    else if (!strcmp(variable, "saturation"))
+        res = s->set_saturation(s, val);
+    else if (!strcmp(variable, "gainceiling"))
+        res = s->set_gainceiling(s, (gainceiling_t)val);
+    else if (!strcmp(variable, "colorbar"))
+        res = s->set_colorbar(s, val);
+    else if (!strcmp(variable, "awb"))
+        res = s->set_whitebal(s, val);
+    else if (!strcmp(variable, "agc"))
+        res = s->set_gain_ctrl(s, val);
+    else if (!strcmp(variable, "aec"))
+        res = s->set_exposure_ctrl(s, val);
+    else if (!strcmp(variable, "hmirror"))
+        res = s->set_hmirror(s, val);
+    else if (!strcmp(variable, "vflip"))
+        res = s->set_vflip(s, val);
+    else if (!strcmp(variable, "awb_gain"))
+        res = s->set_awb_gain(s, val);
+    else if (!strcmp(variable, "agc_gain"))
+        res = s->set_agc_gain(s, val);
+    else if (!strcmp(variable, "aec_value"))
+        res = s->set_aec_value(s, val);
+    else if (!strcmp(variable, "aec2"))
+        res = s->set_aec2(s, val);
+    else if (!strcmp(variable, "dcw"))
+        res = s->set_dcw(s, val);
+    else if (!strcmp(variable, "bpc"))
+        res = s->set_bpc(s, val);
+    else if (!strcmp(variable, "wpc"))
+        res = s->set_wpc(s, val);
+    else if (!strcmp(variable, "raw_gma"))
+        res = s->set_raw_gma(s, val);
+    else if (!strcmp(variable, "lenc"))
+        res = s->set_lenc(s, val);
+    else if (!strcmp(variable, "special_effect"))
+        res = s->set_special_effect(s, val);
+    else if (!strcmp(variable, "wb_mode"))
+        res = s->set_wb_mode(s, val);
+    else if (!strcmp(variable, "ae_level"))
+        res = s->set_ae_level(s, val);
+#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+    else if (!strcmp(variable, "led_intensity")) {
+        led_duty = val;
+        if (isStreaming)
+            enable_led(true);
+    }
+#endif
+
+#if CONFIG_ESP_FACE_DETECT_ENABLED
+    else if (!strcmp(variable, "face_detect")) {
+        detection_enabled = val;
+#if CONFIG_ESP_FACE_RECOGNITION_ENABLED
+        if (!detection_enabled) {
+            recognition_enabled = 0;
+        }
+#endif
+    }
+#if CONFIG_ESP_FACE_RECOGNITION_ENABLED
+    else if (!strcmp(variable, "face_enroll"))
+        is_enrolling = val;
+    else if (!strcmp(variable, "face_recognize")) {
+        recognition_enabled = val;
+        if (recognition_enabled) {
+            detection_enabled = val;
+        }
+    }
+#endif
+#endif
+    else {
+        ESP_LOGI(TAG, "Unknown variable: %s = %d", variable, val);
+        if (!ignore_unknown) {
+            res = -1;
+        }
+    }
+
+    return res;
+}
+
 static esp_err_t bmp_handler(httpd_req_t *req)
 {
     camera_fb_t *fb = NULL;
@@ -342,11 +449,58 @@ static size_t jpg_encode_stream(void *arg, size_t index, const void *data, size_
     return len;
 }
 
+static esp_err_t process_query_string(httpd_req_t *req, sensor_t *s)
+{
+    esp_err_t ret = ESP_OK;
+
+    // Extract query string from the request
+    size_t qs_len = httpd_req_get_url_query_len(req);
+    if (qs_len == 0)
+        return ESP_OK;  // No variables to set
+    char *qs = malloc(qs_len + 1);
+    if (!qs) {
+        ESP_LOGE(TAG, "QS malloc(%d) error", qs_len + 1);
+        httpd_resp_send_500(req);
+        return ESP_FAIL;
+    }
+    ret = httpd_req_get_url_query_str(req, qs, qs_len + 1);
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "QS httpd_req_get_url_query_str() error");
+        free(qs);
+        return ret;
+    }
+
+    // Parse and set individual variables
+    char *p, *q = NULL;
+    char *p_token = strtok_r(qs, "&", &p);
+    while (p_token != NULL) {
+        char *variable = strtok_r(p_token, "=", &q);
+        char *val_str = strtok_r(NULL, "=", &q);
+
+        if (variable != NULL && val_str != NULL) {
+            int val = atoi(val_str);
+            ret = set_variable(variable, val, s, true);
+            if (ret != ESP_OK)
+              break;
+        }
+
+        p_token = strtok_r(NULL, "&", &p);
+    }
+    free(qs);
+    return ret;
+}
+
 static esp_err_t capture_handler(httpd_req_t *req)
 {
     camera_fb_t *fb = NULL;
     esp_err_t res = ESP_OK;
     int64_t fr_start = esp_timer_get_time();
+
+    // Parse variables from URL query string
+    sensor_t *sensor = esp_camera_sensor_get();
+    res = process_query_string(req, sensor);
+    if (res != ESP_OK)
+        return res;
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     enable_led(true);
@@ -478,6 +632,7 @@ static esp_err_t stream_handler(httpd_req_t *req)
     int64_t fr_encode = 0;
 #endif
 
+    int64_t next_frame_time = 0;
     static int64_t last_frame = 0;
     if (!last_frame)
     {
@@ -493,6 +648,12 @@ static esp_err_t stream_handler(httpd_req_t *req)
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
     httpd_resp_set_hdr(req, "X-Framerate", "60");
 
+    // Parse variables from URL query string
+    sensor_t *sensor = esp_camera_sensor_get();
+    res = process_query_string(req, sensor);
+    if (res != ESP_OK)
+        return res;
+
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     enable_led(true);
     isStreaming = true;
@@ -500,6 +661,13 @@ static esp_err_t stream_handler(httpd_req_t *req)
 
     while (true)
     {
+        // Wait to limit FPS if required
+        // NB fps_delay_ms can be negative if processing takes too long -> in that case don't wait
+        int64_t fps_delay_ms = (next_frame_time - esp_timer_get_time()) / 1000;
+        if (fps_max > 0 && fps_delay_ms > 0)
+            vTaskDelay(fps_delay_ms / portTICK_PERIOD_MS);
+        next_frame_time = esp_timer_get_time() + fps_period_us;
+
 #if CONFIG_ESP_FACE_DETECT_ENABLED
         detected = false;
         face_id = 0;
@@ -701,6 +869,7 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     char *buf = NULL;
     char variable[32];
     char value[32];
+    esp_err_t res;
 
     if (parse_get(req, &buf) != ESP_OK) {
         return ESP_FAIL;
@@ -714,96 +883,9 @@ static esp_err_t cmd_handler(httpd_req_t *req)
     free(buf);
 
     int val = atoi(value);
-    ESP_LOGI(TAG, "%s = %d", variable, val);
     sensor_t *s = esp_camera_sensor_get();
-    int res = 0;
 
-    if (!strcmp(variable, "framesize")) {
-        if (s->pixformat == PIXFORMAT_JPEG) {
-            res = s->set_framesize(s, (framesize_t)val);
-            if (res == 0) {
-                app_mdns_update_framesize(val);
-            }
-        }
-    }
-    else if (!strcmp(variable, "quality"))
-        res = s->set_quality(s, val);
-    else if (!strcmp(variable, "contrast"))
-        res = s->set_contrast(s, val);
-    else if (!strcmp(variable, "brightness"))
-        res = s->set_brightness(s, val);
-    else if (!strcmp(variable, "saturation"))
-        res = s->set_saturation(s, val);
-    else if (!strcmp(variable, "gainceiling"))
-        res = s->set_gainceiling(s, (gainceiling_t)val);
-    else if (!strcmp(variable, "colorbar"))
-        res = s->set_colorbar(s, val);
-    else if (!strcmp(variable, "awb"))
-        res = s->set_whitebal(s, val);
-    else if (!strcmp(variable, "agc"))
-        res = s->set_gain_ctrl(s, val);
-    else if (!strcmp(variable, "aec"))
-        res = s->set_exposure_ctrl(s, val);
-    else if (!strcmp(variable, "hmirror"))
-        res = s->set_hmirror(s, val);
-    else if (!strcmp(variable, "vflip"))
-        res = s->set_vflip(s, val);
-    else if (!strcmp(variable, "awb_gain"))
-        res = s->set_awb_gain(s, val);
-    else if (!strcmp(variable, "agc_gain"))
-        res = s->set_agc_gain(s, val);
-    else if (!strcmp(variable, "aec_value"))
-        res = s->set_aec_value(s, val);
-    else if (!strcmp(variable, "aec2"))
-        res = s->set_aec2(s, val);
-    else if (!strcmp(variable, "dcw"))
-        res = s->set_dcw(s, val);
-    else if (!strcmp(variable, "bpc"))
-        res = s->set_bpc(s, val);
-    else if (!strcmp(variable, "wpc"))
-        res = s->set_wpc(s, val);
-    else if (!strcmp(variable, "raw_gma"))
-        res = s->set_raw_gma(s, val);
-    else if (!strcmp(variable, "lenc"))
-        res = s->set_lenc(s, val);
-    else if (!strcmp(variable, "special_effect"))
-        res = s->set_special_effect(s, val);
-    else if (!strcmp(variable, "wb_mode"))
-        res = s->set_wb_mode(s, val);
-    else if (!strcmp(variable, "ae_level"))
-        res = s->set_ae_level(s, val);
-#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
-    else if (!strcmp(variable, "led_intensity")) {
-        led_duty = val;
-        if (isStreaming)
-            enable_led(true);
-    }
-#endif
-
-#if CONFIG_ESP_FACE_DETECT_ENABLED
-    else if (!strcmp(variable, "face_detect")) {
-        detection_enabled = val;
-#if CONFIG_ESP_FACE_RECOGNITION_ENABLED
-        if (!detection_enabled) {
-            recognition_enabled = 0;
-        }
-#endif
-    }
-#if CONFIG_ESP_FACE_RECOGNITION_ENABLED
-    else if (!strcmp(variable, "face_enroll"))
-        is_enrolling = val;
-    else if (!strcmp(variable, "face_recognize")) {
-        recognition_enabled = val;
-        if (recognition_enabled) {
-            detection_enabled = val;
-        }
-    }
-#endif
-#endif
-    else {
-        ESP_LOGI(TAG, "Unknown command: %s", variable);
-        res = -1;
-    }
+    res = set_variable(variable, val, s, false);
 
     if (res < 0) {
         return httpd_resp_send_500(req);
@@ -858,6 +940,7 @@ static esp_err_t status_handler(httpd_req_t *req)
     p += sprintf(p, "\"xclk\":%u,", s->xclk_freq_hz / 1000000);
     p += sprintf(p, "\"pixformat\":%u,", s->pixformat);
     p += sprintf(p, "\"framesize\":%u,", s->status.framesize);
+    p += sprintf(p, "\"fps_max\":%u,", fps_max);
     p += sprintf(p, "\"quality\":%u,", s->status.quality);
     p += sprintf(p, "\"brightness\":%d,", s->status.brightness);
     p += sprintf(p, "\"contrast\":%d,", s->status.contrast);
@@ -879,6 +962,7 @@ static esp_err_t status_handler(httpd_req_t *req)
     p += sprintf(p, "\"raw_gma\":%u,", s->status.raw_gma);
     p += sprintf(p, "\"lenc\":%u,", s->status.lenc);
     p += sprintf(p, "\"hmirror\":%u,", s->status.hmirror);
+    p += sprintf(p, "\"vflip\":%u,", s->status.vflip);
     p += sprintf(p, "\"dcw\":%u,", s->status.dcw);
     p += sprintf(p, "\"colorbar\":%u", s->status.colorbar);
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
