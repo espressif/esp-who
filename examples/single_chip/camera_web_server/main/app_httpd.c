@@ -62,6 +62,11 @@ bool isStreaming = false;
 #endif
 #endif
 
+#define FPS_DEFAULT -1	// -1 = Unlimited FPS
+#define FPS_TO_PERIOD(FPS) (FPS<1?0:(1000000/FPS))
+unsigned int fps_max = FPS_DEFAULT;
+uint64_t fps_period_us = FPS_TO_PERIOD(FPS_DEFAULT);
+
 typedef struct
 {
     httpd_req_t *req;
@@ -478,6 +483,7 @@ static esp_err_t stream_handler(httpd_req_t *req)
     int64_t fr_encode = 0;
 #endif
 
+    int64_t next_frame_time = 0;
     static int64_t last_frame = 0;
     if (!last_frame)
     {
@@ -500,6 +506,13 @@ static esp_err_t stream_handler(httpd_req_t *req)
 
     while (true)
     {
+        // Wait to limit FPS if required
+        // NB fps_delay_ms can be negative if processing takes too long -> in that case don't wait
+        int64_t fps_delay_ms = (next_frame_time - esp_timer_get_time()) / 1000;
+        if (fps_max > 0 && fps_delay_ms > 0)
+            vTaskDelay(fps_delay_ms / portTICK_PERIOD_MS);
+        next_frame_time = esp_timer_get_time() + fps_period_us;
+
 #if CONFIG_ESP_FACE_DETECT_ENABLED
         detected = false;
         face_id = 0;
@@ -726,6 +739,10 @@ static esp_err_t cmd_handler(httpd_req_t *req)
             }
         }
     }
+    else if (!strcmp(variable, "fps_max")) {
+        fps_max = val;
+        fps_period_us = FPS_TO_PERIOD(fps_max);
+    }
     else if (!strcmp(variable, "quality"))
         res = s->set_quality(s, val);
     else if (!strcmp(variable, "contrast"))
@@ -858,6 +875,7 @@ static esp_err_t status_handler(httpd_req_t *req)
     p += sprintf(p, "\"xclk\":%u,", s->xclk_freq_hz / 1000000);
     p += sprintf(p, "\"pixformat\":%u,", s->pixformat);
     p += sprintf(p, "\"framesize\":%u,", s->status.framesize);
+    p += sprintf(p, "\"fps_max\":%u,", fps_max);
     p += sprintf(p, "\"quality\":%u,", s->status.quality);
     p += sprintf(p, "\"brightness\":%d,", s->status.brightness);
     p += sprintf(p, "\"contrast\":%d,", s->status.contrast);
