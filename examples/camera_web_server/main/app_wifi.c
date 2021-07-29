@@ -40,13 +40,13 @@
    If you'd rather not, just change the below entries to strings with
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
 */
-#define EXAMPLE_ESP_WIFI_SSID      CONFIG_ESP_WIFI_SSID
-#define EXAMPLE_ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
-#define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
-#define EXAMPLE_ESP_WIFI_AP_SSID   CONFIG_ESP_WIFI_AP_SSID
-#define EXAMPLE_ESP_WIFI_AP_PASS   CONFIG_ESP_WIFI_AP_PASSWORD
-#define EXAMPLE_MAX_STA_CONN       CONFIG_MAX_STA_CONN
-#define EXAMPLE_IP_ADDR            CONFIG_SERVER_IP
+#define EXAMPLE_ESP_WIFI_SSID CONFIG_ESP_WIFI_SSID
+#define EXAMPLE_ESP_WIFI_PASS CONFIG_ESP_WIFI_PASSWORD
+#define EXAMPLE_ESP_MAXIMUM_RETRY CONFIG_ESP_MAXIMUM_RETRY
+#define EXAMPLE_ESP_WIFI_AP_SSID CONFIG_ESP_WIFI_AP_SSID
+#define EXAMPLE_ESP_WIFI_AP_PASS CONFIG_ESP_WIFI_AP_PASSWORD
+#define EXAMPLE_MAX_STA_CONN CONFIG_MAX_STA_CONN
+#define EXAMPLE_IP_ADDR CONFIG_SERVER_IP
 #define EXAMPLE_ESP_WIFI_AP_CHANNEL CONFIG_ESP_WIFI_AP_CHANNEL
 
 static const char *TAG = "camera wifi";
@@ -55,7 +55,8 @@ static int s_retry_num = 0;
 
 static esp_err_t event_handler(void *ctx, system_event_t *event)
 {
-    switch(event->event_id) {
+    switch (event->event_id)
+    {
     case SYSTEM_EVENT_AP_STACONNECTED:
         ESP_LOGI(TAG, "station:" MACSTR " join, AID=%d",
                  MAC2STR(event->event_info.sta_connected.mac),
@@ -75,15 +76,16 @@ static esp_err_t event_handler(void *ctx, system_event_t *event)
         s_retry_num = 0;
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
+    {
+        if (s_retry_num < EXAMPLE_ESP_MAXIMUM_RETRY)
         {
-            if (s_retry_num < EXAMPLE_ESP_MAXIMUM_RETRY) {
-                esp_wifi_connect();
-                s_retry_num++;
-                ESP_LOGI(TAG,"retry to connect to the AP");
-            }
-            ESP_LOGI(TAG,"connect to the AP fail");
-            break;
+            esp_wifi_connect();
+            s_retry_num++;
+            ESP_LOGI(TAG, "retry to connect to the AP");
         }
+        ESP_LOGI(TAG, "connect to the AP fail");
+        break;
+    }
     default:
         break;
     }
@@ -107,15 +109,17 @@ void wifi_init_softap()
     }
     wifi_config_t wifi_config;
     memset(&wifi_config, 0, sizeof(wifi_config_t));
-    snprintf((char*)wifi_config.ap.ssid, 32, "%s", EXAMPLE_ESP_WIFI_AP_SSID);
-    wifi_config.ap.ssid_len = strlen((char*)wifi_config.ap.ssid);
-    snprintf((char*)wifi_config.ap.password, 64, "%s", EXAMPLE_ESP_WIFI_AP_PASS);
+    snprintf((char *)wifi_config.ap.ssid, 32, "%s", EXAMPLE_ESP_WIFI_AP_SSID);
+    wifi_config.ap.ssid_len = strlen((char *)wifi_config.ap.ssid);
+    snprintf((char *)wifi_config.ap.password, 64, "%s", EXAMPLE_ESP_WIFI_AP_PASS);
     wifi_config.ap.max_connection = EXAMPLE_MAX_STA_CONN;
     wifi_config.ap.authmode = WIFI_AUTH_WPA_WPA2_PSK;
-    if (strlen(EXAMPLE_ESP_WIFI_AP_PASS) == 0) {
+    if (strlen(EXAMPLE_ESP_WIFI_AP_PASS) == 0)
+    {
         wifi_config.ap.authmode = WIFI_AUTH_OPEN;
     }
-    if (strlen(EXAMPLE_ESP_WIFI_AP_CHANNEL)) {
+    if (strlen(EXAMPLE_ESP_WIFI_AP_CHANNEL))
+    {
         int channel;
         sscanf(EXAMPLE_ESP_WIFI_AP_CHANNEL, "%d", &channel);
         wifi_config.ap.channel = channel;
@@ -131,10 +135,10 @@ void wifi_init_sta()
 {
     wifi_config_t wifi_config;
     memset(&wifi_config, 0, sizeof(wifi_config_t));
-    snprintf((char*)wifi_config.sta.ssid, 32, "%s", EXAMPLE_ESP_WIFI_SSID);
-    snprintf((char*)wifi_config.sta.password, 64, "%s", EXAMPLE_ESP_WIFI_PASS);
+    snprintf((char *)wifi_config.sta.ssid, 32, "%s", EXAMPLE_ESP_WIFI_SSID);
+    snprintf((char *)wifi_config.sta.password, 64, "%s", EXAMPLE_ESP_WIFI_PASS);
 
-    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config) );
+    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
 
     ESP_LOGI(TAG, "wifi_init_sta finished.");
     ESP_LOGI(TAG, "connect to ap SSID:%s password:%s",
@@ -146,23 +150,30 @@ void app_wifi_main()
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     wifi_mode_t mode = WIFI_MODE_NULL;
 
-    if (strlen(EXAMPLE_ESP_WIFI_AP_SSID) && strlen(EXAMPLE_ESP_WIFI_SSID)) {
+    if (strlen(EXAMPLE_ESP_WIFI_AP_SSID) && strlen(EXAMPLE_ESP_WIFI_SSID))
+    {
         mode = WIFI_MODE_APSTA;
-    } else if (strlen(EXAMPLE_ESP_WIFI_AP_SSID)) {
+    }
+    else if (strlen(EXAMPLE_ESP_WIFI_AP_SSID))
+    {
         mode = WIFI_MODE_AP;
-    } else if (strlen(EXAMPLE_ESP_WIFI_SSID)) {
+    }
+    else if (strlen(EXAMPLE_ESP_WIFI_SSID))
+    {
         mode = WIFI_MODE_STA;
     }
 
     esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-      ESP_ERROR_CHECK(nvs_flash_erase());
-      ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
     }
     ESP_ERROR_CHECK(ret);
 
-    if (mode == WIFI_MODE_NULL) {
-        ESP_LOGW(TAG,"Neither AP or STA have been configured. WiFi will be off.");
+    if (mode == WIFI_MODE_NULL)
+    {
+        ESP_LOGW(TAG, "Neither AP or STA have been configured. WiFi will be off.");
         return;
     }
 
@@ -171,11 +182,13 @@ void app_wifi_main()
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
     ESP_ERROR_CHECK(esp_wifi_set_mode(mode));
 
-    if (mode & WIFI_MODE_AP) {
+    if (mode & WIFI_MODE_AP)
+    {
         wifi_init_softap();
     }
 
-    if (mode & WIFI_MODE_STA) {
+    if (mode & WIFI_MODE_STA)
+    {
         wifi_init_sta();
     }
     ESP_ERROR_CHECK(esp_wifi_start());

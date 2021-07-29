@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "app_httpd.h"
+#include "app_httpd.hpp"
+
+#include <list>
 #include "esp_http_server.h"
 #include "esp_timer.h"
-#include "esp_camera.h"
 #include "img_converters.h"
 #include "fb_gfx.h"
-#include "driver/ledc.h"
-#include "sdkconfig.h"
 #include "app_mdns.h"
-#include "app_camera.h"
+#include "app_camera.hpp"
+#include "app_common.hpp"
+#include "sdkconfig.h"
 #include "dl_tool.hpp"
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
@@ -32,44 +33,29 @@
 static const char *TAG = "camera_httpd";
 #endif
 
-#if CONFIG_DL_DETECT_ENABLED
-#include <list>
-#include "dl_image.hpp"
-#include "dl_detect_define.hpp"
-
-#define RGB888_RED 0x0000FF
-#define RGB888_GREEN 0x00FF00
-#define RGB888_BLUE 0xFF0000
-
-static int8_t detection_enabled = 0;
-#endif
-
-#if CONFIG_DL_DETECT_HUMAN_FACE
+#if CONFIG_DL_HUMAN_FACE_DETECTION_S1_MSR01
 #include "human_face_detect_msr01.hpp"
 #endif
 
-#if CONFIG_DL_DETECT_HUMAN_FACE_WITH_KEYPOINT
+#if CONFIG_DL_HUMAN_FACE_DETECTION_S2_MNP01
 #include "human_face_detect_mnp01.hpp"
 #endif
 
-#if CONFIG_DL_DETECT_CAT_FACE
+#if CONFIG_DL_CAT_FACE_DETECTION_MN03
 #include "cat_face_detect_mn03.hpp"
 #endif
 
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
+#if CONFIG_DL_HUMAN_FACE_RECOGNITION_XXX
 // TODO: recognize human face
-static int8_t recognition_enabled = 0;
-static int8_t is_enrolling = 0;
 #endif
 
+static int8_t detection_enabled = 0;
+static int8_t recognition_enabled = 0;
+static int8_t is_enrolling = 0;
+
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
+#include "app_led.h"
 int led_duty = 0;
-bool isStreaming = false;
-#ifdef CONFIG_LED_LEDC_LOW_SPEED_MODE
-#define CONFIG_LED_LEDC_SPEED_MODE LEDC_LOW_SPEED_MODE
-#else
-#define CONFIG_LED_LEDC_SPEED_MODE LEDC_HIGH_SPEED_MODE
-#endif
 #endif
 
 typedef struct
@@ -85,20 +71,6 @@ static const char *_STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %
 
 httpd_handle_t stream_httpd = NULL;
 httpd_handle_t camera_httpd = NULL;
-
-#ifdef CONFIG_LED_ILLUMINATOR_ENABLED
-void enable_led(bool en)
-{ // Turn LED On or Off
-    int duty = en ? led_duty : 0;
-    if (en && isStreaming && (led_duty > CONFIG_LED_MAX_INTENSITY))
-    {
-        duty = CONFIG_LED_MAX_INTENSITY;
-    }
-    ledc_set_duty(CONFIG_LED_LEDC_SPEED_MODE, CONFIG_LED_LEDC_CHANNEL, duty);
-    ledc_update_duty(CONFIG_LED_LEDC_SPEED_MODE, CONFIG_LED_LEDC_CHANNEL);
-    ESP_LOGI(TAG, "Set LED intensity to %d", duty);
-}
-#endif
 
 static size_t jpg_encode_stream(void *arg, size_t index, const void *data, size_t len)
 {
@@ -124,10 +96,10 @@ static esp_err_t capture_handler(httpd_req_t *req)
     esp_err_t res = ESP_OK;
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
-    enable_led(true);
+    app_led_duty(led_duty);
     vTaskDelay(150 / portTICK_PERIOD_MS); // The LED needs to be turned on ~150ms before the call to esp_camera_fb_get()
     fb = esp_camera_fb_get();             // or it won't be visible in the frame. A better way to do this is needed.
-    enable_led(false);
+    app_led_duty(0);
 #else
     fb = esp_camera_fb_get();
 #endif
@@ -177,28 +149,32 @@ static esp_err_t stream_handler(httpd_req_t *req)
     char *part_buf[128];
     dl::tool::Latency latency_total(24);
 
-#if CONFIG_DL_DETECT_ENABLED
-    uint8_t *image_rgb888 = NULL;
+    IMAGE_T *image_ptr = NULL;
+    bool is_detected = false;
+
+    dl::tool::Latency latency_fetch;
     dl::tool::Latency latency_decode;
     dl::tool::Latency latency_encode;
     dl::tool::Latency latency_detect;
-#endif
+    dl::tool::Latency latency_recognize;
 
-#if CONFIG_DL_DETECT_HUMAN_FACE
+#if CONFIG_DL_HUMAN_FACE
+#if CONFIG_DL_HUMAN_FACE_DETECTION_S1_MSR01
     HumanFaceDetectMSR01 detector(0.3F, 0.3F, 10, 0.3F);
 #endif
 
-#if CONFIG_DL_DETECT_HUMAN_FACE_WITH_KEYPOINT
+#if CONFIG_DL_HUMAN_FACE_DETECTION_S2_MNP01
     HumanFaceDetectMNP01 detector2(0.4F, 0.3F, 10);
 #endif
-
-#if CONFIG_DL_DETECT_CAT_FACE
-    CatFaceDetectMN03 detector(0.4F, 0.3F, 10, 0.3F);
+#if CONFIG_DL_HUMAN_FACE_RECOGNITION_XXX
+// TODO: recognize human face
+#endif
 #endif
 
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
-    dl::tool::Latency latency_recognize;
-// TODO: recognize human face
+#if CONFIG_DL_CAT_FACE
+#if CONFIG_DL_CAT_FACE_DETECTION_MN03
+    CatFaceDetectMN03 detector(0.4F, 0.3F, 10, 0.3F);
+#endif
 #endif
 
     res = httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
@@ -211,133 +187,150 @@ static esp_err_t stream_handler(httpd_req_t *req)
     httpd_resp_set_hdr(req, "X-Framerate", "60");
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
-    enable_led(true);
-    isStreaming = true;
+    app_led_duty(led_duty);
 #endif
 
     while (true)
     {
-        latency_total.start();
-        fb = esp_camera_fb_get();
-        if (!fb)
+        latency_fetch.clear_period();
+        latency_decode.clear_period();
+        latency_encode.clear_period();
+
+        latency_detect.clear_period();
+        latency_recognize.clear_period();
+
+        image_ptr = NULL;
+        is_detected = false;
+
+        do
         {
-            ESP_LOGE(TAG, "Camera capture failed");
-            res = ESP_FAIL;
-        }
-        else
-        {
+            latency_total.start();
+
+            latency_fetch.start();
+            fb = esp_camera_fb_get();
+            if (!fb)
+            {
+                ESP_LOGE(TAG, "Camera capture failed");
+                res = ESP_FAIL;
+                break;
+            }
             _timestamp.tv_sec = fb->timestamp.tv_sec;
             _timestamp.tv_usec = fb->timestamp.tv_usec;
-#if CONFIG_DL_DETECT_ENABLED
-            if (!detection_enabled || fb->width > 400)
+            latency_fetch.end();
+
+#if CONFIG_DL_ENABLED
+            if (detection_enabled && fb->width < 400)
             {
+                latency_decode.start();
+                if (app_camera_decode(fb, &image_ptr) == false)
+                {
+                    res = ESP_FAIL;
+                    break;
+                }
+                latency_decode.end();
+
+#if CONFIG_DL_HUMAN_FACE
+                latency_detect.start();
+#if CONFIG_DL_HUMAN_FACE_DETECTION_S2_ENABLED
+                std::list<dl::detect::result_t> &detect_candidates = detector.infer((IMAGE_T *)image_ptr, {(int)fb->height, (int)fb->width, 3});
+                std::list<dl::detect::result_t> &detect_results = detector2.infer((IMAGE_T *)image_ptr, {(int)fb->height, (int)fb->width, 3}, detect_candidates);
+#else
+                std::list<dl::detect::result_t> &detect_results = detector.infer((IMAGE_T *)image_ptr, {(int)fb->height, (int)fb->width, 3});
 #endif
-                if (fb->format != PIXFORMAT_JPEG)
+                latency_detect.end();
+
+                if (detect_results.size() > 0)
                 {
-                    bool jpeg_converted = frame2jpg(fb, 80, &_jpg_buf, &_jpg_buf_len);
-                    esp_camera_fb_return(fb);
-                    fb = NULL;
-                    if (!jpeg_converted)
+                    is_detected = true;
+                    draw_detection_result((IMAGE_T*)image_ptr, fb->height, fb->width, detect_results);
+
+                    latency_recognize.start();
+                    if (recognition_enabled)
                     {
-                        ESP_LOGE(TAG, "JPEG compression failed");
-                        res = ESP_FAIL;
+#if CONFIG_DL_HUMAN_FACE_RECOGNITION_XXX
+                        // TODO: recognize human face
+#endif
                     }
+                    latency_recognize.end();
                 }
-                else
+#endif // CONFIG_DL_HUMAN_FACE
+
+#if CONFIG_DL_CAT_FACE
+                latency_detect.start();
+                std::list<dl::detect::result_t> &detect_results = detector.infer((IMAGE_T *)image_ptr, {(int)fb->height, (int)fb->width, 3});
+                latency_detect.end();
+                if (detect_results.size() > 0)
                 {
-                    _jpg_buf_len = fb->len;
-                    _jpg_buf = fb->buf;
+                    is_detected = true;
+                    draw_detection_result((IMAGE_T*)image_ptr, fb->height, fb->width, detect_results);
                 }
-#if CONFIG_DL_DETECT_ENABLED
+#endif // CONFIG_DL_CAT_FACE
+
+#if CONFIG_DL_HUMAN_HAND
+                latency_detect.start();
+                // TODO:
+                latency_detect.end();
+#endif // CONFIG_DL_HUMAN_HAND
+            }
+#endif // CONFIG_DL_ENABLED
+
+            latency_encode.start();
+            if (is_detected)
+            {
+#if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+                if (!fmt2jpg((uint8_t *)image_ptr, fb->width * fb->height * 3, fb->width, fb->height, PIXFORMAT_RGB565, 90, &_jpg_buf, &_jpg_buf_len))
+#else
+                if (!fmt2jpg((uint8_t *)image_ptr, fb->width * fb->height * 3, fb->width, fb->height, PIXFORMAT_RGB888, 90, &_jpg_buf, &_jpg_buf_len))
+#endif
+                {
+                    ESP_LOGE(TAG, "fmt2jpg failed");
+                    res = ESP_FAIL;
+                    break;
+                }
+
+                esp_camera_fb_return(fb);
+                fb = NULL;
+            }
+            else if (fb->format == PIXFORMAT_JPEG)
+            {
+                _jpg_buf = fb->buf;
+                _jpg_buf_len = fb->len;
             }
             else
             {
-                image_rgb888 = (uint8_t *)dl::tool::malloc_aligned(fb->height * fb->width * 3, sizeof(uint8_t));
-
-                if (!image_rgb888)
+                if (!frame2jpg(fb, 80, &_jpg_buf, &_jpg_buf_len))
                 {
-                    ESP_LOGE(TAG, "dl_matrix3du_alloc failed");
+                    ESP_LOGE(TAG, "JPEG compression failed");
                     res = ESP_FAIL;
+                    break;
                 }
-                else
-                {
-                    latency_decode.start();
-                    if (!fmt2rgb888(fb->buf, fb->len, fb->format, image_rgb888))
-                    {
-                        ESP_LOGE(TAG, "fmt2rgb888 failed");
-                        res = ESP_FAIL;
-                    }
-                    else
-                    {
-                        latency_decode.end();
-                        latency_detect.start();
-#if CONFIG_DL_DETECT_HUMAN_FACE_WITH_KEYPOINT
-                        std::list<dl::detect::result_t> &candidates = detector.infer((uint8_t *)image_rgb888, {(int)fb->height, (int)fb->width, 3});
-                        std::list<dl::detect::result_t> &results = detector2.infer((uint8_t *)image_rgb888, {(int)fb->height, (int)fb->width, 3}, candidates);
-#else
-                        std::list<dl::detect::result_t> &results = detector.infer((uint8_t *)image_rgb888, {(int)fb->height, (int)fb->width, 3});
-#endif
-                        latency_detect.end();
 
-                        if (results.size() > 0 || fb->format != PIXFORMAT_JPEG)
-                        {
-                            int i = 0;
-                            for (std::list<dl::detect::result_t>::iterator prediction = results.begin(); prediction != results.end(); prediction++, i++)
-                            {
-                                dl::image::draw_hollow_rectangle(image_rgb888, fb->height, fb->width,
-                                                                 DL_MAX(prediction->box[0], 0),
-                                                                 DL_MAX(prediction->box[1], 0),
-                                                                 DL_MAX(prediction->box[2], 0),
-                                                                 DL_MAX(prediction->box[3], 0),
-                                                                 RGB888_GREEN);
-#if CONFIG_DL_DETECT_HUMAN_FACE_WITH_KEYPOINT
-                                dl::image::draw_point(image_rgb888, fb->height, fb->width, DL_MAX(prediction->keypoint[0], 0), DL_MAX(prediction->keypoint[1], 0), 4, RGB888_RED);   // left eye
-                                dl::image::draw_point(image_rgb888, fb->height, fb->width, DL_MAX(prediction->keypoint[2], 0), DL_MAX(prediction->keypoint[3], 0), 4, RGB888_RED);   // mouth left corner
-                                dl::image::draw_point(image_rgb888, fb->height, fb->width, DL_MAX(prediction->keypoint[4], 0), DL_MAX(prediction->keypoint[5], 0), 4, RGB888_GREEN); // nose
-                                dl::image::draw_point(image_rgb888, fb->height, fb->width, DL_MAX(prediction->keypoint[6], 0), DL_MAX(prediction->keypoint[7], 0), 4, RGB888_BLUE);  // right eye
-                                dl::image::draw_point(image_rgb888, fb->height, fb->width, DL_MAX(prediction->keypoint[8], 0), DL_MAX(prediction->keypoint[9], 0), 4, RGB888_BLUE);  // mouth right corner
-#endif
-                            }
-
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
-                            latency_recognize.start();
-                            // TODO: recognize human face
-                            latency_recognize.end();
-#endif
-
-                            latency_encode.start();
-                            if (!fmt2jpg(image_rgb888, fb->width * fb->height * 3, fb->width, fb->height, PIXFORMAT_RGB888, 90, &_jpg_buf, &_jpg_buf_len))
-                            {
-                                ESP_LOGE(TAG, "fmt2jpg failed");
-                            }
-                            esp_camera_fb_return(fb);
-                            fb = NULL;
-                            latency_encode.end();
-                        }
-                        else
-                        {
-                            _jpg_buf = fb->buf;
-                            _jpg_buf_len = fb->len;
-                        }
-                    }
-                    dl::tool::free_aligned(image_rgb888);
-                }
+                esp_camera_fb_return(fb);
+                fb = NULL;
             }
+            latency_encode.end();
+
+#if !CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+            dl::tool::free_aligned(image_ptr);
 #endif
-        }
+        } while (0);
+
         if (res == ESP_OK)
         {
             res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
         }
+
         if (res == ESP_OK)
         {
             size_t hlen = snprintf((char *)part_buf, 128, _STREAM_PART, _jpg_buf_len, _timestamp.tv_sec, _timestamp.tv_usec);
             res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
         }
+
         if (res == ESP_OK)
         {
             res = httpd_resp_send_chunk(req, (const char *)_jpg_buf, _jpg_buf_len);
         }
+
         if (fb)
         {
             esp_camera_fb_return(fb);
@@ -349,47 +342,27 @@ static esp_err_t stream_handler(httpd_req_t *req)
             free(_jpg_buf);
             _jpg_buf = NULL;
         }
+
         if (res != ESP_OK)
         {
             break;
         }
-        latency_total.end();
 
+        latency_total.end();
         uint32_t frame_latency = latency_total.get_period() / 1000;
         uint32_t average_frame_latency = latency_total.get_average_period() / 1000;
 
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
-        if (recognition_enabled)
-        {
-            ESP_LOGI(TAG, "Frame: %4ums (%.1ffps), Average: %4ums (%.1ffps) | decode: %4ums, detect: %4ums, recognize: %5ums, encode: %4ums",
-                     frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency,
-                     latency_decode.get_period() / 1000,
-                     latency_detect.get_period() / 1000,
-                     latency_recognize.get_period() / 1000,
-                     latency_encode.get_period() / 1000);
-        }
-        else
-#endif
-#if CONFIG_DL_DETECT_ENABLED
-            if (detection_enabled)
-        {
-            ESP_LOGI(TAG, "Frame: %4ums (%.1ffps), Average: %4ums (%.1ffps) | decode: %4ums, detect: %4ums, encode: %4ums",
-                     frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency,
-                     latency_decode.get_period() / 1000,
-                     latency_detect.get_period() / 1000,
-                     latency_encode.get_period() / 1000);
-        }
-        else
-#endif
-        {
-            ESP_LOGI(TAG, "Frame: %4ums (%.1ffps), Average: %4ums (%.1ffps)",
-                     frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency);
-        }
+        ESP_LOGI(TAG, "Frame: %4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch %4ums, decode: %4ums, detect: %4ums, recognize: %5ums, encode: %4ums",
+                 frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency,
+                 latency_fetch.get_period() / 1000,
+                 latency_decode.get_period() / 1000,
+                 latency_detect.get_period() / 1000,
+                 latency_recognize.get_period() / 1000,
+                 latency_encode.get_period() / 1000);
     }
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
-    isStreaming = false;
-    enable_led(false);
+    app_led_duty(0);
 #endif
 
     return res;
@@ -500,25 +473,17 @@ static esp_err_t cmd_handler(httpd_req_t *req)
         res = s->set_ae_level(s, val);
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     else if (!strcmp(variable, "led_intensity"))
-    {
         led_duty = val;
-        if (isStreaming)
-            enable_led(true);
-    }
 #endif
 
-#if CONFIG_DL_DETECT_ENABLED
     else if (!strcmp(variable, "face_detect"))
     {
         detection_enabled = val;
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
         if (!detection_enabled)
         {
             recognition_enabled = 0;
         }
-#endif
     }
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
     else if (!strcmp(variable, "face_enroll"))
         is_enrolling = val;
     else if (!strcmp(variable, "face_recognize"))
@@ -529,8 +494,6 @@ static esp_err_t cmd_handler(httpd_req_t *req)
             detection_enabled = val;
         }
     }
-#endif
-#endif
     else
     {
         res = -1;
@@ -594,7 +557,7 @@ static esp_err_t status_handler(httpd_req_t *req)
         p += print_reg(p, s, 0x132, 0xFF);
     }
 
-    p += sprintf(p, "\"board\":\"%s\",", CAM_BOARD);
+    p += sprintf(p, "\"board\":\"%s\",", CAMERA_MODULE_NAME);
     p += sprintf(p, "\"xclk\":%u,", s->xclk_freq_hz / 1000000);
     p += sprintf(p, "\"pixformat\":%u,", s->pixformat);
     p += sprintf(p, "\"framesize\":%u,", s->status.framesize);
@@ -626,13 +589,9 @@ static esp_err_t status_handler(httpd_req_t *req)
 #else
     p += sprintf(p, ",\"led_intensity\":%d", -1);
 #endif
-#if CONFIG_DL_DETECT_ENABLED
     p += sprintf(p, ",\"face_detect\":%u", detection_enabled);
-#if CONFIG_DL_RECOGNIZE_HUMAN_FACE
     p += sprintf(p, ",\"face_enroll\":%u,", is_enrolling);
     p += sprintf(p, "\"face_recognize\":%u", recognition_enabled);
-#endif
-#endif
     *p++ = '}';
     *p++ = 0;
     httpd_resp_set_type(req, "application/json");

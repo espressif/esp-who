@@ -30,7 +30,7 @@
 #include "esp_wifi.h"
 #include "esp_camera.h"
 #include "mdns.h"
-#include "app_camera.h"
+#include "app_define.h"
 
 static const char *TAG = "camera mdns";
 
@@ -96,7 +96,7 @@ const char * app_mdns_query(size_t * out_len)
     p += sprintf(p, "\"pixformat\":\"%s\",", pixformat);
     p += sprintf(p, "\"framesize\":\"%s\",", framesize);
     p += sprintf(p, "\"stream_port\":\"81\",");
-    p += sprintf(p, "\"board\":\"%s\",", CAM_BOARD);
+    p += sprintf(p, "\"board\":\"%s\",", CAMERA_MODULE_NAME);
     p += sprintf(p, "\"model\":\"%s\"", model);
     *p++ = '}';
     *p++ = ',';
@@ -196,7 +196,7 @@ void app_mdns_main()
             ESP_LOGE(TAG, "esp_read_mac() Failed");
             return;
         }
-        snprintf(iname, 64, "%s-%s-%02X%02X%02X", CAM_BOARD, model, mac[3], mac[4], mac[5]);
+        snprintf(iname, 64, "%s-%s-%02X%02X%02X", CAMERA_MODULE_NAME, model, mac[3], mac[4], mac[5]);
     }
 
     snprintf(framesize, 4, "%d", s->status.framesize);
@@ -234,7 +234,7 @@ void app_mdns_main()
 
 
     mdns_txt_item_t camera_txt_data[] = {
-        {(char*)"board"         ,(char*)CAM_BOARD},
+        {(char*)"board"         ,(char*)CAMERA_MODULE_NAME},
         {(char*)"model"     	,(char*)model},
         {(char*)"stream_port"   ,(char*)"81"},
         {(char*)"framesize"   	,(char*)framesize},
