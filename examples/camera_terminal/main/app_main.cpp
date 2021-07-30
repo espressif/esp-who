@@ -3,6 +3,6 @@
 
 extern "C" void app_main()
 {
-    app_camera_init(FRAMESIZE_QVGA, 12, 2);
+    app_camera_init(CAMERA_PIXEL_FORMAT, FRAMESIZE_QVGA, 2);
     app_dl_init();
 }

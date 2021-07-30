@@ -8,7 +8,7 @@
 
 static const char *TAG = "app_camera";
 
-void app_camera_init(framesize_t frame_size, uint8_t jpeg_quality, uint8_t fb_count)
+void app_camera_init(const pixformat_t pixel_fromat, const framesize_t frame_size, const uint8_t fb_count, const uint8_t jpeg_quality)
 {
     ESP_LOGI(TAG, "Camera module is %s", CAMERA_MODULE_NAME);
 
@@ -47,30 +47,7 @@ void app_camera_init(framesize_t frame_size, uint8_t jpeg_quality, uint8_t fb_co
     config.pin_pwdn = CAMERA_PIN_PWDN;
     config.pin_reset = CAMERA_PIN_RESET;
     config.xclk_freq_hz = XCLK_FREQ_HZ;
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-    config.pixel_format = PIXFORMAT_RGB565;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_YUV422
-    config.pixel_format = PIXFORMAT_YUV422;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_GRAYSCALE
-    config.pixel_format = PIXFORMAT_GRAYSCALE;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_JPEG
-    config.pixel_format = PIXFORMAT_JPEG;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB888
-    config.pixel_format = PIXFORMAT_RGB888;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RAW
-    config.pixel_format = PIXFORMAT_RAW;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB444
-    config.pixel_format = PIXFORMAT_RGB444;
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB555
-    config.pixel_format = PIXFORMAT_RGB555;
-#endif
+    config.pixel_format = pixel_fromat;
     config.frame_size = frame_size;
     config.jpeg_quality = jpeg_quality;
     config.fb_count = fb_count;
@@ -94,27 +71,31 @@ void app_camera_init(framesize_t frame_size, uint8_t jpeg_quality, uint8_t fb_co
     }
 }
 
-bool app_camera_decode(camera_fb_t *fb, uint16_t **image_ptr)
+void *app_camera_decode(camera_fb_t *fb)
 {
-    assert(fb->format == PIXFORMAT_RGB565);
-    *image_ptr = (uint16_t *)fb->buf;
-    return true;
-}
-
-bool app_camera_decode(camera_fb_t *fb, uint8_t **image_ptr)
-{
-    *image_ptr = (uint8_t *)dl::tool::malloc_aligned(fb->height * fb->width * 3, sizeof(uint8_t));
-    if (!*image_ptr)
+    if (fb->format == PIXFORMAT_RGB565)
     {
-        ESP_LOGE(TAG, "malloc memory for image rgb888 failed");
-        return false;
+        return (void *)fb->buf;
     }
-
-    if (!fmt2rgb888(fb->buf, fb->len, fb->format, *image_ptr))
+    else
     {
-        ESP_LOGE(TAG, "fmt2rgb888 failed");
-        dl::tool::free_aligned(*image_ptr);
-        return false;
+        uint8_t *image_ptr = (uint8_t *)malloc(fb->height * fb->width * 3 * sizeof(uint8_t));
+        if (image_ptr)
+        {
+            if (fmt2rgb888(fb->buf, fb->len, fb->format, image_ptr))
+            {
+                return (void *)image_ptr;
+            }
+            else
+            {
+                ESP_LOGE(TAG, "fmt2rgb888 failed");
+                dl::tool::free_aligned(image_ptr);
+            }
+        }
+        else
+        {
+            ESP_LOGE(TAG, "malloc memory for image rgb888 failed");
+        }
     }
-    return true;
+    return NULL;
 }

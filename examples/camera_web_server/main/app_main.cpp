@@ -11,9 +11,9 @@ extern "C" void app_main()
     app_wifi_main();
 
 #if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-    app_camera_init(FRAMESIZE_QVGA, 12, 2);
+    app_camera_init(CAMERA_PIXEL_FORMAT, FRAMESIZE_QVGA, 2);
 #else
-    app_camera_init(FRAMESIZE_UXGA, 12, 2);
+    app_camera_init(CAMERA_PIXEL_FORMAT, FRAMESIZE_UXGA, 2);
 #endif
 
 #if CONFIG_LED_ILLUMINATOR_ENABLED
