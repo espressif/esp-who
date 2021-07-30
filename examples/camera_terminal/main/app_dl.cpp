@@ -33,8 +33,6 @@ static const char *TAG = "app_dl";
 
 void task_dl(void *arg)
 {
-    camera_fb_t *fb = NULL;
-    IMAGE_T *image_ptr;
     dl::tool::Latency latency_total(24);
     dl::tool::Latency latency_fetch;
     dl::tool::Latency latency_decode;
@@ -71,9 +69,8 @@ void task_dl(void *arg)
 
         latency_total.start();
 
-        /* 2. Get one image with camera */
         latency_fetch.start();
-        fb = esp_camera_fb_get();
+        camera_fb_t *fb = esp_camera_fb_get();
         if (!fb)
         {
             ESP_LOGE(TAG, "Camera capture failed");
@@ -82,28 +79,28 @@ void task_dl(void *arg)
         latency_fetch.end();
 
 #if CONFIG_DL_ENABLED
-        /* 3. Transform image to RGB */
         latency_decode.start();
-        int image_height = fb->height;
-        int image_width = fb->width;
-        if (app_camera_decode(fb, &image_ptr) == false)
+        IMAGE_T *image_ptr = (IMAGE_T *)app_camera_decode(fb);
+        if (!image_ptr)
         {
             esp_camera_fb_return(fb);
             continue;
         }
-#if !CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-        esp_camera_fb_return(fb);
-#endif
+        int image_height = fb->height;
+        int image_width = fb->width;
+        pixformat_t image_format = fb->format;
+
+        if (image_format != PIXFORMAT_RGB565)
+            esp_camera_fb_return(fb);
         latency_decode.end();
 
-        /* 4. Do deep-learning processing */
 #if CONFIG_DL_HUMAN_FACE
         latency_detect.start();
 #if CONFIG_DL_HUMAN_FACE_DETECTION_S2_ENABLED
-        std::list<dl::detect::result_t> &detect_candidates = detector.infer((IMAGE_T *)image_ptr, {(int)image_height, (int)image_width, 3});
-        std::list<dl::detect::result_t> &detect_results = detector2.infer((IMAGE_T *)image_ptr, {(int)image_height, (int)image_width, 3}, detect_candidates);
+        std::list<dl::detect::result_t> &detect_candidates = detector.infer(image_ptr, {(int)image_height, (int)image_width, 3});
+        std::list<dl::detect::result_t> &detect_results = detector2.infer(image_ptr, {(int)image_height, (int)image_width, 3}, detect_candidates);
 #else
-        std::list<dl::detect::result_t> &detect_results = detector.infer((IMAGE_T *)image_ptr, {(int)image_height, (int)image_width, 3});
+        std::list<dl::detect::result_t> &detect_results = detector.infer(image_ptr, {(int)image_height, (int)image_width, 3});
 #endif
         latency_detect.end();
 
@@ -121,12 +118,11 @@ void task_dl(void *arg)
 
 #if CONFIG_DL_CAT_FACE
         latency_detect.start();
-        std::list<dl::detect::result_t> &detect_results = detector.infer((IMAGE_T *)image_ptr, {(int)image_height, (int)image_width, 3});
+        std::list<dl::detect::result_t> &detect_results = detector.infer(image_ptr, {(int)image_height, (int)image_width, 3});
         latency_detect.end();
         if (detect_results.size() > 0)
         {
-            is_detected = true;
-            print_detection_result(image_ptr, fb->height, fb->width, detect_results);
+            print_detection_result(detect_results);
         }
 #endif // CONFIG_DL_CAT_FACE
 
@@ -136,20 +132,19 @@ void task_dl(void *arg)
         latency_detect.end();
 #endif // CONFIG_DL_HUMAN_HAND
 
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-        esp_camera_fb_return(fb);
-#else
-        dl::tool::free_aligned(image_ptr);
-#endif
+        if (image_format == PIXFORMAT_RGB565)
+            esp_camera_fb_return(fb);
+        else
+            free(image_ptr);
 
-#else  // not CONFIG_DL_ENABLED
+#else
         esp_camera_fb_return(fb);
 #endif // CONFIG_DL_ENABLED
 
         latency_total.end();
         uint32_t frame_latency = latency_total.get_period() / 1000;
         uint32_t average_frame_latency = latency_total.get_average_period() / 1000;
-        ESP_LOGI(TAG, "Frame: %4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch: %4ums, decode: %4ums, detect: %4ums, recognize: %5ums",
+        ESP_LOGI("Frame Latency", "%4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch: %4ums, decode: %4ums, detect: %4ums, recognize: %5ums",
                  frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency,
                  latency_fetch.get_period() / 1000,
                  latency_decode.get_period() / 1000,
