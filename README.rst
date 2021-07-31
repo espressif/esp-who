@@ -15,8 +15,6 @@ ESP-WHO 的运行基于 ESP-IDF。`ESP-DL <https://github.com/espressif/esp-dl>`
     :alt: overview of ESP-WHO
     :align: center
     
-    ESP-WHO 概述
-    
     ..
 
 
@@ -57,6 +55,8 @@ ESP-WHO 的运行基于 ESP-IDF。`ESP-DL <https://github.com/espressif/esp-dl>`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 `ESP-IDF 编程指南 <https://idf.espressif.com/>`_ 。
+
+.. attention:: 请使用最新的 esp-idf/master 分支。
 
 
 获取 ESP-WHO
@@ -111,8 +111,6 @@ ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 `ES
     :alt: ESP-WHO General Configuration
     :align: center
     
-    ESP-WHO 通用配置
-    
     ..
 
 
@@ -128,15 +126,11 @@ ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 `ES
 .. figure:: ./img/esp-who-general-config-camera.png
     :align: center
 
-    摄像头配置
-
 .. attention::
     摄像头的管脚配置是按照开发套件来区分的。如果管脚配置中，没有您所用的开发套件，请选择 ``Custom Camera Pinout``，正确配置对应管脚，如下图所示：
 
 .. figure:: ./img/esp-who-general-config-camera-custom-pinout.png
     :align: center
-
-    自定义摄像头管脚
 
 
 步骤2.2：指示灯配置
@@ -152,8 +146,6 @@ ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 `ES
 .. figure:: ./img/esp-who-general-config-led.png
     :align: center
 
-    指示灯配置
-
 
 步骤2.3：人工智能应用配置
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -162,8 +154,6 @@ ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 `ES
 
 .. figure:: ./img/esp-who-general-config-dl.png
     :align: center
-
-    人工智能应用配置
 
 
 
@@ -177,8 +167,6 @@ ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 `ES
 
 .. figure:: ./img/esp-who-example-config.png
     :align: center
-
-    示例配置
 
 
 步骤4：运行和监视
