@@ -24,6 +24,7 @@
 #include "app_common.hpp"
 #include "sdkconfig.h"
 #include "dl_tool.hpp"
+#include "dl_image.hpp"
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
@@ -92,19 +93,19 @@ static esp_err_t capture_handler(httpd_req_t *req)
     dl::tool::Latency latency_total;
     latency_total.start();
 
-    camera_fb_t *fb = NULL;
+    camera_fb_t *frame = NULL;
     esp_err_t res = ESP_OK;
 
 #ifdef CONFIG_LED_ILLUMINATOR_ENABLED
     app_led_duty(led_duty);
     vTaskDelay(150 / portTICK_PERIOD_MS); // The LED needs to be turned on ~150ms before the call to esp_camera_fb_get()
-    fb = esp_camera_fb_get();             // or it won't be visible in the frame. A better way to do this is needed.
+    frame = esp_camera_fb_get();             // or it won't be visible in the frame. A better way to do this is needed.
     app_led_duty(0);
 #else
-    fb = esp_camera_fb_get();
+    frame = esp_camera_fb_get();
 #endif
 
-    if (!fb)
+    if (!frame)
     {
         ESP_LOGE(TAG, "Camera capture failed");
         httpd_resp_send_500(req);
@@ -116,23 +117,23 @@ static esp_err_t capture_handler(httpd_req_t *req)
     httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 
     char ts[32];
-    snprintf(ts, 32, "%ld.%06ld", fb->timestamp.tv_sec, fb->timestamp.tv_usec);
+    snprintf(ts, 32, "%ld.%06ld", frame->timestamp.tv_sec, frame->timestamp.tv_usec);
     httpd_resp_set_hdr(req, "X-Timestamp", (const char *)ts);
 
     size_t fb_len = 0;
-    if (fb->format == PIXFORMAT_JPEG)
+    if (frame->format == PIXFORMAT_JPEG)
     {
-        fb_len = fb->len;
-        res = httpd_resp_send(req, (const char *)fb->buf, fb->len);
+        fb_len = frame->len;
+        res = httpd_resp_send(req, (const char *)frame->buf, frame->len);
     }
     else
     {
         jpg_chunking_t jchunk = {req, 0};
-        res = frame2jpg_cb(fb, 80, jpg_encode_stream, &jchunk) ? ESP_OK : ESP_FAIL;
+        res = frame2jpg_cb(frame, 80, jpg_encode_stream, &jchunk) ? ESP_OK : ESP_FAIL;
         httpd_resp_send_chunk(req, NULL, 0);
         fb_len = jchunk.len;
     }
-    esp_camera_fb_return(fb);
+    esp_camera_fb_return(frame);
     latency_total.end();
 
     ESP_LOGI(TAG, "JPG: %uB %ums", (uint32_t)(fb_len), latency_total.get_period() / 1000);
@@ -141,7 +142,7 @@ static esp_err_t capture_handler(httpd_req_t *req)
 
 static esp_err_t stream_handler(httpd_req_t *req)
 {
-    camera_fb_t *fb = NULL;
+    camera_fb_t *frame = NULL;
     struct timeval _timestamp;
     esp_err_t res = ESP_OK;
     size_t _jpg_buf_len = 0;
@@ -157,6 +158,7 @@ static esp_err_t stream_handler(httpd_req_t *req)
     dl::tool::Latency latency_encode;
     dl::tool::Latency latency_detect;
     dl::tool::Latency latency_recognize;
+    dl::tool::Latency latency_moving;
 
 #if CONFIG_DL_HUMAN_FACE
 #if CONFIG_DL_HUMAN_FACE_DETECTION_S1_MSR01
@@ -198,6 +200,7 @@ static esp_err_t stream_handler(httpd_req_t *req)
 
         latency_detect.clear_period();
         latency_recognize.clear_period();
+        latency_moving.clear_period();
 
         image_ptr = NULL;
         is_detected = false;
@@ -207,22 +210,42 @@ static esp_err_t stream_handler(httpd_req_t *req)
             latency_total.start();
 
             latency_fetch.start();
-            fb = esp_camera_fb_get();
-            if (!fb)
+            frame = esp_camera_fb_get();
+            if (!frame)
             {
                 ESP_LOGE(TAG, "Camera capture failed");
                 res = ESP_FAIL;
                 break;
             }
-            _timestamp.tv_sec = fb->timestamp.tv_sec;
-            _timestamp.tv_usec = fb->timestamp.tv_usec;
+            _timestamp.tv_sec = frame->timestamp.tv_sec;
+            _timestamp.tv_usec = frame->timestamp.tv_usec;
             latency_fetch.end();
 
+#if CONFIG_DL_MOVING_TARGET_DETECTION_ENABLED && CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+            camera_fb_t *frame2 = esp_camera_fb_get();
+            if (!frame2)
+            {
+                ESP_LOGE(TAG, "Camera capture failed");
+                continue;
+            }
+            latency_fetch.end();
+
+            latency_moving.start();
+            uint32_t moving_point_number = dl::image::get_moving_point_number((uint16_t *)frame->buf, (uint16_t *)frame2->buf, frame->height, frame->width, 8, 15);
+            latency_moving.end();
+            if (moving_point_number > 50)
+            {
+                ESP_LOGI("Moving Target", "Detected.");
+                dl::image::draw_filled_rectangle((uint16_t *)frame->buf, frame->height, frame->width, 0, 0, 10, 10);
+            }
+            esp_camera_fb_return(frame2);
+#endif
+
 #if CONFIG_DL_ENABLED
-            if (detection_enabled && fb->width < 400)
+            if (detection_enabled && frame->width < 400)
             {
                 latency_decode.start();
-                image_ptr = (IMAGE_T *)app_camera_decode(fb);
+                image_ptr = (IMAGE_T *)app_camera_decode(frame);
                 if (!image_ptr)
                 {
                     ESP_LOGE(TAG, "Frame decode failed");
@@ -234,17 +257,17 @@ static esp_err_t stream_handler(httpd_req_t *req)
 #if CONFIG_DL_HUMAN_FACE
                 latency_detect.start();
 #if CONFIG_DL_HUMAN_FACE_DETECTION_S2_ENABLED
-                std::list<dl::detect::result_t> &detect_candidates = detector.infer(image_ptr, {(int)fb->height, (int)fb->width, 3});
-                std::list<dl::detect::result_t> &detect_results = detector2.infer(image_ptr, {(int)fb->height, (int)fb->width, 3}, detect_candidates);
+                std::list<dl::detect::result_t> &detect_candidates = detector.infer(image_ptr, {(int)frame->height, (int)frame->width, 3});
+                std::list<dl::detect::result_t> &detect_results = detector2.infer(image_ptr, {(int)frame->height, (int)frame->width, 3}, detect_candidates);
 #else
-                std::list<dl::detect::result_t> &detect_results = detector.infer(image_ptr, {(int)fb->height, (int)fb->width, 3});
+                std::list<dl::detect::result_t> &detect_results = detector.infer(image_ptr, {(int)frame->height, (int)frame->width, 3});
 #endif
                 latency_detect.end();
 
                 if (detect_results.size() > 0)
                 {
                     is_detected = true;
-                    draw_detection_result(image_ptr, fb->height, fb->width, detect_results);
+                    draw_detection_result(image_ptr, frame->height, frame->width, detect_results);
 
                     latency_recognize.start();
                     if (recognition_enabled)
@@ -259,12 +282,12 @@ static esp_err_t stream_handler(httpd_req_t *req)
 
 #if CONFIG_DL_CAT_FACE
                 latency_detect.start();
-                std::list<dl::detect::result_t> &detect_results = detector.infer(image_ptr, {(int)fb->height, (int)fb->width, 3});
+                std::list<dl::detect::result_t> &detect_results = detector.infer(image_ptr, {(int)frame->height, (int)frame->width, 3});
                 latency_detect.end();
                 if (detect_results.size() > 0)
                 {
                     is_detected = true;
-                    draw_detection_result(image_ptr, fb->height, fb->width, detect_results);
+                    draw_detection_result(image_ptr, frame->height, frame->width, detect_results);
                 }
 #endif // CONFIG_DL_CAT_FACE
 
@@ -279,38 +302,38 @@ static esp_err_t stream_handler(httpd_req_t *req)
             latency_encode.start();
             if (is_detected)
             {
-                if (!fmt2jpg((uint8_t *)image_ptr, fb->width * fb->height * 3, fb->width, fb->height, CAMERA_PIXEL_FORMAT, 90, &_jpg_buf, &_jpg_buf_len))
+                if (!fmt2jpg((uint8_t *)image_ptr, frame->width * frame->height * 3, frame->width, frame->height, CAMERA_PIXEL_FORMAT, 90, &_jpg_buf, &_jpg_buf_len))
                 {
                     ESP_LOGE(TAG, "fmt2jpg failed");
                     res = ESP_FAIL;
                     break;
                 }
 
-                if (fb->format == PIXFORMAT_RGB565)
+                if (frame->format == PIXFORMAT_RGB565)
                     image_ptr = NULL;
 
-                esp_camera_fb_return(fb);
-                fb = NULL;
+                esp_camera_fb_return(frame);
+                frame = NULL;
             }
-            else if (fb->format == PIXFORMAT_JPEG)
+            else if (frame->format == PIXFORMAT_JPEG)
             {
-                _jpg_buf = fb->buf;
-                _jpg_buf_len = fb->len;
+                _jpg_buf = frame->buf;
+                _jpg_buf_len = frame->len;
             }
             else
             {
-                if (!frame2jpg(fb, 80, &_jpg_buf, &_jpg_buf_len))
+                if (!frame2jpg(frame, 80, &_jpg_buf, &_jpg_buf_len))
                 {
                     ESP_LOGE(TAG, "JPEG compression failed");
                     res = ESP_FAIL;
                     break;
                 }
 
-                if (fb->format == PIXFORMAT_RGB565)
+                if (frame->format == PIXFORMAT_RGB565)
                     image_ptr = NULL;
 
-                esp_camera_fb_return(fb);
-                fb = NULL;
+                esp_camera_fb_return(frame);
+                frame = NULL;
             }
             if (image_ptr)
                 free(image_ptr);
@@ -334,10 +357,10 @@ static esp_err_t stream_handler(httpd_req_t *req)
             res = httpd_resp_send_chunk(req, (const char *)_jpg_buf, _jpg_buf_len);
         }
 
-        if (fb)
+        if (frame)
         {
-            esp_camera_fb_return(fb);
-            fb = NULL;
+            esp_camera_fb_return(frame);
+            frame = NULL;
             _jpg_buf = NULL;
         }
         else if (_jpg_buf)
@@ -355,9 +378,16 @@ static esp_err_t stream_handler(httpd_req_t *req)
         uint32_t frame_latency = latency_total.get_period() / 1000;
         uint32_t average_frame_latency = latency_total.get_average_period() / 1000;
 
-        ESP_LOGI("Frame Latency", "%4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch %4ums, decode: %4ums, detect: %4ums, recognize: %5ums, encode: %4ums",
+        ESP_LOGI("Frame Latency", "%4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch %4ums, "
+#if CONFIG_DL_MOVING_TARGET_DETECTION_ENABLED && CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+                                  "moving: %4uus, "
+#endif
+                                  "decode: %4ums, detect: %4ums, recognize: %5ums, encode: %4ums",
                  frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency,
                  latency_fetch.get_period() / 1000,
+#if CONFIG_DL_MOVING_TARGET_DETECTION_ENABLED && CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+                 latency_moving.get_period(),
+#endif
                  latency_decode.get_period() / 1000,
                  latency_detect.get_period() / 1000,
                  latency_recognize.get_period() / 1000,

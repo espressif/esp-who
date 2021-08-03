@@ -10,6 +10,7 @@ Camera with Terminal `[English] <./README.rst>`_
 
 + `CatFaceDetectMN03 <https://github.com/espressif/esp-dl/blob/master/include/model_zoo/cat_face_detect_mn03.hpp>`_
 
++ `移动侦测 <https://github.com/espressif/esp-dl/blob/master/include/image/dl_image.hpp#L322>`_
 
 
 运行示例

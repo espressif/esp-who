@@ -306,5 +306,10 @@ menu "ESP-WHO General Configuration"
 
         # Human Hand Series
 
+
+        config DL_MOVING_TARGET_DETECTION_ENABLED
+            bool "Enable Moving Target Detection"
+            default y
+
     endmenu
 endmenu

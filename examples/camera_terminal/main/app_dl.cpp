@@ -38,6 +38,7 @@ void task_dl(void *arg)
     dl::tool::Latency latency_decode;
     dl::tool::Latency latency_detect;
     dl::tool::Latency latency_recognize;
+    dl::tool::Latency latency_moving;
 
     /* 1. Load configuration for detection */
 #if CONFIG_DL_HUMAN_FACE
@@ -66,32 +67,53 @@ void task_dl(void *arg)
         latency_decode.clear_period();
         latency_detect.clear_period();
         latency_recognize.clear_period();
+        latency_moving.clear_period();
 
         latency_total.start();
 
         latency_fetch.start();
-        camera_fb_t *fb = esp_camera_fb_get();
-        if (!fb)
+        camera_fb_t *frame = esp_camera_fb_get();
+        if (!frame)
         {
             ESP_LOGE(TAG, "Camera capture failed");
             continue;
         }
         latency_fetch.end();
 
-#if CONFIG_DL_ENABLED
-        latency_decode.start();
-        IMAGE_T *image_ptr = (IMAGE_T *)app_camera_decode(fb);
-        if (!image_ptr)
+#if CONFIG_DL_MOVING_TARGET_DETECTION_ENABLED && CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+        camera_fb_t *frame2 = esp_camera_fb_get();
+        if (!frame2)
         {
-            esp_camera_fb_return(fb);
+            ESP_LOGE(TAG, "Camera capture failed");
             continue;
         }
-        int image_height = fb->height;
-        int image_width = fb->width;
-        pixformat_t image_format = fb->format;
+        latency_fetch.end();
+
+        latency_moving.start();
+        uint32_t moving_point_number = dl::image::get_moving_point_number((uint16_t *)frame->buf, (uint16_t *)frame2->buf, frame->height, frame->width, 8, 15);
+        latency_moving.end();
+        if (moving_point_number > 50)
+        {
+            ESP_LOGI("Moving Target", "Detected.");
+            dl::image::draw_filled_rectangle((uint16_t *)frame->buf, frame->height, frame->width, 0, 0, 10, 10);
+        }
+        esp_camera_fb_return(frame2);
+#endif
+
+#if CONFIG_DL_ENABLED
+        latency_decode.start();
+        IMAGE_T *image_ptr = (IMAGE_T *)app_camera_decode(frame);
+        if (!image_ptr)
+        {
+            esp_camera_fb_return(frame);
+            continue;
+        }
+        int image_height = frame->height;
+        int image_width = frame->width;
+        pixformat_t image_format = frame->format;
 
         if (image_format != PIXFORMAT_RGB565)
-            esp_camera_fb_return(fb);
+            esp_camera_fb_return(frame);
         latency_decode.end();
 
 #if CONFIG_DL_HUMAN_FACE
@@ -133,20 +155,27 @@ void task_dl(void *arg)
 #endif // CONFIG_DL_HUMAN_HAND
 
         if (image_format == PIXFORMAT_RGB565)
-            esp_camera_fb_return(fb);
+            esp_camera_fb_return(frame);
         else
             free(image_ptr);
 
 #else
-        esp_camera_fb_return(fb);
+        esp_camera_fb_return(frame);
 #endif // CONFIG_DL_ENABLED
 
         latency_total.end();
         uint32_t frame_latency = latency_total.get_period() / 1000;
         uint32_t average_frame_latency = latency_total.get_average_period() / 1000;
-        ESP_LOGI("Frame Latency", "%4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch: %4ums, decode: %4ums, detect: %4ums, recognize: %5ums",
+        ESP_LOGI("Frame Latency", "%4ums (%2.1ffps), Average: %4ums (%2.1ffps) | fetch: %4ums, "
+#if CONFIG_DL_MOVING_TARGET_DETECTION_ENABLED && CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+                                  "moving: %4uus, "
+#endif
+                                  "decode: %4ums, detect: %4ums, recognize: %5ums",
                  frame_latency, 1000.0 / frame_latency, average_frame_latency, 1000.0 / average_frame_latency,
                  latency_fetch.get_period() / 1000,
+#if CONFIG_DL_MOVING_TARGET_DETECTION_ENABLED && CONFIG_CAMERA_PIXEL_FORMAT_RGB565
+                 latency_moving.get_period(),
+#endif
                  latency_decode.get_period() / 1000,
                  latency_detect.get_period() / 1000,
                  latency_recognize.get_period() / 1000);
