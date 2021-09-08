@@ -1,30 +1,64 @@
 menu "ESP-WHO General Configuration"
-    menu "Camera Configuration"
-        
-        choice PIXEL_FORMAT
-            bool "Select Camera Pixel Format"
-            default CAMERA_PIXEL_FORMAT_RGB565
-            help
-                Select Camera Pixel Format.
-            
-            config CAMERA_PIXEL_FORMAT_RGB565
-                bool "RGB565"
-            config CAMERA_PIXEL_FORMAT_YUV422
-                bool "YUV422"
-            config CAMERA_PIXEL_FORMAT_GRAYSCALE
-                bool "GRAYSCALE"
-            config CAMERA_PIXEL_FORMAT_JPEG
-                bool "JPEG"
-            config CAMERA_PIXEL_FORMAT_RGB888
-                bool "RGB888"
-            config CAMERA_PIXEL_FORMAT_RAW
-                bool "RAW"
-            config CAMERA_PIXEL_FORMAT_RGB444
-                bool "RGB444"
-            config CAMERA_PIXEL_FORMAT_RGB555
-                bool "RGB555"
+    
+    menu "WiFi Configuration"
 
-        endchoice
+        config ESP_HOST_NAME
+            string "Camera Host Name"
+            default ""
+            help
+            Hostname that the camera will advertise over mDNS.
+
+        config ESP_WIFI_SSID
+            string "WiFi STA SSID"
+            default ""
+            help
+            WiFi SSID (network name) to connect to or empty for Off.
+
+        config ESP_WIFI_PASSWORD
+            string "WiFi STA Password"
+            default ""
+            help
+            WiFi Password if WEP/WPA/WPA2 or empty if Open.
+            
+        config ESP_WIFI_AP_SSID
+            string "WiFi AP SSID"
+            default "ESP32-Camera"
+            help
+            AP SSID (network name) to create or empty for Off.
+
+        config ESP_WIFI_AP_PASSWORD
+            string "WiFi AP Password"
+            default ""
+            help
+            AP password for WPA2 or empty for Open.
+
+        config MAX_STA_CONN
+            int "Maximal STA connections"
+            default 1
+            help
+            Max number of the STA connects to AP.
+
+        config ESP_WIFI_AP_CHANNEL
+            string "WiFi AP Channel"
+            default ""
+            help
+            AP channel for better connection performance.
+
+        config SERVER_IP
+            string "WiFi AP IP Address"
+            default "192.168.4.1"
+            help
+                IP address that the ESP will assign to it's AP interface. You can use this IP to connect to the camera after flashing.
+
+        config ESP_MAXIMUM_RETRY
+            int "Maximum retry"
+            default 5
+            help
+            Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
+
+    endmenu
+
+    menu "Camera Configuration"
 
         choice CAMERA_MODULE
             bool "Select Camera Pinout"
@@ -36,6 +70,8 @@ menu "ESP-WHO General Configuration"
                 bool "WROVER-KIT With OV2640 Module"
             config CAMERA_MODULE_ESP_EYE
                 bool "ESP-EYE DevKit"
+            config CAMERA_MODULE_ESP_S2_KALUGA
+                bool "ESP32-S2-Kaluga-1 V1.3"
             config CAMERA_MODULE_ESP_S3_EYE
                 bool "ESP-S3-EYE DevKit"
             config CAMERA_MODEL_ESP32_CAM_BOARD
@@ -231,85 +267,5 @@ menu "ESP-WHO General Configuration"
             default 1
             help
             Select the LEDC Channel (0-7)
-    endmenu
-
-
-
-    menu "DL Configuration"
-
-        config DL_ENABLED
-            bool "Enable Deep-Learning Application"
-            default y            
-
-        choice DL_SELECT_APP
-            bool "Select Application"
-            depends on DL_ENABLED
-            default DL_HUMAN_FACE
-
-            config DL_HUMAN_FACE
-                bool "Human Face"
-            config DL_CAT_FACE
-                bool "Cat Face"
-            config DL_HUMAN_HAND
-                bool "Human Hand"
-        endchoice
-
-        # Human Face Series
-        choice DL_HUMAN_FACE_DETECTION_S1_MODEL
-            bool "Select Human Face Detection Stage-1 Model"
-            depends on DL_HUMAN_FACE
-            default DL_HUMAN_FACE_DETECTION_S1_MSR01 
-
-            config DL_HUMAN_FACE_DETECTION_S1_MSR01
-                bool "HumanFaceDetectMSR01"
-        endchoice
-
-        config DL_HUMAN_FACE_DETECTION_S2_ENABLED
-            bool "Enable Human Face Detection Stage-2"
-            depends on DL_HUMAN_FACE
-            default y
-
-        choice DL_HUMAN_FACE_DETECTION_S2_MODEL
-            bool "Select Human Face Detection Stage-2 Model"
-            depends on DL_HUMAN_FACE_DETECTION_S2_ENABLED
-            default DL_HUMAN_FACE_DETECTION_S2_MNP01
-
-            config DL_HUMAN_FACE_DETECTION_S2_MNP01
-                bool "HumanFaceDetectMNP01"
-        endchoice
-
-
-        config DL_HUMAN_FACE_RECOGNITION_ENABLED
-            bool "Enable Human Face Recognition"
-            depends on DL_HUMAN_FACE_DETECTION_S2_ENABLED
-            default y
-
-        choice DL_HUMAN_FACE_RECOGNITION_MODEL
-            bool "Select Human Face Recognition Model"
-            depends on DL_HUMAN_FACE_RECOGNITION_ENABLED
-            default DL_HUMAN_FACE_RECOGNITION_XXX 
-
-            config DL_HUMAN_FACE_RECOGNITION_XXX
-                bool "HumanFaceRecognizeXXX"
-        endchoice
-
-        # Cat Face Series
-        choice DL_CAT_FACE_DETECTION_MODEL
-            bool "Select Cat Face Detection Model"
-            depends on DL_CAT_FACE
-            default DL_CAT_FACE_DETECTION_MN03
-
-            config DL_CAT_FACE_DETECTION_MN03
-                bool "CatFaceDetectMN03"
-        endchoice
-
-
-        # Human Hand Series
-
-
-        config DL_MOVING_TARGET_DETECTION_ENABLED
-            bool "Enable Moving Target Detection"
-            default y
-
     endmenu
 endmenu

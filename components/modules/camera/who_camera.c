@@ -1,14 +1,25 @@
-#include "app_camera.hpp"
+#include "who_camera.h"
 
 #include "esp_log.h"
 #include "esp_system.h"
 
-#include "app_define.h"
-#include "dl_tool.hpp"
+static const char *TAG = "who_camera";
+static QueueHandle_t xQueueFrameO = NULL;
 
-static const char *TAG = "app_camera";
+static void task_process_handler(void *arg)
+{
+    while (true)
+    {
+        camera_fb_t *frame = esp_camera_fb_get();
+        if (frame)
+            xQueueSend(xQueueFrameO, &frame, portMAX_DELAY);
+    }
+}
 
-void app_camera_init(const pixformat_t pixel_fromat, const framesize_t frame_size, const uint8_t fb_count, const uint8_t jpeg_quality)
+void register_camera(const pixformat_t pixel_fromat,
+                     const framesize_t frame_size,
+                     const uint8_t fb_count,
+                     const QueueHandle_t frame_o)
 {
     ESP_LOGI(TAG, "Camera module is %s", CAMERA_MODULE_NAME);
 
@@ -49,8 +60,9 @@ void app_camera_init(const pixformat_t pixel_fromat, const framesize_t frame_siz
     config.xclk_freq_hz = XCLK_FREQ_HZ;
     config.pixel_format = pixel_fromat;
     config.frame_size = frame_size;
-    config.jpeg_quality = jpeg_quality;
+    config.jpeg_quality = 12;
     config.fb_count = fb_count;
+    config.fb_location = CAMERA_FB_IN_PSRAM;
     config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
 
     // camera init
@@ -69,33 +81,7 @@ void app_camera_init(const pixformat_t pixel_fromat, const framesize_t frame_siz
         s->set_brightness(s, 1);  //up the blightness just a bit
         s->set_saturation(s, -2); //lower the saturation
     }
-}
 
-void *app_camera_decode(camera_fb_t *fb)
-{
-    if (fb->format == PIXFORMAT_RGB565)
-    {
-        return (void *)fb->buf;
-    }
-    else
-    {
-        uint8_t *image_ptr = (uint8_t *)malloc(fb->height * fb->width * 3 * sizeof(uint8_t));
-        if (image_ptr)
-        {
-            if (fmt2rgb888(fb->buf, fb->len, fb->format, image_ptr))
-            {
-                return (void *)image_ptr;
-            }
-            else
-            {
-                ESP_LOGE(TAG, "fmt2rgb888 failed");
-                dl::tool::free_aligned(image_ptr);
-            }
-        }
-        else
-        {
-            ESP_LOGE(TAG, "malloc memory for image rgb888 failed");
-        }
-    }
-    return NULL;
+    xQueueFrameO = frame_o;
+    xTaskCreatePinnedToCore(task_process_handler, TAG, 2 * 1024, NULL, 5, NULL, 1);
 }

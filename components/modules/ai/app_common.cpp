@@ -1,7 +1,10 @@
 #include "app_common.hpp"
 
-#include "dl_image.hpp"
 #include "esp_log.h"
+#include "esp_camera.h"
+
+#include "dl_image.hpp"
+
 
 void draw_detection_result(uint16_t *image_ptr, int image_height, int image_width, std::list<dl::detect::result_t> &results)
 {
@@ -52,7 +55,7 @@ void print_detection_result(std::list<dl::detect::result_t> &results)
     {
         ESP_LOGI("detection_result", "[%d]: (%3d, %3d, %3d, %3d)"
 #if CONFIG_DL_HUMAN_FACE_DETECTION_S2_ENABLED
-                                 " | left eye: (%3d, %3d), right eye: (%3d, %3d), nose: (%3d, %3d), mouth left: (%3d, %3d), mouth right: (%3d, %3d)"
+                                     " | left eye: (%3d, %3d), right eye: (%3d, %3d), nose: (%3d, %3d), mouth left: (%3d, %3d), mouth right: (%3d, %3d)"
 #endif
                  ,
                  i,
@@ -67,4 +70,33 @@ void print_detection_result(std::list<dl::detect::result_t> &results)
 #endif
         );
     }
+}
+
+void *app_camera_decode(camera_fb_t *fb)
+{
+    if (fb->format == PIXFORMAT_RGB565)
+    {
+        return (void *)fb->buf;
+    }
+    else
+    {
+        uint8_t *image_ptr = (uint8_t *)malloc(fb->height * fb->width * 3 * sizeof(uint8_t));
+        if (image_ptr)
+        {
+            if (fmt2rgb888(fb->buf, fb->len, fb->format, image_ptr))
+            {
+                return (void *)image_ptr;
+            }
+            else
+            {
+                ESP_LOGE(TAG, "fmt2rgb888 failed");
+                dl::tool::free_aligned(image_ptr);
+            }
+        }
+        else
+        {
+            ESP_LOGE(TAG, "malloc memory for image rgb888 failed");
+        }
+    }
+    return NULL;
 }

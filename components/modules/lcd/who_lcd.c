@@ -1,26 +1,57 @@
-#include "app_lcd.h"
+#include "who_lcd.h"
+#include "esp_camera.h"
 #include <string.h>
 #include "wallpaper_128x240_rgb565.h"
 
-static const char *TAG = "app_lcd";
+static const char *TAG = "who_lcd";
 
 static scr_driver_t g_lcd;
 static scr_info_t g_lcd_info;
 
-esp_err_t app_lcd_init()
+static QueueHandle_t xQueueFrameI = NULL;
+static QueueHandle_t xQueueFrameO = NULL;
+static bool gReturnFB = true;
+
+static void task_process_handler(void *arg)
+{
+    camera_fb_t *frame = NULL;
+
+    while (true)
+    {
+        if (xQueueReceive(xQueueFrameI, &frame, portMAX_DELAY))
+        {
+            g_lcd.draw_bitmap(0, 0, frame->width, frame->height, (uint16_t *)frame->buf);
+
+            if (xQueueFrameO)
+            {
+                xQueueSend(xQueueFrameO, &frame, portMAX_DELAY);
+            }
+            else if (gReturnFB)
+            {
+                esp_camera_fb_return(frame);
+            }
+            else
+            {
+                free(frame);
+            }
+        }
+    }
+}
+
+esp_err_t register_lcd(const QueueHandle_t frame_i, const QueueHandle_t frame_o, const bool return_fb)
 {
     spi_config_t bus_conf = {
-        .miso_io_num = -1,
-        .mosi_io_num = 48,
-        .sclk_io_num = 21,
+        .miso_io_num = BOARD_LCD_MISO,
+        .mosi_io_num = BOARD_LCD_MOSI,
+        .sclk_io_num = BOARD_LCD_SCK,
         .max_transfer_sz = 2 * 240 * 240 + 10,
     };
     spi_bus_handle_t spi_bus = spi_bus_create(SPI2_HOST, &bus_conf);
 
     scr_interface_spi_config_t spi_lcd_cfg = {
         .spi_bus = spi_bus,
-        .pin_num_cs = 43,
-        .pin_num_dc = 47,
+        .pin_num_cs = BOARD_LCD_CS,
+        .pin_num_dc = BOARD_LCD_DC,
         .clk_freq = 40 * 1000000,
         .swap_data = 0,
     };
@@ -36,10 +67,10 @@ esp_err_t app_lcd_init()
 
     scr_controller_config_t lcd_cfg = {
         .interface_drv = iface_drv,
-        .pin_num_rst = -1,
-        .pin_num_bckl = -1,
+        .pin_num_rst = BOARD_LCD_RST,
+        .pin_num_bckl = BOARD_LCD_BL,
         .rst_active_level = 0,
-        .bckl_active_level = 1,
+        .bckl_active_level = 0,
         .offset_hor = 0,
         .offset_ver = 0,
         .width = 240,
@@ -55,6 +86,17 @@ esp_err_t app_lcd_init()
 
     g_lcd.get_info(&g_lcd_info);
     ESP_LOGI(TAG, "Screen name:%s | width:%d | height:%d", g_lcd_info.name, g_lcd_info.width, g_lcd_info.height);
+
+    app_lcd_set_color(0x000000);
+    vTaskDelay(pdMS_TO_TICKS(500));
+    app_lcd_draw_wallpaper();
+    vTaskDelay(pdMS_TO_TICKS(500));
+
+    xQueueFrameI = frame_i;
+    xQueueFrameO = frame_o;
+    gReturnFB = return_fb;
+    xTaskCreatePinnedToCore(task_process_handler, TAG, 4 * 1024, NULL, 5, NULL, 1);
+
     return ESP_OK;
 }
 
@@ -103,9 +145,4 @@ void app_lcd_set_color(int color)
 
         free(buffer);
     }
-}
-
-void app_lcd_draw_bitmap(uint16_t *image_ptr, const uint16_t image_height, const uint16_t image_width)
-{
-    g_lcd.draw_bitmap(0, 0, image_width, image_height, image_ptr);
 }

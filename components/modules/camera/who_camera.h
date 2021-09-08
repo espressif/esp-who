@@ -1,22 +1,11 @@
 #pragma once
 
-#include <stdint.h>
-#include "esp_camera.h"
-#include "sdkconfig.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
 
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-#define IMAGE_T uint16_t
-#define COLOR_RED 0b0000000011111000
-#define COLOR_GREEN 0b1110000000000111
-#define COLOR_BLUE 0b0001111100000000
-#define COLOR_BLACK 0b0000000000000000
-#else
-#define IMAGE_T uint8_t
-#define COLOR_RED 0x0000FF
-#define COLOR_GREEN 0x00FF00
-#define COLOR_BLUE 0xFF0000
-#define COLOR_BLACK 0x000000
-#endif
+#include "esp_camera.h"
 
 #if CONFIG_CAMERA_MODULE_WROVER_KIT
 #define CAMERA_MODULE_NAME "Wrover Kit"
@@ -58,10 +47,30 @@
 #define CAMERA_PIN_HREF 27
 #define CAMERA_PIN_PCLK 25
 
+#elif CONFIG_CAMERA_MODULE_ESP_S2_KALUGA
+#define CAMERA_MODULE_NAME "ESP-S2-KALUGA"
+#define CAMERA_PIN_PWDN -1
+#define CAMERA_PIN_RESET -1
+#define CAMERA_PIN_XCLK 1
+#define CAMERA_PIN_SIOD 8
+#define CAMERA_PIN_SIOC 7
+
+#define CAMERA_PIN_D7 38
+#define CAMERA_PIN_D6 21
+#define CAMERA_PIN_D5 40
+#define CAMERA_PIN_D4 39
+#define CAMERA_PIN_D3 42
+#define CAMERA_PIN_D2 41
+#define CAMERA_PIN_D1 37
+#define CAMERA_PIN_D0 36
+#define CAMERA_PIN_VSYNC 2
+#define CAMERA_PIN_HREF 3
+#define CAMERA_PIN_PCLK 33
+
 #elif CONFIG_CAMERA_MODULE_ESP_S3_EYE
 #define CAMERA_MODULE_NAME "ESP-S3-EYE"
-#define CAMERA_PIN_PWDN 43
-#define CAMERA_PIN_RESET 44
+#define CAMERA_PIN_PWDN -1
+#define CAMERA_PIN_RESET -1
 
 #define CAMERA_PIN_VSYNC 6
 #define CAMERA_PIN_HREF 7
@@ -185,27 +194,52 @@
 
 #define XCLK_FREQ_HZ 20000000
 
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_RGB565
+#ifdef __cplusplus
+extern "C"
+{
 #endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_YUV422
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_YUV422
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_GRAYSCALE
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_GRAYSCALE
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_JPEG
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_JPEG
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB888
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_RGB888
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RAW
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_RAW
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB444
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_RGB444
-#endif
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB555
-#define CAMERA_PIXEL_FORMAT PIXFORMAT_RGB555
+    /**
+     * @brief Initialize camera
+     * 
+     * @param pixformat    One of
+     *                     - PIXFORMAT_RGB565
+     *                     - PIXFORMAT_YUV422
+     *                     - PIXFORMAT_GRAYSC
+     *                     - PIXFORMAT_JPEG
+     *                     - PIXFORMAT_RGB888
+     *                     - PIXFORMAT_RAW
+     *                     - PIXFORMAT_RGB444
+     *                     - PIXFORMAT_RGB555
+     * @param frame_size   One of
+     *                     - FRAMESIZE_96X96,    // 96x96
+     *                     - FRAMESIZE_QQVGA,    // 160x120
+     *                     - FRAMESIZE_QCIF,     // 176x144
+     *                     - FRAMESIZE_HQVGA,    // 240x176
+     *                     - FRAMESIZE_240X240,  // 240x240
+     *                     - FRAMESIZE_QVGA,     // 320x240
+     *                     - FRAMESIZE_CIF,      // 400x296
+     *                     - FRAMESIZE_HVGA,     // 480x320
+     *                     - FRAMESIZE_VGA,      // 640x480
+     *                     - FRAMESIZE_SVGA,     // 800x600
+     *                     - FRAMESIZE_XGA,      // 1024x768
+     *                     - FRAMESIZE_HD,       // 1280x720
+     *                     - FRAMESIZE_SXGA,     // 1280x1024
+     *                     - FRAMESIZE_UXGA,     // 1600x1200
+     *                     - FRAMESIZE_FHD,      // 1920x1080
+     *                     - FRAMESIZE_P_HD,     //  720x1280
+     *                     - FRAMESIZE_P_3MP,    //  864x1536
+     *                     - FRAMESIZE_QXGA,     // 2048x1536
+     *                     - FRAMESIZE_QHD,      // 2560x1440
+     *                     - FRAMESIZE_WQXGA,    // 2560x1600
+     *                     - FRAMESIZE_P_FHD,    // 1080x1920
+     *                     - FRAMESIZE_QSXGA,    // 2560x1920
+     * @param fb_count     Number of frame buffers to be allocated. If more than one, then each frame will be acquired (double speed)
+     */
+    void register_camera(const pixformat_t pixel_fromat,
+                         const framesize_t frame_size,
+                         const uint8_t fb_count,
+                         const QueueHandle_t frame_o);
+
+#ifdef __cplusplus
+}
 #endif
