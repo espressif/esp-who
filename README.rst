@@ -11,8 +11,8 @@ ESP-WHO 提供了例如人脸检测、人脸识别、猫脸检测和手势识别
 ESP-WHO 的运行基于 ESP-IDF。`ESP-DL <https://github.com/espressif/esp-dl>`_ 为 ESP-WHO 提供了丰富的深度学习接口。
 配合各种外设可以实现许多有趣的应用。
 
-.. figure:: ./img/overview.drawio.png
-    :alt: overview of ESP-WHO
+.. figure:: ./img/architecture_cn.drawio.svg
+    :alt: architecture of ESP-WHO
     :align: center
     
     ..
