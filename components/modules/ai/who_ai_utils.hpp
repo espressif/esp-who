@@ -3,24 +3,6 @@
 #include <list>
 #include "dl_detect_define.hpp"
 #include "esp_camera.h"
-// #include "who_define.h"
-
-#if CONFIG_CAMERA_PIXEL_FORMAT_RGB565
-#define IMAGE_T uint16_t
-#define COLOR_RED 0b0000000011111000
-#define COLOR_GREEN 0b1110000000000111
-#define COLOR_BLUE 0b0001111100000000
-#define COLOR_BLACK 0b0000000000000000
-#else
-#define IMAGE_T uint8_t
-#define COLOR_RED 0x0000FF
-#define COLOR_GREEN 0x00FF00
-#define COLOR_BLUE 0xFF0000
-#define COLOR_BLACK 0x000000
-#endif
-
-static const char *TAG = "app_common";
-
 
 /**
  * @brief Draw detection result on RGB565 image.
