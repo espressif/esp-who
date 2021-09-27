@@ -95,7 +95,7 @@ esp_err_t register_lcd(const QueueHandle_t frame_i, const QueueHandle_t frame_o,
     xQueueFrameI = frame_i;
     xQueueFrameO = frame_o;
     gReturnFB = return_fb;
-    xTaskCreatePinnedToCore(task_process_handler, TAG, 4 * 1024, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(task_process_handler, TAG, 2 * 1024, NULL, 5, NULL, 1);
 
     return ESP_OK;
 }

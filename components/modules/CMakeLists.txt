@@ -8,14 +8,16 @@ set(src_dirs
                 camera
                 lcd
                 led
-                web)
+                web
+                trace)
 
 set(include_dirs    
                     ai
                     camera
                     lcd
                     led
-                    web)
+                    web
+                    trace)
 
 set(requires    esp32-camera
                 esp-dl

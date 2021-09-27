@@ -93,7 +93,7 @@ void register_human_face_detection(const QueueHandle_t frame_i,
     xQueueResult = result;
     gReturnFB = camera_fb_return;
 
-    xTaskCreatePinnedToCore(task_process_handler, TAG, 4 * 1024, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(task_process_handler, TAG, 4 * 1024, NULL, 5, NULL, 0);
     if (xQueueEvent)
         xTaskCreatePinnedToCore(task_event_handler, TAG, 4 * 1024, NULL, 5, NULL, 1);
 }
