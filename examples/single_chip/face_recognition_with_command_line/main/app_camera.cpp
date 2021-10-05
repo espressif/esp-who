@@ -20,6 +20,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #include "app_camera.h"
+#include "sdkconfig.h"
 
 static const char *TAG = "app_camera";
 

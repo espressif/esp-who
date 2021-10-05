@@ -28,7 +28,12 @@
 extern "C" {
 #endif
 
-void app_wifi_main();
+#include "esp_netif.h"
+
+extern esp_netif_t *AP_netif;
+extern esp_netif_t *STA_netif;
+
+void app_wifi_main(void);
 
 #ifdef __cplusplus
 }

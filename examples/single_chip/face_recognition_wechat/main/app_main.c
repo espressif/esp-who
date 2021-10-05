@@ -80,16 +80,16 @@ en_fsm_state g_state = WAIT_FOR_WAKEUP;
 static void restart_count_erase_timercb(void *timer)
 {
     if (!xTimerStop(timer, portMAX_DELAY)) {
-        ESP_LOGD("esp-eye", "xTimerStop timer: %p", timer);
+        ESP_LOGD("esp-board", "xTimerStop timer: %p", timer);
     }
 
     if (!xTimerDelete(timer, portMAX_DELAY)) {
-        ESP_LOGD("esp-eye", "xTimerDelete timer: %p", timer);
+        ESP_LOGD("esp-board", "xTimerDelete timer: %p", timer);
     }
     
     wifi_info_erase(NVS_KEY_RESTART_COUNT);
 
-    ESP_LOGI("esp-eye", "Erase restart count");
+    ESP_LOGI("esp-board", "Erase restart count");
 }
 
 static int restart_count_get()
@@ -145,7 +145,7 @@ void app_main()
     }
 
     if (restart_count_get() > 3) {
-        ESP_LOGI("esp-eye", "Erase information saved in flash");
+        ESP_LOGI("esp-board", "Erase information saved in flash");
         wifi_info_erase(USERDATANAMESPACE);
     }
 
@@ -156,7 +156,7 @@ void app_main()
 
     g_state = WAIT_FOR_CONNECT;
 
-    ESP_LOGI("esp-eye", "Version "VERSION);
+    ESP_LOGI("esp-board", "Version "VERSION);
 
     // app_wifi_init();
 
@@ -169,6 +169,6 @@ void app_main()
     app_facenet_main();
     app_httpserver_init();
     printf("Mem availabe after: %d\n", heap_caps_get_free_size(MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL));
-    ESP_LOGI("esp-eye", "Version "VERSION" success");
+    ESP_LOGI("esp-board", "Version "VERSION" success");
     //xTaskCreatePinnedToCore(&printTask, "printTask", 2*1024, NULL, 5, NULL, 1);
 }

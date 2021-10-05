@@ -22,15 +22,18 @@
   *
   */
 #include <string.h>
-#include "sdkconfig.h"
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "esp_camera.h"
+#include "sdkconfig.h"
+
 #include "mdns.h"
 #include "app_camera.h"
+#include "app_wifi.h"
 
 static const char *TAG = "camera mdns";
 
@@ -82,11 +85,11 @@ const char * app_mdns_query(size_t * out_len)
     *p++ = '[';
 
     //add own data first
-    tcpip_adapter_ip_info_t ip;
+    esp_netif_ip_info_t ip;
     if (strlen(CONFIG_ESP_WIFI_SSID)) {
-    	tcpip_adapter_get_ip_info(TCPIP_ADAPTER_IF_STA, &ip);
+        esp_netif_get_ip_info(STA_netif, &ip);
     } else {
-    	tcpip_adapter_get_ip_info(TCPIP_ADAPTER_IF_AP, &ip);
+        esp_netif_get_ip_info(AP_netif, &ip);
     }
     *p++ = '{';
     p += sprintf(p, "\"instance\":\"%s\",", iname);
@@ -135,7 +138,7 @@ const char * app_mdns_query(size_t * out_len)
         }
         a = r->addr;
         while(a){
-            if(a->addr.type != IPADDR_TYPE_V6){
+            if(a->addr.type != ESP_IPADDR_TYPE_V6){
                 p += sprintf(p, "\"ip\":\"" IPSTR "\",", IP2STR(&(a->addr.u_addr.ip4)));
             	p += sprintf(p, "\"id\":\"" IPSTR ":%u\",", IP2STR(&(a->addr.u_addr.ip4)), r->port);
                 break;

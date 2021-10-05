@@ -24,11 +24,16 @@
 #ifndef _APP_WIFI_H_
 #define _APP_WIFI_H_
 
+#include "esp_netif.h"
+
+extern esp_netif_t *AP_netif;
+extern esp_netif_t *STA_netif;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void app_wifi_main();
+void app_wifi_main(void);
 
 #ifdef __cplusplus
 }

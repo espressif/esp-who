@@ -99,10 +99,10 @@ void app_main()
     g_state = WAIT_FOR_WAKEUP;
 
     vTaskDelay(30 / portTICK_PERIOD_MS);
-    ESP_LOGI("esp-eye", "Please say 'Hi LeXin' to the board");
-    ESP_LOGI("esp-eye", "Version "VERSION);
+    ESP_LOGI("esp-board", "Please say 'Hi LeXin' to the board");
+    ESP_LOGI("esp-board", "Version "VERSION);
     while (g_state == WAIT_FOR_WAKEUP)
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+       vTaskDelay(1000 / portTICK_PERIOD_MS);
     app_wifi_init();
     app_camera_init();
     app_httpserver_init();
