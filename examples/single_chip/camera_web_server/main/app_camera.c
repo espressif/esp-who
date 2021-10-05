@@ -22,9 +22,9 @@
 #include "esp_log.h"
 #include "driver/ledc.h"
 #include "esp_camera.h"
-#include "app_camera.h"
 #include "sdkconfig.h"
 
+#include "app_camera.h"
 
 static const char *TAG = "app_camera";
 
@@ -95,9 +95,9 @@ void app_camera_main ()
     config.pin_pwdn = PWDN_GPIO_NUM;
     config.pin_reset = RESET_GPIO_NUM;
     config.xclk_freq_hz = 20000000;
-    config.pixel_format = PIXFORMAT_JPEG;
+    config.pixel_format = CAMERA_PIXEL_FORMAT;
+    config.frame_size = CAMERA_FRAME_SIZE;
     //init with high specs to pre-allocate larger buffers
-    config.frame_size = FRAMESIZE_QSXGA;
     config.jpeg_quality = 10;
     config.fb_count = 2;
 
