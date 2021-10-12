@@ -159,7 +159,7 @@ void app_lcd_init(scr_driver_t *g_lcd){
         .offset_ver = 0,
         .width = LCD_WIDTH,
         .height = LCD_HEIGHT,
-        .rotate = 0,
+        .rotate = SCR_SWAP_XY|SCR_MIRROR_Y,
     };
     ret = g_lcd->init(&lcd_cfg);
     if (ESP_OK != ret)

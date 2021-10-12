@@ -10,6 +10,7 @@
 #include "esp_heap_caps.h"
 #include "math.h"
 #include "app_camera.h"
+#include "st7789.h"
 
 
 static const char *TAG = "APP_CODE_SCANNER";
@@ -21,6 +22,7 @@ static void camera_task()
 
     scr_driver_t g_lcd;
     app_lcd_init(&g_lcd);
+    lcd_st7789_set_invert(false);
 
     camera_fb_t *fb = NULL;
     int64_t time1, time2;
@@ -36,7 +38,7 @@ static void camera_task()
         
         scr_info_t lcd_info;
         g_lcd.get_info(&lcd_info);
-        g_lcd.draw_bitmap(0, 0, LCD_WIDTH, LCD_HEIGHT, (uint16_t *)fb->buf);
+        g_lcd.draw_bitmap(0, 0, fb->width, fb->height, (uint16_t *)fb->buf);
 
         esp_camera_fb_return(fb);
     }

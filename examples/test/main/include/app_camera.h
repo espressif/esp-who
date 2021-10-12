@@ -8,6 +8,8 @@
 #include "esp_camera.h"
 #include "screen_driver.h"
 
+#define CONFIG_CAMERA_MODULE_ESP_S2_KALUGA 1
+
 #if CONFIG_CAMERA_MODULE_WROVER_KIT
 #define CAMERA_MODULE_NAME "Wrover Kit"
 #define CAMERA_PIN_PWDN -1
