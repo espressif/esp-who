@@ -183,7 +183,7 @@ esp_err_t spi_bus_transfer_byte(spi_bus_device_handle_t dev_handle, uint8_t data
 esp_err_t spi_bus_transfer_bytes(spi_bus_device_handle_t dev_handle, const uint8_t *data_out, uint8_t *data_in, uint32_t data_len)
 {
     esp_err_t ret;
-#ifdef CONFIG_IDF_TARGET_ESP32S3
+#if 1
 #define MIN(a,b) (((a)<(b))?(a):(b))
     uint32_t remain = data_len;
     while (remain > 0) {
