@@ -1,6 +1,12 @@
 menu "Camera Web Server"
 
 menu "WiFi Settings"
+config ESP_HOST_NAME
+    string "Camera Host Name"
+    default ""
+    help
+    Hostname that the camera will advertise over mDNS.
+
 config ESP_WIFI_SSID
     string "WiFi STA SSID"
     default ""
@@ -24,6 +30,18 @@ config ESP_WIFI_AP_PASSWORD
     default ""
     help
 	AP password for WPA2 or empty for Open.
+
+config MAX_STA_CONN
+    int "Maximal STA connections"
+    default 1
+    help
+	Max number of the STA connects to AP.
+
+config ESP_WIFI_AP_CHANNEL
+    string "WiFi AP Channel"
+    default ""
+    help
+	AP channel for better connection performance.
 
 config SERVER_IP
     string "WiFi AP IP Address"
@@ -100,6 +118,8 @@ choice CAMERA_MODEL
 
 config CAMERA_MODEL_WROVER_KIT
     bool "WROVER-KIT With OV2640 Module"
+config CAMERA_MODEL_ESP32_CAM_BOARD
+    bool "ESP32 Camera Development Board"
 config CAMERA_MODEL_ESP_EYE
     bool "ESP_EYE DevKit"
 config CAMERA_MODEL_M5STACK_PSRAM
@@ -248,21 +268,9 @@ config ESP_FACE_DETECT_ENABLED
     help
         Enables ESP-WHO Face Detection through the web interface.
 
-choice ESP_FACE_DETECT_MODEL
-    bool "Detection Model"
-    depends on ESP_FACE_DETECT_ENABLED
-    default ESP_FACE_DETECT_MTMN
-
-    config ESP_FACE_DETECT_MTMN
-        bool "MTMN"
-        
-    config ESP_FACE_DETECT_LSSH
-        bool "LSSH"
-endchoice
-
 config ESP_FACE_RECOGNITION_ENABLED
     bool "ESP-WHO Face Recognition"
-    depends on ESP_FACE_DETECT_MTMN
+    depends on ESP_FACE_DETECT_ENABLED
     default y
     help
         Enables ESP-WHO Face Recognition through the web interface.
