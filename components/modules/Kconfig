@@ -215,4 +215,34 @@ menu "ESP-WHO Configuration"
                 Select Camera Y9 pin.
     endmenu
 
+
+    menu "Model Configuration"
+        menu "Face Recognition"
+            choice FACE_RECOGNITION_MODEL
+                bool "Face Recognition Model"
+                default MFN_V1
+                help
+                    Select Face Recognition Model.
+
+                config MFN_V1
+                    bool "mfn v1"
+    
+            endchoice
+            
+            choice QUANTIZATION
+                bool "Quantization"
+                default S8
+                help
+                    Select Face Recognition Model.
+
+                config S8
+                    bool "8-bit"
+                config S16
+                    bool "16-bit"
+    
+            endchoice
+        endmenu
+
+    endmenu
+
 endmenu

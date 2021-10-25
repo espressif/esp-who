@@ -1,5 +1,5 @@
-set(COMPONENT_SRCS "fb_gfx.c")
-set(COMPONENT_ADD_INCLUDEDIRS "include")
-set(COMPONENT_PRIV_INCLUDEDIRS "")
-set(COMPONENT_PRIV_REQUIRES newlib)
-register_component()
+set(src_dirs .)
+set(include_dirs .
+                ./include)
+set(requires  esp32-camera)
+idf_component_register(SRC_DIRS ${src_dirs} INCLUDE_DIRS ${include_dirs} REQUIRES ${requires})
