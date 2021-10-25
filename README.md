@@ -48,19 +48,23 @@ ESP-WHO 的所有示例都存放在 [examples](./examples) 中。该文件夹架
 
 ```bash
 ├── examples
-│   ├── cat_face_detection     //猫脸检测示例
-│   │   ├── lcd                //结果显示方式为 LCD 屏
-│   │   ├── terminal           //结果显示方式为终端
-│   │   └── README.md          //说明对各个开发条件的支持情况
-│   ├── human_face_detection   //人脸检测示例
+│   ├── cat_face_detection          // 猫脸检测示例
+│   │   ├── lcd                     // 结果显示方式为 LCD 屏
+│   │   └── terminal                // 结果显示方式为终端
+│   ├── code_recognition            // 一维码/二维码识别示例
+│   ├── human_face_detection        // 人脸检测示例
+│   │   ├── lcd
+│   │   └── terminal
+│   ├── human_face_recognition      // 人脸识别示例
 │   │   ├── lcd
 │   │   ├── terminal
-│   │   └── README.md
-│   └── motion_detection       //移动侦测示例
-│       ├── lcd
+│   │   └── README.md               // 示例的具体说明
+│   └── motion_detection            // 移动侦测示例
+│       ├── lcd 
 │       ├── terminal
-│       ├── web                //结果显示方式为网页
-│       └── README.md
+│       ├── web
+│       └── README.rst              // 说明对各个开发条件的支持情况
+
 ```
 
 对于[硬件准备](#硬件准备)中所提到的开发板，所有示例都是开箱即用的，要运行示例仅需执行[步骤 1：设定目标芯片](#步骤-1设定目标芯片)和[步骤 4：运行和监视](#步骤-4运行和监视)。
