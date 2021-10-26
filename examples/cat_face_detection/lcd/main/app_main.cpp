@@ -15,5 +15,4 @@ extern "C" void app_main()
     register_cat_face_detection(xQueueAIFrame, NULL, NULL, xQueueLCDFrame, false);
     register_lcd(xQueueLCDFrame, NULL, true);
 
-    register_trace();
 }
