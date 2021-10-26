@@ -80,7 +80,7 @@ void register_cat_face_detection(const QueueHandle_t frame_i,
     xQueueResult = result;
     gReturnFB = camera_fb_return;
 
-    xTaskCreatePinnedToCore(task_process_handler, "cat_face_process", 2 * 1024, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(task_process_handler, "cat_face_process", 3 * 1024, NULL, 5, NULL, 1);
     if (xQueueEvent)
         xTaskCreatePinnedToCore(task_event_handler, "cat_face_event", 1 * 1024, NULL, 5, NULL, 1);
 }
