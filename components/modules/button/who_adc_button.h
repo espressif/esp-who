@@ -1,6 +1,5 @@
 #pragma once
 #include "esp_event_loop.h"
-#include "soc/system_reg.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 
@@ -11,9 +10,9 @@ extern "C"
 
     typedef struct
     {
-        int button_index;       /**< button index on the channel */
-        int min;               /**< min voltage in mv corresponding to the button */
-        int max;               /**< max voltage in mv corresponding to the button */
+        int button_index; /**< button index on the channel */
+        int min;          /**< min voltage in mv corresponding to the button */
+        int max;          /**< max voltage in mv corresponding to the button */
     } button_adc_config_t;
 
     /**

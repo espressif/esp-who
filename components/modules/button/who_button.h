@@ -1,6 +1,5 @@
 #pragma once
 #include "esp_event_loop.h"
-#include "soc/system_reg.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 
@@ -16,13 +15,13 @@ extern "C"
 {
 #endif
 
-/**
+    /**
  * @brief initialize gpio button
  * 
  * @param key_io_num the gpio number of the button
  * @param key_state_o the queue to send the button state
  */
-void register_button(const gpio_num_t key_io_num, const QueueHandle_t key_state_o);
+    void register_button(const gpio_num_t key_io_num, const QueueHandle_t key_state_o);
 
 #ifdef __cplusplus
 }
