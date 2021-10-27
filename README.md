@@ -1,120 +1,119 @@
-# ESP-WHO [[英文]](./README.md)
+# ESP-WHO [[中文]](./README_CN.md)
 
-ESP-WHO 是基于乐鑫芯片的图像处理开发平台，其中包含了实际应用中可能出现的开发示例。
+ESP-WHO is an image processing development platform based on Espressif chips. It contains development examples that may be applied in practical applications.
 
-## 概述
+## Overview
 
-ESP-WHO 提供了例如人脸检测、人脸识别、猫脸检测和手势识别等示例。您可以基于这些示例，衍生出丰富的实际应用。ESP-WHO 的运行基于 ESP-IDF。[ESP-DL](https://github.com/espressif/esp-dl) 为 ESP-WHO 提供了丰富的深度学习相关接口，配合各种外设可以实现许多有趣的应用。
+ESP-WHO provides examples such as Human Face Detection, Human Face Recognition, Cat Face Detection, Gesture Recognition, etc. You can develop a variety of practical applications based on these examples. ESP-WHO runs on ESP-IDF. [ESP-DL](https://github.com/espressif/esp-dl) provides rich deep learning related interfaces for ESP-WHO, which can be implemented with various peripherals to realize many interesting applications.
 
 <p align="center">
-    <img width="%" src="./img/architecture_cn.drawio.svg"> 
+    <img width="%" src="./img/architecture_en.drawio.svg"> 
 </p>
 
 
 
-## 准备工作
+## What You Need
 
-### 硬件准备
+### Hardware
 
-我们推荐新手开发者使用乐鑫设计的开发板。ESP-WHO 提供的示例基于以下乐鑫开发板开发，开发板与芯片的对应关系如下表所示。
+We recommend novice developers to use the development boards designed by Espressif. The examples provided by ESP-WHO are developed based on the following Espressif development board, and the corresponding relationships between the development boards and the series of chips (SoC) are shown in the table below.
     
-|    芯片    | [ESP32](https://www.espressif.com/zh-hans/products/socs/esp32) | [ESP32-S2](https://www.espressif.com/zh-hans/products/socs/esp32-s2) | [ESP32-S3](https://www.espressif.com/zh-hans/products/socs/esp32-s3) |
+|    SoC    | [ESP32](https://www.espressif.com/en/products/socs/esp32) | [ESP32-S2](https://www.espressif.com/en/products/socs/esp32-s2) | [ESP32-S3](https://www.espressif.com/en/products/socs/esp32-s3) |
 | :------- | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| 开发板 | [ESP-EYE](https://www.espressif.com/zh-hans/products/devkits/esp-eye/overview) | [ESP32-S2-Kaluga-1](https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32s2/hw-reference/esp32s2/user-guide-esp32-s2-kaluga-1-kit.html) | [ESP-S3-EYE](https://www.espressif.com/zh-hans/products/devkits/esp-s3-eye/overview) |
+| Development Board | [ESP-EYE](https://www.espressif.com/en/products/devkits/esp-eye/overview) | [ESP32-S2-Kaluga-1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/hw-reference/esp32s2/user-guide-esp32-s2-kaluga-1-kit.html) | [ESP-S3-EYE](https://www.espressif.com/en/products/devkits/esp-s3-eye/overview) |
 
-> 使用上表中未提及的开发板，需要手动修改外设的管脚配置，例如摄像头、LCD 和按键等。
+> Using a development board not mentioned in the table above, configure pins assigned to peripherals manually, such as camera, LCD, and buttons.
 
-### 软件准备
+### Software
 
-#### 获取 ESP-IDF
+#### Get ESP-IDF
 
-ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 [ESP-IDF 编程指南](https://idf.espressif.com/)。
+ESP-WHO runs on ESP-IDF. For details on getting ESP-IDF, please refer to [ESP-IDF Programming Guide](https://idf.espressif.com/).
 
-> 请使用 ESP-IDF 在 master 分支上的最新版本。
+> Please use the latest version of ESP-IDF on the master branch.
 
-#### 获取 ESP-WHO
+#### Get ESP-WHO
 
-在终端运行以下命令，下载 ESP-WHO：
+Run the following commands in your terminal to download ESP-WHO:
 
 ```bash
 git clone --recursive https://github.com/espressif/esp-who.git
 ```
 
-> 请记得使用 ``git submodule update --recursive --init`` 拉取和更新 ESP-WHO 的所有子模块。
+> Remember to use ``git submodule update --recursive --init`` to pull and update submodules of ESP-WHO.
 
-## 运行示例
+## Run Examples
 
-ESP-WHO 的所有示例都存放在 [examples](./examples) 中。该文件夹架构如下所示：
+All examples of ESP-WHO are stored in [examples](./examples) folder. Structure of this folder is shown below:
 
 ```bash
 ├── examples
-│   ├── cat_face_detection          // 猫脸检测示例
-│   │   ├── lcd                     // 结果显示方式为 LCD 屏
-│   │   └── terminal                // 结果显示方式为终端
-│   ├── code_recognition            // 一维码/二维码识别示例
-│   ├── human_face_detection        // 人脸检测示例
+│   ├── cat_face_detection          // Cat Face Detection examples
+│   │   ├── lcd                     // Output displayed on LCD screen
+│   │   └── terminal                // Output displayed on terminal
+│   ├── code_recognition            // Barcode and QR Code Recognition examples
+│   ├── human_face_detection        // Human Face Detection examples
 │   │   ├── lcd
 │   │   └── terminal
-│   ├── human_face_recognition      // 人脸识别示例
+│   ├── human_face_recognition      // Human Face Recognition examples
 │   │   ├── lcd
 │   │   ├── terminal
-│   │   └── README.md               // 示例的具体说明
-│   └── motion_detection            // 移动侦测示例
+│   │   └── README.md               // Detailed description of examples
+│   └── motion_detection            // Motion Detection examples
 │       ├── lcd 
 │       ├── terminal
 │       ├── web
-│       └── README.rst              // 说明对各个开发条件的支持情况
-
+│       └── README.rst              
 ```
 
-对于[硬件准备](#硬件准备)中所提到的开发板，所有示例都是开箱即用的，要运行示例仅需执行[步骤 1：设定目标芯片](#步骤-1设定目标芯片)和[步骤 4：运行和监视](#步骤-4运行和监视)。
+For the development boards mentioned in [Hardware](#Hardware), all examples are available out of the box. To run the examples, you only need to perform [Step 1: Set the target chip] (#Step-1 Set the target chip) and [Step 4: Launch and monitor] (#Step-4 Launch and monitor).
 
-### 步骤 1：设定目标芯片
+### Step 1: Set the target chip
 
-打开终端，进入一个示例（例如：examples/human_face_detection/lcd），运行以下命令设定目标芯片：
+Open the terminal and go to any folder that stores examples (e.g. examples/human_face_detection/lcd). Run the following command to set the target chip: 
 
 ```bash
 idf.py set-target [SoC]
 ```
 
-将 [SoC] 替换成您的目标芯片，例如 esp32、esp32s2、esp32s3。
+Replace [SoC] with your target chip, e.g. esp32, esp32s2, esp32s3.
 
-### （可选）步骤 2：摄像头配置
+### (Optional) Step 2: Configure the camera
 
-若您使用的不是[硬件准备](#硬件准备)中提到的乐鑫开发板，则需自行配置摄像头管脚。在终端输入 `idf.py menuconfig`，依次点击 (Top) -> Component config -> ESP-WHO Configuration 可进入 ESP-WHO 的配置界面，如下图所示：
+If not using the Espressif development boards mentioned in [Hardware](#Hardware), configure the camera pins manually. Enter `idf.py menuconfig` in the terminal and click (Top) -> Component config -> ESP-WHO Configuration to enter the ESP-WHO configuration interface, as shown below:
 
 ![](./img/esp-who_config.png)
 
-选择 Camera Configuration 进入摄像头配置，根据您使用的开发板选择摄像头的管脚配置，如下图所示：
+Click Camera Configuration to select the pin configuration of the camera according to the development board you use, as shown in the following figure:
 
 ![](./img/esp-who_config_camera_config_select_pinout.png)
 
-如上图中没有您使用的开发板，请选择 ``Custom Camera Pinout``，并正确配置对应管脚，如下图所示：
+If the board you are using is not shown in the figure above, please select ``Custom Camera Pinout`` and configure the corresponding pins correctly, as shown in the following figure: 
 
 ![](./img/esp-who_config_camera_config_custom.png)
 
-### （可选）步骤 3：Wi-Fi 配置
+### (Optional) Step 3: Configure the Wi-Fi
 
-若您选择的示例输出显示方式为网页，可选择 Wi-Fi Configuration 进入 Wi-Fi 配置，配置 Wi-Fi 密码等参数，如下图所示：
+If the output of example is displayed on web server, click Wi-Fi Configuration to configure Wi-Fi password and other parameters, as shown in the following figure: 
 
 ![](./img/esp-who_config_wifi_config.png)
 
-### 步骤 4：运行和监视
+### Step 4: Launch and monitor
 
-烧录程序，运行 IDF 监视器：
+Flash the program and launch IDF Monitor:
 
 ```bash
 idf.py flash monitor
 ```
 
 
-## 开发板的默认二进制文件
+## Default Binaries of Development Boards
 
-各开发板的默认二进制文件存放在文件夹 [default_bin](./default_bin) 中。您可使用[烧写工具](https://www.espressif.com/zh-hans/support/download/other-tools)烧录二进制文件。
-
-
+The default binaries for each development board are stored in the folder [default_bin](./default_bin). You can use Flash Download Tool (https://www.espressif.com/en/support/download/other-tools) to flash binaries.
 
 
-## 反馈
 
-如果在使用中发现任何问题，请提交相关 [issue](https://github.com/espressif/esp-who/issues)，我们将尽快予以答复。
+## Feedback
+
+
+Please submit an [issue](https://github.com/espressif/esp-who/issues) if you find any problems using our products, and we will reply as soon as possible.
