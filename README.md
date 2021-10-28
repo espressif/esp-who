@@ -16,7 +16,7 @@ ESP-WHO provides examples such as Human Face Detection, Human Face Recognition, 
 
 ### Hardware
 
-We recommend novice developers to use the development boards designed by Espressif. The examples provided by ESP-WHO are developed based on the following Espressif development board, and the corresponding relationships between the development boards and the series of chips (SoC) are shown in the table below.
+We recommend novice developers to use the development boards designed by Espressif. The examples provided by ESP-WHO are developed based on the following Espressif development board, and the corresponding relationships between the development boards and SoC are shown in the table below.
     
 |    SoC    | [ESP32](https://www.espressif.com/en/products/socs/esp32) | [ESP32-S2](https://www.espressif.com/en/products/socs/esp32-s2) | [ESP32-S3](https://www.espressif.com/en/products/socs/esp32-s3) |
 | :------- | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
