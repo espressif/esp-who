@@ -9,7 +9,7 @@ esp_err_t app_camera_init()
 {
     ESP_LOGI(TAG, "Camera module is %s", CAMERA_MODULE_NAME);
 
-#if CONFIG_CAMERA_MODEL_ESP_EYE || CONFIG_CAMERA_MODEL_ESP32_CAM_BOARD
+#if CONFIG_CAMERA_MODULE_ESP_EYE || CONFIG_CAMERA_MODULE_ESP32_CAM_BOARD
     /* IO13, IO14 is designed for JTAG by default,
      * to use it as generalized input,
      * firstly declair it as pullup input */
