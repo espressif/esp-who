@@ -1,7 +1,7 @@
 #include "who_lcd.h"
 #include "esp_camera.h"
 #include <string.h>
-#include "wallpaper_128x240_rgb565.h"
+#include "logo_en_240x240_lcd.h"
 
 static const char *TAG = "who_lcd";
 
@@ -10,6 +10,8 @@ static scr_info_t g_lcd_info;
 
 static QueueHandle_t xQueueFrameI = NULL;
 static QueueHandle_t xQueueFrameO = NULL;
+static SemaphoreHandle_t xMutexLCD = NULL;
+
 static bool gReturnFB = true;
 
 static void task_process_handler(void *arg)
@@ -20,7 +22,9 @@ static void task_process_handler(void *arg)
     {
         if (xQueueReceive(xQueueFrameI, &frame, portMAX_DELAY))
         {
+            xSemaphoreTake(xMutexLCD, portMAX_DELAY);
             g_lcd.draw_bitmap(0, 0, frame->width, frame->height, (uint16_t *)frame->buf);
+            xSemaphoreGive(xMutexLCD);
 
             if (xQueueFrameO)
             {
@@ -40,6 +44,7 @@ static void task_process_handler(void *arg)
 
 esp_err_t register_lcd(const QueueHandle_t frame_i, const QueueHandle_t frame_o, const bool return_fb)
 {
+    xMutexLCD = xSemaphoreCreateMutex();
     spi_config_t bus_conf = {
         .miso_io_num = BOARD_LCD_MISO,
         .mosi_io_num = BOARD_LCD_MOSI,
@@ -90,12 +95,12 @@ esp_err_t register_lcd(const QueueHandle_t frame_i, const QueueHandle_t frame_o,
     app_lcd_set_color(0x000000);
     vTaskDelay(pdMS_TO_TICKS(500));
     app_lcd_draw_wallpaper();
-    vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(1000));
 
     xQueueFrameI = frame_i;
     xQueueFrameO = frame_o;
     gReturnFB = return_fb;
-    xTaskCreatePinnedToCore(task_process_handler, TAG, 2 * 1024, NULL, 5, NULL, 1);
+    xTaskCreatePinnedToCore(task_process_handler, TAG, 4 * 1024, NULL, 5, NULL, 0);
 
     return ESP_OK;
 }
@@ -105,14 +110,16 @@ void app_lcd_draw_wallpaper()
     scr_info_t lcd_info;
     g_lcd.get_info(&lcd_info);
 
-    uint16_t *pixels = (uint16_t *)heap_caps_malloc((wallpaper_128x240_rgb565_width * wallpaper_128x240_rgb565_height) * sizeof(uint16_t), MALLOC_CAP_8BIT | MALLOC_CAP_INTERNAL);
+    uint16_t *pixels = (uint16_t *)heap_caps_malloc((logo_en_240x240_lcd_width * logo_en_240x240_lcd_height) * sizeof(uint16_t), MALLOC_CAP_8BIT | MALLOC_CAP_SPIRAM);
     if (NULL == pixels)
     {
         ESP_LOGE(TAG, "Memory for bitmap is not enough");
         return;
     }
-    memcpy(pixels, wallpaper_128x240_rgb565_array, (wallpaper_128x240_rgb565_width * wallpaper_128x240_rgb565_height) * sizeof(uint16_t));
-    g_lcd.draw_bitmap(0, 0, wallpaper_128x240_rgb565_width, wallpaper_128x240_rgb565_height, (uint16_t *)pixels);
+    memcpy(pixels, logo_en_240x240_lcd, (logo_en_240x240_lcd_width * logo_en_240x240_lcd_height) * sizeof(uint16_t));
+    xSemaphoreTake(xMutexLCD, portMAX_DELAY);
+    g_lcd.draw_bitmap(0, 0, logo_en_240x240_lcd_width, logo_en_240x240_lcd_height, (uint16_t *)pixels);
+    xSemaphoreGive(xMutexLCD);
     heap_caps_free(pixels);
 }
 
@@ -123,13 +130,14 @@ void app_lcd_set_color(int color)
     uint16_t *buffer = (uint16_t *)malloc(lcd_info.width * sizeof(uint16_t));
     if (NULL == buffer)
     {
-        for (size_t y = 0; y < lcd_info.height; y++)
-        {
-            for (size_t x = 0; x < lcd_info.width; x++)
-            {
-                g_lcd.draw_pixel(x, y, color);
-            }
-        }
+        // for (size_t y = 0; y < lcd_info.height; y++)
+        // {
+        //     for (size_t x = 0; x < lcd_info.width; x++)
+        //     {
+        //         g_lcd.draw_pixel(x, y, color);
+        //     }
+        // }
+        ESP_LOGE(TAG, "Memory for bitmap is not enough");
     }
     else
     {
@@ -140,7 +148,9 @@ void app_lcd_set_color(int color)
 
         for (int y = 0; y < lcd_info.height; y++)
         {
+            xSemaphoreTake(xMutexLCD, portMAX_DELAY);
             g_lcd.draw_bitmap(0, y, lcd_info.width, 1, buffer);
+            xSemaphoreGive(xMutexLCD);
         }
 
         free(buffer);
