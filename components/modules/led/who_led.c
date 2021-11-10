@@ -1,10 +1,12 @@
 #include "who_led.h"
+#include "esp_log.h"
+
+static const char *TAG = "who_led";
+static QueueHandle_t xQueueLEDControlI = NULL;
+static int gpio_led;
 
 #if CONFIG_LED_ILLUMINATOR_ENABLED
-#include "esp_log.h"
 #include "driver/ledc.h"
-
-static const char *TAG = "app_led";
 
 #if CONFIG_LED_LEDC_LOW_SPEED_MODE
 #define CONFIG_LED_LEDC_SPEED_MODE LEDC_LOW_SPEED_MODE
@@ -63,3 +65,98 @@ void app_led_duty(int duty)
 }
 
 #endif
+
+static void led_task(void *arg)
+{
+    led_state_t led_op;
+    while (1)
+    {
+        xQueueReceive(xQueueLEDControlI, &led_op, portMAX_DELAY);
+
+        switch (led_op)
+        {
+        case LED_ALWAYS_OFF:
+            gpio_set_level(gpio_led, 0);
+            break;
+        case LED_ALWAYS_ON:
+            gpio_set_level(gpio_led, 1);
+            break;
+        case LED_OFF_1S:
+            gpio_set_level(gpio_led, 0);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            gpio_set_level(gpio_led, 1);
+            break;
+        case LED_OFF_2S:
+            gpio_set_level(gpio_led, 0);
+            vTaskDelay(2000 / portTICK_PERIOD_MS);
+            gpio_set_level(gpio_led, 1);
+            break;
+        case LED_OFF_4S:
+            gpio_set_level(gpio_led, 0);
+            vTaskDelay(4000 / portTICK_PERIOD_MS);
+            gpio_set_level(gpio_led, 1);
+            break;
+        case LED_ON_1S:
+            gpio_set_level(gpio_led, 1);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            gpio_set_level(gpio_led, 0);
+            break;
+        case LED_ON_2S:
+            gpio_set_level(gpio_led, 1);
+            vTaskDelay(2000 / portTICK_PERIOD_MS);
+            gpio_set_level(gpio_led, 0);
+            break;
+        case LED_ON_4S:
+            gpio_set_level(gpio_led, 1);
+            vTaskDelay(4000 / portTICK_PERIOD_MS);
+            gpio_set_level(gpio_led, 0);
+            break;
+        case LED_BLINK_1S:
+            for (int i = 0; i < 2; ++i)
+            {
+                gpio_set_level(gpio_led, 1);
+                vTaskDelay(250 / portTICK_PERIOD_MS);
+                gpio_set_level(gpio_led, 0);
+                vTaskDelay(250 / portTICK_PERIOD_MS);
+            }
+            break;
+        case LED_BLINK_2S:
+            for (int i = 0; i < 4; ++i)
+            {
+                gpio_set_level(gpio_led, 1);
+                vTaskDelay(250 / portTICK_PERIOD_MS);
+                gpio_set_level(gpio_led, 0);
+                vTaskDelay(250 / portTICK_PERIOD_MS);
+            }
+            break;
+        case LED_BLINK_4S:
+            for (int i = 0; i < 8; ++i)
+            {
+                gpio_set_level(gpio_led, 1);
+                vTaskDelay(250 / portTICK_PERIOD_MS);
+                gpio_set_level(gpio_led, 0);
+                vTaskDelay(250 / portTICK_PERIOD_MS);
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+void register_led(const gpio_num_t led_io_num, const QueueHandle_t control_i)
+{
+    xQueueLEDControlI = control_i;
+    gpio_led = led_io_num;
+
+    gpio_config_t gpio_conf;
+    gpio_conf.mode = GPIO_MODE_OUTPUT_OD;
+    gpio_conf.pull_up_en = 1;
+
+    gpio_conf.intr_type = GPIO_INTR_DISABLE;
+    gpio_conf.pin_bit_mask = 1LL << gpio_led;
+    gpio_config(&gpio_conf);
+
+    xTaskCreatePinnedToCore(&led_task, "who_led_task", 1 * 1024, NULL, 5, NULL, 0);
+}

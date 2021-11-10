@@ -23,7 +23,7 @@
 using namespace std;
 using namespace dl;
 
-static const char *TAG = "human_face_detection";
+static const char *TAG = "human_face_recognition";
 
 static QueueHandle_t xQueueFrameI = NULL;
 static QueueHandle_t xQueueEvent = NULL;

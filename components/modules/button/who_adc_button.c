@@ -68,7 +68,7 @@ static bool adc_calibration_init(void)
     return cali_enable;
 }
 
-void adc_button_task(void *arg)
+static void adc_button_task(void *arg)
 {
     int last_button_pressed = -1;
     int button_pressed = -1;
@@ -106,5 +106,5 @@ void register_adc_button(button_adc_config_t *buttons_ptr, int button_num, const
     xQueueKeyStateO = key_state_o;
     adc_buttons = buttons_ptr;
     adc_button_num = button_num;
-    xTaskCreatePinnedToCore(adc_button_task, "adc_button_scan_task", 1024, NULL, 5, NULL, 0);
+    xTaskCreatePinnedToCore(adc_button_task, "adc_button_scan_task", 3*1024, NULL, 5, NULL, 0);
 }
