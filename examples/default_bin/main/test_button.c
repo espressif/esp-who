@@ -24,7 +24,7 @@ static const char *TAG = "BUTTON";
 #define ADC_EXAMPLE_CALI_SCHEME ESP_ADC_CAL_VAL_EFUSE_TP_FIT
 #endif
 
-#define PRESS_INTERVAL 500000
+#define PRESS_INTERVAL 1000000
 // #define ADC_WIDTH_BIT_DEFAULT
 
 static uint32_t voltage = 0;

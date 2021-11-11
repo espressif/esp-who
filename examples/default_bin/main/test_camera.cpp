@@ -7,7 +7,7 @@ static const char *TAG = "CAMERA";
 static QueueHandle_t queue_test_result = NULL;
 static QueueHandle_t *queues_tests = NULL;
 
-#define MAX_TEST_TIMES 100
+#define MAX_TEST_TIMES 60
 static int fb_count = 1;
 
 static esp_err_t camera_init()

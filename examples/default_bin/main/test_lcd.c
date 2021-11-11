@@ -1,5 +1,7 @@
 #include "test_logic.h"
 #include "who_lcd.h"
+#include "fb_gfx.h"
+#include <string.h>
 
 static const char *TAG = "LCD";
 
@@ -9,10 +11,17 @@ static QueueHandle_t *queues_tests = NULL;
 
 static scr_driver_t g_lcd;
 static scr_info_t g_lcd_info;
+static esp_err_t ret;
 
 #define RGB565_MASK_RED 0x00F8
 #define RGB565_MASK_GREEN 0xE007
 #define RGB565_MASK_BLUE 0x1F00
+#define RGB565_MASK_YELLOW 0xE0FF
+
+static void rgb_print(camera_fb_t *fb, uint32_t color, const char *str)
+{
+    fb_gfx_print(fb, (fb->width - (strlen(str) * 14)) / 2, (fb->width - 14) / 2, color, str);
+}
 
 static void test_lcd_set_color(int color)
 {
@@ -21,13 +30,7 @@ static void test_lcd_set_color(int color)
     uint16_t *buffer = (uint16_t *)malloc(lcd_info.width * sizeof(uint16_t));
     if (NULL == buffer)
     {
-        for (size_t y = 0; y < lcd_info.height; y++)
-        {
-            for (size_t x = 0; x < lcd_info.width; x++)
-            {
-                g_lcd.draw_pixel(x, y, color);
-            }
-        }
+        ESP_LOGE(TAG, "Memory for bitmap is not enough");
     }
     else
     {
@@ -44,6 +47,31 @@ static void test_lcd_set_color(int color)
         free(buffer);
     }
 }
+
+// static void test_lcd_set_color_characters(int color, const char *str)
+// {
+//     scr_info_t lcd_info;
+//     g_lcd.get_info(&lcd_info);
+//     uint16_t *buffer = (uint16_t *)malloc(lcd_info.width * lcd_info.height * sizeof(uint16_t));
+//     if (NULL == buffer)
+//     {
+//         ESP_LOGE(TAG, "Memory for bitmap is not enough");
+//     }
+//     else
+//     {
+//         for (size_t i = 0; i < lcd_info.width; i++)
+//         {
+//             buffer[i] = color;
+//         }
+
+//         for (int y = 0; y < lcd_info.height; y++)
+//         {
+//             g_lcd.draw_bitmap(0, y, lcd_info.width, 1, buffer);
+//         }
+
+//         free(buffer);
+//     }
+// }
 
 static esp_err_t lcd_init()
 {
@@ -100,11 +128,12 @@ static esp_err_t lcd_init()
     ESP_LOGI(TAG, "Screen name:%s | width:%d | height:%d", g_lcd_info.name, g_lcd_info.width, g_lcd_info.height);
     initialized = true;
 
-    return ESP_OK;
-
-    // vTaskDelay(pdMS_TO_TICKS(500));
+    // vTaskDelay(pdMS_TO_TICKS(100));
     // app_lcd_draw_wallpaper();
-    // vTaskDelay(pdMS_TO_TICKS(500));
+    vTaskDelay(pdMS_TO_TICKS(100));
+    test_lcd_set_color(RGB565_MASK_YELLOW);
+    vTaskDelay(pdMS_TO_TICKS(100));
+    return ESP_OK;
 }
 
 static void lcd_test_task(void *arg)
@@ -119,9 +148,7 @@ static void lcd_test_task(void *arg)
         {
             ESP_LOGI("ESP32-S3-EYE", "--------------- Enter LCD Test ---------------\n");
 
-            esp_err_t ret = lcd_init();
-            
-            if(ESP_OK != ret)
+            if (ESP_OK != ret)
             {
                 lcd_pass = false;
                 ESP_LOGE(TAG, "--------------- LCD Test FAIL ---------------\n");
@@ -178,6 +205,8 @@ void register_lcd_test(QueueHandle_t *test_queues, const QueueHandle_t result_qu
     queue_test_result = result_queue;
     queue_button = key_state_o;
     queues_tests = test_queues;
+
+    ret = lcd_init();
 
     xTaskCreatePinnedToCore(lcd_test_task, "lcd_test_task", 3 * 1024, NULL, 5, NULL, 1);
 }
