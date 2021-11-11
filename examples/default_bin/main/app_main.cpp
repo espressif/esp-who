@@ -63,12 +63,12 @@ extern "C" void app_main()
     {
         ESP_LOGI(TAG, "--------------- Enter Test Mode ---------------\n");
         ets_printf("ESP32-S3-EYE V2.1 Firmware V0.1.1\n");
+        register_lcd_test(xQueueTests, xQueueTestResult, xQueueKeyResult);
         register_test_controller(xQueueTests, xQueueBootKey, xQueueTestResult);
         register_imu_test(xQueueTests, xQueueTestResult);
         register_button_test(xQueueTests, xQueueTestResult, xQueueKeyResult);
         register_sd_card_test(xQueueTests, xQueueTestResult);
         register_led_test(xQueueTests, xQueueTestResult, xQueueKeyResult);
-        register_lcd_test(xQueueTests, xQueueTestResult, xQueueKeyResult);
         register_camera_test(xQueueTests, xQueueTestResult);
         register_mic_test(xQueueTests, xQueueTestResult);
     }
@@ -85,7 +85,7 @@ extern "C" void app_main()
 
         xQueueSRResult = xQueueCreate(1, sizeof(int));
         ets_printf("\n");
-        ESP_LOGI(TAG, "Firmware V0.1.0");
+        ESP_LOGI(TAG, "Firmware V0.1.1");
 
         xQueueAIFrame = xQueueCreate(2, sizeof(camera_fb_t *));
         xQueueLCDFrame = xQueueCreate(2, sizeof(camera_fb_t *));

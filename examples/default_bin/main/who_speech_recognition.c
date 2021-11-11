@@ -102,7 +102,7 @@ void feed_Task(void *arg)
 
         for (int i = 0; i < samp_len; ++i)
         {
-            i2s_buff[i] = i2s_buff[i] >> 13;    // 32:8为有效位， 8:0为低8位， 全为0， AFE的输入为16位语音数据，拿29：13位是为了对语音信号放大。
+            i2s_buff[i] = i2s_buff[i] >> 14;    // 32:8为有效位， 8:0为低8位， 全为0， AFE的输入为16位语音数据，拿29：13位是为了对语音信号放大。
         }
         // FatfsComboWrite(i2s_buff, audio_chunksize * I2S_CHANNEL_NUM * sizeof(int16_t), 1, fp);
 
@@ -148,7 +148,7 @@ void detect_Task(void *arg)
             if (queue_control)
             {
                 control_id = LED_ALWAYS_ON;
-                xQueueSend(queue_control, &control_id, portMAX_DELAY);
+                xQueueOverwrite(queue_control, &control_id);
             }
 
             int command_id = multinet->detect(model_data, buff);
@@ -161,11 +161,11 @@ void detect_Task(void *arg)
                     if (queue_control)
                     {
                         control_id = LED_BLINK_1S;
-                        xQueueSend(queue_control, &control_id, portMAX_DELAY);
+                        xQueueOverwrite(queue_control, &control_id);
                     }
                     // play_voice = command_id;
                     printf("command_id: %d\n", command_id);
-                    xQueueSend(queue_result, &command_id, portMAX_DELAY);
+                    xQueueOverwrite(queue_result, &command_id);
 #ifndef CONFIG_SR_MN_CN_MULTINET3_CONTINUOUS_RECOGNITION
                     afe_handle->enable_wakenet(afe_data);
                     // afe_handle->enable_aec(afe_data);
@@ -179,7 +179,7 @@ void detect_Task(void *arg)
                     if (queue_control)
                     {
                         control_id = LED_ALWAYS_OFF;
-                        xQueueSend(queue_control, &control_id, portMAX_DELAY);
+                        xQueueOverwrite(queue_control, &control_id);
                     }
                     afe_handle->enable_wakenet(afe_data);
                     // afe_handle->enable_aec(afe_data);

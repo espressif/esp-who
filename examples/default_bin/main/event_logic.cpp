@@ -114,30 +114,30 @@ static void event_generate_from_sr(void *arg)
             xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
             break;
 
-        case 2:
-            task_name_send = TASK_CAT_FACE_DETECTION;
-            xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
-            break;
+        // case 2:
+        //     task_name_send = TASK_CAT_FACE_DETECTION;
+        //     xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
+        //     break;
 
-        case 3:
+        case 2:
             task_name_send = TASK_HUMAN_FACE_RECOGNITION;
             xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
             break;
 
-        case 4:
+        case 3:
             task_name_send = TASK_MOTION_DETECTION;
             xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
             break;
         
-        case 5:
-            task_name_send = TASK_COLOR_DETECTION;
-            xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
-            break;
+        // case 5:
+        //     task_name_send = TASK_COLOR_DETECTION;
+        //     xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
+        //     break;
 
-        case 6:
-            task_name_send = TASK_HAND_DETECTION;
-            xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
-            break;
+        // case 6:
+        //     task_name_send = TASK_HAND_DETECTION;
+        //     xQueueSend(xQueueEventO, &task_name_send, portMAX_DELAY);
+        //     break;
 
         case 20:
             xSemaphoreTake(xMutexEvent, portMAX_DELAY);
