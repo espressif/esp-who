@@ -20,8 +20,8 @@ extern "C" void app_main()
     xQueueKeyState = xQueueCreate(1, sizeof(int *));
     xQueueEventLogic = xQueueCreate(1, sizeof(int *));
 
-    register_camera(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, xQueueAIFrame);
     register_button(GPIO_BOOT, xQueueKeyState);
+    register_camera(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, xQueueAIFrame);
     // register_adc_button(buttons, 4, xQueueKeyState);
     register_event(xQueueKeyState, xQueueEventLogic);
     register_human_face_recognition(xQueueAIFrame, xQueueEventLogic, NULL, xQueueLCDFrame, false);
