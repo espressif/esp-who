@@ -46,10 +46,6 @@ extern "C" void app_main()
     esp_read_mac(derived_mac_addr, ESP_MAC_WIFI_STA);
     ESP_LOGE("ESP_MAC_WIFI_STA ADDRESS", "%x%x%x%x%x%x\n", derived_mac_addr[0], derived_mac_addr[1], derived_mac_addr[2], derived_mac_addr[3], derived_mac_addr[4], derived_mac_addr[5]);
 
-    // register_console(xQueueTests, xQueueTestFlag, xQueueTestResult, &consoleHandle_t);
-    // xQueueReceive(xQueueTestFlag, &testmode_flag, 5000 / portTICK_PERIOD_MS);
-    // int boot_key_state = -1;
-
     register_button(GPIO_BOOT, xQueueBootKey);
     int boot_key_state = -1;
     xQueueReceive(xQueueBootKey, &boot_key_state, 3000 / portTICK_PERIOD_MS);
@@ -62,7 +58,7 @@ extern "C" void app_main()
     if (testmode_flag)
     {
         ESP_LOGI(TAG, "--------------- Enter Test Mode ---------------\n");
-        ets_printf("ESP32-S3-EYE V2.1 Firmware V0.1.1\n");
+        ets_printf("ESP32-S3-EYE V2.1 Firmware CN V0.1.3\n");
         register_lcd_test(xQueueTests, xQueueTestResult, xQueueKeyResult);
         register_test_controller(xQueueTests, xQueueBootKey, xQueueTestResult);
         register_imu_test(xQueueTests, xQueueTestResult);
@@ -85,7 +81,7 @@ extern "C" void app_main()
 
         xQueueSRResult = xQueueCreate(1, sizeof(int));
         ets_printf("\n");
-        ESP_LOGI(TAG, "Firmware V0.1.1");
+        ESP_LOGI(TAG, "Firmware CN V0.1.3");
 
         xQueueAIFrame = xQueueCreate(2, sizeof(camera_fb_t *));
         xQueueLCDFrame = xQueueCreate(2, sizeof(camera_fb_t *));
@@ -102,18 +98,8 @@ extern "C" void app_main()
         register_ai_image_task(xQueueAIFrame, xQueueEventLogic, NULL, xQueueLCDFrame, false);
         register_led(GPIO_NUM_3, xQueueLEDControl);
 
-        print_memory(TAG, 1000);
+        print_memory(TAG, 3000);
     }
 
     // app_mic_test();
-
-    // esp_err_t result = qma7981_init();
-    // float x,y,z = 0.0;
-    // printf("result: %d\n", result);
-    // while(1)
-    // {
-    //     qma7981_get_acce(&x, &y, &z);
-    //     printf("a: %f, x: %f, y: %f, z: %f\n", sqrt(x*x+y*y+z*z), x, y, z);
-    //     vTaskDelay(40);
-    // }
 }

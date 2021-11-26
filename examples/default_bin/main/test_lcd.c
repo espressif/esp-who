@@ -48,30 +48,30 @@ static void test_lcd_set_color(int color)
     }
 }
 
-// static void test_lcd_set_color_characters(int color, const char *str)
-// {
-//     scr_info_t lcd_info;
-//     g_lcd.get_info(&lcd_info);
-//     uint16_t *buffer = (uint16_t *)malloc(lcd_info.width * lcd_info.height * sizeof(uint16_t));
-//     if (NULL == buffer)
-//     {
-//         ESP_LOGE(TAG, "Memory for bitmap is not enough");
-//     }
-//     else
-//     {
-//         for (size_t i = 0; i < lcd_info.width; i++)
-//         {
-//             buffer[i] = color;
-//         }
+static void test_lcd_set_color_characters(int color, const char *str)
+{
+    scr_info_t lcd_info;
+    g_lcd.get_info(&lcd_info);
+    uint16_t *buffer = (uint16_t *)malloc(lcd_info.width * lcd_info.height * sizeof(uint16_t));
+    if (NULL == buffer)
+    {
+        ESP_LOGE(TAG, "Memory for bitmap is not enough");
+    }
+    else
+    {
+        for (size_t i = 0; i < lcd_info.width; i++)
+        {
+            buffer[i] = color;
+        }
 
-//         for (int y = 0; y < lcd_info.height; y++)
-//         {
-//             g_lcd.draw_bitmap(0, y, lcd_info.width, 1, buffer);
-//         }
+        for (int y = 0; y < lcd_info.height; y++)
+        {
+            g_lcd.draw_bitmap(0, y, lcd_info.width, 1, buffer);
+        }
 
-//         free(buffer);
-//     }
-// }
+        free(buffer);
+    }
+}
 
 static esp_err_t lcd_init()
 {
@@ -206,7 +206,15 @@ void register_lcd_test(QueueHandle_t *test_queues, const QueueHandle_t result_qu
     queue_button = key_state_o;
     queues_tests = test_queues;
 
+    // ret = who_lcd_init();
+    // vTaskDelay(pdMS_TO_TICKS(100));
+    // app_lcd_set_color(RGB565_MASK_YELLOW);
+    // vTaskDelay(pdMS_TO_TICKS(100));
+
     ret = lcd_init();
+    vTaskDelay(pdMS_TO_TICKS(100));
+    test_lcd_set_color(RGB565_MASK_YELLOW);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     xTaskCreatePinnedToCore(lcd_test_task, "lcd_test_task", 3 * 1024, NULL, 5, NULL, 1);
 }

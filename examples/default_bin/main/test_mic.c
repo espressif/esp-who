@@ -15,7 +15,7 @@
 
 #define I2S_CHANNEL_NUM 1
 #define I2S_CH 1
-#define RECORD_AUDIO 1
+#define RECORD_AUDIO 0
 
 static esp_afe_sr_iface_t *afe_handle = NULL;
 static SemaphoreHandle_t semaphore_test;
@@ -172,7 +172,7 @@ static void i2s_test_task(void *arg)
         if (g_state_test == TEST_MIC)
         {
             ESP_LOGI("ESP32-S3-EYE", "--------------- Enter MIC Test ---------------\n");
-            ESP_LOGW(TAG, "Please Say \"Hi, Lexin\"\n");
+            ESP_LOGW(TAG, "Please Say \"Hi, LeXin\"\n");
 #if RECORD_AUDIO
             sdmmc_card_t *card = NULL;
             sd_card_mount("/sdcard", &card);

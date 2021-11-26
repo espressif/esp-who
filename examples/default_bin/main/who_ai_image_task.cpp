@@ -196,6 +196,9 @@ static void human_face_recognition_handler(void *arg)
     FaceRecognition112V1S16 *recognizer = new FaceRecognition112V1S16();
 #endif
 #endif
+    recognizer->set_partition(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");
+    int partition_result = recognizer->set_ids_from_flash();
+
     // print_memory("x2", 0);
     show_state_t frame_show_state = SHOW_STATE_HUMAN_FACE_IDLE;
     int _gEvent;
@@ -230,7 +233,7 @@ static void human_face_recognition_handler(void *arg)
                         switch (_gEvent)
                         {
                         case FACE_RECOGNITION_ENROLL:
-                            recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint);
+                            recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint, "", true);
                             ESP_LOGW("ENROLL", "ID %d is enrolled", recognizer->get_enrolled_ids().back().id);
                             frame_show_state = SHOW_STATE_HUMAN_FACE_ENROLL;
                             break;
@@ -246,7 +249,8 @@ static void human_face_recognition_handler(void *arg)
                             break;
 
                         case FACE_RECOGNITION_DELETE:
-                            recognizer->delete_id();
+                            vTaskDelay(10);
+                            recognizer->delete_id(true);
                             ESP_LOGE("DELETE", "% d IDs left", recognizer->get_enrolled_id_num());
                             frame_show_state = SHOW_STATE_HUMAN_FACE_DELETE;
                             break;

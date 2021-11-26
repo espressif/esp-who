@@ -102,7 +102,7 @@ void feed_Task(void *arg)
 
         for (int i = 0; i < samp_len; ++i)
         {
-            i2s_buff[i] = i2s_buff[i] >> 14;    // 32:8为有效位， 8:0为低8位， 全为0， AFE的输入为16位语音数据，拿29：13位是为了对语音信号放大。
+            i2s_buff[i] = i2s_buff[i] >> 14; // 32:8为有效位， 8:0为低8位， 全为0， AFE的输入为16位语音数据，拿29：13位是为了对语音信号放大。
         }
         // FatfsComboWrite(i2s_buff, audio_chunksize * I2S_CHANNEL_NUM * sizeof(int16_t), 1, fp);
 
@@ -139,9 +139,6 @@ void detect_Task(void *arg)
             detect_flag = 1;
             afe_handle->disable_wakenet(afe_data);
         }
-        // if (res == AFE_FETCH_CHANNEL_VERIFIED) {
-        //     play_voice = -1;
-        // }
 
         if (detect_flag == 1)
         {
@@ -206,7 +203,7 @@ void register_speech_recognition(QueueHandle_t result_o, QueueHandle_t control_o
     afe_config.aec_init = false;
     afe_config.se_init = false;
     afe_config.vad_init = false;
-    // afe_config.afe_ringbuf_size = 10;
+    afe_config.afe_ringbuf_size = 10;
     esp_afe_sr_data_t *afe_data = afe_handle->create_from_config(&afe_config);
 
     xTaskCreatePinnedToCore(&feed_Task, "sr_feed", 4 * 1024, (void *)afe_data, 5, NULL, 0);
