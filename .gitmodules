@@ -4,3 +4,6 @@
 [submodule "components/esp-dl"]
 	path = components/esp-dl
 	url = https://github.com/espressif/esp-dl.git
+[submodule "components/esp-sr"]
+	path = components/esp-sr
+	url = https://github.com/espressif/esp-sr.git
