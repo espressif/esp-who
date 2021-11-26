@@ -10,7 +10,8 @@ set(src_dirs
                 led
                 button
                 web
-                trace)
+                trace
+                imu)
 
 set(include_dirs    
                     ai
@@ -19,7 +20,8 @@ set(include_dirs
                     led
                     button
                     web
-                    trace)
+                    trace
+                    imu)
 
 set(requires    esp32-camera
                 esp-dl
