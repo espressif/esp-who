@@ -98,6 +98,8 @@ static void task_process_handler(void *arg)
 #endif
     show_state_t frame_show_state = SHOW_STATE_IDLE;
     recognizer_state_t _gEvent;
+    recognizer->set_partition(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");
+    int partition_result = recognizer->set_ids_from_flash();
 
     while (true)
     {
@@ -123,7 +125,7 @@ static void task_process_handler(void *arg)
                     switch (_gEvent)
                     {
                     case ENROLL:
-                        recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint);
+                        recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint, "", true);
                         ESP_LOGW("ENROLL", "ID %d is enrolled", recognizer->get_enrolled_ids().back().id);
                         frame_show_state = SHOW_STATE_ENROLL;
                         break;
@@ -139,7 +141,8 @@ static void task_process_handler(void *arg)
                         break;
 
                     case DELETE:
-                        recognizer->delete_id();
+                        vTaskDelay(10);
+                        recognizer->delete_id(true);
                         ESP_LOGE("DELETE", "% d IDs left", recognizer->get_enrolled_id_num());
                         frame_show_state = SHOW_STATE_DELETE;
                         break;
@@ -182,6 +185,9 @@ static void task_process_handler(void *arg)
 
                 if (detect_results.size())
                 {
+#if !CONFIG_IDF_TARGET_ESP32S3
+                    print_detection_result(detect_results);
+#endif
                     draw_detection_result((uint16_t *)frame->buf, frame->height, frame->width, detect_results);
                 }
             }

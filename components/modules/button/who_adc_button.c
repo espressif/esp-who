@@ -38,6 +38,8 @@ static const char *TAG = "ADC SINGLE";
 
 static esp_adc_cal_characteristics_t adc1_chars;
 
+static button_adc_config_t buttons[4] = {{1, 2800, 3000}, {2, 2250, 2450}, {3, 300, 500}, {4, 850, 1050}};
+
 button_adc_config_t *adc_buttons;
 int adc_button_num;
 static QueueHandle_t xQueueKeyStateO = NULL;
@@ -104,7 +106,15 @@ static void adc_button_task(void *arg)
 void register_adc_button(button_adc_config_t *buttons_ptr, int button_num, const QueueHandle_t key_state_o)
 {
     xQueueKeyStateO = key_state_o;
-    adc_buttons = buttons_ptr;
-    adc_button_num = button_num;
-    xTaskCreatePinnedToCore(adc_button_task, "adc_button_scan_task", 3*1024, NULL, 5, NULL, 0);
+    if (buttons_ptr == NULL)
+    {
+        adc_buttons = buttons;
+        adc_button_num = 4;
+    }
+    else
+    {
+        adc_buttons = buttons_ptr;
+        adc_button_num = button_num;
+    }
+    xTaskCreatePinnedToCore(adc_button_task, "adc_button_scan_task", 3 * 1024, NULL, 5, NULL, 0);
 }

@@ -81,6 +81,8 @@ void register_camera(const pixformat_t pixel_fromat,
         s->set_brightness(s, 1);  //up the blightness just a bit
         s->set_saturation(s, -2); //lower the saturation
     }
+    s->set_sharpness(s, 2);
+    s->set_awb_gain(s, 2);
 
     xQueueFrameO = frame_o;
     xTaskCreatePinnedToCore(task_process_handler, TAG, 1 * 1024, NULL, 5, NULL, 1);
