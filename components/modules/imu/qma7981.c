@@ -102,7 +102,7 @@ esp_err_t qma7981_init(void)
 		.master.clk_speed = clk_speed,
 	};
 
-	i2c_bus_handle = i2c_bus_create(0, &conf);
+	i2c_bus_handle = i2c_bus_create(1, &conf);
 	assert(i2c_bus_handle != NULL);
 
 	qma7981_handle = i2c_bus_device_create(i2c_bus_handle, 0x12, clk_speed);
