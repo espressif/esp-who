@@ -286,13 +286,13 @@ ESP32-S3-EYE v2.2 相对于 ESP32-S3-EYE v2.1 在硬件方面有两处变更：1
 
 | ESP32-S3-EYE v2.2 主板丝印      | ESP32-S3-EYE v2.1 主板丝印 |
 |--------------------|----|
-|  ![ESP32-S3-EYE v2.2 主板丝印](../../../_static/esp32-s3-eye-v2_2-marking.png) |![ESP32-S3-EYE v2.1 主板丝印](../../../_static/esp32-s3-eye-v2_1-marking.png) |
+|  ![ESP32-S3-EYE v2.2 主板丝印](../../_static/get-started/esp32-s3-eye-v2_2-marking.png) |![ESP32-S3-EYE v2.1 主板丝印](../../_static/get-started/esp32-s3-eye-v2_1-marking.png) |
 
 2.  ESP32-S3-EYE v2.2 的主板增加限流电阻 R83，防止用户误上拉 GPIO3 而烧坏**模组电源指示灯**。
 
 | ESP32-S3-EYE v2.2 限流电阻 R83 位置     | ESP32-S3-EYE v2.1 无限流电阻 R83  |
 |--------------------|----|
-|  ![ESP32-S3-EYE v2.2 限流电阻 R83 位置](../../../_static/esp32-s3-eye-v2_2-resistor.png) |![ESP32-S3-EYE v2.1 无限流电阻 R83](../../../_static/esp32-s3-eye-v2_1-resistor.png) |
+|  ![ESP32-S3-EYE v2.2 限流电阻 R83 位置](../../_static/get-started/esp32-s3-eye-v2_2-resistor.png) |![ESP32-S3-EYE v2.1 无限流电阻 R83](../../_static/get-started/esp32-s3-eye-v2_1-resistor.png) |
 
 3.  因主板丝印变更和增加限流电阻同步更新**主板原理图**、**主板 PCB 布局图**、**主板尺寸图**、**主板尺寸图源文件**（见[相关文档](#5-相关文档)小节提供的文件）。
    

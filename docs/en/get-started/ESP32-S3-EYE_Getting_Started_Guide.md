@@ -287,13 +287,13 @@ Changes in hardware are described in detail below:
 
 | ESP32-S3-EYE-MB_V2.2 Marking      | ESP32-S3-EYE-MB_V2.1 Marking |
 |--------------------|----|
-|  ![ESP32-S3-EYE-MB_V2.2 Marking](../../../_static/esp32-s3-eye-v2_2-marking.png) |![ESP32-S3-EYE-MB_V2.1 Marking](../../../_static/esp32-s3-eye-v2_1-marking.png) |
+|  ![ESP32-S3-EYE-MB_V2.2 Marking](../../_static/get-started/esp32-s3-eye-v2_2-marking.png) |![ESP32-S3-EYE-MB_V2.1 Marking](../../_static/get-started/esp32-s3-eye-v2_1-marking.png) |
 
 2.  The current limiting resistor R83 is added to the ESP32-S3-EYE v2.2 main board to protect the **Module Power LED** from burning in case GPIO3 is pulled up.
 
 | ESP32-S3-EYE v2.2 with R83     | ESP32-S3-EYE v2.1 Without R83  |
 |--------------------|----|
-|  ![ESP32-S3-EYE v2.2 with R83](../../../_static/esp32-s3-eye-v2_2-resistor.png) |![ESP32-S3-EYE v2.1 Without R83](../../../_static/esp32-s3-eye-v2_1-resistor.png) |
+|  ![ESP32-S3-EYE v2.2 with R83](../../_static/get-started/esp32-s3-eye-v2_2-resistor.png) |![ESP32-S3-EYE v2.1 Without R83](../../_static/get-started/esp32-s3-eye-v2_1-resistor.png) |
 
 3.  The **main board schematics**, **main board PCB layout diagrams**, **main board dimension diagrams**, **main board dimension source files** are updated because of the two hardware changes. (See [Related Documents](#5-related-documents)).
 
