@@ -82,6 +82,8 @@ menu "ESP-WHO Configuration"
                 bool "M5Stack Camera F (Wide)"
             config CAMERA_MODULE_AI_THINKER
                 bool "ESP32-CAM by AI-Thinker"
+            config CAMERA_MODULE_S3_KS_DIY
+                bool "ESP32-S3-CAM by S3_KS-DIY"
             config CAMERA_MODULE_CUSTOM
                 bool "Custom Camera Pinout"
         endchoice
