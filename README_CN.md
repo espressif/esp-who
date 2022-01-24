@@ -30,7 +30,7 @@ ESP-WHO 提供了例如人脸检测、人脸识别、猫脸检测和手势识别
 
 ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 [ESP-IDF 编程指南](https://idf.espressif.com/)。
 
-> 请使用 ESP-IDF 在 master 分支上的最新版本。
+> 请使用 ESP-IDF 在 release/v4.4 分支上的最新版本。
 
 #### 获取 ESP-WHO
 
