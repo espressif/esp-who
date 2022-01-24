@@ -21,7 +21,6 @@ static QueueHandle_t xQueueResult = NULL;
 static bool gEvent = true;
 static bool gReturnFB = true;
 
-
 static void task_process_handler(void *arg)
 {
     camera_fb_t *frame = NULL;

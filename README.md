@@ -30,7 +30,7 @@ We recommend novice developers to use the development boards designed by Espress
 
 ESP-WHO runs on ESP-IDF. For details on getting ESP-IDF, please refer to [ESP-IDF Programming Guide](https://idf.espressif.com/).
 
-> Please use the latest ESP-IDF on the release/v4.4 branch.
+> Please use the latest ESP-IDF on the [release/v4.4](https://github.com/espressif/esp-idf/tree/release/v4.4) branch.
 
 #### Get ESP-WHO
 
