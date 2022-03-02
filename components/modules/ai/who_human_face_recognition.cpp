@@ -10,12 +10,10 @@
 #include "human_face_detect_mnp01.hpp"
 #include "face_recognition_tool.hpp"
 
-#if CONFIG_MFN_V1
-#if CONFIG_S8
+#if CONFIG_MFN_V1_Q8
 #include "face_recognition_112_v1_s8.hpp"
-#elif CONFIG_S16
+#elif CONFIG_MFN_V1_Q16
 #include "face_recognition_112_v1_s16.hpp"
-#endif
 #endif
 
 #include "who_ai_utils.hpp"
@@ -89,12 +87,10 @@ static void task_process_handler(void *arg)
     HumanFaceDetectMSR01 detector(0.3F, 0.3F, 10, 0.3F);
     HumanFaceDetectMNP01 detector2(0.4F, 0.3F, 10);
 
-#if CONFIG_MFN_V1
-#if CONFIG_S8
+#if CONFIG_MFN_V1_Q8
     FaceRecognition112V1S8 *recognizer = new FaceRecognition112V1S8();
-#elif CONFIG_S16
+#elif CONFIG_MFN_V1_Q16
     FaceRecognition112V1S16 *recognizer = new FaceRecognition112V1S16();
-#endif
 #endif
     show_state_t frame_show_state = SHOW_STATE_IDLE;
     recognizer_state_t _gEvent;

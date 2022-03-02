@@ -48,7 +48,7 @@ menu "ESP-WHO Configuration"
             string "WiFi AP IP Address"
             default "192.168.4.1"
             help
-                IP address that the ESP will assign to it's AP interface. You can use this IP to connect to the camera after flashing.
+                IP address that the ESP will assign to it is AP interface. You can use this IP to connect to the camera after flashing.
 
         config ESP_MAXIMUM_RETRY
             int "Maximum retry"
@@ -217,31 +217,18 @@ menu "ESP-WHO Configuration"
 
 
     menu "Model Configuration"
-        menu "Face Recognition"
-            choice FACE_RECOGNITION_MODEL
-                bool "Face Recognition Model"
-                default MFN_V1
-                help
-                    Select Face Recognition Model.
+        choice FACE_RECOGNITION_MODEL
+            bool "Face Recognition Model"
+            default MFN_V1_Q8
+            help
+                Select Face Recognition Model.
 
-                config MFN_V1
-                    bool "mfn v1"
-    
-            endchoice
-            
-            choice QUANTIZATION
-                bool "Quantization"
-                default S8
-                help
-                    Select Face Recognition Model.
+            config MFN_V1_Q8
+                bool "mfn v1 in 8-bit quantization"
 
-                config S8
-                    bool "8-bit"
-                config S16
-                    bool "16-bit"
-    
-            endchoice
-        endmenu
+            config MFN_V1_Q16
+                bool "mfn v1 in 16-bit quantization"
+        endchoice
 
     endmenu
 

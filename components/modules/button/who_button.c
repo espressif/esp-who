@@ -29,7 +29,7 @@ int key_scan(TickType_t ticks_to_wait)
     int64_t interval_time = 0;
     static int64_t last_time = 0;
 
-    for (;;)
+    while (true)
     {
         xQueueReceive(gpio_evt_queue, &io_num, ticks_to_wait);
 

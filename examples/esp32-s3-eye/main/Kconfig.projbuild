@@ -1,0 +1,13 @@
+menu "ESP32-S3-EYE Firmware"
+    choice ESP_SR_LANGUAGE
+        bool "esp-sr language"
+        default CN_MODEL
+        help
+             Select ESP-SR Language.
+        
+        config CN_MODEL
+            bool "Chinese"
+        config EN_MODEL
+            bool "English"
+    endchoice
+endmenu

@@ -26,7 +26,7 @@ set(include_dirs
 set(requires    esp32-camera
                 esp-dl
                 esp_lcd
-                # esp-sr
+                esp-sr
                 bus
                 screen
                 esp_http_server
