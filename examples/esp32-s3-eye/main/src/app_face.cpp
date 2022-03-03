@@ -52,55 +52,54 @@ static int rgb_printf(camera_fb_t *fb, uint32_t color, const char *format, ...)
     return len;
 }
 
-AppFace::AppFace(AppButtom *key,
-                                     AppSpeech *speech,
-                                     QueueHandle_t queue_i,
-                                     QueueHandle_t queue_o,
-                                     void (*callback)(camera_fb_t *)) : Frame(queue_i, queue_o, callback),
-                                                                        key(key),
-                                                                        speech(speech),
-                                                                        detector(0.3F, 0.3F, 10, 0.3F),
-                                                                        detector2(0.4F, 0.3F, 10),
-                                                                        state(IDLE),
-                                                                        switch_on(false)
-//   recognizer(
-// #if CONFIG_MFN_V1_Q8
-//   new FaceRecognition112V1S8()
-// #elif CONFIG_MFN_V1_Q16
-//   new FaceRecognition112V1S16()
-// #endif
-//   )
+AppFace::AppFace(AppButton *key,
+                 AppSpeech *speech,
+                 QueueHandle_t queue_i,
+                 QueueHandle_t queue_o,
+                 void (*callback)(camera_fb_t *)) : Frame(queue_i, queue_o, callback),
+                                                    key(key),
+                                                    speech(speech),
+                                                    detector(0.3F, 0.3F, 10, 0.3F),
+                                                    detector2(0.4F, 0.3F, 10),
+                                                    state(IDLE),
+                                                    switch_on(false)
 {
-    // this->recognizer = new FaceRecognition112V1S8();
+#if CONFIG_MFN_V1
+#if CONFIG_S8
+    this->recognizer = new FaceRecognition112V1S8();
+#elif CONFIG_S16
     this->recognizer = new FaceRecognition112V1S16();
+#endif
+#endif
 
     this->recognizer->set_partition(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_ANY, "fr");
-    int partition_result = this->recognizer->set_ids_from_flash();
+    this->recognizer->set_ids_from_flash();
 }
 
 AppFace::~AppFace()
 {
+    delete this->recognizer;
 }
 
 void AppFace::update()
 {
     // Parse key
-    if (this->key->pressed > _IDLE)
+    if (this->key->pressed > BUTTON_IDLE)
     {
-        if (this->key->pressed == _MENU)
+        if (this->key->pressed == BUTTON_MENU)
         {
             this->switch_on = (this->key->menu == MENU_FACE_RECOGNITION) ? true : false;
             ESP_LOGD(TAG, "%s", this->switch_on ? "ON" : "OFF");
         }
-        else if (this->key->pressed == _PLAY)
+        else if (this->key->pressed == BUTTON_PLAY)
         {
             this->state = RECOGNIZE;
         }
-        else if (this->key->pressed == _UP)
+        else if (this->key->pressed == BUTTON_UP)
         {
             this->state = ENROLL;
         }
-        else if (this->key->pressed == _DOWN)
+        else if (this->key->pressed == BUTTON_DOWN)
         {
             this->state = DELETE;
         }
@@ -159,7 +158,7 @@ static void task(AppFace *self)
                     {
                     case ENROLL:
                         self->recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint, "", true);
-                        ESP_LOGW(TAG, "Enroll ID %d", self->recognizer->get_enrolled_ids().back().id);
+                        ESP_LOGI(TAG, "Enroll ID %d", self->recognizer->get_enrolled_ids().back().id);
                         break;
 
                     case RECOGNIZE:
@@ -169,13 +168,13 @@ static void task(AppFace *self)
                         if (self->recognize_result.id > 0)
                             ESP_LOGI(TAG, "Match ID: %d", self->recognize_result.id);
                         else
-                            ESP_LOGE(TAG, "Match ID: %d", self->recognize_result.id);
+                            ESP_LOGI(TAG, "Match ID: %d", self->recognize_result.id);
                         break;
 
                     case DELETE:
                         vTaskDelay(10);
                         self->recognizer->delete_id(true);
-                        ESP_LOGE(TAG, "%d IDs left", self->recognizer->get_enrolled_id_num());
+                        ESP_LOGI(TAG, "%d IDs left", self->recognizer->get_enrolled_id_num());
                         break;
 
                     default:

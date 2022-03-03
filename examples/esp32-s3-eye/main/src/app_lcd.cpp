@@ -2,6 +2,7 @@
 
 #include <string.h>
 
+#include "esp_log.h"
 #include "esp_camera.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_vendor.h"
@@ -13,7 +14,7 @@
 
 static const char TAG[] = "App/LCD";
 
-AppLCD::AppLCD(AppButtom *key,
+AppLCD::AppLCD(AppButton *key,
                AppSpeech *speech,
                QueueHandle_t queue_i,
                QueueHandle_t queue_o,
@@ -120,9 +121,9 @@ void AppLCD::draw_color(int color)
 
 void AppLCD::update()
 {
-    if (this->key->pressed > _IDLE)
+    if (this->key->pressed > BUTTON_IDLE)
     {
-        if (this->key->pressed == _MENU)
+        if (this->key->pressed == BUTTON_MENU)
         {
             this->switch_on = (this->key->menu == MENU_STOP_WORKING) ? false : true;
             ESP_LOGD(TAG, "%s", this->switch_on ? "ON" : "OFF");

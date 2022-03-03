@@ -1,12 +1,10 @@
 #pragma once
 
-#include <stdint.h>
-#include "esp_log.h"
 #include "screen_driver.h"
 
 #include "__base__.hpp"
 #include "app_camera.hpp"
-#include "app_buttom.hpp"
+#include "app_button.hpp"
 #include "app_speech.hpp"
 
 #define BOARD_LCD_MOSI 47
@@ -28,7 +26,7 @@
 class AppLCD : public Observer, public Frame
 {
 private:
-    AppButtom *key;
+    AppButton *key;
     AppSpeech *speech;
 
 public:
@@ -36,7 +34,7 @@ public:
     bool switch_on;
     bool paper_drawn;
 
-    AppLCD(AppButtom *key,
+    AppLCD(AppButton *key,
            AppSpeech *speech,
            QueueHandle_t xQueueFrameI = nullptr,
            QueueHandle_t xQueueFrameO = nullptr,

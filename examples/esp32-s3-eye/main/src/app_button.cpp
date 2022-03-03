@@ -1,4 +1,4 @@
-#include "app_buttom.hpp"
+#include "app_button.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,16 +26,16 @@
 
 #define PRESS_INTERVAL 500000
 
-static const char *TAG = "App/Buttom";
+static const char *TAG = "App/Button";
 
-AppButtom::AppButtom() : key_configs({{_MENU, 2800, 3000}, {_PLAY, 2250, 2450}, {_UP, 300, 500}, {_DOWN, 850, 1050}}),
-                         pressed(_IDLE)
+AppButton::AppButton() : key_configs({{BUTTON_MENU, 2800, 3000}, {BUTTON_PLAY, 2250, 2450}, {BUTTON_UP, 300, 500}, {BUTTON_DOWN, 850, 1050}}),
+                         pressed(BUTTON_IDLE)
 {
     ESP_ERROR_CHECK(adc1_config_width((adc_bits_width_t)ADC_WIDTH_BIT_DEFAULT));
     ESP_ERROR_CHECK(adc1_config_channel_atten(ADC1_EXAMPLE_CHAN0, ADC_EXAMPLE_ATTEN));
 }
 
-static void task(AppButtom *self)
+static void task(AppButton *self)
 {
     int64_t backup_time = esp_timer_get_time();
     int64_t last_time = esp_timer_get_time();
@@ -52,10 +52,10 @@ static void task(AppButtom *self)
             {
                 if (((backup_time - last_time) > PRESS_INTERVAL))
                 {
-                    ESP_LOGD(TAG, "Key[%d] is pressed", self->pressed);
                     self->pressed = key_config.key;
+                    ESP_LOGI(TAG, "Button[%d] is clicked", self->pressed);
 
-                    if (self->pressed == _MENU)
+                    if (self->pressed == BUTTON_MENU)
                     {
                         self->menu++;
                         self->menu %= (MENU_MOTION_DETECTION + 1);
@@ -64,7 +64,7 @@ static void task(AppButtom *self)
                     last_time = backup_time;
                     self->notify();
 
-                    self->pressed = _IDLE;
+                    self->pressed = BUTTON_IDLE;
                     break;
                 }
             }
@@ -73,7 +73,7 @@ static void task(AppButtom *self)
     }
 }
 
-void AppButtom::run()
+void AppButton::run()
 {
     xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 3 * 1024, this, 5, NULL, 0);
 }

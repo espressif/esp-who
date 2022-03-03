@@ -162,7 +162,7 @@ static void detect_hander(AppSpeech *self)
             else
             {
                 self->notify();
-                ESP_LOGD(TAG, "Command: %d", self->command);
+                ESP_LOGI(TAG, "Command: %d", self->command);
 
 #ifndef CONFIG_SR_MN_CN_MULTINET3_CONTINUOUS_RECOGNITION
                 self->afe_handle->enable_wakenet(afe_data);

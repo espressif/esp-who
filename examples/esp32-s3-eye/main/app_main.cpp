@@ -1,6 +1,6 @@
 #include "driver/gpio.h"
 
-#include "app_buttom.hpp"
+#include "app_button.hpp"
 #include "app_camera.hpp"
 #include "app_lcd.hpp"
 #include "app_led.hpp"
@@ -14,13 +14,13 @@ extern "C" void app_main()
     QueueHandle_t xQueueFrame_1 = xQueueCreate(2, sizeof(camera_fb_t *));
     QueueHandle_t xQueueFrame_2 = xQueueCreate(2, sizeof(camera_fb_t *));
 
-    AppButtom *key = new AppButtom();
+    AppButton *key = new AppButton();
     AppSpeech *speech = new AppSpeech();
     AppCamera *camera = new AppCamera(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, xQueueFrame_0);
     AppFace *face = new AppFace(key, speech, xQueueFrame_0, xQueueFrame_1);
     AppMotion *motion = new AppMotion(key, speech, xQueueFrame_1, xQueueFrame_2);
     AppLCD *lcd = new AppLCD(key, speech, xQueueFrame_2);
-    LED *led = new LED(GPIO_NUM_3, key, speech);
+    AppLED *led = new AppLED(GPIO_NUM_3, key, speech);
 
     key->attach(face);
     key->attach(motion);
