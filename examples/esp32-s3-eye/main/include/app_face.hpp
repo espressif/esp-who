@@ -20,11 +20,11 @@
 
 typedef enum
 {
-    IDLE = 0,
-    ENROLL = 1,
-    RECOGNIZE = 2,
-    DELETE = 3,
-} recognizer_state_t;
+    FACE_IDLE = 0,
+    FACE_ENROLL = 1,
+    FACE_RECOGNIZE = 2,
+    FACE_DELETE = 3,
+} face_action_t;
 
 class AppFace : public Observer, public Frame
 {
@@ -45,8 +45,8 @@ public:
 #endif
 
     face_info_t recognize_result;
-    recognizer_state_t state;
-    recognizer_state_t state_previous;
+    face_action_t state;
+    face_action_t state_previous;
 
     bool switch_on;
 
