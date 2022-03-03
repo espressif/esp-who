@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
@@ -10,20 +11,33 @@
 
 static void task_trace(void *arg)
 {
-    char *pbuffer = (char *)malloc(2048);
-
     while (true)
     {
-        printf("\n-------------------------------------------------------------------------\n");
-        vTaskList(pbuffer);
-        printf("%s", pbuffer);
-        printf("-------------------------------------------------------------------------\n\n");
-        vTaskDelay(3000 / portTICK_RATE_MS);
+        if (CONFIG_FREERTOS_USE_TRACE_FACILITY == 0 && CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS == 0)
+            break;
+
+        int task_num = uxTaskGetNumberOfTasks();
+        char *buffer = (char *)malloc(task_num * 40 * sizeof(char));
+
+#if CONFIG_FREERTOS_USE_TRACE_FACILITY
+        printf("TaskList-------------------------------------------------------------------------\n");
+        vTaskList(buffer);
+        printf("%s", buffer);
+#endif
+
+#if CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS
+        printf("TimeStats------------------------------------------------------------------------\n");
+        vTaskGetRunTimeStats(buffer);
+        printf("%s", buffer);
+#endif
+        vTaskDelay(1000 / portTICK_RATE_MS);
+
+        free(buffer);
     }
-    free(pbuffer);
+    vTaskDelete(NULL);
 }
 
 void register_trace()
 {
-    xTaskCreate(task_trace, "trace", 2*1024, NULL, 5, NULL);
+    xTaskCreate(task_trace, "trace", 3 * 1024, NULL, 5, NULL);
 }
