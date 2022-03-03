@@ -1,4 +1,5 @@
 #include "who_trace.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,9 +14,6 @@ static void task_trace(void *arg)
 {
     while (true)
     {
-        if (CONFIG_FREERTOS_USE_TRACE_FACILITY == 0 && CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS == 0)
-            break;
-
         int task_num = uxTaskGetNumberOfTasks();
         char *buffer = (char *)malloc(task_num * 40 * sizeof(char));
 
