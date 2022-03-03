@@ -1,9 +1,4 @@
-#include "sdkconfig.h"
 #include "driver/gpio.h"
-
-#if CONFIG_FREERTOS_VTASKLIST_INCLUDE_COREID
-#include "who_trace.h"
-#endif
 
 #include "app_buttom.hpp"
 #include "app_camera.hpp"
@@ -15,10 +10,6 @@
 
 extern "C" void app_main()
 {
-#if CONFIG_FREERTOS_VTASKLIST_INCLUDE_COREID
-    register_trace();
-#endif
-
     QueueHandle_t xQueueFrame_0 = xQueueCreate(2, sizeof(camera_fb_t *));
     QueueHandle_t xQueueFrame_1 = xQueueCreate(2, sizeof(camera_fb_t *));
     QueueHandle_t xQueueFrame_2 = xQueueCreate(2, sizeof(camera_fb_t *));

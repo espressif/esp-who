@@ -227,5 +227,5 @@ static void task(AppFace *self)
 
 void AppFace::run()
 {
-    xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 5 * 1024, this, 5, NULL, 0);
+    xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 5 * 1024, this, 5, NULL, 1);
 }

@@ -174,5 +174,5 @@ static void task(AppLCD *self)
 
 void AppLCD::run()
 {
-    xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 2 * 1024, this, 5, NULL, 0);
+    xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 2 * 1024, this, 5, NULL, 1);
 }

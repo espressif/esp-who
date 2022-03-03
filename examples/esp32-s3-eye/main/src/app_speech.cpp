@@ -209,6 +209,6 @@ AppSpeech::AppSpeech() : afe_handle(&esp_afe_sr_1mic), detected(false), command(
 
 void AppSpeech::run()
 {
-    xTaskCreatePinnedToCore((TaskFunction_t)feed_handler, "SR_feed", 4 * 1024, this, 5, NULL, 0);
-    xTaskCreatePinnedToCore((TaskFunction_t)detect_hander, "SR_detect", 5 * 1024, this, 5, NULL, 0);
+    xTaskCreatePinnedToCore((TaskFunction_t)feed_handler, "App/SR/Feed", 4 * 1024, this, 5, NULL, 0);
+    xTaskCreatePinnedToCore((TaskFunction_t)detect_hander, "App/SR/Detect", 5 * 1024, this, 5, NULL, 0);
 }

@@ -78,5 +78,5 @@ static void task(AppMotion *self)
 
 void AppMotion::run()
 {
-    xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 3 * 1024, this, 6, NULL, 0);
+    xTaskCreatePinnedToCore((TaskFunction_t)task, TAG, 3 * 1024, this, 5, NULL, 0);
 }
