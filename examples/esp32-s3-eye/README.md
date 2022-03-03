@@ -12,13 +12,13 @@
 
 #### 中文：
 
-如果使用中文时，需要将 `sdkconfig.defaults`中的 [Line49~Line60](/sdkconfig.defaults#L60) 用“#”注释掉，并且把 [Line35~Line46](/sdkconfig.defaults#L35) 前的“#”去掉。*中文为默认设置，所以在默认情况下无需改动。*
+如果使用中文时，需要将 `sdkconfig.defaults`中的 [Line49~Line60](./sdkconfig.defaults#L60) 用“#”注释掉，并且把 [Line35~Line46](./sdkconfig.defaults#L35) 前的“#”去掉。*中文为默认设置，所以在默认情况下无需改动。*
 
 中文的唤醒词为“Hi, 乐鑫”，命令词包括：“停止工作”、“仅显示”、“人脸识别”、“添加人脸”、“删除人脸”和“识别一下”。
 
 #### 英文：
 
-如果使用英文时，需要将 `sdkconfig.defaults`中的 [Line35~Line46](/sdkconfig.defaults#L35) 用“#”注释掉，并且把 [Line49~Line60](/sdkconfig.defaults#L60) 前的“#”去掉。
+如果使用英文时，需要将 `sdkconfig.defaults`中的 [Line35~Line46](./sdkconfig.defaults#L35) 用“#”注释掉，并且把 [Line49~Line60](./sdkconfig.defaults#L60) 前的“#”去掉。
 
 英文的唤醒词为“Hi, ESP”，命令词包括：“Stop Working”、“Display Only”、“Face Recognition”、“Enter Face”、“Delete Face”和“Recognize Face”。
 
