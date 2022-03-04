@@ -1,4 +1,4 @@
-# ESP-S3-EYE[[中文](./README_CN.md)]
+# ESP-S3-EYE [[中文](./README_CN.md)]
 
 This example is designed for [**ESP32-S3-EYE**](https://www.espressif.com/zh-hans/products/devkits) development kit **only**, which can help to get started with it easily and to experience the functions of speech wake-up, speech command recognition, human face detection and recognition.
 
@@ -56,11 +56,11 @@ This example includes four working modes: "Standby Mode", "Real-time Display", "
 1. Real-time Display: in this mode, the pictures collected by the camera will be displayed on the LCD screen in real time.
 1. Face Recognition: in this mode, the pictures collected by the camera will be displayed on the LCD screen in real time. The face in the picture is detected in real time, and the detection box and key points are displayed. Operations related to face recognition can be realized through button press and speech interaction. See the following table for details:
 
-|   Operations   | Description                                               | Button |                     Speech                      |
-| :------------: | :-------------------------------------------------------- | :----: | :---------------------------------------------: |
+| Operations     | Description                                               | Button | Speech                                          |
+| :------------- | :-------------------------------------------------------- | :----- | :---------------------------------------------- |
 | Recognize Face | Recognize the face in picture and display result          | "PLAY" | Wake up by "Hi, ESP", then say "Recognize Face" |
-|   Enter Face   | Enter the face in picture and display its ID number       | "UP+"  |   Wake up by "Hi, ESP", then say "Enter Face"   |
-|  Delete Face   | Delete the last ID in database and display left ID number | "DN-"  |  Wake up by "Hi, ESP", then say "Delete Face"   |
+| Enter Face     | Enter the face in picture and display its ID number       | "UP+"  | Wake up by "Hi, ESP", then say "Enter Face"     |
+| Delete Face    | Delete the last ID in database and display left ID number | "DN-"  | Wake up by "Hi, ESP", then say "Delete Face"    |
 
 4. Motion detection: in this mode, the pictures collected by the camera will be displayed on the LCD screen in real time. And detect whether the object moves in the screen in real time. If the object moves, the blue dot will be displayed in the upper left corner of the screen, otherwise it will not.
 
@@ -76,9 +76,9 @@ Mode switching can be realized by speech and button interaction.
 
 The mode can be switched by speech at any time. The corresponding detailed methods are shown in the table below:
 
-|       Mode        | Chinese                                              | English                                           |
-| :---------------: | ---------------------------------------------------- | ------------------------------------------------- |
-|   Standby Mode    | Wake up by "Hi, Lexin", then say "Ting Zhi Gong Zuo" | Wake up by "Hi, ESP", then say "Stop Working"     |
+| Mode              | Chinese                                              | English                                           |
+| :---------------- | ---------------------------------------------------- | ------------------------------------------------- |
+| Standby Mode      | Wake up by "Hi, Lexin", then say "Ting Zhi Gong Zuo" | Wake up by "Hi, ESP", then say "Stop Working"     |
 | Real-time Display | Wake up by "Hi, Lexin", then say "Jin Xian Shi"      | Wake up by "Hi, ESP", then say "Display Only"     |
 | Face Recognition  | Wake up by "Hi, Lexin", then say "Ren Lian Shi Bie"  | Wake up by "Hi, ESP", then say "Face Recognition" |
 | Motion Detection  | Wake up by "Hi, Lexin", then say "Yi Dong Zhen Ce"   | Wake up by "Hi, ESP", then say "Motion Detection" |
