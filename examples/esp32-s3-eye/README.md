@@ -1,34 +1,34 @@
-# ESP-S3-EYE
+# ESP-S3-EYE[[中文](./README_CN.md)]
 
-该示例**仅适用于** [ESP32-S3-EYE](https://www.espressif.com/zh-hans/products/devkits) 开发板，能帮助你快速上手使用开发板，体验语音唤醒、语音命令识别、人脸检测和识别等功能。
-
-
-
-## 运行示例
-
-### 步骤1：设定唤醒词和命令词
-
-该示例预设了中文和英文两套唤醒词和命令词。
-
-#### 中文：
-
-如果使用中文时，需要将 `sdkconfig.defaults`中的 [Line49~Line60](./sdkconfig.defaults#L49) 用“#”注释掉，并且把 [Line35~Line46](./sdkconfig.defaults#L35) 前的“#”去掉。*中文为默认设置，所以在默认情况下无需改动。*
-
-中文的唤醒词为“Hi, 乐鑫”，命令词包括：“停止工作”、“仅显示”、“人脸识别”、“添加人脸”、“删除人脸”和“识别一下”。
-
-#### 英文：
-
-如果使用英文时，需要将 `sdkconfig.defaults`中的 [Line35~Line46](./sdkconfig.defaults#L35) 用“#”注释掉，并且把 [Line49~Line60](./sdkconfig.defaults#L49) 前的“#”去掉。
-
-英文的唤醒词为“Hi, ESP”，命令词包括：“Stop Working”、“Display Only”、“Face Recognition”、“Enter Face”、“Delete Face”和“Recognize Face”。
-
-> 当然你也可以在 menuconfig 中选择其他唤醒词和命令词。
+This example is designed for [**ESP32-S3-EYE**](https://www.espressif.com/zh-hans/products/devkits) development kit **only**, which can help to get started with it easily and to experience the functions of speech wake-up, speech command recognition, human face detection and recognition.
 
 
 
-### 步骤2：设定目标芯片
+## Run Example
 
-打开终端，进入该示例，运行以下命令设定目标芯片（注意：仅支持 ESP32-S3）：
+### Step 1: Set wake-up word and command words
+
+This example presets two sets of wake-up words and command words in Chinese and English.
+
+#### Chinese:
+
+If you use Chinese, you need to mute [Line49~Line60](./sdkconfig.defaults#L49) in `sdkconfig.defaults` by adding "#" in front, and delete the "#" in the front of [Line35~Line46](./sdkconfig.defaults#L35). *Chinese is set by defaults. So in defaults setting, nothing should be modified.*
+
+The Chinese wake-up word is "Hi, Lexin", and the command words include: "Ting Zhi Gong Zuo", "Jin Xian Shi", "Ren Lian Shi Bie", "Yi Dong Zhen Ce", "Tian Jia Ren Lian", "Shan Chu Ren Lian" and "Shi Bie Yi Xia".
+
+#### English:
+
+If you use English, you need to mute [Line35~Line46](./sdkconfig.defaults#L35) in `sdkconfig.defaults` by adding "#" in front, and delete the "#" in the front of [Line49~Line60](./sdkconfig.defaults#L49).
+
+The English wake-up word is "Hi, ESP", and the command words include: "Stop Working", "Display Only", "Face Recognition", "Motion Detection", "Enter Face", "Delete Face" and "Recognize Face".
+
+> Of course, you can also choose other wake-up words and command words in menuconfig.
+
+
+
+### Step 2: Set target chip
+
+Open the terminal and go to this examples. Run the following command to set the target chip to ESP32-S3.
 
 ```shell
 idf.py set-target esp32s3
@@ -36,9 +36,9 @@ idf.py set-target esp32s3
 
 
 
-### 步骤3：运行和监视
+### Step 3: Launch and monitor
 
-烧录程序，运行 IDF 监视器：
+Flash the program and launch IDF Monitor:
 
 ```shell
 idf.py flash monitor
@@ -46,62 +46,62 @@ idf.py flash monitor
 
 
 
-## 示例说明
+## Example Description
 
-### 工作模式
+### Working modes
 
-该示例共包含四个工作模式：“待机模式”、“实时显示”、“人脸识别”和“移动侦测”。上电后默认进入“待机模式”：
+This example includes four working modes: "Standby Mode", "Real-time Display", "Face Recognition" and "Motion Detection". After power on, it enters "Standby Mode" by default:
 
-1. 待机模式：该模式下，LCD 屏幕上仅显示 Espressif Logo。该模式也是开发板上电以后的默认模式。
-1. 实时显示：该模式下，LCD 屏幕上会实时显示摄像头采集的图片。
-1. 人脸识别：该模式下，LCD 屏幕上会实时显示摄像头采集的图片。并且实时检测画面中的人脸，并显示检测框和关键点。通过按键和语音交互可以实现人脸识别相关的操作，详见下表：
+1. Standby Mode: in this mode, only the espressif logo is displayed on the LCD screen. This mode is also the default mode after the development kit is powered on.
+1. Real-time Display: in this mode, the pictures collected by the camera will be displayed on the LCD screen in real time.
+1. Face Recognition: in this mode, the pictures collected by the camera will be displayed on the LCD screen in real time. The face in the picture is detected in real time, and the detection box and key points are displayed. Operations related to face recognition can be realized through button press and speech interaction. See the following table for details:
 
-|   操作   | 说明                                         | 按键触发 |                语音触发                |
-| :------: | :------------------------------------------- | :------: | :------------------------------------: |
-| 识别人脸 | 识别当前画面中的人脸，并显示识别结果         |  “PLAY”  | “Hi，乐鑫”唤醒后，说出命令词“识别一下” |
-| 添加人脸 | 添加当前画面中的人脸，并显示添加的 ID 号     |  “UP+”   | “Hi，乐鑫”唤醒后，说出命令词“添加人脸” |
-| 删除人脸 | 删除人脸库中的最后一个 ID， 并显示剩余 ID 数 |  “DN-”   | “Hi，乐鑫”唤醒后，说出命令词“删除人脸” |
+|   Operations   | Description                                               | Button |                     Speech                      |
+| :------------: | :-------------------------------------------------------- | :----: | :---------------------------------------------: |
+| Recognize Face | Recognize the face in picture and display result          | "PLAY" | Wake up by "Hi, ESP", then say "Recognize Face" |
+|   Enter Face   | Enter the face in picture and display its ID number       | "UP+"  |   Wake up by "Hi, ESP", then say "Enter Face"   |
+|  Delete Face   | Delete the last ID in database and display left ID number | "DN-"  |  Wake up by "Hi, ESP", then say "Delete Face"   |
 
-4. 移动侦测：该模式下，LCD 屏幕上会实时显示摄像头采集的图片。并且实时检测画面中是否出现物体移动，如果物体移动，画面左上角会显示蓝点，反之则不会。
-
-
-
-### 模式切换
-
-模式切换可以通过语音和按键实现。
+4. Motion detection: in this mode, the pictures collected by the camera will be displayed on the LCD screen in real time. And detect whether the object moves in the screen in real time. If the object moves, the blue dot will be displayed in the upper left corner of the screen, otherwise it will not.
 
 
 
-#### 通过语音
+### Mode Switching
 
-在任何时候都可以通过语音进行模式切换，对应的详细方法见下表：
-
-|   模式   | 中文                                   | 英文                                          |
-| :------: | -------------------------------------- | --------------------------------------------- |
-| 待机模式 | “Hi，乐鑫”唤醒后，说出命令词“停止工作” | “Hi，ESP”唤醒后，说出命令词“Stop Working”     |
-| 实时显示 | “Hi，乐鑫”唤醒后，说出命令词“仅显示”   | “Hi，ESP”唤醒后，说出命令词“Display Only”     |
-| 人脸识别 | “Hi，乐鑫”唤醒后，说出命令词“人脸识别” | “Hi，ESP”唤醒后，说出命令词“Face Recognition” |
-| 移动侦测 | “Hi，乐鑫”唤醒后，说出命令词“移动侦测” | “Hi，ESP”唤醒后，说出命令词“Motion Detection” |
+Mode switching can be realized by speech and button interaction.
 
 
 
-#### 通过按键
+#### By speech
 
-在任何时候都可以通过按下”MENU“按键进行模式切换。模式之间会按照如下顺序循环切换：”待机模式“ > ”实时显示“ > ”人脸识别“ > ”移动侦测“，继续按下“MENU”按键会重新回到“待机模式”，以此往复。
+The mode can be switched by speech at any time. The corresponding detailed methods are shown in the table below:
 
-
-
-### LED 交互
-
-#### 语音反馈
-
-当说出唤醒词并且唤醒成功，开发板上的 LED 灯亮起，表示等待命令词。此时，
-
-- 如果6秒内说出命令词，并且正确识别，LED 灯会闪烁一秒后熄灭，回到待唤醒状态，
-- 如果6秒内没有说出命令词或者没有说出正确的命令词，6秒后 LED 灯熄灭，回到待唤醒状态。
+|       Mode        | Chinese                                              | English                                           |
+| :---------------: | ---------------------------------------------------- | ------------------------------------------------- |
+|   Standby Mode    | Wake up by "Hi, Lexin", then say "Ting Zhi Gong Zuo" | Wake up by "Hi, ESP", then say "Stop Working"     |
+| Real-time Display | Wake up by "Hi, Lexin", then say "Jin Xian Shi"      | Wake up by "Hi, ESP", then say "Display Only"     |
+| Face Recognition  | Wake up by "Hi, Lexin", then say "Ren Lian Shi Bie"  | Wake up by "Hi, ESP", then say "Face Recognition" |
+| Motion Detection  | Wake up by "Hi, Lexin", then say "Yi Dong Zhen Ce"   | Wake up by "Hi, ESP", then say "Motion Detection" |
 
 
 
-#### 按键反馈
+#### By button
 
-当按下任意按键（不包括“boot”和“reset”），LED 灯会闪烁一秒。
+At any time, you can switch modes by pressing the "MENU" button. The modes will be switched in the following order: "Standby Mode" > "Real-time Display" > "Face Recognition" > "Motion Detection". Pressing the "MENU" button again will return to the "Standby Mode" and repeat.
+
+
+
+### LED interaction
+
+#### Feedback for speech
+
+When the wake-up word is spoken and the wake-up is successful, the LED light on the development kit lights up to wait for the command word. At this point,
+
+- If the command word is spoken within 6 seconds and recognized correctly, the LED will flash for one second and then go out to return to the state of waiting to wake up,
+- If the command word is not spoken or recognized correctly within 6 seconds, the LED goes out after 6 seconds and returns to the state to of waiting to wake up.
+
+
+
+#### Feedback for button
+
+When any button is pressed (excluding "boot" and "reset"), the LED will flash for one second.
