@@ -154,33 +154,32 @@ static void task(AppFace *self)
                     draw_detection_result((uint16_t *)frame->buf, frame->height, frame->width, detect_results);
                 }
 
-                if (self->state && detect_results.size() == 1)
+                if (self->state)
                 {
-                    switch (self->state)
+                    if (detect_results.size() == 1)
                     {
-                    case FACE_ENROLL:
-                        self->recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint, "", true);
-                        ESP_LOGI(TAG, "Enroll ID %d", self->recognizer->get_enrolled_ids().back().id);
-                        break;
+                        if (self->state == FACE_ENROLL)
+                        {
+                            self->recognizer->enroll_id((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint, "", true);
+                            ESP_LOGI(TAG, "Enroll ID %d", self->recognizer->get_enrolled_ids().back().id);
+                        }
+                        else if (self->state == FACE_RECOGNIZE)
+                        {
+                            self->recognize_result = self->recognizer->recognize((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint);
+                            // print_detection_result(detect_results);
+                            ESP_LOGD(TAG, "Similarity: %f", self->recognize_result.similarity);
+                            if (self->recognize_result.id > 0)
+                                ESP_LOGI(TAG, "Match ID: %d", self->recognize_result.id);
+                            else
+                                ESP_LOGI(TAG, "Match ID: %d", self->recognize_result.id);
+                        }
+                    }
 
-                    case FACE_RECOGNIZE:
-                        self->recognize_result = self->recognizer->recognize((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, detect_results.front().keypoint);
-                        // print_detection_result(detect_results);
-                        ESP_LOGD(TAG, "Similarity: %f", self->recognize_result.similarity);
-                        if (self->recognize_result.id > 0)
-                            ESP_LOGI(TAG, "Match ID: %d", self->recognize_result.id);
-                        else
-                            ESP_LOGI(TAG, "Match ID: %d", self->recognize_result.id);
-                        break;
-
-                    case FACE_DELETE:
+                    if (self->state == FACE_DELETE)
+                    {
                         vTaskDelay(10);
                         self->recognizer->delete_id(true);
                         ESP_LOGI(TAG, "%d IDs left", self->recognizer->get_enrolled_id_num());
-                        break;
-
-                    default:
-                        break;
                     }
 
                     self->state_previous = self->state;
