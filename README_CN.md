@@ -78,6 +78,11 @@ idf.py set-target [SoC]
 
 将 [SoC] 替换成您的目标芯片，例如 esp32、esp32s2、esp32s3。
 
+**注意：** 所有关于 `esp32s3` 的示例都是基于 ESP32-S3-EYE 开发的。所以默认的烧写和监听都设定为通过 USB。如果你正在使用 `esp32s3` 的其他开发板，请先确认是通过 USB 还是 UART 实现烧写和监听，
+
+- 如果通过 USB，保持默认配置即可，
+- 如果通过 UART，需要在 menuconfig 中修改烧写监听方法。
+
 ### （可选）步骤 2：摄像头配置
 
 若您使用的不是[硬件准备](#硬件准备)中提到的乐鑫开发板，则需自行配置摄像头管脚。在终端输入 `idf.py menuconfig`，依次点击 (Top) -> Component config -> ESP-WHO Configuration 可进入 ESP-WHO 的配置界面，如下图所示：

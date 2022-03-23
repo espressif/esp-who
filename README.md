@@ -50,10 +50,12 @@ All examples of ESP-WHO are stored in [examples](./examples) folder. Structure o
 ├── examples
 │   ├── cat_face_detection          // Cat Face Detection examples
 │   │   ├── lcd                     // Output displayed on LCD screen
+│   │   ├── web                     // Output displayed on web
 │   │   └── terminal                // Output displayed on terminal
 │   ├── code_recognition            // Barcode and QR Code Recognition examples
 │   ├── human_face_detection        // Human Face Detection examples
 │   │   ├── lcd
+│   │   ├── web
 │   │   └── terminal
 │   ├── human_face_recognition      // Human Face Recognition examples
 │   │   ├── lcd
@@ -61,8 +63,8 @@ All examples of ESP-WHO are stored in [examples](./examples) folder. Structure o
 │   │   └── README.md               // Detailed description of examples
 │   └── motion_detection            // Motion Detection examples
 │       ├── lcd 
-│       ├── terminal
 │       ├── web
+│       ├── terminal
 │       └── README.rst              
 ```
 
@@ -77,6 +79,11 @@ idf.py set-target [SoC]
 ```
 
 Replace [SoC] with your target chip, e.g. esp32, esp32s2, esp32s3.
+
+**NOTE:** we implement examples of target chip `esp32s3` with ESP32-S3-EYE by defaults. So that `flash` and `monitor` are through USB. If you are using other board, please confirm which method you will use first,
+
+- If by USB, just keep it in defaults,
+- If by UART, set it in menuconfig.
 
 ### (Optional) Step 2: Configure the camera
 
