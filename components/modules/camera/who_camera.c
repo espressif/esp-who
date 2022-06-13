@@ -26,7 +26,7 @@ void register_camera(const pixformat_t pixel_fromat,
 #if CONFIG_CAMERA_MODULE_ESP_EYE || CONFIG_CAMERA_MODULE_ESP32_CAM_BOARD
     /* IO13, IO14 is designed for JTAG by default,
      * to use it as generalized input,
-     * firstly declair it as pullup input */
+     * firstly declare it as pullup input */
     gpio_config_t conf;
     conf.mode = GPIO_MODE_INPUT;
     conf.pull_up_en = GPIO_PULLUP_ENABLE;
