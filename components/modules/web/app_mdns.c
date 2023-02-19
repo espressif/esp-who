@@ -179,6 +179,8 @@ void app_mdns_main()
 
     sensor_t * s = esp_camera_sensor_get();
     if(s == NULL){
+        ESP_LOGE(TAG, "esp_camera_sensor_get() Failed");
+        ESP_LOGE(TAG, "(camera must previously be initialized with esp_camera_init() to get sensor properties)");
         return;
     }
     switch(s->id.PID){
