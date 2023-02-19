@@ -10,7 +10,6 @@ static QueueHandle_t xQueueHttpFrame = NULL;
 extern "C" void app_main()
 {
     app_wifi_main();
-    app_mdns_main();
 
     xQueueAIFrame = xQueueCreate(2, sizeof(camera_fb_t *));
     xQueueHttpFrame = xQueueCreate(2, sizeof(camera_fb_t *));
@@ -18,4 +17,7 @@ extern "C" void app_main()
     register_camera(PIXFORMAT_RGB565, FRAMESIZE_QVGA, 2, xQueueAIFrame);
     register_human_face_detection(xQueueAIFrame, NULL, NULL, xQueueHttpFrame);
     register_httpd(xQueueHttpFrame, NULL, true);
+
+    // Must be done after camera initialization because it calls 'esp_camera_sensor_get'
+    app_mdns_main();
 }
