@@ -15,6 +15,12 @@ Before Step 4: Flash and Monitor in [ESP-WHO README](../../README.md), run `idf.
 ![](../../img/face_recognition_model_config.png)
 
 
+You can also configure the size of fr partition in partitions.csv to adjust number of faces to be stored in flash.
+The default partition size is 128K. You will be able to see information displayed as below:
+```
+I (1070) MFN: fr partition size: 131072 bytes, maxminum 62 IDs can be stored
+```
+
 ## Use the Example
 
 You can use the Boot button on the development board for interaction.

@@ -13,6 +13,11 @@
 进行 [ESP-WHO README](../../README_CN.md) 中的步骤 4：运行和监视之前，在终端输入 `idf.py menuconfig` ，依次点击 (Top) -> Component config -> ESP-WHO Configuration -> Model Configuration -> Face Recognition 进入下图所示的人脸识别模型配置界面，配置模型版本和量化方式：
 ![](../../img/face_recognition_model_config.png)
 
+您也可以通过在 partitions.csv 里配置 fr 分区的 size 来调节可以存储到 flash 的人脸的个数。
+默认的分区大小为 128 K. 您将能看到以下信息：
+```
+I (1070) MFN: fr partition size: 131072 bytes, maxminum 62 IDs can be stored
+```
 
 ## 使用示例
 
