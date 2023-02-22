@@ -206,11 +206,11 @@
 #if CONFIG_CAMERA_MODULE_ESP_S3_EYE
 #define LCD_CONTROLLER SCREEN_CONTROLLER_ST7789
 
-#define LCD_MOSI 46
+#define LCD_MOSI 47
 #define LCD_MISO -1
 #define LCD_SCLK 21
 #define LCD_CS 44
-#define LCD_DC 47
+#define LCD_DC 43
 #define LCD_RST -1
 #define LCD_BCKL 48
 
