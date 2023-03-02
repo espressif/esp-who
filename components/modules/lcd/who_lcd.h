@@ -2,7 +2,9 @@
 
 #include <stdint.h>
 #include "esp_log.h"
-#include "screen_driver.h"
+#include "esp_event.h"
+#include "driver/spi_master.h"
+#include "driver/gpio.h"
 
 #define BOARD_LCD_MOSI 47
 #define BOARD_LCD_MISO -1

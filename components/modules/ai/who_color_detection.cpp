@@ -150,7 +150,7 @@ static void task_process_handler(void *arg)
                 {
                 case INCREASE_COLOR_AREA:
                     color_thresh_boxes_index = min(color_thresh_boxes_num - 1, color_thresh_boxes_index + 1);
-                    ets_printf("increase color area\n");
+                    printf("increase color area\n");
                     dl::image::draw_hollow_rectangle((uint16_t *)frame->buf, (int)frame->height, (int)frame->width,
                                                      color_thresh_boxes[color_thresh_boxes_index][0],
                                                      color_thresh_boxes[color_thresh_boxes_index][1],
@@ -161,7 +161,7 @@ static void task_process_handler(void *arg)
 
                 case DECREASE_COLOR_AREA:
                     color_thresh_boxes_index = max(0, color_thresh_boxes_index - 1);
-                    ets_printf("decrease color area\n");
+                    printf("decrease color area\n");
                     dl::image::draw_hollow_rectangle((uint16_t *)frame->buf, (int)frame->height, (int)frame->width,
                                                      color_thresh_boxes[color_thresh_boxes_index][0],
                                                      color_thresh_boxes[color_thresh_boxes_index][1],
@@ -173,14 +173,14 @@ static void task_process_handler(void *arg)
                 case REGISTER_COLOR:
                     color_thresh = detector.cal_color_thresh((uint16_t *)frame->buf, {(int)frame->height, (int)frame->width, 3}, color_thresh_boxes[color_thresh_boxes_index]);
                     detector.register_color(color_thresh);
-                    ets_printf("register color, color_thresh: %d, %d, %d, %d, %d, %d\n", color_thresh[0], color_thresh[1], color_thresh[2], color_thresh[3], color_thresh[4], color_thresh[5]);
+                    printf("register color, color_thresh: %d, %d, %d, %d, %d, %d\n", color_thresh[0], color_thresh[1], color_thresh[2], color_thresh[3], color_thresh[4], color_thresh[5]);
                     xSemaphoreTake(xMutex, portMAX_DELAY);
                     register_mode = false;
                     xSemaphoreGive(xMutex);
                     break;
 
                 case CLOSE_REGISTER_COLOR_BOX:
-                    ets_printf("close register color box \n");
+                    printf("close register color box \n");
                     xSemaphoreTake(xMutex, portMAX_DELAY);
                     register_mode = false;
                     xSemaphoreGive(xMutex);
@@ -203,18 +203,18 @@ static void task_process_handler(void *arg)
                 case INCREASE_COLOR_AREA:
                     color_area_thresh_index = min(color_area_thresh_num - 1, color_area_thresh_index + 1);
                     detector.set_area_thresh({color_area_threshes[color_area_thresh_index]});
-                    ets_printf("increase color area thresh to %d\n", color_area_threshes[color_area_thresh_index]);
+                    printf("increase color area thresh to %d\n", color_area_threshes[color_area_thresh_index]);
                     break;
 
                 case DECREASE_COLOR_AREA:
                     color_area_thresh_index = max(0, color_area_thresh_index - 1);
                     detector.set_area_thresh({color_area_threshes[color_area_thresh_index]});
-                    ets_printf("decrease color area thresh to %d\n", color_area_threshes[color_area_thresh_index]);
+                    printf("decrease color area thresh to %d\n", color_area_threshes[color_area_thresh_index]);
                     break;
 
                 case DELETE_COLOR:
                     detector.delete_color();
-                    ets_printf("delete color \n");
+                    printf("delete color \n");
                     break;
 
                 default:
