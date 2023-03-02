@@ -180,6 +180,7 @@ void app_mdns_main()
 	}
 	xSemaphoreGive(query_lock);
 
+    // must be called after camera initialization
     sensor_t * s = esp_camera_sensor_get();
     if(s == NULL){
         ESP_LOGE(TAG, "esp_camera_sensor_get() Failed");
