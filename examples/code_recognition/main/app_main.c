@@ -3,6 +3,7 @@
 #include <string.h>
 #include "esp_log.h"
 #include "esp_system.h"
+#include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "app_peripherals.h"
@@ -20,8 +21,8 @@ static void decode_task()
     
     #ifdef LCD_CONTROLLER
     int USE_LCD = 0;
-    scr_driver_t g_lcd;
-    if (ESP_OK == app_lcd_init(&g_lcd))
+    esp_lcd_panel_handle_t panel_handle = NULL;
+    if (ESP_OK == app_lcd_init(&panel_handle))
         USE_LCD = 1;
     #endif
 
@@ -53,7 +54,7 @@ static void decode_task()
 
         #ifdef LCD_CONTROLLER
         if(USE_LCD){
-            g_lcd.draw_bitmap(0, 0, fb->width, fb->height, (uint16_t *)fb->buf);
+            esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, fb->width, fb->height, (uint16_t *)fb->buf);
         }
         #endif
 

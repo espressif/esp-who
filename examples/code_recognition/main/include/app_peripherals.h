@@ -6,7 +6,11 @@
 #include "freertos/semphr.h"
 
 #include "esp_camera.h"
-#include "screen_driver.h"
+#include "driver/spi_master.h"
+#include "driver/gpio.h"
+#include "esp_lcd_panel_io.h"
+#include "esp_lcd_panel_vendor.h"
+#include "esp_lcd_panel_ops.h"
 
 
 // camera pins
@@ -195,7 +199,7 @@
 #define CAMERA_PIN_PCLK CONFIG_CAMERA_PIN_PCLK
 #endif
 
-#define XCLK_FREQ_HZ 20000000
+#define XCLK_FREQ_HZ 15000000
 #define CAMERA_PIXFORMAT PIXFORMAT_RGB565
 #define CAMERA_FRAME_SIZE FRAMESIZE_240X240
 #define CAMERA_FB_COUNT 2
@@ -213,10 +217,13 @@
 #define LCD_DC 43
 #define LCD_RST -1
 #define LCD_BCKL 48
-
-#define LCD_WIDTH       240
-#define LCD_HEIGHT      240
-#define LCD_ROTATE      0
+#define LCD_CMD_BITS 8
+#define LCD_PARAM_BITS 8
+#define LCD_PIXEL_CLOCK_HZ (40 * 1000 * 1000)
+#define LCD_BK_LIGHT_ON_LEVEL 0
+#define LCD_BK_LIGHT_OFF_LEVEL !LCD_BK_LIGHT_ON_LEVEL
+#define LCD_H_RES       240
+#define LCD_V_RES       240
 #elif CONFIG_CAMERA_MODULE_ESP_S2_KALUGA
 #define LCD_CONTROLLER SCREEN_CONTROLLER_ST7789
 
@@ -227,11 +234,13 @@
 #define LCD_DC 13
 #define LCD_RST 16
 #define LCD_BCKL 6
-
-// LCD display width and height
-#define LCD_WIDTH       240
-#define LCD_HEIGHT      320
-#define LCD_ROTATE      SCR_SWAP_XY|SCR_MIRROR_X
+#define LCD_CMD_BITS 8
+#define LCD_PARAM_BITS 8
+#define LCD_PIXEL_CLOCK_HZ (40 * 1000 * 1000)
+#define LCD_BK_LIGHT_ON_LEVEL 0
+#define LCD_BK_LIGHT_OFF_LEVEL !LCD_BK_LIGHT_ON_LEVEL
+#define LCD_H_RES       240
+#define LCD_V_RES       320
 #endif
 
 
