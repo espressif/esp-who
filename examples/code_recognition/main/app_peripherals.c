@@ -1,7 +1,6 @@
 #include "app_peripherals.h"
 #include "esp_log.h"
 #include "esp_system.h"
-#include "st7789.h"
 
 static const char *TAG = "app_peripherals";
 
@@ -81,60 +80,60 @@ esp_err_t app_camera_init()
 
 
 #ifdef LCD_CONTROLLER
-esp_err_t app_lcd_init(scr_driver_t *g_lcd){
-    static scr_info_t g_lcd_info;
+esp_err_t app_lcd_init(esp_lcd_panel_handle_t *panel_handle){
+    gpio_config_t bk_gpio_config = {
+        .mode = GPIO_MODE_OUTPUT,
+        .pin_bit_mask = 1ULL << LCD_BCKL
+    };
+    ESP_ERROR_CHECK(gpio_config(&bk_gpio_config));
+    gpio_set_level(LCD_BCKL, LCD_BK_LIGHT_OFF_LEVEL);
 
-    spi_config_t bus_conf = {
-        .miso_io_num = LCD_MISO,
-        .mosi_io_num = LCD_MOSI,
+    spi_bus_config_t bus_conf = {
         .sclk_io_num = LCD_SCLK,
-        .max_transfer_sz = 2 * LCD_WIDTH * LCD_HEIGHT + 10,
+        .mosi_io_num = LCD_MOSI,
+        .miso_io_num = LCD_MISO,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+        .max_transfer_sz = LCD_H_RES * LCD_V_RES * sizeof(uint16_t),
     };
-    spi_bus_handle_t spi_bus = spi_bus_create(SPI2_HOST, &bus_conf);
+    ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &bus_conf, SPI_DMA_CH_AUTO));
 
-    scr_interface_spi_config_t spi_lcd_cfg = {
-        .spi_bus = spi_bus,
-        .pin_num_cs = LCD_CS,
-        .pin_num_dc = LCD_DC,
-        .clk_freq = 40 * 1000000,
-        .swap_data = 0,
+    ESP_LOGI(TAG, "Install panel IO");
+    esp_lcd_panel_io_handle_t io_handle = NULL;
+    esp_lcd_panel_io_spi_config_t io_config = {
+        .dc_gpio_num = LCD_DC,
+        .cs_gpio_num = LCD_CS,
+        .pclk_hz = LCD_PIXEL_CLOCK_HZ,
+        .lcd_cmd_bits = LCD_CMD_BITS,
+        .lcd_param_bits = LCD_PARAM_BITS,
+        .spi_mode = 0,
+        .trans_queue_depth = 10,
     };
+    // Attach the LCD to the SPI bus
+    ESP_ERROR_CHECK(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)SPI2_HOST, &io_config, &io_handle));
 
-    scr_interface_driver_t *iface_drv;
-    scr_interface_create(SCREEN_IFACE_SPI, &spi_lcd_cfg, &iface_drv);
-    esp_err_t ret = scr_find_driver(LCD_CONTROLLER, g_lcd);
-    if (ESP_OK != ret)
-    {
-        ESP_LOGE(TAG, "screen find failed");
-        return ESP_FAIL;
-    }
-
-    scr_controller_config_t lcd_cfg = {
-        .interface_drv = iface_drv,
-        .pin_num_rst = LCD_RST,
-        .pin_num_bckl = LCD_BCKL,
-        .rst_active_level = 0,
-        .bckl_active_level = 0,
-        .offset_hor = 0,
-        .offset_ver = 0,
-        .width = LCD_WIDTH,
-        .height = LCD_HEIGHT,
-        .rotate = LCD_ROTATE,
+    // ESP_LOGI(TAG, "Install ST7789 panel driver");
+    esp_lcd_panel_dev_config_t panel_config = {
+        .reset_gpio_num = LCD_RST,
+        .rgb_endian = LCD_RGB_ENDIAN_RGB,
+        .bits_per_pixel = 16,
     };
-    ret = g_lcd->init(&lcd_cfg);
-    if (ESP_OK != ret)
-    {
-        ESP_LOGE(TAG, "screen initialize failed");
-        return ESP_FAIL;
-    }
+    ESP_ERROR_CHECK(esp_lcd_new_panel_st7789(io_handle, &panel_config, panel_handle));
+    ESP_ERROR_CHECK(esp_lcd_panel_reset(*panel_handle));
+    ESP_ERROR_CHECK(esp_lcd_panel_init(*panel_handle));
     
     #if CONFIG_CAMERA_MODULE_ESP_S2_KALUGA
-    lcd_st7789_set_invert(false);
+    esp_lcd_panel_invert_color(*panel_handle, false);
+    esp_lcd_panel_mirror(*panel_handle, 1, 0); //mirror_x
+    esp_lcd_panel_swap_xy(*panel_handle, 1);//swap_xy
+    #else
+    esp_lcd_panel_invert_color(*panel_handle, true);// Set inversion for esp32s3eye
     #endif
 
-    g_lcd->get_info(&g_lcd_info);
-    ESP_LOGI(TAG, "Screen name:%s | width:%d | height:%d", g_lcd_info.name, g_lcd_info.width, g_lcd_info.height);
+    // turn on display
+    esp_lcd_panel_disp_on_off(*panel_handle, true);
 
+    gpio_set_level(LCD_BCKL, LCD_BK_LIGHT_ON_LEVEL);
     return ESP_OK;
 }
 #endif
