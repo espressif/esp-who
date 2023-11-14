@@ -30,7 +30,7 @@ ESP-WHO 提供了例如人脸检测、人脸识别、猫脸检测和手势识别
 
 ESP-WHO 的运行基于 ESP-IDF。关于获取 ESP-IDF 的细节，请参考 [ESP-IDF 编程指南](https://idf.espressif.com/)。
 
-该分支适用于 ESP-IDF [release/v5.0](https://github.com/espressif/esp-idf/tree/release/v5.0)。
+该分支适用于 ESP-IDF [release/v5.0](https://github.com/espressif/esp-idf/tree/release/v5.0)。假如你使用的是 ESP-IDF [release/v4.4](https://github.com/espressif/esp-idf/tree/release/v4.4)，请将 ESP-WHO 的分支切换到 master。
 
 #### 获取 ESP-WHO
 
