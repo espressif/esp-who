@@ -56,7 +56,7 @@ before_script:
 
 .build_template: &build_template
   stage: build
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  image: $CI_DOCKER_REGISTRY/target-test-env-v5.0:3
   tags:
     - build
   variables:
