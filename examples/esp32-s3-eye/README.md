@@ -1,5 +1,7 @@
 # ESP-S3-EYE [[中文](./README_CN.md)]
 
+Note that this example is not compatible with idf5.0 yet.
+
 This example is designed for [**ESP32-S3-EYE**](https://www.espressif.com/zh-hans/products/devkits) development kit **only**, which can help to get started with it easily and to experience the functions of speech wake-up, speech command recognition, human face detection and recognition.
 
 

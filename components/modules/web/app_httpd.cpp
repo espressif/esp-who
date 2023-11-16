@@ -81,7 +81,7 @@ static esp_err_t capture_handler(httpd_req_t *req)
         httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 
         char ts[32];
-        snprintf(ts, 32, "%ld.%06ld", frame->timestamp.tv_sec, frame->timestamp.tv_usec);
+        snprintf(ts, 32, "%lld.%06ld", frame->timestamp.tv_sec, frame->timestamp.tv_usec);
         httpd_resp_set_hdr(req, "X-Timestamp", (const char *)ts);
 
         // size_t fb_len = 0;

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "who_button.h"
-
+static const char *TAG = "WHO BUTTON";
 typedef struct
 {
     gpio_num_t io_num;
@@ -11,7 +11,7 @@ typedef struct
 #define LONG_PRESS_THRESH 700000
 #define DOUBLE_CLICK_THRESH 300000
 
-static xQueueHandle gpio_evt_queue = NULL;
+static QueueHandle_t gpio_evt_queue = NULL;
 static QueueHandle_t xQueueKeyStateO = NULL;
 
 static void IRAM_ATTR gpio_isr_handler_key(void *arg)
@@ -96,5 +96,6 @@ void register_button(const gpio_num_t key_io_num, const QueueHandle_t key_state_
 {
     xQueueKeyStateO = key_state_o;
     key_init(key_io_num);
+    ESP_LOGI(TAG, "key init done");
     xTaskCreatePinnedToCore(key_trigger, "key_scan_task", 1024, NULL, 5, NULL, 0);
 }

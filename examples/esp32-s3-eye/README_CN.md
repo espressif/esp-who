@@ -1,5 +1,7 @@
 # ESP-S3-EYE [[English](./README.md)]
 
+请注意：该示例暂不能在 idf5.0 环境下运行。
+
 该示例**仅适用于** [ESP32-S3-EYE](https://www.espressif.com/zh-hans/products/devkits) 开发板，能帮助你快速上手使用开发板，体验语音唤醒、语音命令识别、人脸检测和识别等功能。
 
 

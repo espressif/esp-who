@@ -28,7 +28,7 @@ static void task_trace(void *arg)
         vTaskGetRunTimeStats(buffer);
         printf("%s", buffer);
 #endif
-        vTaskDelay(1000 / portTICK_RATE_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
 
         free(buffer);
     }

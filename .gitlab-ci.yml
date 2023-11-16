@@ -3,22 +3,10 @@ stages:
   - deploy
 
 variables:
-  # System environment
-
-  # Common parameters for the 'make' during CI tests
-  MAKEFLAGS: "-j5 --no-keep-going"
-
-# GitLab-CI environment
-
-  # more attempts for more robust
-  GET_SOURCES_ATTEMPTS: "10"
-  ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
-
-  # We use get_sources.sh script to fetch the submodules and/or re-fetch the repo
-  # if it was corrupted (if submodule update fails this can happen)
-  GIT_STRATEGY: clone
-  GIT_SUBMODULE_STRATEGY: none
-  IDF_PATH: "$CI_PROJECT_DIR/esp-idf"
+  BATCH_BUILD: "1"
+  V: "0"
+  IDF_CI_BUILD: "1"
+  DOCKER_TARGET_TEST_v5_0_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.0:3"
 
 before_script:
   # add gitlab ssh key
@@ -28,119 +16,39 @@ before_script:
   - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-  # replace submodule esp-idf to internal repository to speedup cloning
-  - sed -i "s%https://github.com/espressif/esp-idf%${GITLAB_SSH_SERVER}/idf/esp-idf.git%" .gitmodules
-  - sed -i "s%https://github.com/espressif/esp-face%${GITLAB_SSH_SERVER}/face-recognition-framework/esp-face.git%" .gitmodules
-  - git submodule update --init
-  # (the same regular expressions are used to set these are used in 'only:' sections below
-  - source esp-idf/tools/ci/configure_ci_environment.sh
-
-  # fetch the submodules (& if necessary re-fetch repo) from gitlab
-  - time git submodule update --init --recursive
-
-  - ./esp-idf/install.sh
-  - . ./esp-idf/export.sh
-
-
-.add_gitlab_key_before:
-  before_script: &add_gitlab_key_before
-    - echo "Not fetching submodules"
-    - source ${IDF_PATH}/tools/ci/configure_ci_environment.sh
-    # add gitlab ssh key
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo -n $AUTO_KEY > ~/.ssh/id_rsa_base64
-    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - git --version
+  - git submodule update --init --recursive --force
+  - pip install idf_build_apps
+  - pip install -r tools/ci/requirements.txt
 
 .build_template: &build_template
+  - python -m idf_build_apps build -p $EXAMPLES_PATH --recursive --manifest-file $EXAMPLES_PATH/$MANIFEST_FILE -t all
+
+
+.build_examples_template:
   stage: build
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - build
   variables:
-    BATCH_BUILD: "1"
-    V: "0"
-
-.build_examples_make_template: &build_examples_make_template
-  <<: *build_template
-  retry: 1
-  artifacts:
-    when: always
-    paths:
-      - build_examples_make/*/*/build/*.bin
-      - build_examples_make/*/*/build/*.elf
-      - build_examples_make/*/*/build/*.map
-      - build_examples_make/*/*/build/bootloader/*.bin
-      - ${LOG_PATH}
-      - ${IDF_PATH}/tools/ci
-    expire_in: 1 week
-  variables:
-    LOG_PATH: "$CI_PROJECT_DIR/log_examples_make"
+    EXAMPLES_PATH: "examples"
+    MANIFEST_FILE: ".build-test-rules.yml"
   script:
-    # it's not possible to build 100% out-of-tree and have the "artifacts"
-    # mechanism work, but this is the next best thing
-    - rm -rf build_examples_make
-    - mkdir build_examples_make
-    - cd build_examples_make
-    - mkdir -p ${LOG_PATH}
-    - ${CI_PROJECT_DIR}/tools/ci/build_examples.sh
+    - *build_template
 
-.build_examples_cmake_template: &build_examples_cmake_template
-  <<: *build_template
-  retry: 1
-  artifacts:
-    when: always
-    paths:
-      - build_examples_cmake/*/*/build/*.bin
-      - build_examples_cmake/*/*/build/*.elf
-      - build_examples_cmake/*/*/build/*.map
-      - build_examples_cmake/*/*/*/build/flasher_args.json
-      - build_examples_cmake/*/*/build/bootloader/*.bin
-      - build_examples_cmake/*/*/build/partition_table/*.bin
-      - ${LOG_PATH}
-      - ${IDF_PATH}/tools/ci
-    expire_in: 1 week
-  variables:
-    LOG_PATH: "$CI_PROJECT_DIR/log_examples_cmake"
-  script:
-    # it's not possible to build 100% out-of-tree and have the "artifacts"
-    # mechanism work, but this is the next best thing
-    - rm -rf build_examples_cmake
-    - mkdir build_examples_cmake
-    - cd build_examples_cmake
-    - mkdir -p ${LOG_PATH}
-    - ${CI_PROJECT_DIR}/tools/ci/build_examples_cmake.sh
+build_idf_v5.0:
+  extends: .build_examples_template
+  image: espressif/idf:release-v5.0
 
-build_examples_make_00:
-  <<: *build_examples_make_template
-
-build_examples_make_01:
-  <<: *build_examples_make_template
-
-build_examples_cmake_00:
-  <<: *build_examples_cmake_template
-
-build_examples_cmake_01:
-  <<: *build_examples_cmake_template
 
 push_to_github:
   stage: deploy
-  image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
+  image: $CI_DOCKER_REGISTRY/esp-env-v4.4:1
   tags:
     - deploy
+  when: on_success
   only:
     - master
     - /^release\/v/
-  when: on_success
-  dependencies:
-    - build_examples_make_00
-    - build_examples_make_01
-    - build_examples_cmake_00
-    - build_examples_cmake_01
-  before_script:
-    - echo "skip default before_script"
   script:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -149,5 +57,5 @@ push_to_github:
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
     - git remote remove github &>/dev/null || true
-    - git remote add github git@github.com:espressif/esp-who.git
-    - ${IDF_PATH}/tools/ci/push_to_github.sh
+    - git remote add github git@github.com:espressif/esp-sr.git
+    - git push github "${CI_COMMIT_SHA}:refs/heads/${CI_COMMIT_REF_NAME}"

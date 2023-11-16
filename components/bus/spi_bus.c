@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -48,12 +49,12 @@ static _spi_bus_t s_spi_bus[2];
     }
 
 #define SPI_DEVICE_MUTEX_TAKE(p_spi_dev, ret) if (!xSemaphoreTake((p_spi_dev)->mutex, ESP_SPI_MUTEX_TICKS_TO_WAIT)) { \
-        ESP_LOGE(TAG, "spi device(%d) take mutex timeout, max wait = %d ticks", (int32_t)((p_spi_dev)->handle), ESP_SPI_MUTEX_TICKS_TO_WAIT); \
+        ESP_LOGE(TAG, "spi device(%"PRId32") take mutex timeout, max wait = %d ticks", (int32_t)((p_spi_dev)->handle), ESP_SPI_MUTEX_TICKS_TO_WAIT); \
         return (ret); \
     }
 
 #define SPI_DEVICE_MUTEX_GIVE(p_spi_dev, ret) if (!xSemaphoreGive((p_spi_dev)->mutex)) { \
-        ESP_LOGE(TAG, "spi device(%d) give mutex failed", (int32_t)((p_spi_dev)->handle)); \
+        ESP_LOGE(TAG, "spi device(%"PRId32") give mutex failed", (int32_t)((p_spi_dev)->handle)); \
         return (ret); \
     }
 
@@ -183,29 +184,6 @@ esp_err_t spi_bus_transfer_byte(spi_bus_device_handle_t dev_handle, uint8_t data
 esp_err_t spi_bus_transfer_bytes(spi_bus_device_handle_t dev_handle, const uint8_t *data_out, uint8_t *data_in, uint32_t data_len)
 {
     esp_err_t ret;
-#if 1
-#define MIN(a,b) (((a)<(b))?(a):(b))
-    uint32_t remain = data_len;
-    while (remain > 0) {
-        uint32_t chunk_len = MIN(remain, 2048);
-        spi_transaction_t trans = {
-            .length = chunk_len * 8,
-            .tx_buffer = NULL,
-            .rx_buffer = NULL
-        };
-
-        if (data_out) {
-            trans.tx_buffer = data_out+(data_len-remain);
-        }
-
-        if (data_in) {
-            trans.rx_buffer = data_in+(data_len-remain);
-        }
-        ret = _spi_device_polling_transmit(dev_handle, &trans);
-        SPI_BUS_CHECK(ret == ESP_OK, "spi transfer bytes failed", ret);
-        remain -= chunk_len;
-    }
-#else
     spi_transaction_t trans = {
         .length = data_len * 8,
         .tx_buffer = NULL,
@@ -222,8 +200,6 @@ esp_err_t spi_bus_transfer_bytes(spi_bus_device_handle_t dev_handle, const uint8
 
     ret = _spi_device_polling_transmit(dev_handle, &trans);
     SPI_BUS_CHECK(ret == ESP_OK, "spi transfer bytes failed", ret);
-
-#endif
 
     return ESP_OK;
 }
