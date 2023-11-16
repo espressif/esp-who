@@ -49,6 +49,7 @@ push_to_github:
   only:
     - master
     - /^release\/v/
+    - /^bugfix\/
   script:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -57,5 +58,5 @@ push_to_github:
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
     - git remote remove github &>/dev/null || true
-    - git remote add github git@github.com:espressif/esp-sr.git
+    - git remote add github git@github.com:espressif/esp-who.git
     - git push github "${CI_COMMIT_SHA}:refs/heads/${CI_COMMIT_REF_NAME}"
