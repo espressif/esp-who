@@ -49,7 +49,6 @@ push_to_github:
   only:
     - master
     - /^release\/v/
-    - /^bugfix\/
   script:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
