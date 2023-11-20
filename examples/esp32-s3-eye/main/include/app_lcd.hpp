@@ -1,6 +1,10 @@
 #pragma once
 
-#include "screen_driver.h"
+#include "driver/spi_master.h"
+#include "driver/gpio.h"
+#include "esp_lcd_panel_io.h"
+#include "esp_lcd_panel_vendor.h"
+#include "esp_lcd_panel_ops.h"
 
 #include "__base__.hpp"
 #include "app_camera.hpp"
@@ -21,7 +25,7 @@
 #define BOARD_LCD_V_RES 240
 #define BOARD_LCD_CMD_BITS 8
 #define BOARD_LCD_PARAM_BITS 8
-#define LCD_HOST SPI2_HOST
+// #define LCD_HOST SPI2_HOST
 
 class AppLCD : public Observer, public Frame
 {
@@ -30,7 +34,7 @@ private:
     AppSpeech *speech;
 
 public:
-    scr_driver_t driver;
+    esp_lcd_panel_handle_t panel_handle;
     bool switch_on;
     bool paper_drawn;
 

@@ -4,11 +4,6 @@
 
 #include "esp_log.h"
 #include "esp_camera.h"
-#include "esp_lcd_panel_io.h"
-#include "esp_lcd_panel_vendor.h"
-#include "esp_lcd_panel_ops.h"
-#include "driver/spi_master.h"
-#include "driver/gpio.h"
 
 #include "logo_en_240x240_lcd.h"
 
@@ -21,56 +16,49 @@ AppLCD::AppLCD(AppButton *key,
                void (*callback)(camera_fb_t *)) : Frame(queue_i, queue_o, callback),
                                                   key(key),
                                                   speech(speech),
+                                                  panel_handle(NULL),
                                                   switch_on(false)
 {
     do
     {
-        spi_config_t bus_conf = {
-            .miso_io_num = (gpio_num_t)BOARD_LCD_MISO,
-            .mosi_io_num = (gpio_num_t)BOARD_LCD_MOSI,
-            .sclk_io_num = (gpio_num_t)BOARD_LCD_SCK,
-            .max_transfer_sz = 2 * 240 * 240 + 10,
+        ESP_LOGI(TAG, "Initialize SPI bus");
+        spi_bus_config_t bus_conf = {
+            .mosi_io_num = BOARD_LCD_MOSI,
+            .miso_io_num = BOARD_LCD_MISO,
+            .sclk_io_num = BOARD_LCD_SCK,
+            .quadwp_io_num = -1,
+            .quadhd_io_num = -1,
+            .max_transfer_sz = BOARD_LCD_H_RES * BOARD_LCD_V_RES * sizeof(uint16_t),
         };
-        spi_bus_handle_t spi_bus = spi_bus_create(SPI2_HOST, &bus_conf);
+        ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &bus_conf, SPI_DMA_CH_AUTO));
 
-        scr_interface_spi_config_t spi_lcd_cfg = {
-            .spi_bus = spi_bus,
-            .pin_num_cs = BOARD_LCD_CS,
-            .pin_num_dc = BOARD_LCD_DC,
-            .clk_freq = 40 * 1000000,
-            .swap_data = 0,
+        ESP_LOGI(TAG, "Install panel IO");
+        esp_lcd_panel_io_handle_t io_handle = NULL;
+        esp_lcd_panel_io_spi_config_t io_config = {
+            .cs_gpio_num = BOARD_LCD_CS,
+            .dc_gpio_num = BOARD_LCD_DC,
+            .spi_mode = 0,
+            .pclk_hz = BOARD_LCD_PIXEL_CLOCK_HZ,
+            .trans_queue_depth = 10,
+            .lcd_cmd_bits = BOARD_LCD_CMD_BITS,
+            .lcd_param_bits = BOARD_LCD_PARAM_BITS,
         };
+        // Attach the LCD to the SPI bus
+        ESP_ERROR_CHECK(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)SPI2_HOST, &io_config, &io_handle));
 
-        scr_interface_driver_t *iface_drv;
-        scr_interface_create(SCREEN_IFACE_SPI, &spi_lcd_cfg, &iface_drv);
-        if (ESP_OK != scr_find_driver(SCREEN_CONTROLLER_ST7789, &this->driver))
-        {
-            ESP_LOGE(TAG, "screen find failed");
-            break;
-        }
-
-        scr_controller_config_t lcd_cfg = {
-            .interface_drv = iface_drv,
-            .pin_num_rst = BOARD_LCD_RST,
-            .pin_num_bckl = BOARD_LCD_BL,
-            .rst_active_level = 0,
-            .bckl_active_level = 0,
-            .width = 240,
-            .height = 240,
-            .offset_hor = 0,
-            .offset_ver = 0,
-            .rotate = (scr_dir_t)0,
+        // ESP_LOGI(TAG, "Install ST7789 panel driver");
+        esp_lcd_panel_dev_config_t panel_config = {
+            .reset_gpio_num = BOARD_LCD_RST,
+            .rgb_endian = LCD_RGB_ENDIAN_RGB,
+            .bits_per_pixel = 16,
         };
+        ESP_ERROR_CHECK(esp_lcd_new_panel_st7789(io_handle, &panel_config, &panel_handle));
+        ESP_ERROR_CHECK(esp_lcd_panel_reset(panel_handle));
+        ESP_ERROR_CHECK(esp_lcd_panel_init(panel_handle));
+        esp_lcd_panel_invert_color(panel_handle, true);// Set inversion for esp32s3eye
 
-        if (ESP_OK != this->driver.init(&lcd_cfg))
-        {
-            ESP_LOGE(TAG, "screen initialize failed");
-            break;
-        }
-
-        scr_info_t lcd_info;
-        this->driver.get_info(&lcd_info);
-        ESP_LOGI(TAG, "Screen name:%s | width:%d | height:%d", lcd_info.name, lcd_info.width, lcd_info.height);
+        // turn on display
+        esp_lcd_panel_disp_on_off(panel_handle, true);
 
         this->draw_color(0x000000);
         vTaskDelay(pdMS_TO_TICKS(500));
@@ -88,7 +76,7 @@ void AppLCD::draw_wallpaper()
         return;
     }
     memcpy(pixels, logo_en_240x240_lcd, (logo_en_240x240_lcd_width * logo_en_240x240_lcd_height) * sizeof(uint16_t));
-    this->driver.draw_bitmap(0, 0, logo_en_240x240_lcd_width, logo_en_240x240_lcd_height, (uint16_t *)pixels);
+    esp_lcd_panel_draw_bitmap(panel_handle, 0, 0, logo_en_240x240_lcd_width, logo_en_240x240_lcd_height, (uint16_t *)pixels);
     heap_caps_free(pixels);
 
     this->paper_drawn = true;
@@ -96,26 +84,24 @@ void AppLCD::draw_wallpaper()
 
 void AppLCD::draw_color(int color)
 {
-    scr_info_t lcd_info;
-    this->driver.get_info(&lcd_info);
-    uint16_t *buffer = (uint16_t *)malloc(lcd_info.width * sizeof(uint16_t));
-    if (buffer)
+    uint16_t *buffer = (uint16_t *)malloc(BOARD_LCD_H_RES * sizeof(uint16_t));
+    if (NULL == buffer)
     {
-        for (size_t i = 0; i < lcd_info.width; i++)
+        ESP_LOGE(TAG, "Memory for bitmap is not enough");
+    }
+    else
+    {
+        for (size_t i = 0; i < BOARD_LCD_H_RES; i++)
         {
             buffer[i] = color;
         }
 
-        for (int y = 0; y < lcd_info.height; y++)
+        for (int y = 0; y < BOARD_LCD_V_RES; y++)
         {
-            this->driver.draw_bitmap(0, y, lcd_info.width, 1, buffer);
+            esp_lcd_panel_draw_bitmap(panel_handle, 0, y, BOARD_LCD_H_RES, y+1, buffer);
         }
 
         free(buffer);
-    }
-    else
-    {
-        ESP_LOGE(TAG, "Memory for bitmap is not enough");
     }
 }
 
@@ -158,7 +144,7 @@ static void task(AppLCD *self)
         if (xQueueReceive(self->queue_i, &frame, portMAX_DELAY))
         {
             if (self->switch_on)
-                self->driver.draw_bitmap(0, 0, frame->width, frame->height, (uint16_t *)frame->buf);
+                esp_lcd_panel_draw_bitmap(self->panel_handle, 0, 0, frame->width, frame->height, (uint16_t *)frame->buf);
             else if (self->paper_drawn == false)
                 self->draw_wallpaper();
 
