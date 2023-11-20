@@ -3,14 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "driver/adc_common.h"
+#include "esp_timer.h"
 #include "esp_log.h"
-#include "esp_adc_cal.h"
+#include "soc/soc_caps.h"
+#include "esp_adc/adc_oneshot.h"
+#include "esp_adc/adc_cali.h"
+#include "esp_adc/adc_cali_scheme.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 // ADC Channels
-#define ADC1_EXAMPLE_CHAN0 ADC1_CHANNEL_0
+#define ADC1_EXAMPLE_CHAN0 ADC_CHANNEL_0
 // ADC Attenuation
 #define ADC_EXAMPLE_ATTEN ADC_ATTEN_DB_11
 // ADC Calibration
@@ -24,15 +27,30 @@
 #define ADC_EXAMPLE_CALI_SCHEME ESP_ADC_CAL_VAL_EFUSE_TP_FIT
 #endif
 
+static adc_oneshot_unit_handle_t adc1_handle = NULL;
+
 #define PRESS_INTERVAL 500000
 
 static const char *TAG = "App/Button";
 
 AppButton::AppButton() : key_configs({{BUTTON_MENU, 2800, 3000}, {BUTTON_PLAY, 2250, 2450}, {BUTTON_UP, 300, 500}, {BUTTON_DOWN, 850, 1050}}),
-                         pressed(BUTTON_IDLE)
+                         pressed(BUTTON_IDLE), menu(0)
 {
-    ESP_ERROR_CHECK(adc1_config_width((adc_bits_width_t)ADC_WIDTH_BIT_DEFAULT));
-    ESP_ERROR_CHECK(adc1_config_channel_atten(ADC1_EXAMPLE_CHAN0, ADC_EXAMPLE_ATTEN));
+    if (adc1_handle){
+        ESP_LOGE(TAG, "Button adc has been initialized");
+    }
+
+    adc_oneshot_unit_init_cfg_t init_config1 = {
+        .unit_id = ADC_UNIT_1,
+        .ulp_mode = ADC_ULP_MODE_DISABLE,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_new_unit(&init_config1, &adc1_handle));
+
+    adc_oneshot_chan_cfg_t config = {
+        .atten = ADC_ATTEN_DB_11,
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+    };
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(adc1_handle, ADC1_EXAMPLE_CHAN0, &config));
 }
 
 static void task(AppButton *self)
@@ -44,7 +62,8 @@ static void task(AppButton *self)
 
     while (true)
     {
-        uint32_t voltage = adc1_get_raw(ADC1_EXAMPLE_CHAN0);
+        int voltage = 0;
+        ESP_ERROR_CHECK(adc_oneshot_read(adc1_handle, ADC1_EXAMPLE_CHAN0, &voltage));
         backup_time = esp_timer_get_time();
         for (auto key_config : self->key_configs)
         {

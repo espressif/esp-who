@@ -1,83 +1,57 @@
 #include "app_speech.hpp"
 
-#include "driver/i2s.h"
+#include "driver/gpio.h"
+#include "driver/i2s_std.h"
+#include "driver/i2s_tdm.h"
+#include "soc/soc_caps.h"
+#include "esp_err.h"
 #include "esp_log.h"
 
-#include "dl_lib_coefgetter_if.h"
 #include "esp_wn_iface.h"
 #include "esp_wn_models.h"
 #include "esp_afe_sr_models.h"
 #include "esp_mn_iface.h"
 #include "esp_mn_models.h"
-#include "esp_spiffs.h"
 
 #define I2S_CHANNEL_NUM 1
 #define I2S_CH ((i2s_port_t)1)
 
 static const char *TAG = "App/Speech";
 
-static void spiffs_init(void)
-{
-    ESP_LOGI(TAG, "Initializing SPIFFS");
+static i2s_chan_handle_t                rx_handle = NULL;        // I2S rx channel handler
 
-    esp_vfs_spiffs_conf_t conf = {
-        .base_path = "/srmodel",
-        .partition_label = "model",
-        .max_files = 5,
-        .format_if_mount_failed = true};
-    // Use settings defined above to initialize and mount SPIFFS filesystem.
-    // Note: esp_vfs_spiffs_register is an all-in-one convenience function.
-    esp_err_t ret = esp_vfs_spiffs_register(&conf);
-    if (ret != ESP_OK)
-    {
-        if (ret == ESP_FAIL)
-        {
-            ESP_LOGE(TAG, "Failed to mount or format filesystem");
-        }
-        else if (ret == ESP_ERR_NOT_FOUND)
-        {
-            ESP_LOGE(TAG, "Failed to find SPIFFS partition");
-        }
-        else
-        {
-            ESP_LOGE(TAG, "Failed to initialize SPIFFS (%s)", esp_err_to_name(ret));
-        }
-        return;
-    }
-    size_t total = 0, used = 0;
-    ret = esp_spiffs_info("model", &total, &used);
-    if (ret != ESP_OK)
-    {
-        ESP_LOGE(TAG, "Failed to get SPIFFS partition information (%s)", esp_err_to_name(ret));
-    }
-    else
-    {
-        ESP_LOGI(TAG, "Partition size: total: %d, used: %d", total, used);
-    }
-}
 
-static void i2s_init(void)
+#define I2S_CONFIG_DEFAULT(sample_rate, channel_fmt, bits_per_chan) { \
+        .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(sample_rate), \
+        .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(bits_per_chan, channel_fmt), \
+        .gpio_cfg = { \
+            .mclk = GPIO_NUM_NC, \
+            .bclk = GPIO_NUM_41, \
+            .ws   = GPIO_NUM_42, \
+            .dout = GPIO_NUM_NC, \
+            .din  = GPIO_NUM_2, \
+            .invert_flags = { \
+                .mclk_inv = false, \
+                .bclk_inv = false, \
+                .ws_inv   = false, \
+            }, \
+        }, \
+    }
+
+static esp_err_t i2s_init(i2s_port_t i2s_num, uint32_t sample_rate, int channel_format, int bits_per_chan)
 {
-    i2s_config_t i2s_config = {
-        .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX), // the mode must be set according to DSP configuration
-        .sample_rate = 16000,                                // must be the same as DSP configuration
-        .bits_per_sample = (i2s_bits_per_sample_t)32,        // must be the same as DSP configuration
-        .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,         // must be the same as DSP configuration
-        .communication_format = I2S_COMM_FORMAT_STAND_I2S,
-        .intr_alloc_flags = ESP_INTR_FLAG_LEVEL2,
-        .dma_buf_count = 3,
-        .dma_buf_len = 300,
-    };
-    i2s_pin_config_t pin_config = {
-        .mck_io_num = I2S_PIN_NO_CHANGE,
-        .bck_io_num = 41,                  // IIS_SCLK
-        .ws_io_num = 42,                   // IIS_LCLK
-        .data_out_num = I2S_PIN_NO_CHANGE, // IIS_DSIN
-        .data_in_num = 2                   // IIS_DOUT
-    };
-    i2s_driver_install(I2S_CH, &i2s_config, 0, NULL);
-    i2s_set_pin(I2S_CH, &pin_config);
-    i2s_zero_dma_buffer(I2S_CH);
+    esp_err_t ret_val = ESP_OK;
+
+    i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(i2s_num, I2S_ROLE_MASTER);
+
+    ret_val |= i2s_new_channel(&chan_cfg, NULL, &rx_handle);
+    i2s_std_config_t std_cfg = I2S_CONFIG_DEFAULT(16000, I2S_SLOT_MODE_MONO, I2S_DATA_BIT_WIDTH_32BIT);
+    std_cfg.slot_cfg.slot_mask = I2S_STD_SLOT_LEFT;
+    // std_cfg.clk_cfg.mclk_multiple = EXAMPLE_MCLK_MULTIPLE;   //The default is I2S_MCLK_MULTIPLE_256. If not using 24-bit data width, 256 should be enough
+    ret_val |= i2s_channel_init_std_mode(rx_handle, &std_cfg);
+    ret_val |= i2s_channel_enable(rx_handle);
+
+    return ret_val;
 }
 
 static void feed_handler(AppSpeech *self)
@@ -85,8 +59,8 @@ static void feed_handler(AppSpeech *self)
     esp_afe_sr_data_t *afe_data = self->afe_data;
     int audio_chunksize = self->afe_handle->get_feed_chunksize(afe_data);
     int nch = self->afe_handle->get_channel_num(afe_data);
-    size_t samp_len = audio_chunksize * I2S_CHANNEL_NUM;
-    size_t samp_len_bytes = samp_len * sizeof(int32_t);
+    size_t samp_len = audio_chunksize;
+    size_t samp_len_bytes = samp_len * I2S_CHANNEL_NUM * sizeof(int32_t);
     int32_t *i2s_buff = (int32_t *)malloc(samp_len_bytes);
     assert(i2s_buff);
     size_t bytes_read;
@@ -95,7 +69,7 @@ static void feed_handler(AppSpeech *self)
 
     while (true)
     {
-        i2s_read(I2S_CH, i2s_buff, samp_len_bytes, &bytes_read, portMAX_DELAY);
+        i2s_channel_read(rx_handle, i2s_buff, samp_len_bytes, &bytes_read, portMAX_DELAY);
 
         for (int i = 0; i < samp_len; ++i)
         {
@@ -106,6 +80,10 @@ static void feed_handler(AppSpeech *self)
         self->afe_handle->feed(afe_data, (int16_t *)i2s_buff);
     }
     self->afe_handle->destroy(afe_data);
+    if (i2s_buff) {
+        free(i2s_buff);
+        i2s_buff = NULL;
+    }
     vTaskDelete(NULL);
 }
 
@@ -113,97 +91,122 @@ static void detect_hander(AppSpeech *self)
 {
     esp_afe_sr_data_t *afe_data = self->afe_data;
     int afe_chunksize = self->afe_handle->get_fetch_chunksize(afe_data);
-    int nch = self->afe_handle->get_channel_num(afe_data);
-    int16_t *buff = (int16_t *)malloc(afe_chunksize * sizeof(int16_t));
-    assert(buff);
-
-    static const esp_mn_iface_t *multinet = &MULTINET_MODEL;
-    model_iface_data_t *model_data = multinet->create((const model_coeff_getter_t *)&MULTINET_COEFF, 5760);
+    char *mn_name = esp_srmodel_filter(self->models, ESP_MN_PREFIX, ESP_MN_CHINESE);
+    ESP_LOGI(TAG, "multinet:%s\n", mn_name);
+    esp_mn_iface_t *multinet = esp_mn_handle_from_name(mn_name);
+    model_iface_data_t *model_data = multinet->create(mn_name, 6000);
+    esp_mn_commands_update_from_sdkconfig(multinet, model_data); // Add speech commands from sdkconfig
     int mu_chunksize = multinet->get_samp_chunksize(model_data);
-    int chunk_num = multinet->get_samp_chunknum(model_data);
     assert(mu_chunksize == afe_chunksize);
 
     // FILE *fp = fopen("/sdcard/out", "w");
     // if (fp == NULL) ESP_LOGE(TAG,"can not open file\n");
 
+    //print active speech commands
+    multinet->print_active_speech_commands(model_data);
     ESP_LOGI(TAG, "Ready");
 
     self->detected = false;
 
     while (true)
     {
-        int res = self->afe_handle->fetch(afe_data, buff);
+        afe_fetch_result_t* res = self->afe_handle->fetch(afe_data); 
+        if (!res || res->ret_value == ESP_FAIL) {
+            ESP_LOGE(TAG, "fetch error!\n");
+            break;
+        }
 
-        if (res == AFE_FETCH_WWE_DETECTED)
-        {
+        if (res->wakeup_state == WAKENET_DETECTED) {
+            ESP_LOGI(TAG, "WAKEWORD DETECTED\n");
+	        multinet->clean(model_data);  // clean all status of multinet
+        } else if (res->wakeup_state == WAKENET_CHANNEL_VERIFIED) {
+            ESP_LOGI(TAG, "AFE_FETCH_CHANNEL_VERIFIED, channel index: %d\n", res->trigger_channel_id);
             ESP_LOGI(TAG, ">>> Say your command <<<");
             self->detected = true;
             self->afe_handle->disable_wakenet(afe_data);
             self->notify();
         }
 
-        if (self->detected)
-        {
-            // Detect command
-            self->command = (command_word_t)multinet->detect(model_data, buff);
-            // FatfsComboWrite(buff, afe_chunksize * sizeof(int16_t), 1, fp);
+        if (self->detected) {
+            esp_mn_state_t mn_state = multinet->detect(model_data, res->data);
 
-            if (self->command == COMMAND_NOT_DETECTED)
+            if (mn_state == ESP_MN_STATE_DETECTING) {
+                self->command = COMMAND_NOT_DETECTED;
                 continue;
-            else if (self->command == COMMAND_TIMEOUT)
-            {
+            } else if (mn_state == ESP_MN_STATE_DETECTED) {
+                esp_mn_results_t *mn_result = multinet->get_results(model_data);
+                for (int i = 0; i < mn_result->num; i++) {
+                    ESP_LOGI(TAG, "TOP %d, command_id: %d, phrase_id: %d, string:%s prob: %f\n", 
+                    i+1, mn_result->command_id[i], mn_result->phrase_id[i], mn_result->string, mn_result->prob[i]);
+                }
+                self->command = (command_word_t)mn_result->command_id[0];
+                self->notify();
                 self->afe_handle->enable_wakenet(afe_data);
-                // self->afe_handle->enable_aec(afe_data);
-
                 self->detected = false;
                 ESP_LOGI(TAG, ">>> Waiting to be waken up <<<");
-                self->notify();
-            }
-            else
-            {
-                self->notify();
-                ESP_LOGI(TAG, "Command: %d", self->command);
-
-#ifndef CONFIG_SR_MN_CN_MULTINET3_CONTINUOUS_RECOGNITION
-                self->afe_handle->enable_wakenet(afe_data);
-                // self->afe_handle->enable_aec(afe_data);
-                self->detected = false;
-                ESP_LOGI(TAG, ">>> Waiting to be waken up <<<");
-#endif
                 self->command = COMMAND_TIMEOUT;
+                self->notify();
+            } else if (mn_state == ESP_MN_STATE_TIMEOUT) {
+                esp_mn_results_t *mn_result = multinet->get_results(model_data);
+                ESP_LOGI(TAG, "timeout, string:%s\n", mn_result->string);
+                self->command = COMMAND_TIMEOUT;
+                self->afe_handle->enable_wakenet(afe_data);
+                self->detected = false;
+                ESP_LOGI(TAG, ">>> Waiting to be waken up <<<");
                 self->notify();
             }
         }
+    }
+    if (model_data) {
+        multinet->destroy(model_data);
+        model_data = NULL;
     }
     self->afe_handle->destroy(afe_data);
     vTaskDelete(NULL);
 }
 
-AppSpeech::AppSpeech() : afe_handle(&esp_afe_sr_1mic), detected(false), command(COMMAND_TIMEOUT)
+AppSpeech::AppSpeech() : afe_handle(&ESP_AFE_SR_HANDLE), detected(false), command(COMMAND_TIMEOUT)
 {
-    spiffs_init();
-    i2s_init();
+    this->models = esp_srmodel_init("model");
+    i2s_init(I2S_NUM_1, 16000, 2, 32);
     // sd_card_mount("/sdcard");
     afe_config_t afe_config = {
         .aec_init = true,
         .se_init = true,
         .vad_init = true,
         .wakenet_init = true,
-        .vad_mode = 3,
-        .wakenet_model = &WAKENET_MODEL,
-        .wakenet_coeff = (const model_coeff_getter_t *)&WAKENET_COEFF,
+        .voice_communication_init = false,
+        .voice_communication_agc_init = false,
+        .voice_communication_agc_gain = 15,
+        .vad_mode = VAD_MODE_3,
+        .wakenet_model_name = NULL,
+        .wakenet_model_name_2 = NULL,
         .wakenet_mode = DET_MODE_2CH_90,
         .afe_mode = SR_MODE_LOW_COST,
         .afe_perferred_core = 0,
         .afe_perferred_priority = 5,
         .afe_ringbuf_size = 50,
-        .alloc_from_psram = AFE_PSRAM_MEDIA_COST,
-        .agc_mode = 2,
+        .memory_alloc_mode = AFE_MEMORY_ALLOC_MORE_PSRAM,
+        .afe_linear_gain = 1.0,
+        .agc_mode = AFE_MN_PEAK_AGC_MODE_2,
+        .pcm_config = {
+            .total_ch_num = 3,
+            .mic_num = 2,
+            .ref_num = 1,
+            .sample_rate = 16000,
+        },
+        .debug_init = false,
+        .debug_hook = {{AFE_DEBUG_HOOK_MASE_TASK_IN, NULL}, {AFE_DEBUG_HOOK_FETCH_TASK_IN, NULL}},
     };
     afe_config.aec_init = false;
     afe_config.se_init = false;
     afe_config.vad_init = false;
     afe_config.afe_ringbuf_size = 10;
+    afe_config.pcm_config.total_ch_num = 2;
+    afe_config.pcm_config.mic_num = 1;
+    afe_config.pcm_config.ref_num = 1;
+    afe_config.pcm_config.sample_rate = 16000;
+    afe_config.wakenet_model_name = esp_srmodel_filter(this->models, ESP_WN_PREFIX, NULL);
     this->afe_data = this->afe_handle->create_from_config(&afe_config);
 }
 
