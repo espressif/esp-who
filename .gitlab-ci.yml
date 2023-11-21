@@ -1,29 +1,18 @@
 stages:
   - build
-  - deploy
 
 variables:
   BATCH_BUILD: "1"
   V: "0"
   IDF_CI_BUILD: "1"
-  DOCKER_TARGET_TEST_v5_0_ENV_IMAGE: "$CI_DOCKER_REGISTRY/target-test-env-v5.0:3"
 
 before_script:
-  # add gitlab ssh key
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - echo -n $GITLAB_KEY > ~/.ssh/id_rsa_base64
-  - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
-  - chmod 600 ~/.ssh/id_rsa
-  - echo -e "Host gitlab.espressif.cn\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-  - git --version
   - git submodule update --init --recursive --force
   - pip install idf_build_apps
   - pip install -r tools/ci/requirements.txt
 
 .build_template: &build_template
   - python -m idf_build_apps build -p $EXAMPLES_PATH --recursive --manifest-file $EXAMPLES_PATH/$MANIFEST_FILE -t all
-
 
 .build_examples_template:
   stage: build
@@ -39,23 +28,3 @@ build_idf_v5.0:
   extends: .build_examples_template
   image: espressif/idf:release-v5.0
 
-
-push_to_github:
-  stage: deploy
-  image: $CI_DOCKER_REGISTRY/esp-env-v4.4:1
-  tags:
-    - deploy
-  when: on_success
-  only:
-    - master
-    - /^release\/v/
-  script:
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo -n $GH_PUSH_KEY > ~/.ssh/id_rsa_base64
-    - base64 --decode --ignore-garbage ~/.ssh/id_rsa_base64 > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-    - git remote remove github &>/dev/null || true
-    - git remote add github git@github.com:espressif/esp-who.git
-    - git push github "${CI_COMMIT_SHA}:refs/heads/${CI_COMMIT_REF_NAME}"
