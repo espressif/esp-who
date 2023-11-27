@@ -23,12 +23,10 @@ set(include_dirs
                     trace
                     imu)
 
-set(requires    esp32-camera
+set(requires    bus
                 esp-dl
-                bus
                 esp_http_server
                 nvs_flash
-                mdns
                 esp_adc
                 esp_lcd
                 esp_timer
