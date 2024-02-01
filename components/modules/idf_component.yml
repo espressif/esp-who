@@ -6,3 +6,8 @@ dependencies:
   espressif/mdns:
     version: "^1"
     public: true
+  espressif/esp32_s3_eye_noglib:
+    version: "~3.0.3"
+    public: true
+    rules:
+      - if: "target in [esp32s3]" 
