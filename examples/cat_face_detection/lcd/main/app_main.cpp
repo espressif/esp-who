@@ -1,7 +1,6 @@
 #include "who_camera.h"
 #include "who_cat_face_detection.hpp"
 #include "who_lcd.h"
-#include "who_trace.h"
 
 static QueueHandle_t xQueueAIFrame = NULL;
 static QueueHandle_t xQueueLCDFrame = NULL;
