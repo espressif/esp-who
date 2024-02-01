@@ -3,28 +3,19 @@ set(embed_files "web/www/index_ov2640.html.gz"
                 "web/www/index_ov5640.html.gz"
                 "web/www/monitor.html.gz")
 
-set(src_dirs    
-                ai
+set(src_dirs    ai
                 camera
                 lcd
-                led
                 button
-                web
-                trace
-                imu)
+                web)
 
-set(include_dirs    
-                    ai
+set(include_dirs    ai
                     camera
                     lcd
-                    led
                     button
-                    web
-                    trace
-                    imu)
+                    web)
 
-set(requires    bus
-                esp-dl
+set(requires    esp-dl
                 esp_http_server
                 nvs_flash
                 esp_adc
