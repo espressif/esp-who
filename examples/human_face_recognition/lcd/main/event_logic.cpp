@@ -1,84 +1,55 @@
 #include <stdio.h>
 #include "event_logic.hpp"
-#include "who_button.h"
 #include "who_human_face_recognition.hpp"
+#include "iot_button.h"
 
-typedef enum
-{
-    MENU = 1,
-    PLAY,
-    UP,
-    DOWN
-}key_name_t;
+#define GPIO_BOOT GPIO_NUM_0
 
-static QueueHandle_t xQueueKeyStateI = NULL;
 static QueueHandle_t xQueueEventO = NULL;
-static key_state_t key_state;
-static key_name_t adc_button_name;
 static recognizer_state_t recognizer_state;
+static button_handle_t boot_button;
 
-void event_generate(void *arg)
+void button_cb(void *button_handle, void *usr_data)
 {
-    while (1)
+    button_event_t event = iot_button_get_event(button_handle);
+    switch (event)
     {
-        xQueueReceive(xQueueKeyStateI, &key_state, portMAX_DELAY);
-        switch (key_state)
-        {
-        case KEY_SHORT_PRESS:
-            recognizer_state = RECOGNIZE;
-            break;
+    case BUTTON_SINGLE_CLICK:
+        recognizer_state = RECOGNIZE;
+        break;
 
-        case KEY_LONG_PRESS:
-            recognizer_state = ENROLL;
-            break;
+    case BUTTON_LONG_PRESS_START:
+        recognizer_state = ENROLL;
+        break;
 
-        case KEY_DOUBLE_CLICK:
-            recognizer_state = DELETE;
-            break;
+    case BUTTON_DOUBLE_CLICK:
+        recognizer_state = DELETE;
+        break;
 
-        default:
-            recognizer_state = DETECT;
-            break;
-        }
-        xQueueSend(xQueueEventO, &recognizer_state, portMAX_DELAY);
+    default:
+        recognizer_state = DETECT;
+        break;
     }
+    xQueueSend(xQueueEventO, &recognizer_state, portMAX_DELAY);
 }
 
-
-void event_generate_from_adc_button(void *arg)
+void register_button_events(const QueueHandle_t event_o)
 {
-    while (1)
-    {
-        xQueueReceive(xQueueKeyStateI, &adc_button_name, portMAX_DELAY);
-        switch (adc_button_name)
-        {
-        case MENU:
-            recognizer_state = ENROLL;
-            break;
-
-        case PLAY:
-            recognizer_state = DELETE;
-            break;
-
-        case UP:
-            recognizer_state = RECOGNIZE;
-            break;
-
-        case DOWN:
-            recognizer_state = RECOGNIZE;
-            break;
-
-        default:
-            recognizer_state = DETECT;
-            break;
-        }
-        xQueueSend(xQueueEventO, &recognizer_state, portMAX_DELAY);
-    }
-}
-
-void register_event(const QueueHandle_t key_state_i, const QueueHandle_t event_o)
-{
-    xQueueKeyStateI = key_state_i;
+    // Save output Queue
     xQueueEventO = event_o;
-    xTaskCreatePinnedToCore(event_generate, "event_logic_task", 1024, NULL, 5, NULL, 0);
+
+    // Init BOOT button
+    button_config_t boot_button_config;
+    boot_button_config.type = BUTTON_TYPE_GPIO;
+    boot_button_config.long_press_time = 1500;
+    boot_button_config.short_press_time = 100;
+    boot_button_config.gpio_button_config.gpio_num = GPIO_BOOT;
+    boot_button_config.gpio_button_config.active_level = 0;
+    boot_button = iot_button_create(&boot_button_config);
+    assert(boot_button);
+
+    // Register button callbacks
+    iot_button_register_cb(boot_button, BUTTON_SINGLE_CLICK, button_cb, NULL);
+    iot_button_register_cb(boot_button, BUTTON_DOUBLE_CLICK, button_cb, NULL);
+    iot_button_register_cb(boot_button, BUTTON_LONG_PRESS_START, button_cb, NULL);
 }

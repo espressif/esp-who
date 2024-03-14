@@ -6,13 +6,11 @@ set(embed_files "web/www/index_ov2640.html.gz"
 set(src_dirs    ai
                 camera
                 lcd
-                button
                 web)
 
 set(include_dirs    ai
                     camera
                     lcd
-                    button
                     web)
 
 set(requires    esp-dl

@@ -2,12 +2,10 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
-#include "freertos/task.h"
 
 /**
- * @brief 
+ * @brief Register button events
  * 
- * @param key_state_i 
- * @param event_o 
+ * @param[in] event_o Queue handle where the events will be added
  */
-void register_event(const QueueHandle_t key_state_i, const QueueHandle_t event_o);
+void register_button_events(const QueueHandle_t event_o);
