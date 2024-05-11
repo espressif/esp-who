@@ -28,6 +28,7 @@
   - [5.2. 原理图](#52-原理图)
   - [5.3. PCB 布局图](#53-pcb-布局图)
   - [5.4. 尺寸图](#54-尺寸图)
+  - [5.5 3D打印外壳](#55-3D打印外壳)
 
 本指南将帮助您快速上手 ESP32-S3-EYE v2.2，并提供该款开发板的详细信息。
 
@@ -224,6 +225,7 @@ ESP32-S3-EYE 出厂即烧录[默认固件](https://github.com/espressif/esp-who/
 
 -   1 个 MicroSD 存储卡
 -   1 块锂电池
+-   1 套[3D打印外壳](#55-3D打印外壳)
 
 > **注意**
 >
@@ -338,6 +340,23 @@ ESP32-S3-EYE 没有 USB 至 UART 桥接器，可能会出现已烧写的程序�
 -   [ESP32-S3-EYE-MB v2.2 主板背面尺寸图源文件](https://dl.espressif.com/dl/schematics/DXF_ESP32-S3-EYE_MB_Bottom_V2.2_20211207.dxf) (DXF) - 可使用 [Autodesk Viewer](https://viewer.autodesk.com/) 查看
 -   [ESP32-S3-EYE-MB v2.1 主板背面尺寸图源文件](https://dl.espressif.com/dl/schematics/DXF_ESP32-S3-EYE_MB_Bottom_V2.1_20211111.dxf) (DXF) - 可使用 [Autodesk Viewer](https://viewer.autodesk.com/) 查看
 -   [ESP32-S3-EYE-SUB 子板尺寸图源文件](https://dl.espressif.com/dl/schematics/DXF_ESP32-S3-EYE_SUB_V1.1_20211111.dxf) (DXF) - 可使用 [Autodesk Viewer](https://viewer.autodesk.com/) 查看
+
+
+## 5.5. 3D打印外壳
+
+以下的3D模型是一个由两部分组成的外壳，您可以为您的ESP32-S3-EYE 3D打印出来。请注意，所有3D打印产品会有公差差异。您的成功记录可能会有所不同。
+
+- [ESP32-S3-EYE 上壳](../../_static/get-started/ESP32-S3-EYE_3dpcase_top.STL)
+- [ESP32-S3-EYE 下壳](../../_static/get-started/ESP32-S3-EYE_3dpcase_btm.STL)
+
+<center>
+
+|![ESP32-S3-EYE - 外壳 在拓竹P1S上3D打印](../../_static/get-started/S3-eye_banner_photo.png)| 
+|:--:| 
+|ESP32-S3-EYE - 外壳 在拓竹P1S上3D打印|
+
+</center>
+
 
 有关本开发板的更多设计文档，请联系我们的商务部门 [<sales@espressif.com>](sales@espressif.com)。
 
