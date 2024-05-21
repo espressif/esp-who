@@ -28,6 +28,7 @@
   - [5.2. Schematic](#52-schematic)
   - [5.3. PCB Layout](#53-pcb-layout)
   - [5.4. Dimensions](#54-dimensions)
+  - [5.5. 3D Printed Case](#55-3d-printed-case)
 
 This user guide will help you get started with ESP32-S3-EYE v2.2 and will also provide more in-depth information.
 
@@ -223,6 +224,7 @@ This section provides instructions on how to do hardware/software setup and flas
 
 -   1 x MicroSD card
 -   1 x Li-ion battery
+-   1 x [3D Printed case](#55-3d-printed-case)
 
 > **Notice**
 >
@@ -338,5 +340,20 @@ In case this issue occurs, you need to:
 -   [ESP32-S3-EYE-MB v2.2 Main Board Back Dimensions Source File](https://dl.espressif.com/dl/schematics/DXF_ESP32-S3-EYE_MB_Bottom_V2.2_20211207.dxf) (DXF) - You can view it with [Autodesk Viewer](https://viewer.autodesk.com/) online
 -   [ESP32-S3-EYE-MB v2.1 Main Board Back Dimensions Source File](https://dl.espressif.com/dl/schematics/DXF_ESP32-S3-EYE_MB_Bottom_V2.1_20211111.dxf) (DXF) - You can view it with [Autodesk Viewer](https://viewer.autodesk.com/) online
 -   [ESP32-S3-EYE-SUB Sub Board Dimensions Source File](https://dl.espressif.com/dl/schematics/DXF_ESP32-S3-EYE_SUB_V1.1_20211111.dxf) (DXF) - You can view it with [Autodesk Viewer](https://viewer.autodesk.com/) online
+
+## 5.5. 3D Printed Case
+
+The following 3D model is a two-part case you can 3D print for your ESP32-S3-EYE. Do note that with all 3D Printed products, there will be a variance in tolerance and fitting. Your success may vary.
+
+- [ESP32-S3-EYE Top Case](../../_static/get-started/ESP32-S3-EYE_3dpcase_top.STL)
+- [ESP32-S3-EYE Bottom Case](../../_static/get-started/ESP32-S3-EYE_3dpcase_btm.STL)
+
+<center>
+
+|![ESP32-S3-EYE - Case 3D printed on BambuLab P1S](../../_static/get-started/S3-eye_banner_photo.png)| 
+|:--:| 
+|ESP32-S3-EYE - Case 3D printed on [BambuLab P1S](https://bambulab.com/en/p1)|
+
+</center>
 
 For further design documentation for the board, please contact us at [<sales@espressif.com>](sales@espressif.com).
