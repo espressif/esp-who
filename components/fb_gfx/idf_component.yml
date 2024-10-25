@@ -1,5 +1,0 @@
-## IDF Component Manager Manifest File
-dependencies:
-  espressif/esp32-camera:
-    version: "^2"
-    public: true
