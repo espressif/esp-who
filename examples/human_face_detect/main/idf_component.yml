@@ -1,9 +1,0 @@
-## IDF Component Manager Manifest File
-dependencies:
-  idf: ">=5.4"
-  espressif/human_face_detect: "==0.1.0~1"
-  espressif/esp_video: "==0.7.0"
-  # compilation problem in newest version, update later
-  espressif/esp32_p4_function_ev_board: "==4.0.1"
-  espressif/esp_lvgl_port: "==2.3.3"
-  lvgl/lvgl: "==9.2.0"

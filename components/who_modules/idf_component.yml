@@ -1,0 +1,9 @@
+## IDF Component Manager Manifest File
+dependencies:
+  idf: ">=5.4"
+  espressif/human_face_recognition:
+    version: "^0.1.1"
+  espressif/esp_video:
+    version: "^0.7.0"
+    rules:
+     - if: "target == esp32p4"
