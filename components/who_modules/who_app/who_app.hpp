@@ -1,21 +1,25 @@
 #pragma once
 #include "human_face_detect.hpp"
 #include "human_face_recognition.hpp"
+#include "pedestrian_detect.hpp"
+#include "who_lcd.hpp"
 
 namespace who {
 namespace cam {
 class Cam;
 }
 namespace app {
-class WhoHumanFaceDetect {
+class WhoDetect {
 public:
-    WhoHumanFaceDetect(HumanFaceDetect *detect, who::cam::Cam *cam) : m_detect(detect), m_cam(cam) {};
+    WhoDetect(dl::detect::Detect *detect, who::cam::Cam *cam, who::lcd::result_type_t type) :
+        m_detect(detect), m_cam(cam), m_type(type) {};
     void run();
 
 private:
     static void task(void *args);
-    HumanFaceDetect *m_detect;
+    dl::detect::Detect *m_detect;
     who::cam::Cam *m_cam;
+    who::lcd::result_type_t m_type;
 };
 
 class WhoHumanFaceRecognition {
@@ -33,7 +37,9 @@ public:
 private:
     static void event_handle_task(void *args);
     static void recognition_task(void *args);
-    static void btn_event_handler(lv_event_t *e);
+    static void lvgl_btn_event_handler(lv_event_t *e);
+    static void iot_btn_event_handler(void *button_handle, void *usr_data);
+    static void btn_event_handler(fr_event_t fr_event);
     static void create_btns();
     static void create_label();
     HumanFaceDetect *m_detect;

@@ -4,7 +4,7 @@
 
 extern "C" void app_main(void)
 {
-#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
+#if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 #if CONFIG_IDF_TARGET_ESP32P4
@@ -14,8 +14,8 @@ extern "C" void app_main(void)
 #endif
 
     who::lcd::LCD *lcd = new who::lcd::LCD();
-#if !CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
-    HumanFaceDetect *detect = new HumanFaceDetect();
+#if !CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
+    PedestrianDetect *detect = new PedestrianDetect();
 #else
     char dir[64];
 #if CONFIG_IDF_TARGET_ESP32P4
@@ -23,7 +23,7 @@ extern "C" void app_main(void)
 #elif CONFIG_IDF_TARGET_ESP32S3
     snprintf(dir, sizeof(dir), "%s/espdl_models/s3", CONFIG_BSP_SD_MOUNT_POINT);
 #endif
-    HumanFaceDetect *detect = new HumanFaceDetect(dir);
+    PedestrianDetect *detect = new PedestrianDetect(dir);
 #endif
 
     who::cam::WhoCam *who_cam = new who::cam::WhoCam(cam);
@@ -32,7 +32,7 @@ extern "C" void app_main(void)
     who_lcd->run();
     who_cam->run();
     who_detect->run();
-#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
+#if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_unmount());
 #endif
 }

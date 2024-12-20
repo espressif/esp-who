@@ -5,10 +5,10 @@ static const char *TAG = "who::cam";
 
 namespace who {
 namespace cam {
-SemaphoreHandle_t P4Cam::s_mutex = xSemaphoreCreateMutex();
 TaskHandle_t WhoCam::s_task_handle = nullptr;
 
 #if CONFIG_IDF_TARGET_ESP32P4
+SemaphoreHandle_t P4Cam::s_mutex = xSemaphoreCreateMutex();
 P4Cam::P4Cam(const video_pix_fmt_t video_pix_fmt,
              const uint8_t fb_count,
              const v4l2_memory fb_mem_type,
@@ -56,6 +56,10 @@ cam_fb_t *P4Cam::cam_fb_get()
 
 cam_fb_t *P4Cam::cam_fb_peek(bool back)
 {
+    if (m_buf_queue.empty()) {
+        ESP_LOGW(TAG, "Can not peek an empty frame buffer queue.");
+        return nullptr;
+    }
     if (back) {
         xSemaphoreTake(s_mutex, portMAX_DELAY);
         struct v4l2_buffer buf = m_buf_queue.back();
@@ -80,11 +84,11 @@ void P4Cam::cam_fb_return()
         buf.m.userptr = (unsigned long)m_cam_fbs[buf.index].buf;
         buf.length = m_cam_fbs[buf.index].len;
     }
+    xSemaphoreTake(s_mutex, portMAX_DELAY);
     if (ioctl(m_fd, VIDIOC_QBUF, &buf) != 0) {
         ESP_LOGE(TAG, "failed to queue video frame");
         return;
     }
-    xSemaphoreTake(s_mutex, portMAX_DELAY);
     m_buf_queue.pop();
     xSemaphoreGive(s_mutex);
 }
@@ -313,6 +317,91 @@ esp_err_t P4Cam::stop_video_stream()
 }
 
 #elif CONFIG_IDF_TARGET_ESP32S3
+SemaphoreHandle_t S3Cam::s_mutex = xSemaphoreCreateMutex();
+S3Cam::S3Cam(const pixformat_t pixel_format,
+             const framesize_t frame_size,
+             const uint8_t fb_count,
+             bool horizontal_flip) :
+    Cam(fb_count)
+{
+    ESP_ERROR_CHECK(bsp_i2c_init());
+    camera_config_t camera_config = BSP_CAMERA_DEFAULT_CONFIG;
+    camera_config.pixel_format = pixel_format;
+    camera_config.frame_size = frame_size;
+    camera_config.fb_count = fb_count;
+    if (pixel_format == PIXFORMAT_JPEG) {
+        camera_config.xclk_freq_hz = 20000000;
+    }
+    ESP_ERROR_CHECK(esp_camera_init(&camera_config));
+    sensor_t *s = esp_camera_sensor_get();
+    if (s->id.PID == OV3660_PID || s->id.PID == OV2640_PID || s->id.PID == GC032A_PID) {
+        s->set_vflip(s, 1);
+    }
+    if (horizontal_flip) {
+        ESP_ERROR_CHECK(set_horizontal_flip());
+    }
+}
+
+S3Cam::~S3Cam()
+{
+    xSemaphoreTake(s_mutex, portMAX_DELAY);
+    while (!m_buf_queue.empty()) {
+        esp_camera_fb_return(m_buf_queue.front());
+        m_buf_queue.pop();
+    }
+    xSemaphoreGive(s_mutex);
+}
+
+cam_fb_t *S3Cam::cam_fb_get()
+{
+    if (m_buf_queue.size() + 1 >= m_fb_count) {
+        ESP_LOGW(TAG, "Can not get more frame buffer.");
+        return nullptr;
+    }
+    cam_fb_t *fb = esp_camera_fb_get();
+    xSemaphoreTake(s_mutex, portMAX_DELAY);
+    m_buf_queue.push(fb);
+    xSemaphoreGive(s_mutex);
+    return fb;
+}
+
+cam_fb_t *S3Cam::cam_fb_peek(bool back)
+{
+    if (m_buf_queue.empty()) {
+        ESP_LOGW(TAG, "Can not peek an empty frame buffer queue.");
+        return nullptr;
+    }
+    cam_fb_t *fb;
+    if (back) {
+        xSemaphoreTake(s_mutex, portMAX_DELAY);
+        fb = m_buf_queue.back();
+        xSemaphoreGive(s_mutex);
+    } else {
+        xSemaphoreTake(s_mutex, portMAX_DELAY);
+        fb = m_buf_queue.front();
+        xSemaphoreGive(s_mutex);
+    }
+    return fb;
+}
+
+void S3Cam::cam_fb_return()
+{
+    if (m_buf_queue.empty()) {
+        ESP_LOGW(TAG, "Can not return more frame buffer.");
+        return;
+    }
+    xSemaphoreTake(s_mutex, portMAX_DELAY);
+    esp_camera_fb_return(m_buf_queue.front());
+    m_buf_queue.pop();
+    xSemaphoreGive(s_mutex);
+}
+
+esp_err_t S3Cam::set_horizontal_flip()
+{
+    sensor_t *s = esp_camera_sensor_get();
+    int ret = s->set_hmirror(s, 1);
+    return (ret == 0) ? ESP_OK : ESP_FAIL;
+}
 
 #endif
 
@@ -334,7 +423,7 @@ void WhoCam::task(void *args)
 
 void WhoCam::run()
 {
-    if (xTaskCreatePinnedToCore(task, "WhoCam", 1536, this, 2, &s_task_handle, 0) != pdPASS) {
+    if (xTaskCreatePinnedToCore(task, "WhoCam", 2048, this, 2, &s_task_handle, 0) != pdPASS) {
         ESP_LOGE(TAG, "Failed to create WhoCam task.\n");
     };
 }

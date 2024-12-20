@@ -6,6 +6,8 @@
 #include <memory>
 #include "bsp/esp-bsp.h"
 
+LV_FONT_DECLARE(montserrat_bold_26);
+
 namespace who {
 namespace lcd {
 typedef enum {
@@ -36,6 +38,22 @@ public:
     void draw_detect_result(const std::list<dl::detect::result_t> &detect_res);
     static lv_obj_t *create_btn(const char *text, lv_obj_t *parent = lv_scr_act());
     static lv_obj_t *create_label(const char *text, lv_obj_t *parent = lv_scr_act());
+    static lv_color_t cvt_little_endian_color(const lv_color_t &color)
+    {
+        lv_color_t new_color;
+        new_color.red = (color.green & 0x1c) << 3 | (color.blue & 0xc0) >> 3;
+        new_color.green = (color.blue & 0x38) << 2 | (color.red & 0xe0) >> 3;
+        new_color.blue = (color.red & 0x18) << 3 | (color.green & 0xe0) >> 2;
+        return new_color;
+    }
+    static lv_color_t get_color_by_palette(lv_palette_t palette)
+    {
+#if CONFIG_IDF_TARGET_ESP32P4
+        return lv_palette_main(palette);
+#elif CONFIG_IDF_TARGET_ESP32S3
+        return cvt_little_endian_color(lv_palette_main(palette));
+#endif
+    }
 
 private:
     lv_obj_t *m_canvas;
@@ -43,6 +61,7 @@ private:
     lv_draw_rect_dsc_t m_rect_dsc;
     lv_draw_arc_dsc_t m_arc_dsc;
     lv_layer_t m_layer;
+    esp_lcd_panel_handle_t m_panel_handle;
 };
 
 class WhoLCD {

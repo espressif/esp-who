@@ -25,6 +25,7 @@
 namespace who {
 namespace cam {
 
+#if CONFIG_IDF_TARGET_ESP32P4
 typedef enum {
     VIDEO_PIX_FMT_RAW8_BGGR = V4L2_PIX_FMT_SBGGR8,
     VIDEO_PIX_FMT_RGB565 = V4L2_PIX_FMT_RGB565,
@@ -33,7 +34,6 @@ typedef enum {
     VIDEO_PIX_FMT_YUV422P = V4L2_PIX_FMT_YUV422P,
 } video_pix_fmt_t;
 
-#if CONFIG_IDF_TARGET_ESP32P4
 typedef struct {
     void *buf;
     size_t len;
@@ -128,7 +128,30 @@ private:
 
 #elif CONFIG_IDF_TARGET_ESP32S3
 using cam_fb_t = camera_fb_t;
-class S3Cam : public Cam {};
+
+inline dl::image::img_t fb2img(const cam_fb_t *fb)
+{
+    assert(fb->format == PIXFORMAT_RGB565 || fb->format == PIXFORMAT_RGB888);
+    return {.data = fb->buf,
+            .width = (int)fb->width,
+            .height = (int)fb->height,
+            .pix_type = (fb->format == PIXFORMAT_RGB565) ? dl::image::DL_IMAGE_PIX_TYPE_RGB565
+                                                         : dl::image::DL_IMAGE_PIX_TYPE_RGB888};
+}
+
+class S3Cam : public Cam {
+public:
+    S3Cam(const pixformat_t pixel_format, const framesize_t frame_size, const uint8_t fb_count, bool horizontal_flip);
+    ~S3Cam();
+    cam_fb_t *cam_fb_get() override;
+    cam_fb_t *cam_fb_peek(bool back = true) override;
+    void cam_fb_return() override;
+    static SemaphoreHandle_t s_mutex;
+
+private:
+    esp_err_t set_horizontal_flip() override;
+    std::queue<cam_fb_t *> m_buf_queue;
+};
 #endif
 
 class WhoCam {
