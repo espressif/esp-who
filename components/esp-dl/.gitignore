@@ -1,0 +1,24 @@
+.vscode/
+build/
+sdkconfig.old
+sdkconfig
+bin/
+.idea/
+__pycache__/
+
+# unit test
+test_apps/*/*/build_*
+test_apps/*/override-result.sdkconfig
+pytest_log
+
+dependencies.lock
+managed_components/
+**/*/sdkconfig.model.*
+
+examples/*/**/build_*
+test_apps/esp-dl/models/*/**/*.onnx
+test_apps/esp-dl/models/*/**/*.info
+test_apps/esp-dl/models/*/**/*.json
+
+.DS_Store
+docs/_build/

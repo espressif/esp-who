@@ -1,0 +1,7 @@
+menu "Test Model"
+
+config MODEL_FILE_PATH
+	string "test"
+	default "model_1.bin"
+
+endmenu

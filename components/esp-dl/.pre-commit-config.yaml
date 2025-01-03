@@ -1,0 +1,48 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+default_stages: [pre-commit]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        # note: whitespace exclusions use multiline regex, see https://pre-commit.com/#regular-expressions
+        # items are:
+        # 1 - some file extensions
+        # 2 - any file matching *test*/*expected* (for host tests, if possible use this naming pattern always)
+        # 3 - any directory named 'testdata'
+        # 4 - protobuf auto-generated files
+        exclude: &whitespace_excludes |
+          (?x)^(
+            .+\.(md|rst|map|bin|yml|ini|svg|fbs|info|jpg)|
+            .+test.*\/.*expected.*|
+            .+\/testdata\/.+|
+            .*_pb2.py|
+            .*.pb-c.h|
+            .*.pb-c.c|
+            .*.yuv|
+            .*.rgb|
+            .+\/flatbuffers\/.+|
+            .schema_generated.h
+          )$
+      - id: end-of-file-fixer
+        exclude: *whitespace_excludes
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        types_or: [c, c++, text]
+        args: ['--fix=lf']
+        description: Forces to replace line ending by the UNIX 'lf' character
+
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.8
+    hooks:
+      - id: clang-format
+        types_or: [c++, c, cuda]
+        args: ['--style=file']

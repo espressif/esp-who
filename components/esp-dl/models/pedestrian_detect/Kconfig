@@ -1,0 +1,28 @@
+menu "models: pedestrian_detect"
+    config PEDESTRIAN_DETECT_PICO_S8_V1
+        bool "pedestrian_detect_pico_s8_v1"
+        default y
+
+    config PEDESTRIAN_DETECT_MODEL_TYPE
+        int
+        default 0 if PEDESTRIAN_DETECT_PICO_S8_V1
+
+    choice
+        prompt "model location"
+        default PEDESTRIAN_DETECT_MODEL_IN_FLASH_RODATA
+        help
+            pedestrian_detect model location
+        config PEDESTRIAN_DETECT_MODEL_IN_FLASH_RODATA
+            bool "flash_rodata"
+        config PEDESTRIAN_DETECT_MODEL_IN_FLASH_PARTITION
+            bool "flash_partition"
+        config PEDESTRIAN_DETECT_MODEL_IN_SDCARD
+            bool "sdcard"
+    endchoice
+
+    config PEDESTRIAN_DETECT_MODEL_LOCATION
+        int
+        default 0 if PEDESTRIAN_DETECT_MODEL_IN_FLASH_RODATA
+        default 1 if PEDESTRIAN_DETECT_MODEL_IN_FLASH_PARTITION
+        default 2 if PEDESTRIAN_DETECT_MODEL_IN_SDCARD
+endmenu

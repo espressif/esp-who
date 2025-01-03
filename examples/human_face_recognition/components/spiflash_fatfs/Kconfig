@@ -1,4 +1,4 @@
-menu "example: human_face_recognition"
+menu "esp-who: human_face_recognition"
     config SPIFLASH_MOUNT_POINT
         string "spiflash fatfs mount point"
         default "/spiflash"

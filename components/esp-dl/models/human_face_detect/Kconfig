@@ -1,0 +1,28 @@
+menu "models: human_face_detect"
+    config HUMAN_FACE_DETECT_MSRMNP_S8_V1
+        bool "human_face_detect_msrmnp_s8_v1"
+        default y
+
+    config HUMAN_FACE_DETECT_MODEL_TYPE
+        int
+        default 0 if HUMAN_FACE_DETECT_MSRMNP_S8_V1
+
+    choice
+        prompt "model location"
+        default HUMAN_FACE_DETECT_MODEL_IN_FLASH_RODATA
+        help
+            human_face_detect model location
+        config HUMAN_FACE_DETECT_MODEL_IN_FLASH_RODATA
+            bool "flash_rodata"
+        config HUMAN_FACE_DETECT_MODEL_IN_FLASH_PARTITION
+            bool "flash_partition"
+        config HUMAN_FACE_DETECT_MODEL_IN_SDCARD
+            bool "sdcard"
+    endchoice
+
+    config HUMAN_FACE_DETECT_MODEL_LOCATION
+        int
+        default 0 if HUMAN_FACE_DETECT_MODEL_IN_FLASH_RODATA
+        default 1 if HUMAN_FACE_DETECT_MODEL_IN_FLASH_PARTITION
+        default 2 if HUMAN_FACE_DETECT_MODEL_IN_SDCARD
+endmenu

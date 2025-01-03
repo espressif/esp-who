@@ -1,4 +1,4 @@
-menu "example: human_face_recognition"
+menu "esp-who: human_face_recognition"
     choice DB_FILE_SYSTEM
         prompt "database file system"
         default DB_SPIFFS

@@ -1,0 +1,13 @@
+## IDF Component Manager Manifest File
+dependencies:
+  espressif/pedestrian_detect:
+    version: "^0.2.0"
+    override_path: "../../../models/pedestrian_detect"
+  espressif/esp32_p4_function_ev_board_noglib:
+    version: "^4.0.1"
+    rules:
+     - if: "target == esp32p4"
+  espressif/esp32_s3_eye_noglib:
+    version: "^3.1.0~1"
+    rules:
+     - if: "target == esp32s3"

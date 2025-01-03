@@ -1,0 +1,14 @@
+examples/human_face_detect:
+  enable:
+    - if: IDF_TARGET in ["esp32p4"]
+      temporary: false
+
+examples/pedestrian_detect:
+  enable:
+    - if: IDF_TARGET in ["esp32p4"]
+      temporary: false
+
+examples/mobilenet_v2:
+  enable:
+    - if: IDF_TARGET in ["esp32p4"]
+      temporary: false

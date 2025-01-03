@@ -1,7 +1,10 @@
 #include "spiflash_fatfs.hpp"
-#include "who_app.hpp"
-#include "who_cam.hpp"
-#include "who_lcd.hpp"
+#include "who_cam_lcd.hpp"
+#include "who_recognition.hpp"
+
+using namespace who::app;
+using namespace who::cam;
+using namespace dl::detect;
 
 extern "C" void app_main(void)
 {
@@ -15,11 +18,11 @@ extern "C" void app_main(void)
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 #if CONFIG_IDF_TARGET_ESP32P4
-    who::cam::Cam *cam = new who::cam::P4Cam(who::cam::VIDEO_PIX_FMT_RGB565, 5, V4L2_MEMORY_MMAP, true);
+    auto cam = new P4Cam(VIDEO_PIX_FMT_RGB565, 5, V4L2_MEMORY_MMAP, true);
 #elif CONFIG_IDF_TARGET_ESP32S3
-    who::cam::Cam *cam = new who::cam::S3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 5, true);
+    auto cam = new S3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 4, true);
 #endif
-    who::lcd::LCD *lcd = new who::lcd::LCD();
+    auto who_cam_lcd = new WhoCamLCD(cam);
 #if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD || CONFIG_HUMAN_FACE_FEAT_MODEL_IN_SDCARD
     char dir[64];
 #if CONFIG_IDF_TARGET_ESP32P4
@@ -52,12 +55,8 @@ extern "C" void app_main(void)
     auto human_face_recognizer = new HumanFaceRecognizer(
         human_face_feat, db_path, static_cast<dl::recognition::db_type_t>(CONFIG_DB_FILE_SYSTEM));
 
-    who::cam::WhoCam *who_cam = new who::cam::WhoCam(cam);
-    who::lcd::WhoLCD *who_lcd = new who::lcd::WhoLCD(lcd, cam, 2);
-    who::app::WhoHumanFaceRecognition *who_recognition =
-        new who::app::WhoHumanFaceRecognition(human_face_detect, human_face_recognizer, cam);
-    who_lcd->run();
-    who_cam->run();
+    auto who_recognition = new WhoHumanFaceRecognition(human_face_detect, human_face_recognizer, cam);
+    who_cam_lcd->run();
     who_recognition->run();
 #if !CONFIG_DB_FATFS_SDCARD && (CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD || CONFIG_HUMAN_FACE_FEAT_MODEL_IN_SDCARD)
     ESP_ERROR_CHECK(bsp_sdcard_unmount());

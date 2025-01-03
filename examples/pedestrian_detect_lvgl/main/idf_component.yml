@@ -1,0 +1,8 @@
+## IDF Component Manager Manifest File
+dependencies:
+  espressif/pedestrian_detect:
+    version: "^0.2.0"
+    override_path: "../../../components/esp-dl/models/pedestrian_detect"
+  espressif/esp_lvgl_port:
+    public: true
+    version: ^2

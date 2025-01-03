@@ -1,0 +1,8 @@
+version: "0.2.0"
+license: "MIT"
+description: pedestrian detect model.
+url: https://github.com/espressif/esp-dl/tree/master/models/pedestrian_detect
+dependencies: 
+  espressif/esp-dl:
+    version: "^3.1.0"
+    override_path: "../../esp-dl"

@@ -1,0 +1,4 @@
+dependencies:
+  espressif/human_face_recognition:
+    version: "^0.2.0"
+    override_path: "../esp-dl/models/human_face_recognition"

@@ -1,19 +1,28 @@
-#include "who_app.hpp"
-#include "who_cam.hpp"
-#include "who_lcd.hpp"
+#include "pedestrian_detect.hpp"
+#include "who_cam_lcd.hpp"
+#include "who_detect.hpp"
 
+using namespace who::app;
+using namespace who::lcd;
+using namespace who::cam;
+using namespace dl::detect;
 extern "C" void app_main(void)
 {
 #if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
-#if CONFIG_IDF_TARGET_ESP32P4
-    who::cam::Cam *cam = new who::cam::P4Cam(who::cam::VIDEO_PIX_FMT_RGB565, 5, V4L2_MEMORY_MMAP, true);
-#elif CONFIG_IDF_TARGET_ESP32S3
-    who::cam::Cam *cam = new who::cam::S3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 5, true);
-#endif
 
-    who::lcd::LCD *lcd = new who::lcd::LCD();
+#if CONFIG_IDF_TARGET_ESP32P4
+#if CONFIG_USE_PPA_CAM
+    auto cam = new PPAP4Cam(VIDEO_PIX_FMT_RGB565, 6, V4L2_MEMORY_MMAP, 224, 224, true);
+#else
+    auto cam = new P4Cam(VIDEO_PIX_FMT_RGB565, 5, V4L2_MEMORY_MMAP, true);
+#endif
+#elif CONFIG_IDF_TARGET_ESP32S3
+    auto cam = new S3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 4, true);
+#endif
+    auto who_cam_lcd = new WhoCamLCD(cam);
+
 #if !CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
     PedestrianDetect *detect = new PedestrianDetect();
 #else
@@ -25,12 +34,12 @@ extern "C" void app_main(void)
 #endif
     PedestrianDetect *detect = new PedestrianDetect(dir);
 #endif
+    auto who_detect = new WhoDetect(detect, cam, "PedestrianDet");
 
-    who::cam::WhoCam *who_cam = new who::cam::WhoCam(cam);
-    who::lcd::WhoLCD *who_lcd = new who::lcd::WhoLCD(lcd, cam, 1);
-    who::app::WhoDetect *who_detect = new who::app::WhoDetect(detect, cam, who::lcd::FACE_DETECT_RESULT_TYPE);
-    who_lcd->run();
-    who_cam->run();
+    who_cam_lcd->run();
+
+    // delay to ensure who_cam_lcd is ready.
+    vTaskDelay(pdMS_TO_TICKS(100));
     who_detect->run();
 #if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_unmount());
