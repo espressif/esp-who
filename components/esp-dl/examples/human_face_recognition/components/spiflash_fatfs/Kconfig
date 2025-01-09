@@ -1,9 +1,0 @@
-menu "models: human_face_recognition"
-    config SPIFLASH_MOUNT_POINT
-        string "spiflash fatfs mount point"
-        default "/spiflash"
-
-    config SPIFLASH_MOUNT_PARTITION
-        string "spiflash fatfs mount partition"
-        default "storage"
-endmenu

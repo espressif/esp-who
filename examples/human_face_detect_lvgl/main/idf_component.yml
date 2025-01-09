@@ -1,8 +1,7 @@
 ## IDF Component Manager Manifest File
 dependencies:
   espressif/human_face_detect:
-    version: "^0.2.0"
-    override_path: "../../../components/esp-dl/models/human_face_detect"
+    version: "*"
   espressif/esp_lvgl_port:
     public: true
-    version: ^2
+    version: "*"

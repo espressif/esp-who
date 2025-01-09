@@ -1,8 +1,0 @@
-version: "0.2.0"
-license: "MIT"
-description: imagenet classification model.
-url: https://github.com/espressif/esp-dl/tree/master/models/imagenet_cls
-dependencies: 
-  espressif/esp-dl:
-    version: "^3.1.0"
-    override_path: "../../esp-dl"

@@ -1,8 +1,0 @@
-version: "0.2.0"
-license: "MIT"
-description: human face recognition model.
-url: https://github.com/espressif/esp-dl/tree/master/models/human_face_recognition
-dependencies: 
-  espressif/human_face_detect:
-    version: "^0.2.0"
-    override_path: "../human_face_detect"

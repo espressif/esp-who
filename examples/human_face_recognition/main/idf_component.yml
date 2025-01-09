@@ -2,4 +2,4 @@
 dependencies:
   espressif/esp_lvgl_port:
     public: true
-    version: ^2
+    version: "*"
