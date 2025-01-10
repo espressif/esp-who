@@ -1,11 +1,15 @@
-| Supported Targets | ESP32-P4 |
-| ----------------- | -------- |
+| Supported Targets | ESP32-S3 | ESP32-P4 |
+| ----------------- | -------- | -------- |
 
 
 # Human Face Detect Example
 
-Connect lcd and camera to esp32-p4-function-ev-board.  
-https://docs.espressif.com/projects/esp-dev-kits/zh_CN/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html
+### Personalized configuration
 
-Flash with latest esp-idf
-The master branch of esp-idf should be ok.
+You can change these options in menuconfig.
+
+1. USE_PPA_CAM  
+    Use pixel-processing accelerator (PPA) to asynchronously resize the camera frame.
+    Hardware resize instead of software resize can reduce the cpu load or provide higher
+    fps but it will use more psram to store the resized frame.
+
