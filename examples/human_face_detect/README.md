@@ -8,12 +8,4 @@ Connect lcd and camera to esp32-p4-function-ev-board.
 https://docs.espressif.com/projects/esp-dev-kits/zh_CN/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html
 
 Flash with latest esp-idf
-test with esp-idf commit 5910fc8270214efed34aa6cf3d5199d9c2929789
-
-esp32s3  
-
-| btn  | opertion         |
-|------|------------------|
-| play | recognize        |
-| up   | enroll           |
-| down | delete last feat |
+The master branch of esp-idf should be ok.

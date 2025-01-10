@@ -1,0 +1,9 @@
+menu "esp-who: detect"
+    config USE_PPA_CAM
+        bool "Enable PPA to process every cam frame."
+        help 
+            Use pixel-processing accelerator (PPA) to asynchronously resize the camera frame.
+            Hardware resize instead of software resize can reduce the cpu load but it will use
+            more psram to store the resized frame.
+        default n
+endmenu

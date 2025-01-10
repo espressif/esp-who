@@ -1,0 +1,3 @@
+dependencies:
+  espressif/human_face_recognition:
+    version: "*"

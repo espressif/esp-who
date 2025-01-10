@@ -1,10 +1,9 @@
-build
+build/
 
 sdkconfig
 sdkconfig.old
-.DS_Store
 
-.vscode
+.vscode/
 
-managed_components
+managed_components/
 dependencies.lock
