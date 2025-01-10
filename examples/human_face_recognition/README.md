@@ -4,16 +4,25 @@
 
 # Human Face Detect Example
 
-Connect lcd and camera to esp32-p4-function-ev-board.  
-https://docs.espressif.com/projects/esp-dev-kits/zh_CN/latest/esp32p4/esp32-p4-function-ev-board/user_guide.html
+### Interaction
 
-Flash with latest esp-idf
-test with esp-idf commit 5910fc8270214efed34aa6cf3d5199d9c2929789
+#### ESP-S3-EYE
 
-esp32s3  
+Physical buttons
 
 | btn  | opertion         |
 |------|------------------|
 | play | recognize        |
 | up   | enroll           |
 | down | delete last feat |
+
+#### ESP32-P4-Function-EV-Board
+
+Touch screen buttons
+
+| btn       | opertion         |
+|-----------|------------------|
+| recognize | recognize        |
+| enroll    | enroll           |
+| delete    | delete last feat |
+

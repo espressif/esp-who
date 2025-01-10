@@ -13,7 +13,11 @@ extern "C" void app_main(void)
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32P4
+#if CONFIG_USE_PPA_CAM
+    auto cam = new PPAP4Cam(VIDEO_PIX_FMT_RGB565, 6, V4L2_MEMORY_MMAP, 160, 120, true);
+#else
     auto cam = new P4Cam(VIDEO_PIX_FMT_RGB565, 5, V4L2_MEMORY_MMAP, true);
+#endif
 #elif CONFIG_IDF_TARGET_ESP32S3
     auto cam = new S3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 4, true);
 #endif
