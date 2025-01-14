@@ -57,7 +57,7 @@ All examples of ESP-WHO are stored in [examples](./examples) folder. Structure o
 │   └── pedestrian_detect_lvgl  
 ```
 
-For the development boards mentioned in [Hardware](#Hardware), all examples are available out of the box. To run the examples, you only need to perform [Step 1](#step-1-hardware-connection), [Step 2](#step-2-set-the-target-chip) and [Step 3](#step-4-launch-and-monitor).
+For the development boards mentioned in [Hardware](#Hardware), all examples are available out of the box. To run the examples, you only need to perform [Step 1: Hardware connection](#step-1-hardware-connection), [Step 2: Set the target chip](#step-2-set-the-target-chip) and [Step 4: Launch and monitor](#step-4-launch-and-monitor).
 
 
 ### Step 1: Hardware connection
@@ -66,7 +66,7 @@ If you are using ESP32-P4-Function-EV-Board, please following the user guide [ES
 
 ### Step 2: Set the target chip
 
-Open the terminal and go to any folder that stores examples (e.g. examples/human_face_detection/lcd). Run the following command to set the target chip: 
+Open the terminal and go to any folder that stores examples (e.g. examples/human_face_detection). Run the following command to set the target chip: 
 
 ```bash
 idf.py set-target [SoC]
@@ -92,6 +92,5 @@ idf.py flash monitor
 ```
 
 ## Feedback
-
 
 Please submit an [issue](https://github.com/espressif/esp-who/issues) if you find any problems using our products, and we will reply as soon as possible.
