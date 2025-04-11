@@ -1,52 +1,70 @@
 #pragma once
-#include "cam.hpp"
 #include "human_face_detect.hpp"
 #include "human_face_recognition.hpp"
+#include "who_cam.hpp"
+#include "who_detect_lcd.hpp"
+#include "who_subscriber.hpp"
+#include "bsp/esp-bsp.h"
 
 namespace who {
-namespace app {
+namespace recognition {
+class WhoRecognition;
+class WhoDetectLCD : public detect::WhoDetectLCD {
+    friend class WhoRecognition;
 
-class WhoHumanFaceRecognition {
 public:
-    typedef struct {
-        std::list<dl::detect::result_t> det_res;
-        struct timeval timestamp;
-    } det_result_t;
-    using rec_result_t = char *;
-
-    WhoHumanFaceRecognition(HumanFaceDetect *detect, HumanFaceRecognizer *recognizer, who::cam::Cam *cam) :
-        m_status_mutex(xSemaphoreCreateMutex()),
-        m_det_res_mutex(xSemaphoreCreateMutex()),
-        m_rec_res_mutex(xSemaphoreCreateMutex()),
-        m_detect(detect),
-        m_recognizer(recognizer),
-        m_cam(cam)
-    {
-    }
-    enum class fr_event_t { RECOGNIZE = 1 << 0, ENROLL = 1 << 1, DELETE = 1 << 2 };
-    enum class fr_status_t { RECOGNIZE, ENROLL, DELETE, DETECT };
-    void run();
-    void display(who::cam::cam_fb_t *fb);
-    static TaskHandle_t s_task_handle;
+    WhoDetectLCD(frame_cap::WhoFrameCap *frame_cap,
+                 dl::detect::Detect *detect,
+                 const std::string &name,
+                 const std::vector<std::vector<uint8_t>> &palette);
+    detect::WhoDetectBase::result_t get_result();
 
 private:
-    static void event_handle_task(void *args);
-    static void recognition_task(void *args);
+    void on_new_detect_result(const result_t &result) override;
+    SemaphoreHandle_t m_res_mutex;
+    result_t m_result;
+};
+
+class WhoRecognition : public WhoSubscriber {
+public:
+    using result_t = char *;
+    typedef struct {
+        WhoRecognition *who_rec_ptr;
+        event_type_t event;
+    } user_data_t;
+
+    WhoRecognition(WhoDetectLCD *detect, HumanFaceRecognizer *recognizer, const std::string &name) :
+        WhoSubscriber(name), m_detect(detect), m_recognizer(recognizer), m_res_mutex(xSemaphoreCreateMutex())
+    {
+        m_detect->m_frame_cap->add_element(this);
+        m_btn_user_data = new user_data_t[3];
+        m_btn_user_data[0] = {this, RECOGNIZE};
+        m_btn_user_data[1] = {this, ENROLL};
+        m_btn_user_data[2] = {this, DELETE};
+    }
+
+    ~WhoRecognition()
+    {
+        vSemaphoreDelete(m_res_mutex);
+        delete[] m_btn_user_data;
+    }
+
+    void task() override;
+    void lcd_display_cb(who::cam::cam_fb_t *fb) override;
+
+private:
     static void lvgl_btn_event_handler(lv_event_t *e);
     static void iot_btn_event_handler(void *button_handle, void *usr_data);
-    static void btn_event_handler(fr_event_t fr_event);
     void create_btns();
     void create_label();
-    SemaphoreHandle_t m_status_mutex;
-    SemaphoreHandle_t m_det_res_mutex;
-    SemaphoreHandle_t m_rec_res_mutex;
-    HumanFaceDetect *m_detect;
+
+    WhoDetectLCD *m_detect;
     HumanFaceRecognizer *m_recognizer;
-    who::cam::Cam *m_cam;
-    fr_status_t m_status = fr_status_t::DETECT;
+
+    SemaphoreHandle_t m_res_mutex;
+    std::list<result_t> m_results;
     lv_obj_t *m_label;
-    std::queue<det_result_t> m_det_results;
-    std::list<rec_result_t> m_rec_results;
+    user_data_t *m_btn_user_data;
 };
-} // namespace app
+} // namespace recognition
 } // namespace who

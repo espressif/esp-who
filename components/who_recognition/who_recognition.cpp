@@ -1,175 +1,139 @@
 #include "who_recognition.hpp"
-#include "display_func_manager.hpp"
-#include "helper.hpp"
+#include "who_lcd.hpp"
+#include "who_lvgl_utils.hpp"
 #if CONFIG_IDF_TARGET_ESP32P4
 #define WHO_REC_RES_SHOW_N_FRAMES (60)
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define WHO_REC_RES_SHOW_N_FRAMES (30)
 #endif
 
-static const char *TAG = "who_recognition";
+static const char *TAG = "WhoRecognition";
 LV_FONT_DECLARE(montserrat_bold_26);
 
 namespace who {
-namespace app {
-using namespace who::lcd;
-TaskHandle_t WhoHumanFaceRecognition::s_task_handle = nullptr;
-
-void WhoHumanFaceRecognition::event_handle_task(void *args)
+namespace recognition {
+WhoDetectLCD::WhoDetectLCD(frame_cap::WhoFrameCap *frame_cap,
+                           dl::detect::Detect *detect,
+                           const std::string &name,
+                           const std::vector<std::vector<uint8_t>> &palette) :
+    detect::WhoDetectLCD(frame_cap, detect, name, palette), m_res_mutex(xSemaphoreCreateMutex())
 {
-    WhoHumanFaceRecognition *self = (WhoHumanFaceRecognition *)args;
-    while (true) {
-        uint32_t event;
-        xTaskNotifyWait(0, 0xffffffff, &event, portMAX_DELAY);
-        if (event & static_cast<uint32_t>(fr_event_t::RECOGNIZE)) {
-            xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-            self->m_status = fr_status_t::RECOGNIZE;
-            xSemaphoreGive(self->m_status_mutex);
-        }
-        if (event & static_cast<uint32_t>(fr_event_t::ENROLL)) {
-            xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-            self->m_status = fr_status_t::ENROLL;
-            xSemaphoreGive(self->m_status_mutex);
-        }
-        if (event & static_cast<uint32_t>(fr_event_t::DELETE)) {
-            xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-            self->m_status = fr_status_t::DELETE;
-            xSemaphoreGive(self->m_status_mutex);
-        }
-    }
 }
 
-void WhoHumanFaceRecognition::recognition_task(void *args)
+detect::WhoDetectBase::result_t WhoDetectLCD::get_result()
 {
-    WhoHumanFaceRecognition *self = (WhoHumanFaceRecognition *)args;
-    self->create_btns();
-    self->create_label();
-    struct timeval timestamp;
-    fr_status_t status;
-    int64_t start = esp_timer_get_time();
-    int64_t task_wt_interval = 1000000;
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+    result_t result = m_result;
+    xSemaphoreGive(m_res_mutex);
+    return result;
+}
+
+void WhoDetectLCD::on_new_detect_result(const result_t &result)
+{
+    detect::WhoDetectLCD::on_new_detect_result(result);
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+    m_result = result;
+    xSemaphoreGive(m_res_mutex);
+}
+
+void WhoRecognition::task()
+{
+    create_btns();
+    create_label();
     while (true) {
-        xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-        status = self->m_status;
-        xSemaphoreGive(self->m_status_mutex);
-        switch (status) {
-        case fr_status_t::RECOGNIZE: {
-            auto *fb = self->m_cam->cam_fb_peek();
-            timestamp = fb->timestamp;
-            auto img = who::cam::fb2img(fb);
-            auto &det_res = self->m_detect->run(img);
-            xSemaphoreTake(self->m_det_res_mutex, portMAX_DELAY);
-            self->m_det_results.push({det_res, timestamp});
-            xSemaphoreGive(self->m_det_res_mutex);
-            auto rec_res = self->m_recognizer->recognize(img, det_res);
-            char *text = new char[64];
-            if (rec_res.empty()) {
-                strcpy(text, "who?");
-            } else {
-                snprintf(text, 64, "id: %d, sim: %.2f", rec_res[0].id, rec_res[0].similarity);
-            }
-            xSemaphoreTake(self->m_rec_res_mutex, portMAX_DELAY);
-            self->m_rec_results.emplace_back(text);
-            xSemaphoreGive(self->m_rec_res_mutex);
-            xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-            self->m_status = fr_status_t::DETECT;
-            xSemaphoreGive(self->m_status_mutex);
+        set_and_clear_bits(BLOCKING, RUNNING);
+        EventBits_t event_bits = xEventGroupWaitBits(
+            m_event_group, RECOGNIZE | ENROLL | DELETE | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+        if (event_bits & STOP) {
+            set_and_clear_bits(TERMINATE, BLOCKING);
             break;
-        }
-        case fr_status_t::ENROLL: {
-            auto *fb = self->m_cam->cam_fb_peek();
-            timestamp = fb->timestamp;
-            auto img = who::cam::fb2img(fb);
-            auto &det_res = self->m_detect->run(img);
-            xSemaphoreTake(self->m_det_res_mutex, portMAX_DELAY);
-            self->m_det_results.push({det_res, timestamp});
-            xSemaphoreGive(self->m_det_res_mutex);
-            esp_err_t ret = self->m_recognizer->enroll(img, det_res);
-            char *text = new char[64];
-            if (ret == ESP_FAIL) {
-                strcpy(text, "Failed to enroll.");
+        } else if (event_bits & PAUSE) {
+            EventBits_t pause_event_bits =
+                xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+            if (pause_event_bits & STOP) {
+                set_and_clear_bits(TERMINATE, BLOCKING);
+                break;
             } else {
-                snprintf(text, 64, "id: %d enrolled.", self->m_recognizer->get_num_feats());
+                continue;
             }
-            xSemaphoreTake(self->m_rec_res_mutex, portMAX_DELAY);
-            self->m_rec_results.emplace_back(text);
-            xSemaphoreGive(self->m_rec_res_mutex);
-            xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-            self->m_status = fr_status_t::DETECT;
-            xSemaphoreGive(self->m_status_mutex);
-            break;
         }
-        case fr_status_t::DELETE: {
-            esp_err_t ret = self->m_recognizer->delete_last_feat();
+        set_and_clear_bits(RUNNING, BLOCKING);
+        m_detect->pause();
+        if (event_bits & (RECOGNIZE | ENROLL)) {
+            auto result = m_detect->get_result();
+            auto img = who::cam::fb2img(result.fb);
+            if (event_bits & RECOGNIZE) {
+                auto rec_res = m_recognizer->recognize(img, result.det_res);
+                char *text = new char[64];
+                if (rec_res.empty()) {
+                    strcpy(text, "who?");
+                } else {
+                    snprintf(text, 64, "id: %d, sim: %.2f", rec_res[0].id, rec_res[0].similarity);
+                }
+                xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+                m_results.emplace_back(text);
+                xSemaphoreGive(m_res_mutex);
+            }
+            if (event_bits & ENROLL) {
+                esp_err_t ret = m_recognizer->enroll(img, result.det_res);
+                char *text = new char[64];
+                if (ret == ESP_FAIL) {
+                    strcpy(text, "Failed to enroll.");
+                } else {
+                    snprintf(text, 64, "id: %d enrolled.", m_recognizer->get_num_feats());
+                }
+                xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+                m_results.emplace_back(text);
+                xSemaphoreGive(m_res_mutex);
+            }
+        }
+        if (event_bits & DELETE) {
+            esp_err_t ret = m_recognizer->delete_last_feat();
             char *text = new char[64];
             if (ret == ESP_FAIL) {
                 strcpy(text, "Failed to delete.");
             } else {
-                snprintf(text, 64, "id: %d deleted.", self->m_recognizer->get_num_feats() + 1);
+                snprintf(text, 64, "id: %d deleted.", m_recognizer->get_num_feats() + 1);
             }
-            xSemaphoreTake(self->m_rec_res_mutex, portMAX_DELAY);
-            self->m_rec_results.emplace_back(text);
-            xSemaphoreGive(self->m_rec_res_mutex);
-            xSemaphoreTake(self->m_status_mutex, portMAX_DELAY);
-            self->m_status = fr_status_t::DETECT;
-            xSemaphoreGive(self->m_status_mutex);
-            break;
+            xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+            m_results.emplace_back(text);
+            xSemaphoreGive(m_res_mutex);
         }
-        case fr_status_t::DETECT: {
-            auto *fb = self->m_cam->cam_fb_peek();
-            timestamp = fb->timestamp;
-            auto &det_res = self->m_detect->run(who::cam::fb2img(fb));
-            xSemaphoreTake(self->m_det_res_mutex, portMAX_DELAY);
-            self->m_det_results.push({det_res, timestamp});
-            xSemaphoreGive(self->m_det_res_mutex);
-            break;
-        }
-        }
-        int64_t end = esp_timer_get_time();
-        if (end - start >= task_wt_interval) {
-            vTaskDelay(pdMS_TO_TICKS(10));
-            start = esp_timer_get_time();
-        }
+        m_detect->resume();
+    }
+    vTaskDelete(NULL);
+}
+
+void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
+{
+    user_data_t *user_data = reinterpret_cast<user_data_t *>(lv_event_get_user_data(e));
+    EventGroupHandle_t event_group = user_data->who_rec_ptr->m_event_group;
+    EventBits_t event_bits = xEventGroupGetBits(event_group);
+    if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
+        xEventGroupSetBits(event_group, user_data->event);
     }
 }
 
-void WhoHumanFaceRecognition::lvgl_btn_event_handler(lv_event_t *e)
+void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
 {
-    fr_event_t fr_event = (fr_event_t)(reinterpret_cast<int>(lv_event_get_user_data(e)));
-    btn_event_handler(fr_event);
-}
-
-void WhoHumanFaceRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
-{
-    fr_event_t fr_event = (fr_event_t)(reinterpret_cast<int>(usr_data));
-    btn_event_handler(fr_event);
-}
-
-inline void WhoHumanFaceRecognition::btn_event_handler(fr_event_t fr_event)
-{
-    switch (fr_event) {
-    case fr_event_t::RECOGNIZE:
-        xTaskNotify(s_task_handle, (uint32_t)fr_event_t::RECOGNIZE, eSetBits);
-        break;
-    case fr_event_t::ENROLL:
-        xTaskNotify(s_task_handle, (uint32_t)fr_event_t::ENROLL, eSetBits);
-        break;
-    case fr_event_t::DELETE:
-        xTaskNotify(s_task_handle, (uint32_t)fr_event_t::DELETE, eSetBits);
-        break;
+    user_data_t *user_data = reinterpret_cast<user_data_t *>(usr_data);
+    EventGroupHandle_t event_group = user_data->who_rec_ptr->m_event_group;
+    EventBits_t event_bits = xEventGroupGetBits(event_group);
+    if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
+        xEventGroupSetBits(event_group, user_data->event);
     }
 }
 
-void WhoHumanFaceRecognition::create_btns()
+void WhoRecognition::create_btns()
 {
 #if CONFIG_IDF_TARGET_ESP32P4
     bsp_display_lock(0);
     lv_obj_t *btn_recognize = create_lvgl_btn("recognize", &montserrat_bold_26);
     lv_obj_t *btn_enroll = create_lvgl_btn("enroll", &montserrat_bold_26);
     lv_obj_t *btn_delete = create_lvgl_btn("delete", &montserrat_bold_26);
-    lv_obj_add_event_cb(btn_recognize, lvgl_btn_event_handler, LV_EVENT_CLICKED, (void *)fr_event_t::RECOGNIZE);
-    lv_obj_add_event_cb(btn_enroll, lvgl_btn_event_handler, LV_EVENT_CLICKED, (void *)fr_event_t::ENROLL);
-    lv_obj_add_event_cb(btn_delete, lvgl_btn_event_handler, LV_EVENT_CLICKED, (void *)fr_event_t::DELETE);
+    lv_obj_add_event_cb(btn_recognize, lvgl_btn_event_handler, LV_EVENT_CLICKED, (void *)m_btn_user_data);
+    lv_obj_add_event_cb(btn_enroll, lvgl_btn_event_handler, LV_EVENT_CLICKED, (void *)(m_btn_user_data + 1));
+    lv_obj_add_event_cb(btn_delete, lvgl_btn_event_handler, LV_EVENT_CLICKED, (void *)(m_btn_user_data + 2));
     lv_obj_update_layout(btn_recognize);
     lv_obj_update_layout(btn_enroll);
     lv_obj_update_layout(btn_delete);
@@ -190,17 +154,17 @@ void WhoHumanFaceRecognition::create_btns()
     ESP_ERROR_CHECK(bsp_iot_button_create(btns, NULL, BSP_BUTTON_NUM));
     // play  recognize
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[1], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)fr_event_t::RECOGNIZE));
+        iot_button_register_cb(btns[1], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)m_btn_user_data));
     // up    enroll
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[3], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)fr_event_t::ENROLL));
+        iot_button_register_cb(btns[3], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
     // down  delete
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)fr_event_t::DELETE));
+        iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
 #endif
 }
 
-void WhoHumanFaceRecognition::create_label()
+void WhoRecognition::create_label()
 {
     bsp_display_lock(0);
     m_label = create_lvgl_label("", &montserrat_bold_26);
@@ -209,58 +173,23 @@ void WhoHumanFaceRecognition::create_label()
     bsp_display_unlock();
 }
 
-void WhoHumanFaceRecognition::display(who::cam::cam_fb_t *fb)
+void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
 {
-    xSemaphoreTake(m_det_res_mutex, portMAX_DELAY);
-    // Try to sync camera frame and result, skip the future result.
-    struct timeval t1 = fb->timestamp;
-    bool display = false;
-    det_result_t det_result;
-    while (!m_det_results.empty()) {
-        det_result = m_det_results.front();
-        if (!compare_timestamp(t1, det_result.timestamp)) {
-            m_det_results.pop();
-            display = true;
-        } else {
-            break;
-        }
-    }
-    xSemaphoreGive(m_det_res_mutex);
-    if (display) {
-        draw_detect_results(fb, det_result.det_res);
-    }
-
-    xSemaphoreTake(m_rec_res_mutex, portMAX_DELAY);
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     static int cnt = WHO_REC_RES_SHOW_N_FRAMES;
-    if (!m_rec_results.empty()) {
-        bsp_display_lock(0);
-        lv_label_set_text(m_label, m_rec_results.back());
-        bsp_display_unlock();
-        for (auto iter = m_rec_results.begin(); iter != m_rec_results.end(); iter++) {
+    if (!m_results.empty()) {
+        lv_label_set_text(m_label, m_results.back());
+        for (auto iter = m_results.begin(); iter != m_results.end(); iter++) {
             delete[] *iter;
         }
-        m_rec_results.clear();
+        m_results.clear();
         cnt = 0;
     }
     if (cnt < WHO_REC_RES_SHOW_N_FRAMES && ++cnt == WHO_REC_RES_SHOW_N_FRAMES) {
-        bsp_display_lock(0);
         lv_label_set_text(m_label, "");
-        bsp_display_unlock();
     }
-    xSemaphoreGive(m_rec_res_mutex);
+    xSemaphoreGive(m_res_mutex);
 }
 
-void WhoHumanFaceRecognition::run()
-{
-    auto display_func_manager = DisplayFuncManager::get_instance();
-    display_func_manager->register_display_func(
-        "WhoRec", std::bind(&WhoHumanFaceRecognition::display, this, std::placeholders::_1));
-    if (xTaskCreatePinnedToCore(event_handle_task, "WhoRecEvent", 2560, this, 2, &s_task_handle, 0) != pdPASS) {
-        ESP_LOGE(TAG, "Failed to create WhoRecog_event task.\n");
-    }
-    if (xTaskCreatePinnedToCore(recognition_task, "WhoRec", 3584, this, 2, nullptr, 1) != pdPASS) {
-        ESP_LOGE(TAG, "Failed to create WhoRecog task.\n");
-    }
-}
-} // namespace app
+} // namespace recognition
 } // namespace who

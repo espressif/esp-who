@@ -2,7 +2,7 @@
 | ----------------- | -------- |
 
 
-# Human Face Detect Example
+# Human Face Recognition Example
 
 ### Interaction
 

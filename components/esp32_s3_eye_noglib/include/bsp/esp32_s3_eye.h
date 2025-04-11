@@ -309,7 +309,12 @@ esp_err_t bsp_sdcard_unmount(void);
  *
  * If you want to use the display without LVGL, see bsp/display.h API and use BSP version with 'noglib' suffix.
  **************************************************************************************************/
+
+#if CONFIG_SPI_DMA_SUPPORT_PSRAM
+#define BSP_LCD_PIXEL_CLOCK_HZ (40 * 1000 * 1000)
+#else
 #define BSP_LCD_PIXEL_CLOCK_HZ (80 * 1000 * 1000)
+#endif
 #define BSP_LCD_SPI_NUM (SPI3_HOST)
 
 #if (BSP_CONFIG_NO_GRAPHIC_LIB == 0)

@@ -1,0 +1,14 @@
+menu "esp-who: human_face_recognition"
+    choice DB_FILE_SYSTEM
+        prompt "database file system"
+        default DB_FATFS_FLASH
+        help
+            fatfs support flash/sdcard. spiffs only support flash.
+        config DB_FATFS_FLASH
+            bool "fatfs_flash"
+        config DB_FATFS_SDCARD
+            bool "fatfs_sdcard"
+        config DB_SPIFFS
+            bool "spiffs"
+    endchoice
+endmenu

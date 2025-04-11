@@ -1,4 +1,3 @@
-> :warning: This is **No Graphical Library version** of esp32_s3_eye BSP. If you want to use this BSP with LVGL use [esp32_s3_eye](https://components.espressif.com/components/espressif/esp32_s3_eye) component.
 # BSP: ESP32-S3-EYE
 
 [![Component Registry](https://components.espressif.com/components/espressif/esp32_s3_eye/badge.svg)](https://components.espressif.com/components/espressif/esp32_s3_eye)

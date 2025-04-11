@@ -1,5 +1,5 @@
-set(src_dirs        .)
+set(include_dirs ".")
+set(src_dirs ".")
+set (requires who_lcd who_task who_cam who_frame_capture)
 
-set(include_dirs    .)
-
-idf_component_register(SRC_DIRS ${src_dirs} INCLUDE_DIRS ${include_dirs} REQUIRES who_cam_lcd)
+idf_component_register(SRC_DIRS ${src_dirs} INCLUDE_DIRS ${include_dirs} REQUIRES ${requires})

@@ -88,7 +88,8 @@ menu "Board Support Package"
                 Maximum time for task sleep in ms.
         
         config BSP_DISPLAY_LVGL_BUFFER_IN_PSRAM
-            bool "Allocate LVGL buffer in PSRAM "
+            bool "Allocate LVGL buffer in PSRAM"
+            depends on SPI_DMA_SUPPORT_PSRAM
             default n
             help
                 LVGL buffer will be allocated in PSRAM instead of internal RAM with DMA.
