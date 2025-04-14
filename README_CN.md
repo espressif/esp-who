@@ -48,12 +48,14 @@ ESP-WHO 的所有示例都存放在 [examples](./examples) 中。该文件夹架
 
 ```bash
 ├── examples
-│   ├── human_face_detect       // 仅使用esp_lcd，帧率高
-│   ├── human_face_detect_lvgl  // 帧率较低，但是图形库更强大
-│   ├── human_face_recognition  // 和实体按键(s3)或者触摸屏(p4)交互
-│   │                           // 体验人脸识别示例
-│   ├── pedestrian_detect
-│   └── pedestrian_detect_lvgl  
+│   ├── human_face_detect
+│   │   ├── human_face_detect_lcd           // 使用esp_lcd的高帧率示例
+│   │   └── human_face_detect_terminal      // 没有lcd的情况下在terminal显示结果
+│   ├── human_face_recognition              // 使用lvgl的人脸识别示例
+│   ├── multiple_detect                     // 多个检测模型同时运行的示例
+│   └── pedestrian_detect
+│       ├── pedestrian_detect_lcd
+│       └── pedestrian_detect_terminal
 ```
 
 对于[硬件准备](#硬件准备)中所提到的开发板，所有示例都是开箱即用的，要运行示例仅需执行[步骤 1：硬件连接](#步骤-1硬件连接)， [步骤 2：设置目标芯片](#步骤-2设置目标芯片)和[步骤 4：运行和监视](#步骤-4运行和监视)。

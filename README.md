@@ -49,12 +49,14 @@ All examples of ESP-WHO are stored in [examples](./examples) folder. Structure o
 
 ```bash
 ├── examples
-│   ├── human_face_detect       // high fps with esp_lcd only
-│   ├── human_face_detect_lvgl  // slower but with more powerful graphic lib
-│   ├── human_face_recognition  // interact with button(s3) or touch screen(p4)  
-│   │                           // to experience the face recognition demo.
-│   ├── pedestrian_detect
-│   └── pedestrian_detect_lvgl  
+│   ├── human_face_detect
+│   │   ├── human_face_detect_lcd           // high fps diaplay with esp_lcd
+│   │   └── human_face_detect_terminal      // output in terminal witout lcd
+│   ├── human_face_recognition              // human face recognition demo with lvgl
+│   ├── multiple_detect                     // run mutiple detect models in the same time.
+│   └── pedestrian_detect
+│       ├── pedestrian_detect_lcd
+│       └── pedestrian_detect_terminal
 ```
 
 For the development boards mentioned in [Hardware](#Hardware), all examples are available out of the box. To run the examples, you only need to perform [Step 1: Hardware connection](#step-1-hardware-connection), [Step 2: Set the target chip](#step-2-set-the-target-chip) and [Step 4: Launch and monitor](#step-4-launch-and-monitor).

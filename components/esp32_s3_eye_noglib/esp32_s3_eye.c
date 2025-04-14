@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2022-2025 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -344,13 +344,12 @@ lv_display_t *bsp_display_start(void)
                              .buffer_size = BSP_LCD_DRAW_BUFF_SIZE,
                              .double_buffer = BSP_LCD_DRAW_BUFF_DOUBLE,
                              .flags = {
-#if (CONFIG_BSP_DISPLAY_LVGL_BUFFER_IN_PSRAM && CONFIG_SPIRAM)
-                                 .buff_dma = false,
+#if CONFIG_BSP_DISPLAY_LVGL_BUFFER_IN_PSRAM
                                  .buff_spiram = true,
 #else
-                                 .buff_dma = true,
                                  .buff_spiram = false,
 #endif
+                                 .buff_dma = true,
                              }};
     return bsp_display_start_with_config(&cfg);
 }

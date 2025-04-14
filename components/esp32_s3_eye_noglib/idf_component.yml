@@ -1,22 +1,28 @@
-dependencies:
-  button:
-    public: true
-    version: '>=2.5,<4.0'
-  esp32-camera:
-    public: true
-    version: ^2.0.13
-  esp_codec_dev:
-    public: true
-    version: ~1.3.1
-  idf: '>=5.4'
-  qma6100p:
-    public: true
-    version: ^2
-description: Board Support Package (BSP) for ESP32-S3-EYE with no graphical library
-repository: git://github.com/espressif/esp-bsp.git
-tags:
-- bsp
-targets:
-- esp32s3
+version: "4.0.2"
+description: Board Support Package (BSP) for ESP32-S3-EYE
 url: https://github.com/espressif/esp-bsp/tree/master/bsp/esp32_s3_eye
-version: 4.0.1
+
+targets:
+  - esp32s3
+
+tags:
+  - bsp
+
+dependencies:
+  idf: ">=5.4" # I2C Driver-NG is supported in esp32-camera only from IDFv5.4
+
+  esp32-camera:
+    version: "^2.0.13"
+    public: true
+
+  button:
+    version: ">=2.5,<4.0"
+    public: true
+
+  esp_codec_dev:
+    version: "~1.3.1"
+    public: true
+
+  qma6100p:
+    version: "^2"
+    public: true
