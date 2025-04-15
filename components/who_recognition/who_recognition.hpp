@@ -16,7 +16,11 @@ public:
     WhoDetectLCD(frame_cap::WhoFrameCap *frame_cap,
                  dl::detect::Detect *detect,
                  const std::string &name,
-                 const std::vector<std::vector<uint8_t>> &palette);
+                 const std::vector<std::vector<uint8_t>> &palette) :
+        detect::WhoDetectLCD(frame_cap, detect, name, palette), m_res_mutex(xSemaphoreCreateMutex())
+    {
+    }
+    ~WhoDetectLCD() { vSemaphoreDelete(m_res_mutex); }
     detect::WhoDetectBase::result_t get_result();
 
 private:

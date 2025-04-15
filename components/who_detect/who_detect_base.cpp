@@ -2,6 +2,13 @@
 
 namespace who {
 namespace detect {
+void WhoDetectBase::set_fps(float fps)
+{
+    if (fps > 0) {
+        m_interval = pdMS_TO_TICKS((int)(1000.f / fps));
+    }
+}
+
 void WhoDetectBase::detect_loop()
 {
     TickType_t last_wake_time = xTaskGetTickCount();
@@ -23,7 +30,7 @@ void WhoDetectBase::detect_loop()
             }
         }
         set_and_clear_bits(RUNNING, BLOCKING);
-        auto fb = m_frame_cap->m_cam->cam_fb_peek();
+        auto fb = m_frame_cap->get_cam()->cam_fb_peek();
         struct timeval timestamp = fb->timestamp;
         auto &res = m_detect->run(who::cam::fb2img(fb));
         on_new_detect_result({res, timestamp, fb});
@@ -38,7 +45,7 @@ void WhoDetectBase::detect_loop()
 #if CONFIG_IDF_TARGET_ESP32P4
 void WhoDetectBase::ppa_detect_loop()
 {
-    auto ppa_cam = static_cast<who::cam::WhoP4PPACam *>(m_frame_cap->m_cam);
+    auto ppa_cam = static_cast<who::cam::WhoP4PPACam *>(m_frame_cap->get_cam());
     float ppa_inv_scale_x = 1.f / ppa_cam->m_ppa_scale_x;
     float ppa_inv_scale_y = 1.f / ppa_cam->m_ppa_scale_y;
     auto fb = ppa_cam->cam_fb_peek();
@@ -94,7 +101,7 @@ void WhoDetectBase::ppa_detect_loop()
 void WhoDetectBase::task()
 {
 #if CONFIG_IDF_TARGET_ESP32P4
-    if (m_frame_cap->m_cam->get_type() == "WhoP4PPACam") {
+    if (m_frame_cap->get_cam()->get_type() == "WhoP4PPACam") {
         ppa_detect_loop();
     } else {
         detect_loop();
@@ -119,7 +126,7 @@ bool WhoDetectBase::stop()
         return false;
     }
     xEventGroupSetBits(m_event_group, STOP);
-    xTaskAbortDelay(xTaskGetHandle(m_name.c_str()));
+    xTaskAbortDelay(m_task_handle);
     xEventGroupWaitBits(m_event_group, TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
     return true;
 }

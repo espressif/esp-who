@@ -35,6 +35,18 @@ void WhoFrameCap::task()
     vTaskDelete(NULL);
 }
 
+void WhoFrameCap::fill_cam_queue()
+{
+#if CONFIG_IDF_TARGET_ESP32P4
+    int n = m_cam->m_fb_count - 2;
+#elif CONFIG_IDF_TARGET_ESP32S3
+    int n = m_cam->m_fb_count - 1;
+#endif
+    for (int i = 0; i < n; i++) {
+        m_cam->cam_fb_get();
+    }
+}
+
 bool WhoFrameCap::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
 {
     if (!m_cam) {
@@ -47,9 +59,10 @@ bool WhoFrameCap::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxP
 void WhoFrameCap::set_new_frame_bits()
 {
     for (const auto &subscriber : m_elements) {
-        EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+        EventGroupHandle_t event_group = subscriber->get_event_group();
+        EventBits_t event_bits = xEventGroupGetBits(event_group);
         if (!(event_bits & TERMINATE) && !(event_bits & PAUSE)) {
-            xEventGroupSetBits(subscriber->m_event_group, NEW_FRAME);
+            xEventGroupSetBits(event_group, NEW_FRAME);
         }
     }
 }
@@ -59,10 +72,25 @@ void WhoFrameCap::on_new_frame()
     set_new_frame_bits();
 }
 
+bool WhoFrameCapLCD::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
+{
+    if (!m_lcd) {
+        ESP_LOGE(TAG, "LCD is nullptr, please call set_lcd() first.");
+        return false;
+    }
+    if (xEventGroupGetBits(m_event_group) & (RUNNING | BLOCKING)) {
+        return false;
+    }
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
+    m_lcd->create_canvas();
+#endif
+    return WhoFrameCap::run(uxStackDepth, uxPriority, xCoreID);
+}
+
 void WhoFrameCapLCD::run_lcd_display_cbs(who::cam::cam_fb_t *fb)
 {
     for (const auto &subscriber : m_elements) {
-        EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+        EventBits_t event_bits = xEventGroupGetBits(subscriber->get_event_group());
         if (!(event_bits & TERMINATE) && !(event_bits & PAUSE)) {
             subscriber->lcd_display_cb(fb);
         }
@@ -75,10 +103,10 @@ void WhoFrameCapLCD::on_new_frame()
     auto fb = m_cam->cam_fb_peek(m_display_back_frame);
 #if BSP_CONFIG_NO_GRAPHIC_LIB
     run_lcd_display_cbs(fb);
-    esp_lcd_panel_draw_bitmap(who::lcd::LCD::s_panel_handle, 0, 0, fb->width, fb->height, fb->buf);
+    m_lcd->draw_full_lcd(fb->buf);
 #else
     bsp_display_lock(0);
-    lv_canvas_set_buffer(who::lcd::LCD::s_canvas, fb->buf, fb->width, fb->height, LV_COLOR_FORMAT_NATIVE);
+    lv_canvas_set_buffer(m_lcd->get_canvas(), fb->buf, fb->width, fb->height, LV_COLOR_FORMAT_NATIVE);
     run_lcd_display_cbs(fb);
     bsp_display_unlock();
 #endif

@@ -17,6 +17,5 @@ dependencies:
     version: "*"
     rules:
      - if: "target == esp32s3"
-    override_path: "../../../components/esp32_s3_eye_noglib"
   espressif/esp-dl:
     version: "*"

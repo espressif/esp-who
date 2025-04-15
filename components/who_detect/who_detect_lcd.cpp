@@ -42,13 +42,11 @@ void WhoDetectLCD::lcd_display_cb(who::cam::cam_fb_t *fb)
         return t1.tv_sec < t2.tv_sec;
     };
     struct timeval t1 = fb->timestamp;
-    while (!m_results.empty()) {
+    if (!m_results.empty()) {
         result_t result = m_results.front();
         if (!compare_timestamp(t1, result.timestamp)) {
             m_result = result;
             m_results.pop();
-        } else {
-            break;
         }
     }
     xSemaphoreGive(m_res_mutex);
@@ -56,7 +54,8 @@ void WhoDetectLCD::lcd_display_cb(who::cam::cam_fb_t *fb)
 #if BSP_CONFIG_NO_GRAPHIC_LIB
     draw_detect_results_on_fb(fb, m_result.det_res, m_palette);
 #else
-    draw_detect_results_on_canvas(who::lcd::LCD::s_canvas, m_result.det_res, m_palette);
+    draw_detect_results_on_canvas(
+        static_cast<frame_cap::WhoFrameCapLCD *>(m_frame_cap)->get_lcd()->get_canvas(), m_result.det_res, m_palette);
 #endif
 }
 } // namespace detect

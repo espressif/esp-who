@@ -1,4 +1,6 @@
 #pragma once
+#include <algorithm>
+#include <esp_log.h>
 #include <vector>
 
 namespace who {

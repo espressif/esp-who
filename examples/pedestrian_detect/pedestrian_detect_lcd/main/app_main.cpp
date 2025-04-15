@@ -25,15 +25,13 @@ extern "C" void app_main(void)
 #elif CONFIG_IDF_TARGET_ESP32S3
     auto cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
 #endif
-
-    auto lcd = new LCD();
+    auto lcd = new WhoLCD();
     auto model = new PedestrianDetect();
 
     auto detect = new WhoDetectLCDApp("pedestrian", {{255, 0, 0}});
     detect->set_cam(cam);
+    detect->set_lcd(lcd);
     detect->set_model(model);
     // detect->set_fps(5);
-
-    who::WhoYield2Idle::run();
     detect->run();
 }
