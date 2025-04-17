@@ -12,14 +12,6 @@ LV_FONT_DECLARE(montserrat_bold_26);
 
 namespace who {
 namespace recognition {
-WhoDetectLCD::WhoDetectLCD(frame_cap::WhoFrameCap *frame_cap,
-                           dl::detect::Detect *detect,
-                           const std::string &name,
-                           const std::vector<std::vector<uint8_t>> &palette) :
-    detect::WhoDetectLCD(frame_cap, detect, name, palette), m_res_mutex(xSemaphoreCreateMutex())
-{
-}
-
 detect::WhoDetectBase::result_t WhoDetectLCD::get_result()
 {
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
@@ -107,7 +99,7 @@ void WhoRecognition::task()
 void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
 {
     user_data_t *user_data = reinterpret_cast<user_data_t *>(lv_event_get_user_data(e));
-    EventGroupHandle_t event_group = user_data->who_rec_ptr->m_event_group;
+    EventGroupHandle_t event_group = user_data->who_rec_ptr->get_event_group();
     EventBits_t event_bits = xEventGroupGetBits(event_group);
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
         xEventGroupSetBits(event_group, user_data->event);
@@ -117,7 +109,7 @@ void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
 void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
 {
     user_data_t *user_data = reinterpret_cast<user_data_t *>(usr_data);
-    EventGroupHandle_t event_group = user_data->who_rec_ptr->m_event_group;
+    EventGroupHandle_t event_group = user_data->who_rec_ptr->get_event_group();
     EventBits_t event_bits = xEventGroupGetBits(event_group);
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
         xEventGroupSetBits(event_group, user_data->event);

@@ -1,4 +1,5 @@
 #include "who_recognition_app.hpp"
+#include "who_yield2idle.hpp"
 
 namespace who {
 namespace app {
@@ -25,6 +26,7 @@ WhoRecognitionApp::WhoRecognitionApp(const std::string &name)
 
 bool WhoRecognitionApp::run()
 {
+    who::WhoYield2Idle::run();
     bool ret = m_frame_cap->run(4096, 2, 0);
     ret &= m_detect->run(2560, 2, 1);
     ret &= m_recognition->run(3584, 2, 0);

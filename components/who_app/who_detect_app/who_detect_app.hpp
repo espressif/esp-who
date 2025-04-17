@@ -20,6 +20,7 @@ protected:
 class WhoDetectLCDApp : public WhoDetectApp {
 public:
     WhoDetectLCDApp(const std::string &name, const std::vector<std::vector<uint8_t>> &palette);
+    void set_lcd(lcd::WhoLCD *lcd) { static_cast<frame_cap::WhoFrameCapLCD *>(m_frame_cap)->set_lcd(lcd); }
 };
 
 class WhoDetectTerminalApp : public WhoDetectApp {

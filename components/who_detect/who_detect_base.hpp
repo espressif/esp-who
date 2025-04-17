@@ -15,18 +15,17 @@ public:
         who::cam::cam_fb_t *fb;
     } result_t;
 
+    WhoDetectBase(frame_cap::WhoFrameCap *frame_cap, const std::string &name) : WhoDetectBase(frame_cap, nullptr, name)
+    {
+    }
+
     WhoDetectBase(frame_cap::WhoFrameCap *frame_cap, dl::detect::Detect *detect, const std::string &name) :
         WhoSubscriber(name), m_frame_cap(frame_cap), m_detect(detect), m_interval(0)
     {
         frame_cap->add_element(this);
     }
     void set_model(dl::detect::Detect *model) { m_detect = model; }
-    void set_fps(float fps)
-    {
-        if (fps > 0) {
-            m_interval = pdMS_TO_TICKS((int)(1000.f / fps));
-        }
-    }
+    void set_fps(float fps);
     bool run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID) override;
     bool stop() override;
 

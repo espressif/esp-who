@@ -11,7 +11,8 @@ bool WhoTaskBase::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxP
         return false;
     }
     set_and_clear_bits(RUNNING, TERMINATE);
-    if (xTaskCreatePinnedToCore(task, m_name.c_str(), uxStackDepth, this, uxPriority, nullptr, xCoreID) != pdPASS) {
+    if (xTaskCreatePinnedToCore(task, m_name.c_str(), uxStackDepth, this, uxPriority, &m_task_handle, xCoreID) !=
+        pdPASS) {
         ESP_LOGE(TAG, "Failed to create task.\n");
         set_and_clear_bits(TERMINATE, RUNNING);
         return false;
@@ -64,7 +65,7 @@ bool WhoTask::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPrior
     // Never run other tasks when yield2idle running.
     auto yield2idle = WhoYield2Idle::get_instance(xCoreID);
     EventBits_t event_bits =
-        xEventGroupWaitBits(yield2idle->m_event_group, BLOCKING | TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
+        xEventGroupWaitBits(yield2idle->get_event_group(), BLOCKING | TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
     if (event_bits & BLOCKING) {
         yield2idle->monitor(this);
     }

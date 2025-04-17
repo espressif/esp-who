@@ -8,10 +8,11 @@ class WhoRecognitionApp : public WhoTasks {
 public:
     WhoRecognitionApp(const std::string &name);
     void set_cam(cam::WhoCam *cam) { m_frame_cap->set_cam(cam); }
+    void set_lcd(lcd::WhoLCD *lcd) { m_frame_cap->set_lcd(lcd); }
     bool run() override;
 
 protected:
-    frame_cap::WhoFrameCap *m_frame_cap;
+    frame_cap::WhoFrameCapLCD *m_frame_cap;
     recognition::WhoDetectLCD *m_detect;
     recognition::WhoRecognition *m_recognition;
 };

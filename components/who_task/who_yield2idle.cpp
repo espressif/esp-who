@@ -30,7 +30,7 @@ bool WhoYield2Idle::stop()
     }
     xEventGroupWaitBits(m_event_group, BLOCKING, pdFALSE, pdFALSE, portMAX_DELAY);
     xEventGroupSetBits(m_event_group, STOP);
-    xTaskAbortDelay(xTaskGetHandle(m_name.c_str()));
+    xTaskAbortDelay(m_task_handle);
     xEventGroupWaitBits(m_event_group, TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
     return true;
 }
@@ -74,7 +74,7 @@ void WhoYield2Idle::task()
         set_and_clear_bits(RUNNING, BLOCKING);
         for (const auto &task : m_elements) {
             task->pause();
-            xEventGroupWaitBits(task->m_event_group, BLOCKING | TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
+            xEventGroupWaitBits(task->get_event_group(), BLOCKING | TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
         }
         vTaskDelay(pdMS_TO_TICKS(10));
         for (const auto &task : m_elements) {

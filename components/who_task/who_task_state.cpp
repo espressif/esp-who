@@ -40,7 +40,7 @@ bool WhoTaskState::stop()
         return false;
     }
     xEventGroupSetBits(m_event_group, STOP);
-    xTaskAbortDelay(xTaskGetHandle(m_name.c_str()));
+    xTaskAbortDelay(m_task_handle);
     xEventGroupWaitBits(m_event_group, TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
     return true;
 }

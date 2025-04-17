@@ -5,12 +5,7 @@ namespace who {
 namespace detect {
 class WhoDetectTerminal : public WhoDetectBase {
 public:
-    WhoDetectTerminal(frame_cap::WhoFrameCap *frame_cap, const std::string &name) :
-        WhoDetectTerminal(frame_cap, nullptr, name)
-    {
-    }
-    WhoDetectTerminal(frame_cap::WhoFrameCap *frame_cap, dl::detect::Detect *detect, const std::string &name) :
-        WhoDetectBase(frame_cap, detect, name) {};
+    using WhoDetectBase::WhoDetectBase;
 
 private:
     void on_new_detect_result(const result_t &result) override;

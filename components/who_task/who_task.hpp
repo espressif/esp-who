@@ -1,5 +1,4 @@
 #pragma once
-#include "who_cam_define.hpp"
 #include "who_container.hpp"
 #include <freertos/FreeRTOS.h>
 #include <string>
@@ -36,9 +35,14 @@ public:
     virtual bool pause();
     virtual bool resume();
     void set_and_clear_bits(EventBits_t bit_to_clear, EventBits_t bit_to_set);
+    std::string get_name() { return m_name; }
+    EventGroupHandle_t get_event_group() { return m_event_group; }
+    TaskHandle_t get_task_handle() { return m_task_handle; }
 
+protected:
     std::string m_name;
     EventGroupHandle_t m_event_group;
+    TaskHandle_t m_task_handle;
 
 private:
     virtual void task() = 0;

@@ -30,11 +30,10 @@ extern "C" void app_main(void)
 #elif CONFIG_IDF_TARGET_ESP32S3
     auto cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
 #endif
+    auto lcd = new WhoLCD();
 
-    auto lcd = new LCD();
     auto recognition = new WhoRecognitionApp("rec");
     recognition->set_cam(cam);
-
-    who::WhoYield2Idle::run();
+    recognition->set_lcd(lcd);
     recognition->run();
 }

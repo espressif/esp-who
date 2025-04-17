@@ -1,9 +1,11 @@
 #include "who_detect_app.hpp"
+#include "who_yield2idle.hpp"
 
 namespace who {
 namespace app {
 bool WhoDetectApp::run()
 {
+    who::WhoYield2Idle::run();
     bool ret = m_frame_cap->run(4096, 2, 0);
     return ret & m_detect->run(2560, 2, 1);
 }
