@@ -32,7 +32,7 @@ void WhoLCD::draw_full_lcd(const void *data)
     // Display the fb must copy it from PSRAM to internal RAM.
     // Use a static internal memory chunk to avoid alloc internal memory each time dynamically.
     memcpy(m_lcd_buffer, data, BSP_LCD_H_RES * BSP_LCD_V_RES * (BSP_LCD_BITS_PER_PIXEL / 8));
-    esp_lcd_panel_draw_bitmap(m_panel_handle, 0, 0, BSP_LCD_V_RES, BSP_LCD_H_RES, m_lcd_buffer);
+    esp_lcd_panel_draw_bitmap(m_panel_handle, 0, 0, BSP_LCD_H_RES, BSP_LCD_V_RES, m_lcd_buffer);
 }
 #elif CONFIG_IDF_TARGET_ESP32P4
 void WhoLCD::init()
@@ -62,7 +62,7 @@ void WhoLCD::init()
 
 void WhoLCD::draw_full_lcd(const void *data)
 {
-    esp_lcd_panel_draw_bitmap(m_lcd_handles.panel, 0, 0, BSP_LCD_V_RES, BSP_LCD_H_RES, data);
+    esp_lcd_panel_draw_bitmap(m_lcd_handles.panel, 0, 0, BSP_LCD_H_RES, BSP_LCD_V_RES, data);
 }
 #endif
 } // namespace lcd
