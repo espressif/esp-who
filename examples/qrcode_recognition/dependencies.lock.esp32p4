@@ -238,28 +238,16 @@ dependencies:
     targets:
     - esp32p4
     version: 0.8.0~3
-  espressif/human_face_detect:
-    component_hash: f648d741db5d3bf6a7b8ef9e76e8a301cd1a5959545fb6bce1037bf87e6128f2
+  espressif/quirc:
+    component_hash: 3be250a06364f0d71a7903b66ac93084d2ce3998c2e75a168b9f1f0621dd6218
     dependencies:
-    - name: espressif/esp-dl
-      registry_url: https://components.espressif.com
+    - name: idf
       require: private
-      version: ^3.1.1
-    source:
-      registry_url: https://components.espressif.com
-      type: service
-    version: 0.2.1
-  espressif/human_face_recognition:
-    component_hash: 6e158c3501d53d6fa65c2ea35194fd43dc2994d9f3b032798c544657664223b6
-    dependencies:
-    - name: espressif/human_face_detect
-      registry_url: https://components.espressif.com
-      require: private
-      version: ^0.2.1
+      version: '>=4.3.0'
     source:
       registry_url: https://components.espressif.com/
       type: service
-    version: 0.2.2
+    version: 1.2.0
   idf:
     source:
       type: idf
@@ -277,8 +265,8 @@ direct_dependencies:
 - espressif/esp_h264
 - espressif/esp_lvgl_port
 - espressif/esp_video
-- espressif/human_face_recognition
+- espressif/quirc
 - idf
-manifest_hash: 0b679489e5b80af28c2a972ab26ae5ea151ded8876f8b098279a6406e93a41d6
+manifest_hash: fc16f601e8571c4aeb889b09bb34b78e106755c1f65d3d1e66325051ed286892
 target: esp32p4
 version: 2.0.0

@@ -1,18 +1,15 @@
-#include "who_recognition_app.hpp"
-#include "who_spiflash_fatfs.hpp"
+#include "human_face_detect.hpp"
+#include "who_detect_app.hpp"
 
 using namespace who::cam;
 using namespace who::lcd;
 using namespace who::app;
 
+#define WITH_LCD 1
+
 extern "C" void app_main(void)
 {
-#if CONFIG_DB_FATFS_FLASH
-    ESP_ERROR_CHECK(fatfs_flash_mount());
-#elif CONFIG_DB_SPIFFS
-    ESP_ERROR_CHECK(bsp_spiffs_mount());
-#endif
-#if CONFIG_DB_FATFS_SDCARD || CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD || CONFIG_HUMAN_FACE_FEAT_MODEL_IN_SDCARD
+#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 
@@ -29,8 +26,20 @@ extern "C" void app_main(void)
 #endif
     auto lcd = new WhoLCD();
 
-    auto recognition = new WhoRecognitionApp();
-    recognition->set_cam(cam);
-    recognition->set_lcd(lcd);
-    recognition->run();
+#if WITH_LCD
+    auto model = new HumanFaceDetect();
+    auto detect = new WhoDetectAppLCD({{255, 0, 0}});
+    detect->set_cam(cam);
+    detect->set_model(model);
+    detect->set_lcd(lcd);
+    // detect->set_fps(5);
+    detect->run();
+#else
+    auto model = new HumanFaceDetect();
+    auto detect = new WhoDetectAppTerm();
+    detect->set_cam(cam);
+    detect->set_model(model);
+    // detect->set_fps(5);
+    detect->run();
+#endif
 }

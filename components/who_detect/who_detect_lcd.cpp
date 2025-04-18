@@ -1,8 +1,5 @@
 #include "who_detect_lcd.hpp"
 #include "who_detect_utils.hpp"
-#include "who_lcd.hpp"
-
-static const char *TAG = "WhoDetectLCD";
 
 namespace who {
 namespace detect {

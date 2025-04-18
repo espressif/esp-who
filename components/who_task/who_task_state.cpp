@@ -3,7 +3,7 @@
 
 namespace who {
 namespace task {
-WhoTaskState::WhoTaskState(int interval) : WhoTask("task_status"), m_interval(interval)
+WhoTaskState::WhoTaskState(int interval) : WhoTask("TaskState"), m_interval(interval)
 {
     m_task_state = {"Running", "Ready", "Blocked", "Suspended", "Deleted", "Invalid"};
 }

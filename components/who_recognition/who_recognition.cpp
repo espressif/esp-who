@@ -1,13 +1,10 @@
 #include "who_recognition.hpp"
-#include "who_lcd.hpp"
 #include "who_lvgl_utils.hpp"
 #if CONFIG_IDF_TARGET_ESP32P4
 #define WHO_REC_RES_SHOW_N_FRAMES (60)
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define WHO_REC_RES_SHOW_N_FRAMES (30)
 #endif
-
-static const char *TAG = "WhoRecognition";
 LV_FONT_DECLARE(montserrat_bold_26);
 
 namespace who {
