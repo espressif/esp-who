@@ -1,6 +1,6 @@
 #include "who_detect_utils.hpp"
 
-static const char *TAG = "who_detect";
+static const char *TAG = "WhoDetect";
 
 namespace who {
 namespace detect {

@@ -3,7 +3,7 @@
 #include "esp_log.h"
 #include "bsp/esp-bsp.h"
 
-static const char *TAG = "who_cam_s3";
+static const char *TAG = "WhoS3Cam";
 
 namespace who {
 namespace cam {

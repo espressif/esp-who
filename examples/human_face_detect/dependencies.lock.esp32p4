@@ -186,20 +186,6 @@ dependencies:
       registry_url: https://components.espressif.com
       type: service
     version: 1.1.3
-  espressif/esp_lvgl_port:
-    component_hash: e720c95cf0667554a204591bb5fade4655fb2990465557041200fa44b5bc7556
-    dependencies:
-    - name: idf
-      require: private
-      version: '>=4.4'
-    - name: lvgl/lvgl
-      registry_url: https://components.espressif.com
-      require: public
-      version: '>=8,<10'
-    source:
-      registry_url: https://components.espressif.com/
-      type: service
-    version: 2.6.0
   espressif/esp_sccb_intf:
     component_hash: 19fd07c1296aaf03f61d0f5959c4b6d7d53380f499d28d5c197be0a8c6e04d74
     dependencies:
@@ -246,39 +232,20 @@ dependencies:
       require: private
       version: ^3.1.1
     source:
-      registry_url: https://components.espressif.com
-      type: service
-    version: 0.2.1
-  espressif/human_face_recognition:
-    component_hash: 6e158c3501d53d6fa65c2ea35194fd43dc2994d9f3b032798c544657664223b6
-    dependencies:
-    - name: espressif/human_face_detect
-      registry_url: https://components.espressif.com
-      require: private
-      version: ^0.2.1
-    source:
       registry_url: https://components.espressif.com/
       type: service
-    version: 0.2.2
+    version: 0.2.1
   idf:
     source:
       type: idf
     version: 5.4.0
-  lvgl/lvgl:
-    component_hash: 096c69af22eaf8a2b721e3913da91918c5e6bf1a762a113ec01f401aa61337a0
-    dependencies: []
-    source:
-      registry_url: https://components.espressif.com
-      type: service
-    version: 9.2.2
 direct_dependencies:
 - espressif/esp-dl
 - espressif/esp32_p4_function_ev_board_noglib
 - espressif/esp_h264
-- espressif/esp_lvgl_port
 - espressif/esp_video
-- espressif/human_face_recognition
+- espressif/human_face_detect
 - idf
-manifest_hash: 0b679489e5b80af28c2a972ab26ae5ea151ded8876f8b098279a6406e93a41d6
+manifest_hash: e503dcfbdd8596845c4d288c0ac8c813fdb6ada1aa90f5d237864efa469ae736
 target: esp32p4
 version: 2.0.0

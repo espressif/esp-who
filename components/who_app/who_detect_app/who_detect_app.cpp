@@ -3,25 +3,25 @@
 
 namespace who {
 namespace app {
-bool WhoDetectApp::run()
+bool WhoDetectAppBase::run()
 {
     who::WhoYield2Idle::run();
     bool ret = m_frame_cap->run(4096, 2, 0);
     return ret & m_detect->run(2560, 2, 1);
 }
 
-WhoDetectLCDApp::WhoDetectLCDApp(const std::string &name, const std::vector<std::vector<uint8_t>> &palette)
+WhoDetectAppLCD::WhoDetectAppLCD(const std::vector<std::vector<uint8_t>> &palette)
 {
-    m_frame_cap = new frame_cap::WhoFrameCapLCD(name + "_cap");
-    m_detect = new detect::WhoDetectLCD(m_frame_cap, name + "_det", palette);
+    m_frame_cap = new frame_cap::WhoFrameCapLCD("FrameCapLCD");
+    m_detect = new detect::WhoDetectLCD(m_frame_cap, "DetectLCD", palette);
     add_element(m_frame_cap);
     add_element(m_detect);
 }
 
-WhoDetectTerminalApp::WhoDetectTerminalApp(const std::string &name)
+WhoDetectAppTerm::WhoDetectAppTerm()
 {
-    m_frame_cap = new frame_cap::WhoFrameCap(name + "_cap");
-    m_detect = new detect::WhoDetectTerminal(m_frame_cap, name + "_det");
+    m_frame_cap = new frame_cap::WhoFrameCap("FrameCap");
+    m_detect = new detect::WhoDetectTerm(m_frame_cap, "DetectTerm");
     add_element(m_frame_cap);
     add_element(m_detect);
 }

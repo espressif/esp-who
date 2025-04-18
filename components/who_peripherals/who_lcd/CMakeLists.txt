@@ -18,6 +18,7 @@ foreach(req ${optional_reqs})
         idf_component_get_property(req_lib ${req} COMPONENT_LIB)
         add_library(who_lvgl_utils STATIC
             who_lvgl_utils/montserrat_bold_26.c
+            who_lvgl_utils/montserrat_bold_20.c
             who_lvgl_utils/who_lvgl_utils.cpp
             )
         target_include_directories(who_lvgl_utils PUBLIC who_lvgl_utils)

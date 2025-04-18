@@ -1,11 +1,11 @@
 #pragma once
 #include "who_detect_lcd.hpp"
-#include "who_detect_terminal.hpp"
+#include "who_detect_term.hpp"
 #include "who_frame_cap.hpp"
 
 namespace who {
 namespace app {
-class WhoDetectApp : public WhoTasks {
+class WhoDetectAppBase : public WhoTasks {
 public:
     void set_cam(cam::WhoCam *cam) { m_frame_cap->set_cam(cam); }
     void set_model(dl::detect::Detect *model) { m_detect->set_model(model); }
@@ -17,15 +17,15 @@ protected:
     detect::WhoDetectBase *m_detect;
 };
 
-class WhoDetectLCDApp : public WhoDetectApp {
+class WhoDetectAppLCD : public WhoDetectAppBase {
 public:
-    WhoDetectLCDApp(const std::string &name, const std::vector<std::vector<uint8_t>> &palette);
+    WhoDetectAppLCD(const std::vector<std::vector<uint8_t>> &palette);
     void set_lcd(lcd::WhoLCD *lcd) { static_cast<frame_cap::WhoFrameCapLCD *>(m_frame_cap)->set_lcd(lcd); }
 };
 
-class WhoDetectTerminalApp : public WhoDetectApp {
+class WhoDetectAppTerm : public WhoDetectAppBase {
 public:
-    WhoDetectTerminalApp(const std::string &name);
+    WhoDetectAppTerm();
 };
 } // namespace app
 } // namespace who

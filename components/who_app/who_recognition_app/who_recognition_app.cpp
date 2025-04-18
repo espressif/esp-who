@@ -3,7 +3,7 @@
 
 namespace who {
 namespace app {
-WhoRecognitionApp::WhoRecognitionApp(const std::string &name)
+WhoRecognitionApp::WhoRecognitionApp()
 {
     auto detect_model = new HumanFaceDetect();
     auto feat_model = new HumanFaceFeat();
@@ -16,9 +16,9 @@ WhoRecognitionApp::WhoRecognitionApp(const std::string &name)
     snprintf(db_path, sizeof(db_path), "%s/face.db", CONFIG_BSP_SD_MOUNT_POINT);
 #endif
     auto recognizer = new HumanFaceRecognizer(feat_model, db_path);
-    m_frame_cap = new frame_cap::WhoFrameCapLCD(name + "_cap");
-    m_detect = new recognition::WhoDetectLCD(m_frame_cap, detect_model, name + "_det", {{255, 0, 0}});
-    m_recognition = new recognition::WhoRecognition(m_detect, recognizer, name + "_rec");
+    m_frame_cap = new frame_cap::WhoFrameCapLCD("FrameCapLCD");
+    m_detect = new recognition::WhoDetectLCD(m_frame_cap, detect_model, "DetectLCD", {{255, 0, 0}});
+    m_recognition = new recognition::WhoRecognition(m_detect, recognizer, "Recognition");
     add_element(m_frame_cap);
     add_element(m_detect);
     add_element(m_recognition);
