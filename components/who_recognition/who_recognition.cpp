@@ -143,13 +143,13 @@ void WhoRecognition::create_btns()
     ESP_ERROR_CHECK(bsp_iot_button_create(btns, NULL, BSP_BUTTON_NUM));
     // play  recognize
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[1], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)m_btn_user_data));
+        iot_button_register_cb(btns[1], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
     // up    enroll
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[3], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
+        iot_button_register_cb(btns[3], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
     // down  delete
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
+        iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
 #endif
 }
 
