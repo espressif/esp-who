@@ -86,7 +86,7 @@ dependencies:
       type: service
     version: 1.3.4
   espressif/esp_jpeg:
-    component_hash: 14c7335ea46c9ba51af8222ce7c31fe8c4f3417bece0287fdb4152f81cb6af95
+    component_hash: fdddaa1ceeee223e0abd7e865b05dbceea7ff175440a5ea26eeff8304564e7aa
     dependencies:
     - name: idf
       require: private
@@ -94,7 +94,7 @@ dependencies:
     source:
       registry_url: https://components.espressif.com
       type: service
-    version: 1.2.1
+    version: 1.3.0
   espressif/esp_lvgl_port:
     component_hash: e720c95cf0667554a204591bb5fade4655fb2990465557041200fa44b5bc7556
     dependencies:
@@ -150,6 +150,6 @@ direct_dependencies:
 - espressif/esp_lvgl_port
 - espressif/quirc
 - idf
-manifest_hash: 241941c99f005b3e3f738b4207ed53212d97604e9e56932d9c9e2dd801ee3b14
+manifest_hash: 924cd9d1f65456c78a55760760b7465d4fd0e7ddb24f892bc5d950952f847972
 target: esp32s3
 version: 2.0.0
