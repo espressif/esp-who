@@ -1,0 +1,143 @@
+############
+# Patterns #
+############
+
+.patterns-gitlab-ci: &patterns-gitlab-ci
+  - ".gitlab/ci/*"
+
+# components folder
+.patterns-components_who_detect_app: &patterns-components_who_detect_app
+  - "components/who_app/who_detect_app/**/*"
+
+.patterns-components_who_qrcode_app: &patterns-components_who_qrcode_app
+  - "components/who_app/who_qrcode_app/**/*"
+
+.patterns-components_who_recognition_app: &patterns-components_who_recognition_app
+  - "components/who_app/who_recognition_app/**/*"
+  
+.patterns-components_who_detect: &patterns-components_who_detect
+  - "components/who_detect/**/*"
+
+.patterns-components_who_frame_cap: &patterns-components_who_frame_cap
+  - "components/who_frame_cap/**/*"
+
+.patterns-components_who_cam: &patterns-components_who_cam
+  - "components/who_peripherals/who_cam/**/*"
+
+.patterns-components_who_lcd: &patterns-components_who_lcd
+  - "components/who_peripherals/who_lcd/**/*"
+
+.patterns-components_who_spiflash_fatfs: &patterns-components_who_spiflash_fatfs
+  - "components/who_peripherals/who_spiflash_fatfs/**/*"
+
+.patterns-components_who_qrcode: &patterns-components_who_qrcode
+  - "components/who_qrcode/**/*"
+
+.patterns-components_who_recognition: &patterns-components_who_recognition
+  - "components/who_recognition/**/*"
+
+.patterns-components_who_task: &patterns-components_who_task
+  - "components/who_task/**/*"
+
+# examples folder
+.patterns-example_human_face_detect: &patterns-example_human_face_detect
+  - "examples/human_face_detect/**/*"
+
+.patterns-example_human_face_recognition: &patterns-example_human_face_recognition
+  - "examples/human_face_recognition/**/*"
+
+.patterns-example_pedestrian_detect: &patterns-example_pedestrian_detect
+  - "examples/pedestrian_detect/**/*"
+
+.patterns-example_qrcode_recognition: &patterns-example_qrcode_recognition
+  - "examples/qrcode_recognition/**/*"
+
+##############
+# if anchors #
+##############
+.if-protected: &if-protected
+  if: '($CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^release\/v/ || $CI_COMMIT_TAG =~ /^v\d+\.\d+(\.\d+)?($|-)/)'
+
+.if-dev-push: &if-dev-push
+  if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_BRANCH !~ /^release\/v/ && $CI_COMMIT_TAG !~ /^v\d+\.\d+(\.\d+)?($|-)/ && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+
+##################
+# Auto Generated #
+##################
+.if-label-build: &if-label-build
+  if: '$CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*build(?:,[^,\n\r]+)*$/i'
+
+.if-label-pre_check: &if-label-pre_check
+  if: '$BOT_LABEL_PRE_CHECK || $CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*pre_check(?:,[^,\n\r]+)*$/i'
+
+.patterns-docs_md: &patterns-docs_md
+  - "**/*.md"
+
+# rules for examples
+.rules:build:example_detect:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-components_who_detect_app
+    - <<: *if-dev-push
+      changes: *patterns-components_who_detect
+    - <<: *if-dev-push
+      changes: *patterns-components_who_frame_cap
+    - <<: *if-dev-push
+      changes: *patterns-components_who_cam
+    - <<: *if-dev-push
+      changes: *patterns-components_who_lcd
+    - <<: *if-dev-push
+      changes: *patterns-components_who_task
+    - <<: *if-dev-push
+      changes: *patterns-gitlab-ci
+
+.rules:build:example_human_face_recognition:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-components_who_recognition_app
+    - <<: *if-dev-push
+      changes: *patterns-components_who_detect
+    - <<: *if-dev-push
+      changes: *patterns-components_who_frame_cap
+    - <<: *if-dev-push
+      changes: *patterns-components_who_cam
+    - <<: *if-dev-push
+      changes: *patterns-components_who_lcd
+    - <<: *if-dev-push
+      changes: *patterns-components_who_spiflash_fatfs
+    - <<: *if-dev-push
+      changes: *patterns-components_who_recognition
+    - <<: *if-dev-push
+      changes: *patterns-components_who_task
+    - <<: *if-dev-push
+      changes: *patterns-gitlab-ci
+
+.rules:build:example_qrcode_recognition:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-components_who_qrcode_app
+    - <<: *if-dev-push
+      changes: *patterns-components_who_frame_cap
+    - <<: *if-dev-push
+      changes: *patterns-components_who_cam
+    - <<: *if-dev-push
+      changes: *patterns-components_who_lcd
+    - <<: *if-dev-push
+      changes: *patterns-components_who_qrcode
+    - <<: *if-dev-push
+      changes: *patterns-components_who_task
+    - <<: *if-dev-push
+      changes: *patterns-gitlab-ci
+
+.rules:pre_check:readme:
+  rules:
+    - <<: *if-protected
+    - <<: *if-label-pre_check
+    - <<: *if-dev-push
+      changes: *patterns-docs_md

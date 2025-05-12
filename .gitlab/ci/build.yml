@@ -1,0 +1,71 @@
+.build_template: &build_template
+  stage: build
+  tags: ["build", "amd64", "internet"]
+  image: ${IMAGE}
+  variables:
+    # Enable ccache for all build jobs. See configure_ci_environment.sh for more ccache related settings.
+    IDF_CCACHE_ENABLE: "1"
+    BATCH_BUILD: "1"
+    V: "0"
+    WARNING_STR: ""
+  artifacts:
+    when: always
+    paths:
+      - "**/build*/*.bin"
+      # upload to s3 server to save the artifacts size
+      - "**/build*/*.map"
+      - "**/build*/*.elf"
+      - "**/build*/flasher_args.json"
+      - "**/build*/flash_project_args"
+      - "**/build*/sdkconfig"
+      - "**/build*/bootloader/*.bin"
+      - "**/build*/bootloader/*.elf"
+      - "**/build*/partition_table/*.bin"
+      - "**/build*/size.json"
+    expire_in: 1 week
+  variables:
+    IDF_CI_BUILD: "1"
+  script:
+    - pip install --upgrade idf-component-manager
+    - pip install idf_build_apps==2.10.1
+    - python tools/ci/build_apps.py ${EXAMPLE_DIR}
+
+build_example_human_face_detect:
+  extends:
+    - .build_template
+    - .rules:build:example_detect
+  parallel:
+    matrix:
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+  variables:
+    EXAMPLE_DIR: examples/human_face_detect
+
+build_example_human_face_recognition:
+  extends:
+    - .build_template
+    - .rules:build:example_human_face_recognition
+  parallel:
+    matrix:
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+  variables:
+    EXAMPLE_DIR: examples/human_face_recognition
+
+build_example_pedestrian_detect:
+  extends:
+    - .build_template
+    - .rules:build:example_detect
+  parallel:
+    matrix:
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+  variables:
+    EXAMPLE_DIR: examples/pedestrian_detect
+
+build_example_qrcode_recognition:
+  extends:
+    - .build_template
+    - .rules:build:example_qrcode_recognition
+  parallel:
+    matrix:
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+  variables:
+    EXAMPLE_DIR: examples/qrcode_recognition
