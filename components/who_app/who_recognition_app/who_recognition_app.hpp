@@ -1,18 +1,17 @@
 #pragma once
-#include "who_frame_cap.hpp"
+#include "who_app.hpp"
 #include "who_recognition.hpp"
 
 namespace who {
 namespace app {
-class WhoRecognitionApp : public WhoTasks {
+class WhoRecognitionApp : public WhoApp {
 public:
-    WhoRecognitionApp();
-    void set_cam(cam::WhoCam *cam) { m_frame_cap->set_cam(cam); }
-    void set_lcd(lcd::WhoLCD *lcd) { m_frame_cap->set_lcd(lcd); }
+    WhoRecognitionApp(frame_cap::WhoFrameCap *frame_cap, frame_cap::WhoFrameCapNode *lcd_disp_frame_cap_node = nullptr);
     bool run() override;
 
-protected:
-    frame_cap::WhoFrameCapLCD *m_frame_cap;
+private:
+    lcd_disp::WhoLCDDisp *m_lcd_disp;
+    frame_cap::WhoFrameCap *m_frame_cap;
     recognition::WhoDetectLCD *m_detect;
     recognition::WhoRecognition *m_recognition;
 };

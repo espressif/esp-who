@@ -1,59 +1,45 @@
 #pragma once
-#include "who_cam.hpp"
-#include "who_lcd.hpp"
-#include "who_publisher.hpp"
+#include "who_frame_cap_node.hpp"
 
 namespace who {
 namespace frame_cap {
-class WhoFrameCap : public WhoPublisher {
+class WhoFrameCap : public WhoTaskGroup {
 public:
-    WhoFrameCap(const std::string &name) : WhoFrameCap(nullptr, name) {}
-    WhoFrameCap(who::cam::WhoCam *cam, const std::string &name) : WhoPublisher(name), m_cam(cam)
+    ~WhoFrameCap()
     {
-        if (cam) {
-            fill_cam_queue();
+        WhoTaskGroup::destroy();
+        for (auto queue : m_queues) {
+            vQueueDelete(queue);
         }
     }
-    void set_cam(who::cam::WhoCam *cam)
-    {
-        m_cam = cam;
-        fill_cam_queue();
-    }
-    who::cam::WhoCam *get_cam() { return m_cam; }
-    bool run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID) override;
 
-protected:
-    void set_new_frame_bits();
-    who::cam::WhoCam *m_cam;
+    template <typename T, typename... Args>
+    void add_node(Args &&...args)
+    {
+        T *node = new T(std::forward<Args>(args)...);
+        if (!m_nodes.empty()) {
+            auto &prev_node = m_nodes.back();
+            QueueHandle_t queue = xQueueCreate(1, sizeof(who::cam::cam_fb_t *));
+            node->set_in_queue(queue);
+            node->set_prev_node(prev_node);
+            prev_node->set_out_queue(queue);
+            prev_node->set_next_node(node);
+            m_queues.emplace_back(queue);
+        }
+        m_nodes.emplace_back(node);
+        WhoTaskGroup::register_task(node);
+    }
+
+    bool run(std::vector<std::tuple<const configSTACK_DEPTH_TYPE, UBaseType_t, const BaseType_t>> args);
+
+    WhoFrameCapNode *get_node(const std::string &name);
+    WhoFrameCapNode *get_node(int i);
+    WhoFrameCapNode *get_last_node();
+    std::vector<WhoFrameCapNode *> get_all_nodes() { return m_nodes; }
 
 private:
-    void task() override;
-    void fill_cam_queue();
-    virtual void on_new_frame();
-};
-
-class WhoFrameCapLCD : public WhoFrameCap {
-public:
-    WhoFrameCapLCD(const std::string &name, bool display_back_frame = false) :
-        WhoFrameCapLCD(nullptr, nullptr, name, display_back_frame)
-    {
-    }
-    WhoFrameCapLCD(who::cam::WhoCam *cam,
-                   who::lcd::WhoLCD *lcd,
-                   const std::string &name,
-                   bool display_back_frame = false) :
-        WhoFrameCap(cam, name), m_lcd(lcd), m_display_back_frame(display_back_frame)
-    {
-    }
-    void set_lcd(who::lcd::WhoLCD *lcd) { m_lcd = lcd; }
-    who::lcd::WhoLCD *get_lcd() { return m_lcd; }
-    bool run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID) override;
-
-private:
-    void run_lcd_display_cbs(who::cam::cam_fb_t *fb);
-    void on_new_frame() override;
-    who::lcd::WhoLCD *m_lcd;
-    bool m_display_back_frame;
+    std::vector<WhoFrameCapNode *> m_nodes;
+    std::vector<QueueHandle_t> m_queues;
 };
 } // namespace frame_cap
 } // namespace who

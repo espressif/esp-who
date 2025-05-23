@@ -1,0 +1,7 @@
+menu "esp-who: yield2idle"
+    config MAX_TASK_LOOP_TIME
+        int "max task loop time in seconds"
+        default 1
+        help
+            This option is related to CONFIG_ESP_TASK_WDT_TIMEOUT_S. If one of your task takes a long time to loop, and the time is close to CONFIG_ESP_TASK_WDT_TIMEOUT_S, try to increase CONFIG_ESP_TASK_WDT_TIMEOUT_S. The value of this option should be round up. For example, real time is 0.3, it should be round up to 1. real time is 1.7, it should be round up to 2.
+endmenu

@@ -10,9 +10,11 @@ namespace lcd {
 class WhoLCD {
 public:
     WhoLCD() { init(); }
+    ~WhoLCD() { deinit(); }
     void init();
+    void deinit();
     esp_lcd_panel_handle_t get_lcd_panel_handle();
-    void draw_full_lcd(const void *data);
+    void draw_bitmap(const void *data, int width, int height, int x_start, int y_start);
 
 private:
 #if CONFIG_IDF_TARGET_ESP32S3

@@ -36,8 +36,12 @@ void WhoLCD::init(const lvgl_port_cfg_t &lvgl_port_cfg)
             .swap_bytes = false,
 #endif
         }};
-    lvgl_port_add_disp(&disp_cfg);
+    m_disp = lvgl_port_add_disp(&disp_cfg);
     ESP_ERROR_CHECK(bsp_display_backlight_on());
+}
+void WhoLCD::deinit()
+{
+    // TODO
 }
 #elif CONFIG_IDF_TARGET_ESP32P4
 void WhoLCD::init(const lvgl_port_cfg_t &lvgl_port_cfg)
@@ -74,15 +78,21 @@ void WhoLCD::init(const lvgl_port_cfg_t &lvgl_port_cfg)
                                  .buff_spiram = false,
                                  .sw_rotate = true,
                              }};
-    bsp_display_start_with_config(&cfg);
+    m_disp = bsp_display_start_with_config(&cfg);
     ESP_ERROR_CHECK(bsp_display_backlight_on());
 }
+void WhoLCD::deinit()
+{
+    bsp_display_stop(m_disp);
+    // only a workaround, i2c should not deinitialized by bsp_display.
+    ESP_ERROR_CHECK(bsp_i2c_init());
+}
 #endif
-void WhoLCD::create_canvas()
+void WhoLCD::create_canvas(uint16_t width, uint16_t height)
 {
     bsp_display_lock(0);
     m_canvas = lv_canvas_create(lv_scr_act());
-    lv_obj_set_size(m_canvas, BSP_LCD_H_RES, BSP_LCD_V_RES);
+    lv_obj_set_size(m_canvas, width, height);
     bsp_display_unlock();
 }
 } // namespace lcd

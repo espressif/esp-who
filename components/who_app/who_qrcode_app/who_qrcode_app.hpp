@@ -1,29 +1,29 @@
 #pragma once
-#include "who_frame_cap.hpp"
+#include "who_app.hpp"
 #include "who_qrcode_lcd.hpp"
 #include "who_qrcode_term.hpp"
 
 namespace who {
 namespace app {
-class WhoQRCodeAppBase : public WhoTasks {
+class WhoQRCodeAppLCD : public WhoApp {
 public:
-    void set_cam(cam::WhoCam *cam) { m_frame_cap->set_cam(cam); }
+    WhoQRCodeAppLCD(frame_cap::WhoFrameCap *frame_cap, frame_cap::WhoFrameCapNode *lcd_disp_frame_cap_node = nullptr);
     bool run() override;
 
-protected:
+private:
+    lcd_disp::WhoLCDDisp *m_lcd_disp;
     frame_cap::WhoFrameCap *m_frame_cap;
-    qrcode::WhoQRCodeBase *m_qrcode;
+    qrcode::WhoQRCodeLCD *m_qrcode;
 };
 
-class WhoQRCodeAppLCD : public WhoQRCodeAppBase {
+class WhoQRCodeAppTerm : public WhoApp {
 public:
-    WhoQRCodeAppLCD();
-    void set_lcd(lcd::WhoLCD *lcd) { static_cast<frame_cap::WhoFrameCapLCD *>(m_frame_cap)->set_lcd(lcd); }
-};
+    WhoQRCodeAppTerm(frame_cap::WhoFrameCap *frame_cap);
+    bool run() override;
 
-class WhoQRCodeAppTerm : public WhoQRCodeAppBase {
-public:
-    WhoQRCodeAppTerm();
+private:
+    frame_cap::WhoFrameCap *m_frame_cap;
+    qrcode::WhoQRCodeTerm *m_qrcode;
 };
 
 } // namespace app

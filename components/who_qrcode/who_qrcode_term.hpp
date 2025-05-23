@@ -8,6 +8,8 @@ namespace qrcode {
 class WhoQRCodeTerm : public WhoQRCodeBase {
 public:
     using WhoQRCodeBase::WhoQRCodeBase;
+
+private:
     void on_new_qrcode_result(const char *result) override;
 };
 } // namespace qrcode

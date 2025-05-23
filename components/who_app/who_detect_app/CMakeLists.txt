@@ -1,6 +1,8 @@
-set(src_dirs        .)
+set(src_dirs        .
+                    ..)
 
-set(include_dirs    .)
+set(include_dirs    .
+                    ..)
 
 set(requires who_detect)
 

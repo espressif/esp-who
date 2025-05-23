@@ -1,45 +1,56 @@
+#include "frame_cap_pipeline.hpp"
 #include "pedestrian_detect.hpp"
 #include "who_detect_app.hpp"
+#include "bsp/esp-bsp.h"
 
-using namespace who::cam;
-using namespace who::lcd;
+using namespace who::frame_cap;
 using namespace who::app;
 
-#define WITH_LCD 1
+void run_detect_lcd()
+{
+    WhoFrameCapNode *lcd_disp_frame_cap_node = nullptr;
+#if CONFIG_IDF_TARGET_ESP32S3
+    auto frame_cap = get_lcd_dvp_frame_cap_pipeline();
+#elif CONFIG_IDF_TARGET_ESP32P4
+    auto frame_cap = get_lcd_mipi_csi_frame_cap_pipeline();
+    // auto frame_cap = get_lcd_mipi_csi_ppa_frame_cap_pipeline(&lcd_disp_frame_cap_node);
+    // auto frame_cap = get_lcd_uvc_frame_cap_pipeline();
+#endif
+    auto detect_app = new WhoDetectAppLCD(frame_cap, lcd_disp_frame_cap_node);
+    // create model later to avoid memory fragmentation.
+    detect_app->set_model(new PedestrianDetect(), {{255, 0, 0}});
+    detect_app->run();
+}
+
+void run_detect_term()
+{
+#if CONFIG_IDF_TARGET_ESP32S3
+    auto frame_cap = get_term_dvp_frame_cap_pipeline();
+#elif CONFIG_IDF_TARGET_ESP32P4
+    auto frame_cap = get_term_mipi_csi_frame_cap_pipeline();
+    // auto frame_cap = get_term_mipi_csi_ppa_frame_cap_pipeline();
+    // auto frame_cap = get_term_uvc_frame_cap_pipeline();
+#endif
+    auto detect_app = new WhoDetectAppTerm(frame_cap);
+    // create model later to avoid memory fragmentation.
+    detect_app->set_model(new PedestrianDetect());
+    detect_app->run();
+}
 
 extern "C" void app_main(void)
 {
-#if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
+    vTaskPrioritySet(xTaskGetCurrentTaskHandle(), 5);
+#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 
+// close led
 #if CONFIG_IDF_TARGET_ESP32S3
     ESP_ERROR_CHECK(bsp_leds_init());
     ESP_ERROR_CHECK(bsp_led_set(BSP_LED_GREEN, false));
 #endif
 
-#if CONFIG_IDF_TARGET_ESP32P4
-    auto cam = new WhoP4Cam(VIDEO_PIX_FMT_RGB565, 3, V4L2_MEMORY_USERPTR, true);
-    // auto cam = new WhoP4PPACam(VIDEO_PIX_FMT_RGB565, 4, V4L2_MEMORY_USERPTR, 224, 224, true);
-#elif CONFIG_IDF_TARGET_ESP32S3
-    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
-#endif
-    auto lcd = new WhoLCD();
-
-#if WITH_LCD
-    auto model = new PedestrianDetect();
-    auto detect = new WhoDetectAppLCD({{255, 0, 0}});
-    detect->set_cam(cam);
-    detect->set_lcd(lcd);
-    detect->set_model(model);
-    // detect->set_fps(5);
-    detect->run();
-#else
-    auto model = new PedestrianDetect();
-    auto detect = new WhoDetectAppTerm();
-    detect->set_cam(cam);
-    detect->set_model(model);
-    // detect->set_fps(5);
-    detect->run();
-#endif
+    run_detect_lcd();
+    // try this if you don't have a lcd.
+    // run_detect_term();
 }

@@ -9,7 +9,8 @@ class WhoTaskState : public WhoTask {
 public:
     WhoTaskState(int interval = 2);
     void task() override;
-    bool stop() override;
+    bool stop_async() override;
+    bool pause_async() override;
 
 private:
     void print_task_status();

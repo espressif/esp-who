@@ -25,32 +25,65 @@ void WhoDetectLCD::on_new_detect_result(const result_t &result)
     xSemaphoreGive(m_res_mutex);
 }
 
+void WhoDetectLCD::cleanup()
+{
+    detect::WhoDetectLCD::cleanup();
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+    m_result = {};
+    xSemaphoreGive(m_res_mutex);
+}
+
+WhoRecognition::WhoRecognition(const std::string &name,
+                               lcd_disp::WhoLCDDisp *lcd_disp,
+                               WhoDetectLCD *detect,
+                               HumanFaceRecognizer *recognizer) :
+    WhoTask(name),
+    lcd_disp::IWhoLCDDisp(lcd_disp, this),
+    m_detect(detect),
+    m_recognizer(recognizer),
+    m_res_mutex(xSemaphoreCreateMutex())
+{
+    m_btn_user_data = new user_data_t[3];
+    m_btn_user_data[0] = {this, RECOGNIZE};
+    m_btn_user_data[1] = {this, ENROLL};
+    m_btn_user_data[2] = {this, DELETE};
+}
+
+WhoRecognition::~WhoRecognition()
+{
+    // TODO unregister buttons
+    vSemaphoreDelete(m_res_mutex);
+    delete[] m_btn_user_data;
+    delete m_recognizer;
+}
+
 void WhoRecognition::task()
 {
     create_btns();
     create_label();
     while (true) {
-        set_and_clear_bits(BLOCKING, RUNNING);
         EventBits_t event_bits = xEventGroupWaitBits(
             m_event_group, RECOGNIZE | ENROLL | DELETE | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
         if (event_bits & STOP) {
-            set_and_clear_bits(TERMINATE, BLOCKING);
             break;
         } else if (event_bits & PAUSE) {
+            xEventGroupSetBits(m_event_group, PAUSED);
             EventBits_t pause_event_bits =
                 xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
             if (pause_event_bits & STOP) {
-                set_and_clear_bits(TERMINATE, BLOCKING);
                 break;
             } else {
                 continue;
             }
         }
-        set_and_clear_bits(RUNNING, BLOCKING);
-        m_detect->pause();
         if (event_bits & (RECOGNIZE | ENROLL)) {
             auto result = m_detect->get_result();
-            auto img = who::cam::fb2img(result.fb);
+            if (!result.fb) {
+                // The result of detection may not be ready yet.
+                continue;
+            }
+            m_detect->pause_async();
+            auto img = static_cast<dl::image::img_t>(*(result.fb));
             if (event_bits & RECOGNIZE) {
                 auto rec_res = m_recognizer->recognize(img, result.det_res);
                 char *text = new char[64];
@@ -75,6 +108,9 @@ void WhoRecognition::task()
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
             }
+            m_detect->wait_for_paused(portMAX_DELAY);
+            m_detect->cleanup_for_paused();
+            m_detect->resume();
         }
         if (event_bits & DELETE) {
             esp_err_t ret = m_recognizer->delete_last_feat();
@@ -88,8 +124,8 @@ void WhoRecognition::task()
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
         }
-        m_detect->resume();
     }
+    xEventGroupSetBits(m_event_group, STOPPED);
     vTaskDelete(NULL);
 }
 
@@ -98,7 +134,7 @@ void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
     user_data_t *user_data = reinterpret_cast<user_data_t *>(lv_event_get_user_data(e));
     EventGroupHandle_t event_group = user_data->who_rec_ptr->get_event_group();
     EventBits_t event_bits = xEventGroupGetBits(event_group);
-    if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
+    if (!(event_bits & STOPPED) && !(event_bits & PAUSED)) {
         xEventGroupSetBits(event_group, user_data->event);
     }
 }
@@ -108,7 +144,7 @@ void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
     user_data_t *user_data = reinterpret_cast<user_data_t *>(usr_data);
     EventGroupHandle_t event_group = user_data->who_rec_ptr->get_event_group();
     EventBits_t event_bits = xEventGroupGetBits(event_group);
-    if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
+    if (!(event_bits & STOPPED) && !(event_bits & PAUSED)) {
         xEventGroupSetBits(event_group, user_data->event);
     }
 }
@@ -164,8 +200,8 @@ void WhoRecognition::create_label()
 
 void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
 {
-    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     static int cnt = WHO_REC_RES_SHOW_N_FRAMES;
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     if (!m_results.empty()) {
         lv_label_set_text(m_label, m_results.back());
         for (auto iter = m_results.begin(); iter != m_results.end(); iter++) {
@@ -174,10 +210,10 @@ void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
         m_results.clear();
         cnt = 0;
     }
+    xSemaphoreGive(m_res_mutex);
     if (cnt < WHO_REC_RES_SHOW_N_FRAMES && ++cnt == WHO_REC_RES_SHOW_N_FRAMES) {
         lv_label_set_text(m_label, "");
     }
-    xSemaphoreGive(m_res_mutex);
 }
 
 } // namespace recognition

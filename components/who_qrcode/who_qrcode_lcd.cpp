@@ -12,19 +12,31 @@ static const char *TAG = "WhoQRCode";
 
 namespace who {
 namespace qrcode {
+WhoQRCodeLCD::WhoQRCodeLCD(const std::string &name,
+                           frame_cap::WhoFrameCapNode *frame_cap_node,
+                           lcd_disp::WhoLCDDisp *lcd_disp) :
+    WhoQRCodeBase(name, frame_cap_node), lcd_disp::IWhoLCDDisp(lcd_disp, this), m_res_mutex(xSemaphoreCreateMutex())
+{
+}
+
+WhoQRCodeLCD::~WhoQRCodeLCD()
+{
+    vSemaphoreDelete(m_res_mutex);
+}
+
 void WhoQRCodeLCD::lcd_display_cb(who::cam::cam_fb_t *fb)
 {
-    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     static int cnt = WHO_QRCODE_RES_SHOW_N_FRAMES;
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     if (!m_results.empty()) {
         lv_label_set_text(m_label, m_results.back().c_str());
         m_results.clear();
         cnt = 0;
     }
+    xSemaphoreGive(m_res_mutex);
     if (cnt < WHO_QRCODE_RES_SHOW_N_FRAMES && ++cnt == WHO_QRCODE_RES_SHOW_N_FRAMES) {
         lv_label_set_text(m_label, "");
     }
-    xSemaphoreGive(m_res_mutex);
 }
 
 void WhoQRCodeLCD::task()

@@ -1,5 +1,6 @@
 #include "who_task.hpp"
 #include "who_yield2idle.hpp"
+#include <algorithm>
 #include <esp_log.h>
 
 static const char *TAG = "WhoTask";
@@ -7,51 +8,114 @@ static const char *TAG = "WhoTask";
 namespace who {
 bool WhoTaskBase::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
 {
-    if (xEventGroupGetBits(m_event_group) & (RUNNING | BLOCKING)) {
-        return false;
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
+    EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+    if (event_bits & STOPPED) {
+        if (xTaskCreatePinnedToCore(task, m_name.c_str(), uxStackDepth, this, uxPriority, &m_task_handle, xCoreID) ==
+            pdPASS) {
+            xEventGroupClearBits(m_event_group, STOPPED);
+            xSemaphoreGive(m_mutex);
+            return true;
+        } else {
+            ESP_LOGE(TAG, "Failed to create task.\n");
+        }
     }
-    set_and_clear_bits(RUNNING, TERMINATE);
-    if (xTaskCreatePinnedToCore(task, m_name.c_str(), uxStackDepth, this, uxPriority, &m_task_handle, xCoreID) !=
-        pdPASS) {
-        ESP_LOGE(TAG, "Failed to create task.\n");
-        set_and_clear_bits(TERMINATE, RUNNING);
-        return false;
-    }
-    return true;
+    xSemaphoreGive(m_mutex);
+    return false;
 }
 
 bool WhoTaskBase::stop()
 {
-    if (xEventGroupGetBits(m_event_group) & TERMINATE) {
-        return false;
+    if (stop_async()) {
+        wait_for_stopped(portMAX_DELAY);
+        cleanup_for_stopped();
+        return true;
     }
-    xEventGroupSetBits(m_event_group, STOP);
-    xEventGroupWaitBits(m_event_group, TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
-    return true;
+    return false;
 }
 
-bool WhoTaskBase::pause()
+bool WhoTaskBase::stop_async()
 {
-    if (xEventGroupGetBits(m_event_group) & TERMINATE) {
-        return false;
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
+    EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+    if (!(event_bits & STOPPED) && !(event_bits & STOP)) {
+        xEventGroupSetBits(m_event_group, STOP);
+        xSemaphoreGive(m_mutex);
+        return true;
     }
-    xEventGroupSetBits(m_event_group, PAUSE);
-    return true;
+    xSemaphoreGive(m_mutex);
+    return false;
+}
+
+void WhoTaskBase::wait_for_stopped(TickType_t timeout)
+{
+    xEventGroupWaitBits(m_event_group, STOPPED, pdFALSE, pdFALSE, timeout);
 }
 
 bool WhoTaskBase::resume()
 {
-    if (xEventGroupGetBits(m_event_group) & TERMINATE) {
-        return false;
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
+    EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+    if (event_bits & PAUSED) {
+        xEventGroupSetBits(m_event_group, RESUME);
+        xEventGroupClearBits(m_event_group, PAUSED);
+        xSemaphoreGive(m_mutex);
+        return true;
     }
-    xEventGroupSetBits(m_event_group, RESUME);
-    return true;
+    xSemaphoreGive(m_mutex);
+    return false;
 }
 
-void WhoTaskBase::set_and_clear_bits(EventBits_t bit_to_set, EventBits_t bit_to_clear)
+bool WhoTaskBase::pause()
 {
-    xEventGroupSetBits(m_event_group, bit_to_set);
-    xEventGroupClearBits(m_event_group, bit_to_clear);
+    if (pause_async()) {
+        wait_for_paused(portMAX_DELAY);
+        cleanup_for_paused();
+        return true;
+    }
+    return false;
+}
+
+bool WhoTaskBase::pause_async()
+{
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
+    EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+    if (!(event_bits & STOPPED) && !(event_bits & PAUSED) && !(event_bits & STOP) && !(event_bits & PAUSE)) {
+        xEventGroupSetBits(m_event_group, PAUSE);
+        xSemaphoreGive(m_mutex);
+        return true;
+    }
+    xSemaphoreGive(m_mutex);
+    return false;
+}
+
+void WhoTaskBase::wait_for_paused(TickType_t timeout)
+{
+    xEventGroupWaitBits(m_event_group, PAUSED, pdFALSE, pdFALSE, timeout);
+}
+
+void WhoTaskBase::cleanup_for_paused()
+{
+    xEventGroupClearBits(m_event_group, ALL_EVENT_BITS & ~PAUSED);
+    cleanup();
+}
+
+void WhoTaskBase::cleanup_for_stopped()
+{
+    xEventGroupClearBits(m_event_group, ALL_EVENT_BITS & ~STOPPED);
+    cleanup();
+}
+
+bool WhoTaskBase::is_active()
+{
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
+    EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+    if (!(event_bits & STOPPED) && !(event_bits & PAUSED) && !(event_bits & STOP) && !(event_bits & PAUSE)) {
+        xSemaphoreGive(m_mutex);
+        return true;
+    }
+    xSemaphoreGive(m_mutex);
+    return false;
 }
 
 void WhoTaskBase::task(void *args)
@@ -60,16 +124,134 @@ void WhoTaskBase::task(void *args)
     self->task();
 }
 
-bool WhoTask::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
+WhoTask::WhoTask(const std::string &name) :
+    WhoTaskBase(name), m_coreid(tskNO_AFFINITY), m_mutex(xSemaphoreCreateMutex())
 {
-    // Never run other tasks when yield2idle running.
-    auto yield2idle = WhoYield2Idle::get_instance(xCoreID);
-    EventBits_t event_bits =
-        xEventGroupWaitBits(yield2idle->get_event_group(), BLOCKING | TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
-    if (event_bits & BLOCKING) {
-        yield2idle->monitor(this);
-    }
-    return WhoTaskBase::run(uxStackDepth, uxPriority, xCoreID);
+    WhoYield2Idle::get_instance()->start_monitor(this);
 }
 
+WhoTask::~WhoTask()
+{
+    WhoYield2Idle::get_instance()->end_monitor(this);
+    vSemaphoreDelete(m_mutex);
+}
+
+bool WhoTask::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
+{
+    assert(xCoreID != tskNO_AFFINITY);
+    // never run when yielding2idle.
+    if (xSemaphoreTake(m_mutex, 0) == pdTRUE) {
+        bool ret = WhoTaskBase::run(uxStackDepth, uxPriority, xCoreID);
+        m_coreid = xCoreID;
+        xSemaphoreGive(m_mutex);
+        return ret;
+    }
+    return false;
+}
+
+bool WhoTask::resume()
+{
+    // never resume when yielding2idle.
+    if (xSemaphoreTake(m_mutex, 0) == pdTRUE) {
+        bool ret = WhoTaskBase::resume();
+        xSemaphoreGive(m_mutex);
+        return ret;
+    }
+    return false;
+}
+
+void WhoTaskGroup::register_task(WhoTask *task)
+{
+    assert(!WhoYield2Idle::get_instance()->is_active());
+    m_tasks.emplace_back(task);
+}
+
+void WhoTaskGroup::unregister_task(WhoTask *task)
+{
+    assert(!WhoYield2Idle::get_instance()->is_active());
+    m_tasks.erase(std::remove(m_tasks.begin(), m_tasks.end(), task), m_tasks.end());
+}
+
+void WhoTaskGroup::register_task_group(WhoTaskGroup *task_group)
+{
+    assert(!WhoYield2Idle::get_instance()->is_active());
+    m_task_groups.emplace_back(task_group);
+}
+
+void WhoTaskGroup::unregister_task_group(WhoTaskGroup *task_group)
+{
+    assert(!WhoYield2Idle::get_instance()->is_active());
+    m_task_groups.erase(std::remove(m_task_groups.begin(), m_task_groups.end(), task_group), m_task_groups.end());
+}
+
+std::vector<WhoTask *> WhoTaskGroup::get_all_tasks()
+{
+    if (m_task_groups.empty()) {
+        return m_tasks;
+    }
+    auto all_tasks = m_tasks;
+    for (const auto &task_group : m_task_groups) {
+        auto task_group_tasks = task_group->get_all_tasks();
+        all_tasks.insert(all_tasks.end(), task_group_tasks.begin(), task_group_tasks.end());
+    }
+    return all_tasks;
+}
+
+void WhoTaskGroup::stop()
+{
+    auto tasks = get_all_tasks();
+    std::vector<bool> flags;
+    for (const auto &task : tasks) {
+        flags.emplace_back(task->stop_async());
+    }
+    for (int i = 0; i < tasks.size(); i++) {
+        if (flags[i]) {
+            tasks[i]->wait_for_stopped(portMAX_DELAY);
+        }
+    }
+    for (int i = 0; i < tasks.size(); i++) {
+        if (flags[i]) {
+            tasks[i]->cleanup_for_stopped();
+        }
+    }
+}
+
+void WhoTaskGroup::resume()
+{
+    auto tasks = get_all_tasks();
+    for (const auto &task : tasks) {
+        task->resume();
+    }
+}
+
+void WhoTaskGroup::pause()
+{
+    auto tasks = get_all_tasks();
+    std::vector<bool> flags;
+    for (const auto &task : tasks) {
+        flags.emplace_back(task->pause_async());
+    }
+    for (int i = 0; i < tasks.size(); i++) {
+        if (flags[i]) {
+            tasks[i]->wait_for_paused(portMAX_DELAY);
+        }
+    }
+    for (int i = 0; i < tasks.size(); i++) {
+        if (flags[i]) {
+            tasks[i]->cleanup_for_paused();
+        }
+    }
+}
+
+void WhoTaskGroup::destroy()
+{
+    auto tasks = m_tasks;
+    for (const auto &task : tasks) {
+        delete (task);
+    }
+    auto task_groups = m_task_groups;
+    for (const auto &task_group : m_task_groups) {
+        delete (task_group);
+    }
+}
 } // namespace who
