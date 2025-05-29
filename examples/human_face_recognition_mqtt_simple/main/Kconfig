@@ -1,40 +1,40 @@
-menu "Example Configuration"
+menu "Application Configuration"
 
-    config EXAMPLE_BASIC_AUTH
-        bool "Basic Authentication"
-        default n
-        help
-            Basic Authentication is a method for an HTTP user agent (e.g. a web browser)
-            to provide a user name and password when making a request. It is the simplest
-            technique for enforcing access controls to web resources. because it doesn't
-            require cookies, session identifiers, or login pages; rather, it uses standard
-            fields in the HTTP header.
-            Note that, Basic Authentication is not encrypted channel and also easy to retrieve
-            credentials as they are sent in plain text format.
+    # config EXAMPLE_BASIC_AUTH
+    #     bool "Basic Authentication"
+    #     default n
+    #     help
+    #         Basic Authentication is a method for an HTTP user agent (e.g. a web browser)
+    #         to provide a user name and password when making a request. It is the simplest
+    #         technique for enforcing access controls to web resources. because it doesn't
+    #         require cookies, session identifiers, or login pages; rather, it uses standard
+    #         fields in the HTTP header.
+    #         Note that, Basic Authentication is not encrypted channel and also easy to retrieve
+    #         credentials as they are sent in plain text format.
 
-    config EXAMPLE_BASIC_AUTH_USERNAME
-        string "Basic Authenticate User Name"
-        depends on EXAMPLE_BASIC_AUTH
-        default "ESP32"
-        help
-            The client's user name which used for basic authenticate.
+    # config EXAMPLE_BASIC_AUTH_USERNAME
+    #     string "Basic Authenticate User Name"
+    #     depends on EXAMPLE_BASIC_AUTH
+    #     default "ESP32"
+    #     help
+    #         The client's user name which used for basic authenticate.
 
-    config EXAMPLE_BASIC_AUTH_PASSWORD
-        string "Basic Authenticate Password"
-        depends on EXAMPLE_BASIC_AUTH
-        default "ESP32Webserver"
-        help
-            The client's password which used for basic authenticate.
+    # config EXAMPLE_BASIC_AUTH_PASSWORD
+    #     string "Basic Authenticate Password"
+    #     depends on EXAMPLE_BASIC_AUTH
+    #     default "ESP32Webserver"
+    #     help
+    #         The client's password which used for basic authenticate.
 
     config ESP_WIFI_SSID
         string "WiFi SSID"
-        default "myssid"
+        default "CasetaWifi"
         help
             SSID (network name) for the example to connect to.
 
     config ESP_WIFI_PASSWORD
         string "WiFi Password"
-        default "mypassword"
+        default "apd14505jc"
         help
             WiFi password (WPA or WPA2) for the example to use.
 
@@ -92,5 +92,175 @@ menu "Example Configuration"
             bool "WAPI PSK"
     endchoice
 
+    config MQTT_HOST
+        string "MQTT_HOST"
+        default "mqtt://myhost"
+        help
+            MQtt host url
+    config MQTT_TOPIC_RECOGNITION
+        string "MQTT TOPIC_RECOGNITION"
+        default "/topic/face/recognized/01"
+        help
+            Face recognition topic    
+    config MQTT_TOPIC_COMMAND
+        string "MQTT_TOPIC_COMMAND"
+        default "/topic/face/command/01"
+        help
+            Camera command topic    
+
+    menu "Camera Pins"
+        choice CAMERA_MODEL
+            bool "Select Camera Pinout"
+            default CAMERA_MODEL_WROVER_KIT
+            help
+                Select Camera Pinout.
+
+        config CAMERA_MODEL_ESP32_S3_CAM
+            bool "ESP32-S3-CAM"
+        config CAMERA_MODEL_WROVER_KIT
+            bool "WROVER-KIT With OV2640 Module"
+        config CAMERA_MODEL_ESP32_CAM_BOARD
+            bool "ESP32 Camera Development Board"
+        config CAMERA_MODEL_ESP_EYE
+            bool "ESP_EYE DevKit"
+        config CAMERA_MODEL_M5STACK_PSRAM
+            bool "M5Stack Camera With PSRAM"
+        config CAMERA_MODEL_M5STACK_WIDE
+            bool "M5Stack Camera F (Wide)"
+        config CAMERA_MODEL_AI_THINKER
+            bool "ESP32-CAM by AI-Thinker"
+        config CAMERA_MODEL_CUSTOM
+            bool "Custom Camera Pinout"
+        endchoice
+
+        config CAMERA_PIN_PWDN
+            depends on CAMERA_MODEL_CUSTOM
+            int "Power Down pin"
+            range -1 33
+            default -1
+            help
+                Select Power Down pin or -1 for unmanaged.
+
+        config CAMERA_PIN_RESET
+            depends on CAMERA_MODEL_CUSTOM
+            int "Reset pin"
+            range -1 33
+            default -1
+            help
+                Select Camera Reset pin or -1 for software reset.
+
+        config CAMERA_PIN_XCLK
+            depends on CAMERA_MODEL_CUSTOM
+            int "XCLK pin"
+            range 0 33
+            default 21
+            help
+                Select Camera XCLK pin.
+
+        config CAMERA_PIN_SIOD
+            depends on CAMERA_MODEL_CUSTOM
+            int "SIOD pin"
+            range 0 33
+            default 26
+            help
+                Select Camera SIOD pin.
+
+        config CAMERA_PIN_SIOC
+            depends on CAMERA_MODEL_CUSTOM
+            int "SIOC pin"
+            range 0 33
+            default 27
+            help
+                Select Camera SIOC pin.
+
+        config CAMERA_PIN_VSYNC
+            depends on CAMERA_MODEL_CUSTOM
+            int "VSYNC pin"
+            range 0 39
+            default 25
+            help
+                Select Camera VSYNC pin.
+
+        config CAMERA_PIN_HREF
+            depends on CAMERA_MODEL_CUSTOM
+            int "HREF pin"
+            range 0 39
+            default 23
+            help
+                Select Camera HREF pin.
+
+        config CAMERA_PIN_PCLK
+            depends on CAMERA_MODEL_CUSTOM
+            int "PCLK pin"
+            range 0 39
+            default 25
+            help
+                Select Camera PCLK pin.
+
+        config CAMERA_PIN_Y2
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y2 pin"
+            range 0 39
+            default 4
+            help
+                Select Camera Y2 pin.
+
+        config CAMERA_PIN_Y3
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y3 pin"
+            range 0 39
+            default 5
+            help
+                Select Camera Y3 pin.
+
+        config CAMERA_PIN_Y4
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y4 pin"
+            range 0 39
+            default 18
+            help
+                Select Camera Y4 pin.
+
+        config CAMERA_PIN_Y5
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y5 pin"
+            range 0 39
+            default 19
+            help
+                Select Camera Y5 pin.
+
+        config CAMERA_PIN_Y6
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y6 pin"
+            range 0 39
+            default 36
+            help
+                Select Camera Y6 pin.
+
+        config CAMERA_PIN_Y7
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y7 pin"
+            range 0 39
+            default 39
+            help
+                Select Camera Y7 pin.
+
+        config CAMERA_PIN_Y8
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y8 pin"
+            range 0 39
+            default 34
+            help
+                Select Camera Y8 pin.
+
+        config CAMERA_PIN_Y9
+            depends on CAMERA_MODEL_CUSTOM
+            int "Y9 pin"
+            range 0 39
+            default 35
+            help
+                Select Camera Y9 pin.
+
+    endmenu            
 
 endmenu

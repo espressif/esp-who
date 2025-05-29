@@ -25,6 +25,7 @@
 #include "esp_http_server.h"
 #include "esp_timer.h"
 
+
 #define PART_BOUNDARY "123456789000000000000987654321"
 static const char *_STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
 static const char *_STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
@@ -79,7 +80,7 @@ using namespace who::cam;
 using namespace who::lcd;
 using namespace who::app;
 
-static auto cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
+static WhoCam* cam;// = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
 static httpd_handle_t server = NULL;
 
 #define EXAMPLE_HTTP_QUERY_KEY_MAX_LEN (64)
@@ -223,98 +224,6 @@ static void httpd_register_basic_auth(httpd_handle_t server)
 
 static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 
-/* An HTTP GET handler */
-// static esp_err_t hello_get_handler(httpd_req_t *req)
-// {
-//     char *buf;
-//     size_t buf_len;
-
-//     /* Get header value string length and allocate memory for length + 1,
-//      * extra byte for null termination */
-//     buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
-//     if (buf_len > 1) {
-//         buf = static_cast<char*>(malloc(buf_len));
-//         ESP_RETURN_ON_FALSE(buf, ESP_ERR_NO_MEM, TAG, "buffer alloc failed");
-//         /* Copy null terminated value string into buffer */
-//         if (httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK) {
-//             ESP_LOGI(TAG, "Found header => Host: %s", buf);
-//         }
-//         free(buf);
-//     }
-
-//     buf_len = httpd_req_get_hdr_value_len(req, "Test-Header-2") + 1;
-//     if (buf_len > 1) {
-//         buf = static_cast<char*>(malloc(buf_len));
-//         ESP_RETURN_ON_FALSE(buf, ESP_ERR_NO_MEM, TAG, "buffer alloc failed");
-//         if (httpd_req_get_hdr_value_str(req, "Test-Header-2", buf, buf_len) == ESP_OK) {
-//             ESP_LOGI(TAG, "Found header => Test-Header-2: %s", buf);
-//         }
-//         free(buf);
-//     }
-
-//     buf_len = httpd_req_get_hdr_value_len(req, "Test-Header-1") + 1;
-//     if (buf_len > 1) {
-//         buf = static_cast<char*>(malloc(buf_len));
-//         ESP_RETURN_ON_FALSE(buf, ESP_ERR_NO_MEM, TAG, "buffer alloc failed");
-//         if (httpd_req_get_hdr_value_str(req, "Test-Header-1", buf, buf_len) == ESP_OK) {
-//             ESP_LOGI(TAG, "Found header => Test-Header-1: %s", buf);
-//         }
-//         free(buf);
-//     }
-
-//     /* Read URL query string length and allocate memory for length + 1,
-//      * extra byte for null termination */
-//     buf_len = httpd_req_get_url_query_len(req) + 1;
-//     if (buf_len > 1) {
-//         buf = static_cast<char*>(malloc(buf_len));
-//         ESP_RETURN_ON_FALSE(buf, ESP_ERR_NO_MEM, TAG, "buffer alloc failed");
-//         if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) {
-//             ESP_LOGI(TAG, "Found URL query => %s", buf);
-//             char param[EXAMPLE_HTTP_QUERY_KEY_MAX_LEN], dec_param[EXAMPLE_HTTP_QUERY_KEY_MAX_LEN] = {0};
-//             /* Get value of expected key from query string */
-//             if (httpd_query_key_value(buf, "query1", param, sizeof(param)) == ESP_OK) {
-//                 ESP_LOGI(TAG, "Found URL query parameter => query1=%s", param);
-//                 example_uri_decode(dec_param, param, strnlen(param, EXAMPLE_HTTP_QUERY_KEY_MAX_LEN));
-//                 ESP_LOGI(TAG, "Decoded query parameter => %s", dec_param);
-//             }
-//             if (httpd_query_key_value(buf, "query3", param, sizeof(param)) == ESP_OK) {
-//                 ESP_LOGI(TAG, "Found URL query parameter => query3=%s", param);
-//                 example_uri_decode(dec_param, param, strnlen(param, EXAMPLE_HTTP_QUERY_KEY_MAX_LEN));
-//                 ESP_LOGI(TAG, "Decoded query parameter => %s", dec_param);
-//             }
-//             if (httpd_query_key_value(buf, "query2", param, sizeof(param)) == ESP_OK) {
-//                 ESP_LOGI(TAG, "Found URL query parameter => query2=%s", param);
-//                 example_uri_decode(dec_param, param, strnlen(param, EXAMPLE_HTTP_QUERY_KEY_MAX_LEN));
-//                 ESP_LOGI(TAG, "Decoded query parameter => %s", dec_param);
-//             }
-//         }
-//         free(buf);
-//     }
-
-//     /* Set some custom headers */
-//     httpd_resp_set_hdr(req, "Custom-Header-1", "Custom-Value-1");
-//     httpd_resp_set_hdr(req, "Custom-Header-2", "Custom-Value-2");
-
-//     /* Send response with custom headers and body set as the
-//      * string passed in user context*/
-//     const char *resp_str = (const char *)req->user_ctx;
-//     httpd_resp_send(req, resp_str, HTTPD_RESP_USE_STRLEN);
-
-//     /* After sending the HTTP response the old HTTP request
-//      * headers are lost. Check if HTTP request headers can be read now. */
-//     if (httpd_req_get_hdr_value_len(req, "Host") == 0) {
-//         ESP_LOGI(TAG, "Request headers lost");
-//     }
-//     return ESP_OK;
-// }
-
-// static const httpd_uri_t hello = {.uri = "/hello",
-//                                   .method = HTTP_GET,
-//                                   .handler = hello_get_handler,
-//                                   /* Let's pass response string in user
-//                                    * context to demonstrate it's usage */
-//                                   .user_ctx = "Hello World!"};
-
 /* An HTTP POST handler */
 static esp_err_t echo_post_handler(httpd_req_t *req)
 {
@@ -366,7 +275,7 @@ esp_err_t jpg_stream_httpd_handler(httpd_req_t *req)
     }
 
     while (true) {
-        fb = cam->cam_fb_get();
+        fb = esp_camera_fb_get();//cam->cam_fb_get();
         if (!fb) {
             ESP_LOGE(TAG, "Camera capture failed");
             res = ESP_FAIL;
@@ -419,26 +328,6 @@ esp_err_t jpg_stream_httpd_handler(httpd_req_t *req)
 
 static const httpd_uri_t jpeg_stream_uri = {
     .uri = "/stream", .method = HTTP_GET, .handler = jpg_stream_httpd_handler, .user_ctx = NULL};
-
-// /* An HTTP_ANY handler */
-// static esp_err_t any_handler(httpd_req_t *req)
-// {
-//     /* Send response with body set as the
-//      * string passed in user context*/
-//     const char *resp_str = (const char *)req->user_ctx;
-//     httpd_resp_send(req, resp_str, HTTPD_RESP_USE_STRLEN);
-
-//     // End response
-//     httpd_resp_send_chunk(req, NULL, 0);
-//     return ESP_OK;
-// }
-
-// static const httpd_uri_t any = {.uri = "/any",
-//                                 .method = HTTP_ANY,
-//                                 .handler = any_handler,
-//                                 /* Let's pass response string in user
-//                                  * context to demonstrate it's usage */
-//                                 .user_ctx = "Hello World!"};
 
 /* This handler allows the custom error handling functionality to be
  * tested from client side. For that, when a PUT request 0 is sent to
@@ -547,9 +436,9 @@ void wifi_init_sta(void)
 {
     s_wifi_event_group = xEventGroupCreate();
 
-    ESP_ERROR_CHECK(esp_netif_init());
+    // ESP_ERROR_CHECK(esp_netif_init());
 
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    // ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_create_default_wifi_sta();
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
@@ -621,28 +510,45 @@ extern "C" void app_main(void)
 #endif
 
 #if CONFIG_IDF_TARGET_ESP32S3
+
+    ESP_LOGI(TAG, "Staring APP");
+
     ESP_ERROR_CHECK(bsp_leds_init());
     ESP_ERROR_CHECK(bsp_led_set(BSP_LED_GREEN, false));
 #endif
 
-#if CONFIG_IDF_TARGET_ESP32P4
-    auto cam = new WhoP4Cam(VIDEO_PIX_FMT_RGB565, 3, V4L2_MEMORY_USERPTR, true);
-    // auto cam = new WhoP4PPACam(VIDEO_PIX_FMT_RGB565, 4, V4L2_MEMORY_USERPTR, 160, 120, true);
-#elif CONFIG_IDF_TARGET_ESP32S3
+// ===============================================
+    // ESP_LOGI(TAG, "Staring WhoS3Cam");
+
     cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
-#endif
     // auto lcd = new WhoLCD();
 
-    auto recognition = new WhoRecognitionApp();
+    // ESP_LOGI(TAG, "WhoRecognitionApp");
+
+    // auto recognition = new WhoRecognitionApp();
     // cam->cam_fb_get()
-    recognition->set_cam(cam);
+    // recognition->set_cam(cam);
     // recognition->set_lcd(lcd);
-    recognition->run();
+
+    // ESP_LOGI(TAG, "Recognition run");
+
+    // recognition->run();
 
     // ===============================================
 
+    //app_camera_init();
+
+    // =================================================
+
+    ESP_LOGI(TAG, "Staring nvs");
+
+
     ESP_ERROR_CHECK(nvs_flash_init());
+    ESP_LOGI(TAG, "netif");
     ESP_ERROR_CHECK(esp_netif_init());
+
+    ESP_LOGI(TAG, "Staring event loop");
+
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
@@ -650,6 +556,8 @@ extern "C" void app_main(void)
      * examples/protocols/README.md for more information about this function.
      */
     // ESP_ERROR_CHECK(example_connect());
+
+    ESP_LOGI(TAG, "wifi_init_sta");
 
     wifi_init_sta();
 
@@ -660,12 +568,12 @@ extern "C" void app_main(void)
     // ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_STA_DISCONNECTED, &disconnect_handler,
     // &server));
 
-    /* Start the server for the first time */
-    server = start_webserver();
-    if (server == NULL) {
-        ESP_LOGE(TAG, "Failed to start server!");
-        return;
-    }
+    // /* Start the server for the first time */
+    // server = start_webserver();
+    // if (server == NULL) {
+    //     ESP_LOGE(TAG, "Failed to start server!");
+    //     return;
+    // }
 }
 
 // =====================================================================================
