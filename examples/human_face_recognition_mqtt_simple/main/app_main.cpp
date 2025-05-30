@@ -24,6 +24,7 @@
 #include "esp_camera.h"
 #include "esp_http_server.h"
 #include "esp_timer.h"
+#include "http_lcd.hpp"
 
 
 #define PART_BOUNDARY "123456789000000000000987654321"
@@ -80,7 +81,10 @@ using namespace who::cam;
 using namespace who::lcd;
 using namespace who::app;
 
-static WhoCam* cam;// = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
+WhoLCDiface* lcd = nullptr; // = new HttpLCD();
+
+// static WhoCam* cam;// = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
+// static WhoLCD* lcd;// = new WhoLCD();
 static httpd_handle_t server = NULL;
 
 #define EXAMPLE_HTTP_QUERY_KEY_MAX_LEN (64)
@@ -329,6 +333,91 @@ esp_err_t jpg_stream_httpd_handler(httpd_req_t *req)
 static const httpd_uri_t jpeg_stream_uri = {
     .uri = "/stream", .method = HTTP_GET, .handler = jpg_stream_httpd_handler, .user_ctx = NULL};
 
+
+esp_err_t recognize_httpd_handler(httpd_req_t *req)
+{
+    esp_err_t res = ESP_OK;
+    char part_buf[64];
+    static int64_t last_frame = 0;
+    if (!last_frame) {
+        last_frame = esp_timer_get_time();
+    }
+
+    res = httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
+    if (res != ESP_OK) {
+        return res;
+    }
+
+    while (true) {
+        // 1. Get the latest LCD buffer
+        size_t img_size = 0;
+        const uint8_t* img = static_cast<HttpLCD*>(lcd)->get_buffer(img_size);
+
+        if (!img || img_size == 0) {
+            ESP_LOGE(TAG, "No LCD buffer available");
+            vTaskDelay(10 / portTICK_PERIOD_MS);
+            continue;
+        }
+
+        ESP_LOGI(TAG, "buffer available");
+
+        // 2. Wrap the buffer as a camera_fb_t
+        camera_fb_t fb;
+        fb.buf = (uint8_t*)img;
+        fb.len = img_size;
+        fb.width = BSP_LCD_H_RES;
+        fb.height = BSP_LCD_V_RES;
+        fb.format = PIXFORMAT_RGB565;
+
+        // 3. Convert to JPEG
+        uint8_t* _jpg_buf = nullptr;
+        size_t _jpg_buf_len = 0;
+        bool jpeg_converted = frame2jpg(&fb, 80, &_jpg_buf, &_jpg_buf_len);
+        if (!jpeg_converted) {
+            ESP_LOGE(TAG, "JPEG compression failed");
+            res = ESP_FAIL;
+            break;
+        }
+
+        // 4. Send as multipart JPEG stream
+        if (res == ESP_OK) {
+            res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
+        }
+        if (res == ESP_OK) {
+            size_t hlen = snprintf(part_buf, sizeof(part_buf), _STREAM_PART, _jpg_buf_len);
+            res = httpd_resp_send_chunk(req, part_buf, hlen);
+        }
+        if (res == ESP_OK) {
+            res = httpd_resp_send_chunk(req, (const char*)_jpg_buf, _jpg_buf_len);
+        }
+
+        free(_jpg_buf);
+
+        if (res != ESP_OK) {
+            break;
+        }
+
+        int64_t fr_end = esp_timer_get_time();
+        int64_t frame_time = fr_end - last_frame;
+        last_frame = fr_end;
+        frame_time /= 1000;
+        ESP_LOGI(TAG,
+                 "MJPG: %luKB %lums (%.1ffps)",
+                 (uint32_t)(_jpg_buf_len / 1024),
+                 (uint32_t)frame_time,
+                 1000.0 / (uint32_t)frame_time);
+
+        // Optional: add a small delay to control frame rate
+        vTaskDelay(30 / portTICK_PERIOD_MS);
+    }
+
+    last_frame = 0;
+    return res;
+}
+
+static const httpd_uri_t recognize_uri = {
+    .uri = "/recognize", .method = HTTP_GET, .handler = recognize_httpd_handler, .user_ctx = NULL};
+
 /* This handler allows the custom error handling functionality to be
  * tested from client side. For that, when a PUT request 0 is sent to
  * URI /ctrl, the /hello and /echo URIs are unregistered and following
@@ -414,6 +503,8 @@ static httpd_handle_t start_webserver(void)
         httpd_register_uri_handler(server, &ctrl);
         // httpd_register_uri_handler(server, &any);
         httpd_register_uri_handler(server, &jpeg_stream_uri);
+        httpd_register_uri_handler(server, &recognize_uri);
+        
 #if CONFIG_EXAMPLE_BASIC_AUTH
         httpd_register_basic_auth(server);
 #endif
@@ -436,9 +527,6 @@ void wifi_init_sta(void)
 {
     s_wifi_event_group = xEventGroupCreate();
 
-    // ESP_ERROR_CHECK(esp_netif_init());
-
-    // ESP_ERROR_CHECK(esp_event_loop_create_default());
     esp_netif_create_default_wifi_sta();
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
@@ -452,22 +540,6 @@ void wifi_init_sta(void)
     ESP_ERROR_CHECK(
         esp_event_handler_instance_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL, &instance_got_ip));
 
-    // wifi_config_t wifi_config = {
-    //     .sta =
-    //         {
-    //             .ssid = EXAMPLE_ESP_WIFI_SSID,
-    //             .password = EXAMPLE_ESP_WIFI_PASS,
-    //             /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (password len =>
-    //             8).
-    //              * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
-    //              * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
-    //              * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
-    //              */
-    //             .threshold.authmode = ESP_WIFI_SCAN_AUTH_MODE_THRESHOLD,
-    //             .sae_pwe_h2e = ESP_WIFI_SAE_MODE,
-    //             .sae_h2e_identifier = EXAMPLE_H2E_IDENTIFIER,
-    //         },
-    // };
     wifi_config_t wifi_config = {};
     strncpy((char *)wifi_config.sta.ssid, EXAMPLE_ESP_WIFI_SSID, sizeof(wifi_config.sta.ssid));
     strncpy((char *)wifi_config.sta.password, EXAMPLE_ESP_WIFI_PASS, sizeof(wifi_config.sta.password));
@@ -518,30 +590,23 @@ extern "C" void app_main(void)
 #endif
 
 // ===============================================
-    // ESP_LOGI(TAG, "Staring WhoS3Cam");
+    ESP_LOGI(TAG, "Staring WhoS3Cam");
+    WhoCam* cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_VGA, 2, true);
+    
+    ESP_LOGI(TAG, "Creating HttpLCD");
+    lcd = new HttpLCD();
 
-    cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
-    // auto lcd = new WhoLCD();
+    ESP_LOGI(TAG, "WhoRecognitionApp");
+    auto recognition = new WhoRecognitionApp();
+    recognition->set_cam(cam);
+    recognition->set_lcd(lcd);
 
-    // ESP_LOGI(TAG, "WhoRecognitionApp");
+    ESP_LOGI(TAG, "Recognition run");
 
-    // auto recognition = new WhoRecognitionApp();
-    // cam->cam_fb_get()
-    // recognition->set_cam(cam);
-    // recognition->set_lcd(lcd);
+    recognition->run();
 
-    // ESP_LOGI(TAG, "Recognition run");
-
-    // recognition->run();
-
-    // ===============================================
-
-    //app_camera_init();
-
-    // =================================================
 
     ESP_LOGI(TAG, "Staring nvs");
-
 
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_LOGI(TAG, "netif");
@@ -551,41 +616,12 @@ extern "C" void app_main(void)
 
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
-     * Read "Establishing Wi-Fi or Ethernet Connection" section in
-     * examples/protocols/README.md for more information about this function.
-     */
-    // ESP_ERROR_CHECK(example_connect());
-
     ESP_LOGI(TAG, "wifi_init_sta");
 
     wifi_init_sta();
 
-    /* Register event handlers to stop the server when Wi-Fi or Ethernet is disconnected,
-     * and re-start it upon connection.
-     */
-    // ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &connect_handler, &server));
-    // ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_STA_DISCONNECTED, &disconnect_handler,
-    // &server));
-
-    // /* Start the server for the first time */
-    // server = start_webserver();
-    // if (server == NULL) {
-    //     ESP_LOGE(TAG, "Failed to start server!");
-    //     return;
-    // }
 }
 
-// =====================================================================================
-
-// static constexpr const char* TAG = "httpd_jpg_stream";
-
-// =====================================================================================
-/* The examples use WiFi configuration that you can set via project configuration menu
-
-   If you'd rather not, just change the below entries to strings with
-   the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
-*/
 
 static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
 {

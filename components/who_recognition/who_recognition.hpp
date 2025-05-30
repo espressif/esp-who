@@ -57,7 +57,9 @@ public:
     void lcd_display_cb(who::cam::cam_fb_t *fb) override;
 
 private:
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
     static void lvgl_btn_event_handler(lv_event_t *e);
+#endif // !BSP_CONFIG_NO_GRAPHIC_LIB
     static void iot_btn_event_handler(void *button_handle, void *usr_data);
     void create_btns();
     void create_label();
@@ -67,7 +69,9 @@ private:
 
     SemaphoreHandle_t m_res_mutex;
     std::list<result_t> m_results;
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
     lv_obj_t *m_label;
+#endif // !BSP_CONFIG_NO_GRAPHIC_LIB
     user_data_t *m_btn_user_data;
 };
 } // namespace recognition

@@ -1,4 +1,4 @@
 ## IDF Component Manager Manifest File
 dependencies:
-  espressif/esp_lvgl_port: '*'
+  espressif/esp32_s3_eye_noglib: '*'
   espressif/esp-dl: ^3.1.2

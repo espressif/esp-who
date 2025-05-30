@@ -1,12 +1,16 @@
 #include "who_recognition.hpp"
+#include <esp_log.h>
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
 #include "who_lvgl_utils.hpp"
+#endif
 #if CONFIG_IDF_TARGET_ESP32P4
 #define WHO_REC_RES_SHOW_N_FRAMES (60)
 #elif CONFIG_IDF_TARGET_ESP32S3
 #define WHO_REC_RES_SHOW_N_FRAMES (30)
 #endif
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
 LV_FONT_DECLARE(montserrat_bold_26);
-
+#endif
 namespace who {
 namespace recognition {
 detect::WhoDetectBase::result_t WhoDetectLCD::get_result()
@@ -34,6 +38,7 @@ void WhoRecognition::task()
         EventBits_t event_bits = xEventGroupWaitBits(
             m_event_group, RECOGNIZE | ENROLL | DELETE | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
         if (event_bits & STOP) {
+            printf("Stop received\n");
             set_and_clear_bits(TERMINATE, BLOCKING);
             break;
         } else if (event_bits & PAUSE) {
@@ -52,6 +57,7 @@ void WhoRecognition::task()
             auto result = m_detect->get_result();
             auto img = who::cam::fb2img(result.fb);
             if (event_bits & RECOGNIZE) {
+                printf("Recognize received\n");
                 auto rec_res = m_recognizer->recognize(img, result.det_res);
                 char *text = new char[64];
                 if (rec_res.empty()) {
@@ -62,8 +68,10 @@ void WhoRecognition::task()
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
+                printf("%s\n", text);
             }
             if (event_bits & ENROLL) {
+                printf("Enroll received\n");
                 esp_err_t ret = m_recognizer->enroll(img, result.det_res);
                 char *text = new char[64];
                 if (ret == ESP_FAIL) {
@@ -74,9 +82,11 @@ void WhoRecognition::task()
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
+                printf("%s\n", text);
             }
         }
         if (event_bits & DELETE) {
+            printf("Delete received\n");
             esp_err_t ret = m_recognizer->delete_last_feat();
             char *text = new char[64];
             if (ret == ESP_FAIL) {
@@ -87,12 +97,14 @@ void WhoRecognition::task()
             xSemaphoreTake(m_res_mutex, portMAX_DELAY);
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
+            printf("%s\n", text);
         }
         m_detect->resume();
     }
     vTaskDelete(NULL);
 }
 
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
 void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
 {
     user_data_t *user_data = reinterpret_cast<user_data_t *>(lv_event_get_user_data(e));
@@ -102,6 +114,7 @@ void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
         xEventGroupSetBits(event_group, user_data->event);
     }
 }
+#endif // !BSP_CONFIG_NO_GRAPHIC_LIB
 
 void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
 {
@@ -143,27 +156,33 @@ void WhoRecognition::create_btns()
     ESP_ERROR_CHECK(bsp_iot_button_create(btns, NULL, BSP_BUTTON_NUM));
     // play  recognize
     ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[1], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
+    iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
+
     // up    enroll
-    ESP_ERROR_CHECK(iot_button_register_cb(
-        btns[3], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
+    ESP_ERROR_CHECK(
+    iot_button_register_cb(btns[2], BUTTON_DOUBLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data +1)));
+    
     // down  delete
-    ESP_ERROR_CHECK(iot_button_register_cb(
-        btns[2], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
+    ESP_ERROR_CHECK(
+    iot_button_register_cb(btns[2], BUTTON_LONG_PRESS_START, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data +2)));
+    
 #endif
 }
 
 void WhoRecognition::create_label()
 {
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
     bsp_display_lock(0);
     m_label = create_lvgl_label("", &montserrat_bold_26);
     const lv_font_t *font = lv_obj_get_style_text_font(m_label, LV_PART_MAIN);
     lv_obj_align(m_label, LV_ALIGN_TOP_MID, 0, font->line_height);
     bsp_display_unlock();
+#endif // !BSP_CONFIG_NO_GRAPHIC_LIB
 }
 
 void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
 {
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     static int cnt = WHO_REC_RES_SHOW_N_FRAMES;
     if (!m_results.empty()) {
@@ -178,6 +197,7 @@ void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
         lv_label_set_text(m_label, "");
     }
     xSemaphoreGive(m_res_mutex);
+#endif
 }
 
 } // namespace recognition
