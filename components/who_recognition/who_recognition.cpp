@@ -69,6 +69,9 @@ void WhoRecognition::task()
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
                 printf("%s\n", text);
+                if (m_result_cb) {
+                   m_result_cb(text);
+                }
             }
             if (event_bits & ENROLL) {
                 printf("Enroll received\n");
@@ -83,6 +86,10 @@ void WhoRecognition::task()
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
                 printf("%s\n", text);
+                if (m_result_cb) {
+                   m_result_cb(text);
+                }
+
             }
         }
         if (event_bits & DELETE) {
@@ -98,6 +105,9 @@ void WhoRecognition::task()
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
             printf("%s\n", text);
+            if (m_result_cb) {
+                m_result_cb(text);
+            }
         }
         m_detect->resume();
     }
@@ -116,6 +126,16 @@ void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
 }
 #endif // !BSP_CONFIG_NO_GRAPHIC_LIB
 
+void WhoRecognition::virtual_btn_event_handler( event_type_t event)
+{
+    EventGroupHandle_t event_group = get_event_group();
+    EventBits_t event_bits = xEventGroupGetBits(event_group);
+    if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
+        xEventGroupSetBits(event_group, event);
+    }
+}
+
+
 void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
 {
     user_data_t *user_data = reinterpret_cast<user_data_t *>(usr_data);
@@ -124,6 +144,10 @@ void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
         xEventGroupSetBits(event_group, user_data->event);
     }
+}
+
+void WhoRecognition::new_result_subscription(const std::function<void(result_t)> &cb) {
+    m_result_cb = cb;
 }
 
 void WhoRecognition::create_btns()

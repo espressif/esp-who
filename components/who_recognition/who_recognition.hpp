@@ -56,6 +56,12 @@ public:
     void task() override;
     void lcd_display_cb(who::cam::cam_fb_t *fb) override;
 
+    void new_result_subscription(const std::function<void(result_t)> &cb);
+    void virtual_btn_event_handler( event_type_t event);
+
+
+
+
 private:
 #if !BSP_CONFIG_NO_GRAPHIC_LIB
     static void lvgl_btn_event_handler(lv_event_t *e);
@@ -73,6 +79,7 @@ private:
     lv_obj_t *m_label;
 #endif // !BSP_CONFIG_NO_GRAPHIC_LIB
     user_data_t *m_btn_user_data;
+    std::function<void(result_t)> m_result_cb;
 };
 } // namespace recognition
 } // namespace who

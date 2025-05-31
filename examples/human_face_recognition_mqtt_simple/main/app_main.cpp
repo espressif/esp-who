@@ -32,6 +32,15 @@ static const char *_STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" 
 static const char *_STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
 static const char *_STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %u\r\n\r\n";
 
+// static const char* html =
+//         "<!DOCTYPE html><html><body>"
+//         "<h2>Recognition</h2>"
+//         "<img src=\"/recognize_stream\" style=\"max-width:100%;height:auto;\"><br><br>"
+//         "<form action=\"/recognizebt\" method=\"post\"><button type=\"submit\">Recognize</button></form>"
+//         "<form action=\"/enrollbt\" method=\"post\"><button type=\"submit\">Enroll</button></form>"
+//         "<form action=\"/deletebt\" method=\"post\"><button type=\"submit\">Delete</button></form>"
+//         "</body></html>";
+
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t s_wifi_event_group;
 
@@ -82,6 +91,8 @@ using namespace who::lcd;
 using namespace who::app;
 
 WhoLCDiface* lcd = nullptr; // = new HttpLCD();
+WhoRecognitionApp* recognition = nullptr; //  = new WhoRecognitionApp();
+
 
 // static WhoCam* cam;// = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
 // static WhoLCD* lcd;// = new WhoLCD();
@@ -94,137 +105,6 @@ static httpd_handle_t server = NULL;
  */
 
 static const char *TAG = "example";
-
-#if CONFIG_EXAMPLE_BASIC_AUTH
-
-typedef struct {
-    char *username;
-    char *password;
-} basic_auth_info_t;
-
-#define HTTPD_401 "401 UNAUTHORIZED" /*!< HTTP Response 401 */
-
-static char *http_auth_basic(const char *username, const char *password)
-{
-    size_t out;
-    char *user_info = NULL;
-    char *digest = NULL;
-    size_t n = 0;
-    int rc = asprintf(&user_info, "%s:%s", username, password);
-    if (rc < 0) {
-        ESP_LOGE(TAG, "asprintf() returned: %d", rc);
-        return NULL;
-    }
-
-    if (!user_info) {
-        ESP_LOGE(TAG, "No enough memory for user information");
-        return NULL;
-    }
-    esp_crypto_base64_encode(NULL, 0, &n, (const unsigned char *)user_info, strlen(user_info));
-
-    /* 6: The length of the "Basic " string
-     * n: Number of bytes for a base64 encode format
-     * 1: Number of bytes for a reserved which be used to fill zero
-     */
-    digest = calloc(1, 6 + n + 1);
-    if (digest) {
-        strcpy(digest, "Basic ");
-        esp_crypto_base64_encode(
-            (unsigned char *)digest + 6, n, &out, (const unsigned char *)user_info, strlen(user_info));
-    }
-    free(user_info);
-    return digest;
-}
-
-/* An HTTP GET handler */
-static esp_err_t basic_auth_get_handler(httpd_req_t *req)
-{
-    char *buf = NULL;
-    size_t buf_len = 0;
-    basic_auth_info_t *basic_auth_info = req->user_ctx;
-
-    buf_len = httpd_req_get_hdr_value_len(req, "Authorization") + 1;
-    if (buf_len > 1) {
-        buf = calloc(1, buf_len);
-        if (!buf) {
-            ESP_LOGE(TAG, "No enough memory for basic authorization");
-            return ESP_ERR_NO_MEM;
-        }
-
-        if (httpd_req_get_hdr_value_str(req, "Authorization", buf, buf_len) == ESP_OK) {
-            ESP_LOGI(TAG, "Found header => Authorization: %s", buf);
-        } else {
-            ESP_LOGE(TAG, "No auth value received");
-        }
-
-        char *auth_credentials = http_auth_basic(basic_auth_info->username, basic_auth_info->password);
-        if (!auth_credentials) {
-            ESP_LOGE(TAG, "No enough memory for basic authorization credentials");
-            free(buf);
-            return ESP_ERR_NO_MEM;
-        }
-
-        if (strncmp(auth_credentials, buf, buf_len)) {
-            ESP_LOGE(TAG, "Not authenticated");
-            httpd_resp_set_status(req, HTTPD_401);
-            httpd_resp_set_type(req, "application/json");
-            httpd_resp_set_hdr(req, "Connection", "keep-alive");
-            httpd_resp_set_hdr(req, "WWW-Authenticate", "Basic realm=\"Hello\"");
-            httpd_resp_send(req, NULL, 0);
-        } else {
-            ESP_LOGI(TAG, "Authenticated!");
-            char *basic_auth_resp = NULL;
-            httpd_resp_set_status(req, HTTPD_200);
-            httpd_resp_set_type(req, "application/json");
-            httpd_resp_set_hdr(req, "Connection", "keep-alive");
-            int rc =
-                asprintf(&basic_auth_resp, "{\"authenticated\": true,\"user\": \"%s\"}", basic_auth_info->username);
-            if (rc < 0) {
-                ESP_LOGE(TAG, "asprintf() returned: %d", rc);
-                free(auth_credentials);
-                return ESP_FAIL;
-            }
-            if (!basic_auth_resp) {
-                ESP_LOGE(TAG, "No enough memory for basic authorization response");
-                free(auth_credentials);
-                free(buf);
-                return ESP_ERR_NO_MEM;
-            }
-            httpd_resp_send(req, basic_auth_resp, strlen(basic_auth_resp));
-            free(basic_auth_resp);
-        }
-        free(auth_credentials);
-        free(buf);
-    } else {
-        ESP_LOGE(TAG, "No auth header received");
-        httpd_resp_set_status(req, HTTPD_401);
-        httpd_resp_set_type(req, "application/json");
-        httpd_resp_set_hdr(req, "Connection", "keep-alive");
-        httpd_resp_set_hdr(req, "WWW-Authenticate", "Basic realm=\"Hello\"");
-        httpd_resp_send(req, NULL, 0);
-    }
-
-    return ESP_OK;
-}
-
-static httpd_uri_t basic_auth = {
-    .uri = "/basic_auth",
-    .method = HTTP_GET,
-    .handler = basic_auth_get_handler,
-};
-
-static void httpd_register_basic_auth(httpd_handle_t server)
-{
-    basic_auth_info_t *basic_auth_info = calloc(1, sizeof(basic_auth_info_t));
-    if (basic_auth_info) {
-        basic_auth_info->username = CONFIG_EXAMPLE_BASIC_AUTH_USERNAME;
-        basic_auth_info->password = CONFIG_EXAMPLE_BASIC_AUTH_PASSWORD;
-
-        basic_auth.user_ctx = basic_auth_info;
-        httpd_register_uri_handler(server, &basic_auth);
-    }
-}
-#endif
 
 static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
 
@@ -261,80 +141,9 @@ static esp_err_t echo_post_handler(httpd_req_t *req)
 
 static const httpd_uri_t echo = {.uri = "/echo", .method = HTTP_POST, .handler = echo_post_handler, .user_ctx = NULL};
 
-esp_err_t jpg_stream_httpd_handler(httpd_req_t *req)
-{
-    camera_fb_t *fb = NULL;
-    esp_err_t res = ESP_OK;
-    size_t _jpg_buf_len;
-    uint8_t *_jpg_buf;
-    char *part_buf[64];
-    static int64_t last_frame = 0;
-    if (!last_frame) {
-        last_frame = esp_timer_get_time();
-    }
-
-    res = httpd_resp_set_type(req, _STREAM_CONTENT_TYPE);
-    if (res != ESP_OK) {
-        return res;
-    }
-
-    while (true) {
-        fb = esp_camera_fb_get();//cam->cam_fb_get();
-        if (!fb) {
-            ESP_LOGE(TAG, "Camera capture failed");
-            res = ESP_FAIL;
-            break;
-        }
-        if (fb->format != PIXFORMAT_JPEG) {
-            bool jpeg_converted = frame2jpg(fb, 80, &_jpg_buf, &_jpg_buf_len);
-            if (!jpeg_converted) {
-                ESP_LOGE(TAG, "JPEG compression failed");
-                esp_camera_fb_return(fb);
-                res = ESP_FAIL;
-            }
-        } else {
-            _jpg_buf_len = fb->len;
-            _jpg_buf = fb->buf;
-        }
-
-        if (res == ESP_OK) {
-            res = httpd_resp_send_chunk(req, _STREAM_BOUNDARY, strlen(_STREAM_BOUNDARY));
-        }
-        if (res == ESP_OK) {
-            size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, _jpg_buf_len);
-
-            res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
-        }
-        if (res == ESP_OK) {
-            res = httpd_resp_send_chunk(req, (const char *)_jpg_buf, _jpg_buf_len);
-        }
-        if (fb->format != PIXFORMAT_JPEG) {
-            free(_jpg_buf);
-        }
-        esp_camera_fb_return(fb);
-        if (res != ESP_OK) {
-            break;
-        }
-        int64_t fr_end = esp_timer_get_time();
-        int64_t frame_time = fr_end - last_frame;
-        last_frame = fr_end;
-        frame_time /= 1000;
-        ESP_LOGI(TAG,
-                 "MJPG: %luKB %lums (%.1ffps)",
-                 (uint32_t)(_jpg_buf_len / 1024),
-                 (uint32_t)frame_time,
-                 1000.0 / (uint32_t)frame_time);
-    }
-
-    last_frame = 0;
-    return res;
-}
-
-static const httpd_uri_t jpeg_stream_uri = {
-    .uri = "/stream", .method = HTTP_GET, .handler = jpg_stream_httpd_handler, .user_ctx = NULL};
 
 
-esp_err_t recognize_httpd_handler(httpd_req_t *req)
+esp_err_t stream_httpd_handler(httpd_req_t *req)
 {
     esp_err_t res = ESP_OK;
     char part_buf[64];
@@ -359,7 +168,7 @@ esp_err_t recognize_httpd_handler(httpd_req_t *req)
             continue;
         }
 
-        ESP_LOGI(TAG, "buffer available");
+        // ESP_LOGI(TAG, "buffer available");
 
         // 2. Wrap the buffer as a camera_fb_t
         camera_fb_t fb;
@@ -397,15 +206,15 @@ esp_err_t recognize_httpd_handler(httpd_req_t *req)
             break;
         }
 
-        int64_t fr_end = esp_timer_get_time();
-        int64_t frame_time = fr_end - last_frame;
-        last_frame = fr_end;
-        frame_time /= 1000;
-        ESP_LOGI(TAG,
-                 "MJPG: %luKB %lums (%.1ffps)",
-                 (uint32_t)(_jpg_buf_len / 1024),
-                 (uint32_t)frame_time,
-                 1000.0 / (uint32_t)frame_time);
+        // int64_t fr_end = esp_timer_get_time();
+        // int64_t frame_time = fr_end - last_frame;
+        // last_frame = fr_end;
+        // frame_time /= 1000;
+        // ESP_LOGI(TAG,
+        //          "MJPG: %luKB %lums (%.1ffps)",
+        //          (uint32_t)(_jpg_buf_len / 1024),
+        //          (uint32_t)frame_time,
+        //          1000.0 / (uint32_t)frame_time);
 
         // Optional: add a small delay to control frame rate
         vTaskDelay(30 / portTICK_PERIOD_MS);
@@ -415,8 +224,81 @@ esp_err_t recognize_httpd_handler(httpd_req_t *req)
     return res;
 }
 
-static const httpd_uri_t recognize_uri = {
-    .uri = "/recognize", .method = HTTP_GET, .handler = recognize_httpd_handler, .user_ctx = NULL};
+static const httpd_uri_t stream_uri = {
+    .uri = "/stream", .method = HTTP_GET, .handler = stream_httpd_handler, .user_ctx = NULL};
+
+
+static esp_err_t recognize_page_handler(httpd_req_t *req)
+{
+    const char* html =
+        "<!DOCTYPE html><html><body>"
+        "<h2>Recognition</h2>"
+        "<img id=\"stream\" src=\"/stream\" style=\"max-width:100%;height:auto;\"><br><br>"
+        "<form action=\"/recognize_action\" method=\"post\"><button type=\"submit\">Recognize</button></form>"
+        "<form action=\"/enroll_action\" method=\"post\"><button type=\"submit\">Enroll</button></form>"
+        "<form action=\"/delete_action\" method=\"post\"><button type=\"submit\">Delete</button></form>"
+        "</body></html>";
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_send(req, html, HTTPD_RESP_USE_STRLEN);
+    return ESP_OK;
+}
+
+static const httpd_uri_t recognize_page_uri = {
+    .uri = "/recognize",
+    .method = HTTP_GET,
+    .handler = recognize_page_handler,
+    .user_ctx = NULL
+};
+
+
+static esp_err_t recognizebt_post_handler(httpd_req_t *req)
+{
+    ESP_LOGI(TAG, "Recognize button pressed");
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_sendstr(req, "<html><body>Recognize button pressed!<br><a href=\"/recognize\">Back</a></body></html>");
+    recognition->recognize();
+    return ESP_OK;
+}
+
+static esp_err_t enrollbt_post_handler(httpd_req_t *req)
+{
+    ESP_LOGI(TAG, "Enroll button pressed");
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_sendstr(req, "<html><body>Enroll button pressed!<br><a href=\"/recognize\">Back</a></body></html>");
+    recognition->enroll();
+    return ESP_OK;
+}
+
+static esp_err_t deletebt_post_handler(httpd_req_t *req)
+{
+    ESP_LOGI(TAG, "Delete button pressed");
+    httpd_resp_set_type(req, "text/html");
+    httpd_resp_sendstr(req, "<html><body>Delete button pressed!<br><a href=\"/recognize\">Back</a></body></html>");
+
+    recognition->delete_face();
+    return ESP_OK;
+}
+
+static const httpd_uri_t recognizebt_uri = {
+    .uri = "/recognize_action",
+    .method = HTTP_POST,
+    .handler = recognizebt_post_handler,
+    .user_ctx = NULL
+};
+
+static const httpd_uri_t enrollbt_uri = {
+    .uri = "/enroll_action",
+    .method = HTTP_POST,
+    .handler = enrollbt_post_handler,
+    .user_ctx = NULL
+};
+
+static const httpd_uri_t deletebt_uri = {
+    .uri = "/delete_action",
+    .method = HTTP_POST,
+    .handler = deletebt_post_handler,
+    .user_ctx = NULL
+};
 
 /* This handler allows the custom error handling functionality to be
  * tested from client side. For that, when a PUT request 0 is sent to
@@ -502,8 +384,12 @@ static httpd_handle_t start_webserver(void)
         httpd_register_uri_handler(server, &echo);
         httpd_register_uri_handler(server, &ctrl);
         // httpd_register_uri_handler(server, &any);
-        httpd_register_uri_handler(server, &jpeg_stream_uri);
-        httpd_register_uri_handler(server, &recognize_uri);
+        httpd_register_uri_handler(server, &stream_uri);
+        httpd_register_uri_handler(server, &recognize_page_uri);
+
+        httpd_register_uri_handler(server, &recognizebt_uri);
+        httpd_register_uri_handler(server, &enrollbt_uri);
+        httpd_register_uri_handler(server, &deletebt_uri);
         
 #if CONFIG_EXAMPLE_BASIC_AUTH
         httpd_register_basic_auth(server);
@@ -570,6 +456,11 @@ void wifi_init_sta(void)
     }
 }
 
+void recognition_result_cb(char *result)
+{
+    ESP_LOGI(TAG, "Recognition result: %s", result);
+}
+
 extern "C" void app_main(void)
 {
 #if CONFIG_DB_FATFS_FLASH
@@ -597,9 +488,10 @@ extern "C" void app_main(void)
     lcd = new HttpLCD();
 
     ESP_LOGI(TAG, "WhoRecognitionApp");
-    auto recognition = new WhoRecognitionApp();
+    recognition = new WhoRecognitionApp();
     recognition->set_cam(cam);
     recognition->set_lcd(lcd);
+    recognition->new_result_subscription(recognition_result_cb);
 
     ESP_LOGI(TAG, "Recognition run");
 
