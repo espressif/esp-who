@@ -26,6 +26,9 @@ void WhoDetectLCD::on_new_detect_result(const result_t &result)
     detect::WhoDetectLCD::on_new_detect_result(result);
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     m_result = result;
+    if (!result.det_res.empty() && subscriptor_m_event_group_) {
+        xEventGroupSetBits(subscriptor_m_event_group_, subscriptor_m_event_type_);
+    }
     xSemaphoreGive(m_res_mutex);
 }
 
@@ -38,7 +41,6 @@ void WhoRecognition::task()
         EventBits_t event_bits = xEventGroupWaitBits(
             m_event_group, RECOGNIZE | ENROLL | DELETE | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
         if (event_bits & STOP) {
-            printf("Stop received\n");
             set_and_clear_bits(TERMINATE, BLOCKING);
             break;
         } else if (event_bits & PAUSE) {
@@ -57,7 +59,6 @@ void WhoRecognition::task()
             auto result = m_detect->get_result();
             auto img = who::cam::fb2img(result.fb);
             if (event_bits & RECOGNIZE) {
-                printf("Recognize received\n");
                 auto rec_res = m_recognizer->recognize(img, result.det_res);
                 char *text = new char[64];
                 if (rec_res.empty()) {
@@ -68,13 +69,11 @@ void WhoRecognition::task()
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
-                printf("%s\n", text);
                 if (m_result_cb) {
                    m_result_cb(text);
                 }
             }
             if (event_bits & ENROLL) {
-                printf("Enroll received\n");
                 esp_err_t ret = m_recognizer->enroll(img, result.det_res);
                 char *text = new char[64];
                 if (ret == ESP_FAIL) {
@@ -85,7 +84,6 @@ void WhoRecognition::task()
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
-                printf("%s\n", text);
                 if (m_result_cb) {
                    m_result_cb(text);
                 }
@@ -93,7 +91,6 @@ void WhoRecognition::task()
             }
         }
         if (event_bits & DELETE) {
-            printf("Delete received\n");
             esp_err_t ret = m_recognizer->delete_last_feat();
             char *text = new char[64];
             if (ret == ESP_FAIL) {
@@ -104,7 +101,6 @@ void WhoRecognition::task()
             xSemaphoreTake(m_res_mutex, portMAX_DELAY);
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
-            printf("%s\n", text);
             if (m_result_cb) {
                 m_result_cb(text);
             }

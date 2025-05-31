@@ -22,10 +22,9 @@
 #include <esp_wifi.h>
 // #include "esp_eth.h"
 #include "esp_camera.h"
-#include "esp_http_server.h"
 #include "esp_timer.h"
 #include "http_lcd.hpp"
-
+#include "mqtt_handler.hpp"
 
 #define PART_BOUNDARY "123456789000000000000987654321"
 static const char *_STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
@@ -92,7 +91,9 @@ using namespace who::app;
 
 WhoLCDiface* lcd = nullptr; // = new HttpLCD();
 WhoRecognitionApp* recognition = nullptr; //  = new WhoRecognitionApp();
-
+static char latest_result[128] = "No result yet";
+static httpd_handle_t ws_server_handle = NULL;
+static int ws_fd = -1;
 
 // static WhoCam* cam;// = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
 // static WhoLCD* lcd;// = new WhoLCD();
@@ -107,41 +108,6 @@ static httpd_handle_t server = NULL;
 static const char *TAG = "example";
 
 static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data);
-
-/* An HTTP POST handler */
-static esp_err_t echo_post_handler(httpd_req_t *req)
-{
-    char buf[100];
-    int ret, remaining = req->content_len;
-
-    while (remaining > 0) {
-        /* Read the data for the request */
-        if ((ret = httpd_req_recv(req, buf, MIN(remaining, sizeof(buf)))) <= 0) {
-            if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
-                /* Retry receiving if timeout occurred */
-                continue;
-            }
-            return ESP_FAIL;
-        }
-
-        /* Send back the same data */
-        httpd_resp_send_chunk(req, buf, ret);
-        remaining -= ret;
-
-        /* Log data received */
-        ESP_LOGI(TAG, "=========== RECEIVED DATA ==========");
-        ESP_LOGI(TAG, "%.*s", ret, buf);
-        ESP_LOGI(TAG, "====================================");
-    }
-
-    // End response
-    httpd_resp_send_chunk(req, NULL, 0);
-    return ESP_OK;
-}
-
-static const httpd_uri_t echo = {.uri = "/echo", .method = HTTP_POST, .handler = echo_post_handler, .user_ctx = NULL};
-
-
 
 esp_err_t stream_httpd_handler(httpd_req_t *req)
 {
@@ -217,7 +183,7 @@ esp_err_t stream_httpd_handler(httpd_req_t *req)
         //          1000.0 / (uint32_t)frame_time);
 
         // Optional: add a small delay to control frame rate
-        vTaskDelay(30 / portTICK_PERIOD_MS);
+        vTaskDelay(5 / portTICK_PERIOD_MS);
     }
 
     last_frame = 0;
@@ -225,19 +191,54 @@ esp_err_t stream_httpd_handler(httpd_req_t *req)
 }
 
 static const httpd_uri_t stream_uri = {
-    .uri = "/stream", .method = HTTP_GET, .handler = stream_httpd_handler, .user_ctx = NULL};
+    .uri = "/stream", .method = HTTP_GET, .handler = stream_httpd_handler, .user_ctx = NULL, .is_websocket = false,
+    .handle_ws_control_frames = NULL};
 
 
 static esp_err_t recognize_page_handler(httpd_req_t *req)
 {
-    const char* html =
-        "<!DOCTYPE html><html><body>"
-        "<h2>Recognition</h2>"
-        "<img id=\"stream\" src=\"/stream\" style=\"max-width:100%;height:auto;\"><br><br>"
-        "<form action=\"/recognize_action\" method=\"post\"><button type=\"submit\">Recognize</button></form>"
-        "<form action=\"/enroll_action\" method=\"post\"><button type=\"submit\">Enroll</button></form>"
-        "<form action=\"/delete_action\" method=\"post\"><button type=\"submit\">Delete</button></form>"
-        "</body></html>";
+    // char html[1024];
+    // snprintf(html, sizeof(html),
+    //     "<!DOCTYPE html><html><body>"
+    //     "<h2>Recognition</h2>"
+    //     "<div><b>Result:</b> %s</div><br>"
+    //     "<img id=\"stream\" src=\"/stream\" style=\"max-width:100%%;height:auto;\"><br><br>"
+    //     "<form action=\"/recognize_action\" method=\"post\" onsubmit=\"document.getElementById('stream').src='';\">"
+    //     "<button type=\"submit\">Recognize</button></form>"
+    //     "<form action=\"/enroll_action\" method=\"post\" onsubmit=\"document.getElementById('stream').src='';\">"
+    //     "<button type=\"submit\">Enroll</button></form>"
+    //     "<form action=\"/delete_action\" method=\"post\" onsubmit=\"document.getElementById('stream').src='';\">"
+    //     "<button type=\"submit\">Delete</button></form>"
+    //     "</body></html>",
+    //     latest_result
+    // );
+
+    // httpd_resp_set_type(req, "text/html");
+    // httpd_resp_send(req, html, HTTPD_RESP_USE_STRLEN);
+
+char html[1024];
+snprintf(html, sizeof(html),
+    "<!DOCTYPE html><html><body>"
+    "<h2>Recognition</h2>"
+    "<div><b>Result:</b> %s</div><br>"
+    "<img id=\"stream\" src=\"/stream\" style=\"max-width:100%%;height:auto;\"><br><br>"
+    "<button onclick=\"wsSend('recognize')\">Recognize</button>"
+    "<button onclick=\"wsSend('enroll')\">Enroll</button>"
+    "<button onclick=\"wsSend('delete')\">Delete</button>"
+    "<div id=\"result\"></div>"
+    "<script>"
+    "var ws = new WebSocket('ws://' + window.location.host + '/ws');"
+    "ws.onopen = function() { console.log('WebSocket connected'); };"
+    "ws.onmessage = function(evt) { document.getElementById('result').innerHTML = evt.data; };"
+    "ws.onerror = function(e) { console.log('WebSocket error', e); };"
+    "ws.onclose = function() { console.log('WebSocket closed'); };"
+    "function wsSend(cmd) {"
+    "  ws.send(cmd);"
+    "}"
+    "</script>"
+    "</body></html>",
+    latest_result
+);
     httpd_resp_set_type(req, "text/html");
     httpd_resp_send(req, html, HTTPD_RESP_USE_STRLEN);
     return ESP_OK;
@@ -247,57 +248,116 @@ static const httpd_uri_t recognize_page_uri = {
     .uri = "/recognize",
     .method = HTTP_GET,
     .handler = recognize_page_handler,
-    .user_ctx = NULL
+    .user_ctx = NULL,
+    .is_websocket = false,
+    .handle_ws_control_frames = NULL
 };
 
 
-static esp_err_t recognizebt_post_handler(httpd_req_t *req)
+// static esp_err_t recognizebt_post_handler(httpd_req_t *req)
+// {
+//     ESP_LOGI(TAG, "Recognize button pressed");
+//     recognition->recognize();
+//     httpd_resp_sendstr(req, "Recognize button pressed!");
+//     return ESP_OK;
+// }
+
+// static esp_err_t enrollbt_post_handler(httpd_req_t *req)
+// {
+//     ESP_LOGI(TAG, "Enroll button pressed");
+//     recognition->enroll();
+//     httpd_resp_sendstr(req, "Enroll button pressed!");
+//     return ESP_OK;
+// }
+
+// static esp_err_t deletebt_post_handler(httpd_req_t *req)
+// {
+//     ESP_LOGI(TAG, "Delete button pressed");
+//     recognition->delete_face();
+//     httpd_resp_sendstr(req, "Delete button pressed!");
+//     return ESP_OK;
+// }
+
+// static const httpd_uri_t recognizebt_uri = {
+//     .uri = "/recognize_action",
+//     .method = HTTP_POST,
+//     .handler = recognizebt_post_handler,
+//     .user_ctx = NULL
+// };
+
+// static const httpd_uri_t enrollbt_uri = {
+//     .uri = "/enroll_action",
+//     .method = HTTP_POST,
+//     .handler = enrollbt_post_handler,
+//     .user_ctx = NULL
+// };
+
+// static const httpd_uri_t deletebt_uri = {
+//     .uri = "/delete_action",
+//     .method = HTTP_POST,
+//     .handler = deletebt_post_handler,
+//     .user_ctx = NULL
+// };
+
+
+// WebSocket handler
+static esp_err_t ws_handler(httpd_req_t *req)
 {
-    ESP_LOGI(TAG, "Recognize button pressed");
-    httpd_resp_set_type(req, "text/html");
-    httpd_resp_sendstr(req, "<html><body>Recognize button pressed!<br><a href=\"/recognize\">Back</a></body></html>");
-    recognition->recognize();
+    printf("WebSocket request received: %s\n", req->uri);
+
+    if (req->method == HTTP_GET) {
+        // Handshake done, nothing to do here
+        ws_server_handle = req->handle;
+        ws_fd = httpd_req_to_sockfd(req);
+        return ESP_OK;
+    }
+
+    printf("2WebSocket request received: %s\n", req->uri);
+
+
+    httpd_ws_frame_t ws_pkt;
+    memset(&ws_pkt, 0, sizeof(httpd_ws_frame_t));
+    ws_pkt.type = HTTPD_WS_TYPE_TEXT;
+
+    // Get frame length
+    esp_err_t ret = httpd_ws_recv_frame(req, &ws_pkt, 0);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+    ws_pkt.payload = (uint8_t*)malloc(ws_pkt.len + 1);
+    if (ws_pkt.payload == NULL) {
+        return ESP_ERR_NO_MEM;
+    }
+    ret = httpd_ws_recv_frame(req, &ws_pkt, ws_pkt.len);
+    if (ret != ESP_OK) {
+        free(ws_pkt.payload);
+        return ret;
+    }
+    ws_pkt.payload[ws_pkt.len] = 0; // Null-terminate
+
+    // Handle commands from client
+    if (strcmp((char*)ws_pkt.payload, "recognize") == 0) {
+        recognition->recognize();
+    } else if (strcmp((char*)ws_pkt.payload, "enroll") == 0) {
+        recognition->enroll();
+    } else if (strcmp((char*)ws_pkt.payload, "delete") == 0) {
+        recognition->delete_face();
+    }
+
+    ws_server_handle = req->handle;
+    ws_fd = httpd_req_to_sockfd(req);
+
+    free(ws_pkt.payload);
     return ESP_OK;
 }
 
-static esp_err_t enrollbt_post_handler(httpd_req_t *req)
-{
-    ESP_LOGI(TAG, "Enroll button pressed");
-    httpd_resp_set_type(req, "text/html");
-    httpd_resp_sendstr(req, "<html><body>Enroll button pressed!<br><a href=\"/recognize\">Back</a></body></html>");
-    recognition->enroll();
-    return ESP_OK;
-}
-
-static esp_err_t deletebt_post_handler(httpd_req_t *req)
-{
-    ESP_LOGI(TAG, "Delete button pressed");
-    httpd_resp_set_type(req, "text/html");
-    httpd_resp_sendstr(req, "<html><body>Delete button pressed!<br><a href=\"/recognize\">Back</a></body></html>");
-
-    recognition->delete_face();
-    return ESP_OK;
-}
-
-static const httpd_uri_t recognizebt_uri = {
-    .uri = "/recognize_action",
-    .method = HTTP_POST,
-    .handler = recognizebt_post_handler,
-    .user_ctx = NULL
-};
-
-static const httpd_uri_t enrollbt_uri = {
-    .uri = "/enroll_action",
-    .method = HTTP_POST,
-    .handler = enrollbt_post_handler,
-    .user_ctx = NULL
-};
-
-static const httpd_uri_t deletebt_uri = {
-    .uri = "/delete_action",
-    .method = HTTP_POST,
-    .handler = deletebt_post_handler,
-    .user_ctx = NULL
+static const httpd_uri_t ws_uri = {
+    .uri = "/ws",
+    .method = HTTP_GET,
+    .handler = ws_handler,
+    .user_ctx = NULL,
+    .is_websocket = true,
+    .handle_ws_control_frames = NULL
 };
 
 /* This handler allows the custom error handling functionality to be
@@ -327,52 +387,15 @@ esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
     return ESP_FAIL;
 }
 
-/* An HTTP PUT handler. This demonstrates realtime
- * registration and deregistration of URI handlers
- */
-static esp_err_t ctrl_put_handler(httpd_req_t *req)
-{
-    char buf;
-    int ret;
-
-    if ((ret = httpd_req_recv(req, &buf, 1)) <= 0) {
-        if (ret == HTTPD_SOCK_ERR_TIMEOUT) {
-            httpd_resp_send_408(req);
-        }
-        return ESP_FAIL;
-    }
-
-    if (buf == '0') {
-        /* URI handlers can be unregistered using the uri string */
-        ESP_LOGI(TAG, "Unregistering /hello and /echo URIs");
-        // httpd_unregister_uri(req->handle, "/hello");
-        httpd_unregister_uri(req->handle, "/echo");
-        /* Register the custom error handler */
-        httpd_register_err_handler(req->handle, HTTPD_404_NOT_FOUND, http_404_error_handler);
-    } else {
-        ESP_LOGI(TAG, "Registering /hello and /echo URIs");
-        // httpd_register_uri_handler(req->handle, &hello);
-        httpd_register_uri_handler(req->handle, &echo);
-        /* Unregister custom error handler */
-        httpd_register_err_handler(req->handle, HTTPD_404_NOT_FOUND, NULL);
-    }
-
-    /* Respond with empty body */
-    httpd_resp_send(req, NULL, 0);
-    return ESP_OK;
-}
-
-static const httpd_uri_t ctrl = {.uri = "/ctrl", .method = HTTP_PUT, .handler = ctrl_put_handler, .user_ctx = NULL};
-
 static httpd_handle_t start_webserver(void)
 {
-    httpd_handle_t server = NULL;
+    server = NULL;
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
     // Setting port as 8001 when building for Linux. Port 80 can be used only by a privileged user in linux.
     // So when a unprivileged user tries to run the application, it throws bind error and the server is not started.
     // Port 8001 can be used by an unprivileged user as well. So the application will not throw bind error and the
     // server will be started.
-    config.server_port = 8001;
+    // config.server_port = 8001;
     config.lru_purge_enable = true;
 
     // Start the httpd server
@@ -381,15 +404,16 @@ static httpd_handle_t start_webserver(void)
         // Set URI handlers
         ESP_LOGI(TAG, "Registering URI handlers");
         // httpd_register_uri_handler(server, &hello);
-        httpd_register_uri_handler(server, &echo);
-        httpd_register_uri_handler(server, &ctrl);
+        // httpd_register_uri_handler(server, &echo);
+        // httpd_register_uri_handler(server, &ctrl);
         // httpd_register_uri_handler(server, &any);
         httpd_register_uri_handler(server, &stream_uri);
         httpd_register_uri_handler(server, &recognize_page_uri);
 
-        httpd_register_uri_handler(server, &recognizebt_uri);
-        httpd_register_uri_handler(server, &enrollbt_uri);
-        httpd_register_uri_handler(server, &deletebt_uri);
+        // httpd_register_uri_handler(server, &recognizebt_uri);
+        // httpd_register_uri_handler(server, &enrollbt_uri);
+        // httpd_register_uri_handler(server, &deletebt_uri);
+        httpd_register_uri_handler(server, &ws_uri);
         
 #if CONFIG_EXAMPLE_BASIC_AUTH
         httpd_register_basic_auth(server);
@@ -459,6 +483,22 @@ void wifi_init_sta(void)
 void recognition_result_cb(char *result)
 {
     ESP_LOGI(TAG, "Recognition result: %s", result);
+    strncpy(latest_result, result, sizeof(latest_result) - 1);
+    latest_result[sizeof(latest_result) - 1] = '\0'; // Ensure null-termination
+
+        // Send result to browser via WebSocket
+    if (ws_server_handle && ws_fd >= 0) {
+        httpd_ws_frame_t ws_pkt = {
+            .final = true,
+            .fragmented = false,
+            .type = HTTPD_WS_TYPE_TEXT,
+            .payload = (uint8_t*)result,
+            .len = strlen(result)
+        };
+        httpd_ws_send_frame_async(ws_server_handle, ws_fd, &ws_pkt);
+    }
+
+    mqtt_publish(result);
 }
 
 extern "C" void app_main(void)
@@ -512,6 +552,8 @@ extern "C" void app_main(void)
 
     wifi_init_sta();
 
+
+    
 }
 
 
@@ -548,5 +590,6 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
             ESP_LOGI(TAG, "Starting webserver");
             server = start_webserver();
         }
+        mqtt_app_start();
     }
 }

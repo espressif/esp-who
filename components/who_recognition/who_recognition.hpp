@@ -22,11 +22,18 @@ public:
     }
     ~WhoDetectLCD() { vSemaphoreDelete(m_res_mutex); }
     detect::WhoDetectBase::result_t get_result();
+    void set_subscriptor_event_group (EventGroupHandle_t event_group, event_type_t event_type = RECOGNIZE)
+    {
+        subscriptor_m_event_group_ = event_group;
+        subscriptor_m_event_type_ = event_type;
+    }
 
 private:
     void on_new_detect_result(const result_t &result) override;
     SemaphoreHandle_t m_res_mutex;
     result_t m_result;
+    EventGroupHandle_t subscriptor_m_event_group_ = nullptr; // Event group for subscriber notifications
+    event_type_t subscriptor_m_event_type_ = static_cast<event_type_t>(0); // Default event type for recognition
 };
 
 class WhoRecognition : public WhoSubscriber {
@@ -41,6 +48,7 @@ public:
         WhoSubscriber(name), m_detect(detect), m_recognizer(recognizer), m_res_mutex(xSemaphoreCreateMutex())
     {
         m_detect->m_frame_cap->add_element(this);
+        m_detect->set_subscriptor_event_group(get_event_group(), RECOGNIZE);
         m_btn_user_data = new user_data_t[3];
         m_btn_user_data[0] = {this, RECOGNIZE};
         m_btn_user_data[1] = {this, ENROLL};

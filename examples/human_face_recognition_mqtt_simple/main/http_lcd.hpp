@@ -44,7 +44,6 @@ public:
     }
 
     void draw_full_lcd(const void* data) override  {
-        // printf("draw full lcd\n");
         if (!data) {
             ESP_LOGE("HttpLCD", "No data provided to draw_full_lcd");
             return;
