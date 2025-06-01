@@ -24,8 +24,10 @@ public:
     detect::WhoDetectBase::result_t get_result();
     void set_subscriptor_event_group (EventGroupHandle_t event_group, event_type_t event_type = RECOGNIZE)
     {
+        xSemaphoreTake(m_res_mutex, portMAX_DELAY);
         subscriptor_m_event_group_ = event_group;
         subscriptor_m_event_type_ = event_type;
+        xSemaphoreGive(m_res_mutex);
     }
 
 private:
@@ -59,12 +61,13 @@ public:
     {
         vSemaphoreDelete(m_res_mutex);
         delete[] m_btn_user_data;
+        if (latest_image_data) free(latest_image_data);
     }
 
     void task() override;
     void lcd_display_cb(who::cam::cam_fb_t *fb) override;
 
-    void new_result_subscription(const std::function<void(result_t)> &cb);
+    void new_result_subscription(const std::function<void(result_t, dl::image::img_t)> &cb);
     void virtual_btn_event_handler( event_type_t event);
 
 
@@ -87,7 +90,9 @@ private:
     lv_obj_t *m_label;
 #endif // !BSP_CONFIG_NO_GRAPHIC_LIB
     user_data_t *m_btn_user_data;
-    std::function<void(result_t)> m_result_cb;
+    std::function<void(result_t, dl::image::img_t)> m_result_cb;
+
+    uint8_t* latest_image_data = nullptr;
 };
 } // namespace recognition
 } // namespace who

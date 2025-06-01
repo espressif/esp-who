@@ -92,6 +92,8 @@ using namespace who::app;
 WhoLCDiface* lcd = nullptr; // = new HttpLCD();
 WhoRecognitionApp* recognition = nullptr; //  = new WhoRecognitionApp();
 static char latest_result[128] = "No result yet";
+static  dl::image::img_t img_latest_result =  {nullptr, 0, 0, dl::image::DL_IMAGE_PIX_TYPE_RGB888_QINT8};
+
 static httpd_handle_t ws_server_handle = NULL;
 static int ws_fd = -1;
 
@@ -194,6 +196,39 @@ static const httpd_uri_t stream_uri = {
     .uri = "/stream", .method = HTTP_GET, .handler = stream_httpd_handler, .user_ctx = NULL, .is_websocket = false,
     .handle_ws_control_frames = NULL};
 
+
+static esp_err_t latest_image_handler(httpd_req_t *req)
+{
+    // Convert img_latest_result to JPEG
+    camera_fb_t fb;
+    fb.buf = (uint8_t*)img_latest_result.data; // Assuming img_latest_result.data is a valid pointer
+    fb.len = get_img_byte_size(img_latest_result); // Assuming RGB565 format
+    fb.width = img_latest_result.width;
+    fb.height = img_latest_result.height;
+    fb.format = img_latest_result.pix_type == dl::image::DL_IMAGE_PIX_TYPE_RGB888_QINT8 ? PIXFORMAT_RGB888 : PIXFORMAT_RGB565;
+
+    uint8_t* jpg_buf = nullptr;
+    size_t jpg_buf_len = 0;
+    bool jpeg_converted = frame2jpg(&fb, 80, &jpg_buf, &jpg_buf_len);
+    if (!jpeg_converted) {
+        httpd_resp_send_500(req);
+        return ESP_FAIL;
+    }
+
+    httpd_resp_set_type(req, "image/jpeg");
+    esp_err_t res = httpd_resp_send(req, (const char*)jpg_buf, jpg_buf_len);
+    free(jpg_buf);
+    return res;
+}
+
+static const httpd_uri_t latest_image_uri = {
+    .uri = "/latest_image",
+    .method = HTTP_GET,
+    .handler = latest_image_handler,
+    .user_ctx = NULL,
+    .is_websocket = false,
+    .handle_ws_control_frames = NULL
+};
 
 static esp_err_t recognize_page_handler(httpd_req_t *req)
 {
@@ -409,6 +444,7 @@ static httpd_handle_t start_webserver(void)
         // httpd_register_uri_handler(server, &any);
         httpd_register_uri_handler(server, &stream_uri);
         httpd_register_uri_handler(server, &recognize_page_uri);
+        httpd_register_uri_handler(server, &latest_image_uri);
 
         // httpd_register_uri_handler(server, &recognizebt_uri);
         // httpd_register_uri_handler(server, &enrollbt_uri);
@@ -480,11 +516,17 @@ void wifi_init_sta(void)
     }
 }
 
-void recognition_result_cb(char *result)
+void recognition_result_cb(char *result,  dl::image::img_t img)
 {
     ESP_LOGI(TAG, "Recognition result: %s", result);
     strncpy(latest_result, result, sizeof(latest_result) - 1);
     latest_result[sizeof(latest_result) - 1] = '\0'; // Ensure null-termination
+
+    // Only save the image if "id" is present in the result string
+    if (strstr(result, "id") != NULL) {
+        ESP_LOGI(TAG, "Saving the image");
+        memcpy(&img_latest_result, &img, sizeof(dl::image::img_t));
+    }
 
         // Send result to browser via WebSocket
     if (ws_server_handle && ws_fd >= 0) {
@@ -498,7 +540,18 @@ void recognition_result_cb(char *result)
         httpd_ws_send_frame_async(ws_server_handle, ws_fd, &ws_pkt);
     }
 
+    int id = 0;
+    float sim = 0.0f;
+
+    // Parse the values from the input string
+    sscanf(result, "id: %d, sim: %f", &id, &sim);
+
+    // Format as JSON
+    char json[64];
+    snprintf(json, sizeof(json), "{\"id\":%d,\"sim\":%.2f}", id, sim);
+
     mqtt_publish(result);
+    mqtt_publish(json);
 }
 
 extern "C" void app_main(void)

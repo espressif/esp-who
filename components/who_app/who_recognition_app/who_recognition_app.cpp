@@ -33,7 +33,7 @@ bool WhoRecognitionApp::run()
     return ret;
 }
 
-void WhoRecognitionApp::new_result_subscription(const std::function<void(char *)> &cb)
+void WhoRecognitionApp::new_result_subscription(const std::function<void(char *,  dl::image::img_t)> &cb)
 {
     m_recognition->new_result_subscription(cb);
 }

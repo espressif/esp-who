@@ -26,8 +26,9 @@ void WhoDetectLCD::on_new_detect_result(const result_t &result)
     detect::WhoDetectLCD::on_new_detect_result(result);
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     m_result = result;
-    if (!result.det_res.empty() && subscriptor_m_event_group_) {
-        xEventGroupSetBits(subscriptor_m_event_group_, subscriptor_m_event_type_);
+
+    if (!result.det_res.empty() && subscriptor_m_event_group_ != nullptr) {
+            xEventGroupSetBits(subscriptor_m_event_group_, subscriptor_m_event_type_);
     }
     xSemaphoreGive(m_res_mutex);
 }
@@ -61,16 +62,31 @@ void WhoRecognition::task()
             if (event_bits & RECOGNIZE) {
                 auto rec_res = m_recognizer->recognize(img, result.det_res);
                 char *text = new char[64];
+                size_t latest_image_size = 0;
+
                 if (rec_res.empty()) {
                     strcpy(text, "who?");
                 } else {
                     snprintf(text, 64, "id: %d, sim: %.2f", rec_res[0].id, rec_res[0].similarity);
                 }
+                
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                 m_results.emplace_back(text);
+
+                if (latest_image_data) {
+                    free(latest_image_data);
+                    latest_image_data = nullptr;
+                    latest_image_size = 0;
+                }
+                latest_image_size = get_img_byte_size(img);
+                latest_image_data = (uint8_t*)malloc(latest_image_size);
+                memcpy(latest_image_data, img.data, latest_image_size);
+                img.data = latest_image_data; // Update img to point to the latest image data
+
                 xSemaphoreGive(m_res_mutex);
+
                 if (m_result_cb) {
-                   m_result_cb(text);
+                    m_result_cb(text, img);
                 }
             }
             if (event_bits & ENROLL) {
@@ -85,9 +101,8 @@ void WhoRecognition::task()
                 m_results.emplace_back(text);
                 xSemaphoreGive(m_res_mutex);
                 if (m_result_cb) {
-                   m_result_cb(text);
+                    m_result_cb(text, img);
                 }
-
             }
         }
         if (event_bits & DELETE) {
@@ -102,7 +117,8 @@ void WhoRecognition::task()
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
             if (m_result_cb) {
-                m_result_cb(text);
+                dl::image::img_t img = {nullptr, 0, 0, dl::image::DL_IMAGE_PIX_TYPE_RGB888};
+                m_result_cb(text, img);
             }
         }
         m_detect->resume();
@@ -122,27 +138,47 @@ void WhoRecognition::lvgl_btn_event_handler(lv_event_t *e)
 }
 #endif // !BSP_CONFIG_NO_GRAPHIC_LIB
 
-void WhoRecognition::virtual_btn_event_handler( event_type_t event)
+void WhoRecognition::virtual_btn_event_handler(event_type_t event)
 {
     EventGroupHandle_t event_group = get_event_group();
     EventBits_t event_bits = xEventGroupGetBits(event_group);
+    if (event == RECOGNIZE) {
+        // Activate autorecognize whenever there is a face detected
+        printf("Autorecognize activated\n");
+        m_detect->set_subscriptor_event_group(event_group,RECOGNIZE);
+    } else {
+        // Deactivate autorecognize when not recognizing solicited
+        printf("Autorecognize deactivated\n");
+        m_detect->set_subscriptor_event_group(nullptr,RECOGNIZE);
+    }
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
         xEventGroupSetBits(event_group, event);
     }
 }
-
 
 void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
 {
     user_data_t *user_data = reinterpret_cast<user_data_t *>(usr_data);
     EventGroupHandle_t event_group = user_data->who_rec_ptr->get_event_group();
     EventBits_t event_bits = xEventGroupGetBits(event_group);
+
+    if (user_data->event == RECOGNIZE) {
+        // Activate autorecognize whenever there is a face detected
+        printf("Autorecognize activated\n");
+        user_data->who_rec_ptr->m_detect->set_subscriptor_event_group(event_group,RECOGNIZE);
+    } else {
+        // Deactivate autorecognize when not recognizing solicited
+        printf("Autorecognize deactivated\n");
+        user_data->who_rec_ptr->m_detect->set_subscriptor_event_group(nullptr,RECOGNIZE);
+    }
+
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
         xEventGroupSetBits(event_group, user_data->event);
     }
 }
 
-void WhoRecognition::new_result_subscription(const std::function<void(result_t)> &cb) {
+void WhoRecognition::new_result_subscription(const std::function<void(result_t, dl::image::img_t)> &cb)
+{
     m_result_cb = cb;
 }
 
@@ -176,16 +212,16 @@ void WhoRecognition::create_btns()
     ESP_ERROR_CHECK(bsp_iot_button_create(btns, NULL, BSP_BUTTON_NUM));
     // play  recognize
     ESP_ERROR_CHECK(
-    iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
+        iot_button_register_cb(btns[2], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
 
     // up    enroll
-    ESP_ERROR_CHECK(
-    iot_button_register_cb(btns[2], BUTTON_DOUBLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data +1)));
-    
+    ESP_ERROR_CHECK(iot_button_register_cb(
+        btns[2], BUTTON_DOUBLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
+
     // down  delete
-    ESP_ERROR_CHECK(
-    iot_button_register_cb(btns[2], BUTTON_LONG_PRESS_START, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data +2)));
-    
+    ESP_ERROR_CHECK(iot_button_register_cb(
+        btns[2], BUTTON_LONG_PRESS_START, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
+
 #endif
 }
 
