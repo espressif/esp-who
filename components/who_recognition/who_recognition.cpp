@@ -13,6 +13,7 @@ LV_FONT_DECLARE(montserrat_bold_26);
 #endif
 namespace who {
 namespace recognition {
+
 detect::WhoDetectBase::result_t WhoDetectLCD::get_result()
 {
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
@@ -28,7 +29,7 @@ void WhoDetectLCD::on_new_detect_result(const result_t &result)
     m_result = result;
 
     if (!result.det_res.empty() && subscriptor_m_event_group_ != nullptr) {
-            xEventGroupSetBits(subscriptor_m_event_group_, subscriptor_m_event_type_);
+        xEventGroupSetBits(subscriptor_m_event_group_, subscriptor_m_event_type_);
     }
     xSemaphoreGive(m_res_mutex);
 }
@@ -59,50 +60,48 @@ void WhoRecognition::task()
         if (event_bits & (RECOGNIZE | ENROLL)) {
             auto result = m_detect->get_result();
             auto img = who::cam::fb2img(result.fb);
-            if (event_bits & RECOGNIZE) {
-                auto rec_res = m_recognizer->recognize(img, result.det_res);
+
+            // If a face is detected
+            if (!result.det_res.empty()) {
                 char *text = new char[64];
-                size_t latest_image_size = 0;
 
-                if (rec_res.empty()) {
-                    strcpy(text, "who?");
-                } else {
-                    snprintf(text, 64, "id: %d, sim: %.2f", rec_res[0].id, rec_res[0].similarity);
-                }
-                
+                // Crop the first detected face
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                m_results.emplace_back(text);
-
-                if (latest_image_data) {
-                    free(latest_image_data);
-                    latest_image_data = nullptr;
-                    latest_image_size = 0;
-                }
-                latest_image_size = get_img_byte_size(img);
-                latest_image_data = (uint8_t*)malloc(latest_image_size);
-                memcpy(latest_image_data, img.data, latest_image_size);
-                img.data = latest_image_data; // Update img to point to the latest image data
-
+                crop_img(img, result.det_res); // Cropped_face is updated here
                 xSemaphoreGive(m_res_mutex);
 
+                // Prepare the text for the result
+                if (event_bits & RECOGNIZE) {
+                    auto rec_res = m_recognizer->recognize(img, result.det_res);
+
+                    if (rec_res.empty()) {
+                        strcpy(text, "who?");
+                    } else {
+                        snprintf(text, 64, "id: %d, sim: %.2f", rec_res[0].id, rec_res[0].similarity);
+                    }
+
+                    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+                    m_results.emplace_back(text);
+                    xSemaphoreGive(m_res_mutex);
+                }
+                if (event_bits & ENROLL) {
+                    esp_err_t ret = m_recognizer->enroll(img, result.det_res);
+                    if (ret == ESP_FAIL) {
+                        strcpy(text, "Failed to enroll.");
+                    } else {
+                        snprintf(text, 64, "id: %d enrolled.", m_recognizer->get_num_feats());
+                    }
+                    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+                    m_results.emplace_back(text);
+                    xSemaphoreGive(m_res_mutex);
+                }
+
+                // Display the result
                 if (m_result_cb) {
-                    m_result_cb(text, img);
+                    m_result_cb(text, cropped_face);
                 }
-            }
-            if (event_bits & ENROLL) {
-                esp_err_t ret = m_recognizer->enroll(img, result.det_res);
-                char *text = new char[64];
-                if (ret == ESP_FAIL) {
-                    strcpy(text, "Failed to enroll.");
-                } else {
-                    snprintf(text, 64, "id: %d enrolled.", m_recognizer->get_num_feats());
-                }
-                xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                m_results.emplace_back(text);
-                xSemaphoreGive(m_res_mutex);
-                if (m_result_cb) {
-                    m_result_cb(text, img);
-                }
+            } else {
+                m_result_cb("No face detected.", cropped_face);
             }
         }
         if (event_bits & DELETE) {
@@ -145,11 +144,11 @@ void WhoRecognition::virtual_btn_event_handler(event_type_t event)
     if (event == RECOGNIZE) {
         // Activate autorecognize whenever there is a face detected
         printf("Autorecognize activated\n");
-        m_detect->set_subscriptor_event_group(event_group,RECOGNIZE);
+        m_detect->set_subscriptor_event_group(event_group, RECOGNIZE);
     } else {
         // Deactivate autorecognize when not recognizing solicited
         printf("Autorecognize deactivated\n");
-        m_detect->set_subscriptor_event_group(nullptr,RECOGNIZE);
+        m_detect->set_subscriptor_event_group(nullptr, RECOGNIZE);
     }
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
         xEventGroupSetBits(event_group, event);
@@ -165,11 +164,11 @@ void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
     if (user_data->event == RECOGNIZE) {
         // Activate autorecognize whenever there is a face detected
         printf("Autorecognize activated\n");
-        user_data->who_rec_ptr->m_detect->set_subscriptor_event_group(event_group,RECOGNIZE);
+        user_data->who_rec_ptr->m_detect->set_subscriptor_event_group(event_group, RECOGNIZE);
     } else {
         // Deactivate autorecognize when not recognizing solicited
         printf("Autorecognize deactivated\n");
-        user_data->who_rec_ptr->m_detect->set_subscriptor_event_group(nullptr,RECOGNIZE);
+        user_data->who_rec_ptr->m_detect->set_subscriptor_event_group(nullptr, RECOGNIZE);
     }
 
     if (event_bits & BLOCKING && !(event_bits & PAUSE)) {
@@ -254,6 +253,60 @@ void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
     }
     xSemaphoreGive(m_res_mutex);
 #endif
+}
+
+// Crops an RGB888 image buffer
+dl::image::img_t WhoRecognition::crop_img(const dl::image::img_t &src,
+                                          const std::list<dl::detect::result_t> &detect_res)
+{
+    if (detect_res.empty()) {
+        ESP_LOGW("CROP", "Failed to crop. No face detected.");
+        return {};
+    }
+
+    // Initialize with the first face's box
+    int x1 = detect_res.front().box[0];
+    int y1 = detect_res.front().box[1];
+    int x2 = detect_res.front().box[2];
+    int y2 = detect_res.front().box[3];
+
+    // Expand bounding box to include all faces
+    for (const auto &face : detect_res) {
+        x1 = std::min(x1, face.box[0]);
+        y1 = std::min(y1, face.box[1]);
+        x2 = std::max(x2, face.box[2]);
+        y2 = std::max(y2, face.box[3]);
+    }
+
+    int crop_w = x2 - x1;
+    int crop_h = y2 - y1;
+    if (crop_w <= 0 || crop_h <= 0) {
+        ESP_LOGE("WhoRecognition", "Invalid crop dimensions: width=%d, height=%d", crop_w, crop_h);
+        return {};
+    }
+
+    if (cropped_face.data) {
+        free(cropped_face.data);
+        cropped_face.data = nullptr;
+    }
+    
+    cropped_face.width = crop_w;
+    cropped_face.height = crop_h;
+    cropped_face.pix_type = src.pix_type;
+    size_t pixel_size = get_img_byte_size(src) / (src.width * src.height);
+
+    cropped_face.data = (uint8_t *)malloc(crop_w * crop_h * pixel_size);
+    if (!cropped_face.data) {
+        ESP_LOGE("WhoRecognition", "Failed to allocate memory for cropped face.");
+        return {};
+    }
+
+    for (int y = 0; y < crop_h; ++y) {
+        memcpy(cropped_face.data + y * crop_w * pixel_size,
+               src.data + ((y + y1) * src.width + x1) * pixel_size,
+               crop_w * pixel_size);
+    }
+    return cropped_face;
 }
 
 } // namespace recognition

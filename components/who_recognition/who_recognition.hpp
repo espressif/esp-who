@@ -61,7 +61,7 @@ public:
     {
         vSemaphoreDelete(m_res_mutex);
         delete[] m_btn_user_data;
-        if (latest_image_data) free(latest_image_data);
+        if (cropped_face.data) free(cropped_face.data);
     }
 
     void task() override;
@@ -80,6 +80,9 @@ private:
     static void iot_btn_event_handler(void *button_handle, void *usr_data);
     void create_btns();
     void create_label();
+    dl::image::img_t crop_img(const dl::image::img_t &src,
+                                          const std::list<dl::detect::result_t> &detect_res);
+
 
     WhoDetectLCD *m_detect;
     HumanFaceRecognizer *m_recognizer;
@@ -92,7 +95,7 @@ private:
     user_data_t *m_btn_user_data;
     std::function<void(result_t, dl::image::img_t)> m_result_cb;
 
-    uint8_t* latest_image_data = nullptr;
+    dl::image::img_t cropped_face = {nullptr, 0, 0, dl::image::DL_IMAGE_PIX_TYPE_RGB888_QINT8};
 };
 } // namespace recognition
 } // namespace who
