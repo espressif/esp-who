@@ -14,6 +14,8 @@ LV_FONT_DECLARE(montserrat_bold_26);
 namespace who {
 namespace recognition {
 
+void crop_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &detect_res, dl::image::img_t &cropped);
+
 detect::WhoDetectBase::result_t WhoDetectLCD::get_result()
 {
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
@@ -67,7 +69,7 @@ void WhoRecognition::task()
 
                 // Crop the first detected face
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                crop_img(img, result.det_res); // Cropped_face is updated here
+                crop_img(img, result.det_res, cropped_face);
                 xSemaphoreGive(m_res_mutex);
 
                 // Prepare the text for the result
@@ -98,7 +100,9 @@ void WhoRecognition::task()
 
                 // Display the result
                 if (m_result_cb) {
+                    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                     m_result_cb(text, cropped_face);
+                    xSemaphoreGive(m_res_mutex);
                 }
             } else {
                 m_result_cb("No face detected.", cropped_face);
@@ -256,19 +260,17 @@ void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
 }
 
 // Crops an RGB888 image buffer
-dl::image::img_t WhoRecognition::crop_img(const dl::image::img_t &src,
-                                          const std::list<dl::detect::result_t> &detect_res)
+void crop_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &detect_res, dl::image::img_t &cropped)
 {
     if (detect_res.empty()) {
         ESP_LOGW("CROP", "Failed to crop. No face detected.");
-        return {};
+        return;
     }
 
-    // Initialize with the first face's box
-    int x1 = detect_res.front().box[0];
-    int y1 = detect_res.front().box[1];
-    int x2 = detect_res.front().box[2];
-    int y2 = detect_res.front().box[3];
+    int x1 = INT_MAX;//face.box[0];
+    int y1 = INT_MAX;//face.box[1];
+    int x2 = 0;//face.box[2];
+    int y2 = 0;//face.box[3];
 
     // Expand bounding box to include all faces
     for (const auto &face : detect_res) {
@@ -280,33 +282,33 @@ dl::image::img_t WhoRecognition::crop_img(const dl::image::img_t &src,
 
     int crop_w = x2 - x1;
     int crop_h = y2 - y1;
-    if (crop_w <= 0 || crop_h <= 0) {
+    if (crop_h <= 0 || crop_w <= 0) {
         ESP_LOGE("WhoRecognition", "Invalid crop dimensions: width=%d, height=%d", crop_w, crop_h);
-        return {};
+        if (crop_h <= 0) {
+            crop_h = y1 - y2;
+        }
+        if (crop_w <= 0) {
+            crop_w = x1 - x2;
+        }
     }
 
-    if (cropped_face.data) {
-        free(cropped_face.data);
-        cropped_face.data = nullptr;
+    if (cropped.data) {
+        free(cropped.data);
+        memset(&cropped, 0, sizeof(dl::image::img_t));
     }
-    
-    cropped_face.width = crop_w;
-    cropped_face.height = crop_h;
-    cropped_face.pix_type = src.pix_type;
-    size_t pixel_size = get_img_byte_size(src) / (src.width * src.height);
+    cropped.width = crop_w;
+    cropped.height = crop_h;
+    cropped.pix_type = src.pix_type;
+    size_t pixel_size =
+        get_img_byte_size(cropped) / (cropped.width * cropped.height); // For RGB888 is 3 bytes per pixel
 
-    cropped_face.data = (uint8_t *)malloc(crop_w * crop_h * pixel_size);
-    if (!cropped_face.data) {
-        ESP_LOGE("WhoRecognition", "Failed to allocate memory for cropped face.");
-        return {};
-    }
+    cropped.data = (uint8_t *)malloc(get_img_byte_size(cropped));
 
     for (int y = 0; y < crop_h; ++y) {
-        memcpy(cropped_face.data + y * crop_w * pixel_size,
+        memcpy(cropped.data + y * crop_w * pixel_size,
                src.data + ((y + y1) * src.width + x1) * pixel_size,
                crop_w * pixel_size);
     }
-    return cropped_face;
 }
 
 } // namespace recognition

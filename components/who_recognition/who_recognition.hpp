@@ -80,9 +80,6 @@ private:
     static void iot_btn_event_handler(void *button_handle, void *usr_data);
     void create_btns();
     void create_label();
-    dl::image::img_t crop_img(const dl::image::img_t &src,
-                                          const std::list<dl::detect::result_t> &detect_res);
-
 
     WhoDetectLCD *m_detect;
     HumanFaceRecognizer *m_recognizer;

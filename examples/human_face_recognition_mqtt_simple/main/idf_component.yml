@@ -1,4 +1,5 @@
 ## IDF Component Manager Manifest File
 dependencies:
-  espressif/esp32_s3_eye_noglib: '*'
+  esp32_s3_camera: 
+    path: ../components/espressif__esp32_s3_camera
   espressif/esp-dl: ^3.1.2
