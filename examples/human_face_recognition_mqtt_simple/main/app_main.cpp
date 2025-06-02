@@ -523,7 +523,7 @@ void recognition_result_cb(char *result,  dl::image::img_t img)
     latest_result[sizeof(latest_result) - 1] = '\0'; // Ensure null-termination
 
     // Only save the image if "id" is present in the result string
-    if (strstr(result, "id") != NULL) {
+    if (strstr(result, "id") != NULL || strstr(result, "who") != NULL) {
         ESP_LOGI(TAG, "Saving the image");
         memcpy(&img_latest_result, &img, sizeof(dl::image::img_t));
     }

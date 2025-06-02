@@ -294,8 +294,8 @@ void crop_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &dete
 
     if (cropped.data) {
         free(cropped.data);
-        memset(&cropped, 0, sizeof(dl::image::img_t));
     }
+    memset(&cropped, 0, sizeof(dl::image::img_t));
     cropped.width = crop_w;
     cropped.height = crop_h;
     cropped.pix_type = src.pix_type;
