@@ -10,7 +10,7 @@ public:
     void set_cam(cam::WhoCam *cam) { m_frame_cap->set_cam(cam); }
     void set_lcd(lcd::WhoLCDiface *lcd) { m_frame_cap->set_lcd(lcd); }
     bool run() override;
-    void new_result_subscription(const std::function<void(char *,  dl::image::img_t)> &cb);
+    void new_result_subscription(const std::function<void(char *,  dl::image::img_t, dl::image::img_t)> &cb);
 
     void recognize() ;
     void enroll() ;

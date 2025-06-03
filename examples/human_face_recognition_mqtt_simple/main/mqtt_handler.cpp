@@ -10,9 +10,9 @@
 #include "esp_event.h"
 #include "esp_netif.h"
 // #include "protocol_examples_common.h"
-
-#include "esp_log.h"
 #include "mqtt_client.h"
+#include "esp_log.h"
+
 
 #define BROKER_URI CONFIG_MQTT_HOST
 #define TOPIC_FACE_RECOGNITION CONFIG_MQTT_TOPIC_RECOGNITION
@@ -26,12 +26,8 @@ static struct
     uint8_t connected;
 } mqtt;
 
-// static void sendCamCommand(esp_mqtt_event_handle_t event)
-// {
-//     recognizer_state_t state;
-//     state = (recognizer_state_t)atoi(event->data);
-//     xQueueSend(xQueueEvent, &state, 0);
-// }
+
+void (*mqtt_event_cb)(const char *data, const size_t data_len) = NULL;
 
 /*mqtt event handler*/
 static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
@@ -63,12 +59,13 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
 #endif
         break;
     case MQTT_EVENT_DATA:
-        // ESP_LOGI(TAG, "MQTT_EVENT_DATA");
-        // sendCamCommand(event);
-#ifdef APP_DEBUG
         printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
         printf("DATA=%.*s\r\n", event->data_len, event->data);
-#endif
+
+        if (mqtt_event_cb)
+        { 
+            mqtt_event_cb(event->data, event->data_len);
+        }
         break;
     case MQTT_EVENT_ERROR:
         // ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
@@ -110,8 +107,9 @@ void mqtt_task(void *arg)
     vTaskDelete(NULL);
 }
 
-void mqtt_app_start()
+void mqtt_app_start(void (*mqtt_event_cb_)(const char *data, const size_t data_len))
 {
+    mqtt_event_cb = mqtt_event_cb_; // Store the callback function for later use
     xTaskCreatePinnedToCore(mqtt_task, "mqtt_task", 3 * 1024, NULL, 5, NULL, 1);
 }
 

@@ -14,7 +14,7 @@ LV_FONT_DECLARE(montserrat_bold_26);
 namespace who {
 namespace recognition {
 
-void crop_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &detect_res, dl::image::img_t &cropped);
+void copy_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &detect_res, dl::image::img_t &dst, bool cropped);
 
 detect::WhoDetectBase::result_t WhoDetectLCD::get_result()
 {
@@ -65,11 +65,15 @@ void WhoRecognition::task()
 
             // If a face is detected
             if (!result.det_res.empty()) {
+                // Cppy the latest detected result
+                img_last_det_res = result.det_res;
+
                 char *text = new char[64];
 
                 // Crop the first detected face
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                crop_img(img, result.det_res, cropped_face);
+                copy_img(img, result.det_res, latest_image_with_a_face, 0);
+                copy_img(img, result.det_res, latest_face_cropped, 1);
                 xSemaphoreGive(m_res_mutex);
 
                 // Prepare the text for the result
@@ -101,11 +105,30 @@ void WhoRecognition::task()
                 // Display the result
                 if (m_result_cb) {
                     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                    m_result_cb(text, cropped_face);
+                    m_result_cb(text, latest_image_with_a_face, latest_face_cropped);
                     xSemaphoreGive(m_res_mutex);
                 }
             } else {
-                m_result_cb("No face detected.", cropped_face);
+                char *text = new char[64];
+                // No face detected -> enroll last detected face
+                if (event_bits & ENROLL) {
+                    esp_err_t ret = m_recognizer->enroll(latest_image_with_a_face, img_last_det_res);
+                    if (ret == ESP_FAIL) {
+                        strcpy(text, "Failed to enroll latest detected face.");
+                    } else {
+                        snprintf(text, 64, "id: %d enrolled.", m_recognizer->get_num_feats());
+                    }
+                    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+                    m_results.emplace_back(text);
+                    xSemaphoreGive(m_res_mutex);
+                } else {
+                    strcpy(text, "Failed to enroll latest detected face.");
+                }
+                if (m_result_cb) {
+                    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+                    m_result_cb(text, latest_image_with_a_face, latest_face_cropped);
+                    xSemaphoreGive(m_res_mutex);
+                }
             }
         }
         if (event_bits & DELETE) {
@@ -120,8 +143,7 @@ void WhoRecognition::task()
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
             if (m_result_cb) {
-                dl::image::img_t img = {nullptr, 0, 0, dl::image::DL_IMAGE_PIX_TYPE_RGB888};
-                m_result_cb(text, img);
+                m_result_cb(text, latest_image_with_a_face, latest_face_cropped);
             }
         }
         m_detect->resume();
@@ -180,7 +202,7 @@ void WhoRecognition::iot_btn_event_handler(void *button_handle, void *usr_data)
     }
 }
 
-void WhoRecognition::new_result_subscription(const std::function<void(result_t, dl::image::img_t)> &cb)
+void WhoRecognition::new_result_subscription(const std::function<void(result_t, dl::image::img_t, dl::image::img_t)> &cb)
 {
     m_result_cb = cb;
 }
@@ -260,7 +282,7 @@ void WhoRecognition::lcd_display_cb(who::cam::cam_fb_t *fb)
 }
 
 // Crops an RGB888 image buffer
-void crop_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &detect_res, dl::image::img_t &cropped)
+void copy_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &detect_res, dl::image::img_t &dst, bool cropped)
 {
     if (detect_res.empty()) {
         ESP_LOGW("CROP", "Failed to crop. No face detected.");
@@ -292,20 +314,34 @@ void crop_img(const dl::image::img_t &src, std::list<dl::detect::result_t> &dete
         }
     }
 
-    if (cropped.data) {
-        free(cropped.data);
+    if (dst.data) {
+        free(dst.data);
     }
-    memset(&cropped, 0, sizeof(dl::image::img_t));
-    cropped.width = crop_w;
-    cropped.height = crop_h;
-    cropped.pix_type = src.pix_type;
-    size_t pixel_size =
-        get_img_byte_size(cropped) / (cropped.width * cropped.height); // For RGB888 is 3 bytes per pixel
+    memset(&dst, 0, sizeof(dl::image::img_t));
 
-    cropped.data = (uint8_t *)malloc(get_img_byte_size(cropped));
+    if (cropped) {
+        // Ensure the crop does not exceed the source image dimensions
+        x1 = std::max(0, x1);
+        y1 = std::max(0, y1);
+        crop_w = std::min(crop_w, src.width - x1);
+        crop_h = std::min(crop_h, src.height - y1);
+    } else {
+        // If not cropping, use the full image dimensions
+        x1 = 0;
+        y1 = 0;
+        crop_w = src.width;
+        crop_h = src.height;
+    }
+    dst.width = crop_w;
+    dst.height = crop_h;
+    dst.pix_type = src.pix_type;
+    size_t pixel_size =
+        get_img_byte_size(dst) / (dst.width * dst.height); // For RGB888 is 3 bytes per pixel
+
+    dst.data = (uint8_t *)malloc(get_img_byte_size(dst));
 
     for (int y = 0; y < crop_h; ++y) {
-        memcpy(cropped.data + y * crop_w * pixel_size,
+        memcpy(dst.data + y * crop_w * pixel_size,
                src.data + ((y + y1) * src.width + x1) * pixel_size,
                crop_w * pixel_size);
     }

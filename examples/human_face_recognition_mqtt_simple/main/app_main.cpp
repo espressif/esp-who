@@ -93,12 +93,11 @@ WhoLCDiface* lcd = nullptr; // = new HttpLCD();
 WhoRecognitionApp* recognition = nullptr; //  = new WhoRecognitionApp();
 static char latest_result[128] = "No result yet";
 static  dl::image::img_t img_latest_result =  {nullptr, 0, 0, dl::image::DL_IMAGE_PIX_TYPE_RGB888_QINT8};
+static  dl::image::img_t img_latest_result_cropped =  {nullptr, 0, 0, dl::image::DL_IMAGE_PIX_TYPE_RGB888_QINT8};
 
 static httpd_handle_t ws_server_handle = NULL;
 static int ws_fd = -1;
 
-// static WhoCam* cam;// = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, 2, true);
-// static WhoLCD* lcd;// = new WhoLCD();
 static httpd_handle_t server = NULL;
 
 #define EXAMPLE_HTTP_QUERY_KEY_MAX_LEN (64)
@@ -174,16 +173,6 @@ esp_err_t stream_httpd_handler(httpd_req_t *req)
             break;
         }
 
-        // int64_t fr_end = esp_timer_get_time();
-        // int64_t frame_time = fr_end - last_frame;
-        // last_frame = fr_end;
-        // frame_time /= 1000;
-        // ESP_LOGI(TAG,
-        //          "MJPG: %luKB %lums (%.1ffps)",
-        //          (uint32_t)(_jpg_buf_len / 1024),
-        //          (uint32_t)frame_time,
-        //          1000.0 / (uint32_t)frame_time);
-
         // Optional: add a small delay to control frame rate
         vTaskDelay(5 / portTICK_PERIOD_MS);
     }
@@ -225,6 +214,39 @@ static const httpd_uri_t latest_image_uri = {
     .uri = "/latest_image",
     .method = HTTP_GET,
     .handler = latest_image_handler,
+    .user_ctx = NULL,
+    .is_websocket = false,
+    .handle_ws_control_frames = NULL
+};
+
+static esp_err_t latest_face_handler(httpd_req_t *req)
+{
+    // Convert img_latest_result to JPEG
+    camera_fb_t fb;
+    fb.buf = (uint8_t*)img_latest_result_cropped.data; // Assuming img_latest_result.data is a valid pointer
+    fb.len = get_img_byte_size(img_latest_result_cropped); // Assuming RGB565 format
+    fb.width = img_latest_result_cropped.width;
+    fb.height = img_latest_result_cropped.height;
+    fb.format = img_latest_result_cropped.pix_type == dl::image::DL_IMAGE_PIX_TYPE_RGB888_QINT8 ? PIXFORMAT_RGB888 : PIXFORMAT_RGB565;
+
+    uint8_t* jpg_buf = nullptr;
+    size_t jpg_buf_len = 0;
+    bool jpeg_converted = frame2jpg(&fb, 80, &jpg_buf, &jpg_buf_len);
+    if (!jpeg_converted) {
+        httpd_resp_send_500(req);
+        return ESP_FAIL;
+    }
+
+    httpd_resp_set_type(req, "image/jpeg");
+    esp_err_t res = httpd_resp_send(req, (const char*)jpg_buf, jpg_buf_len);
+    free(jpg_buf);
+    return res;
+}
+
+static const httpd_uri_t latest_face_uri = {
+    .uri = "/latest_face",
+    .method = HTTP_GET,
+    .handler = latest_face_handler,
     .user_ctx = NULL,
     .is_websocket = false,
     .handle_ws_control_frames = NULL
@@ -445,6 +467,8 @@ static httpd_handle_t start_webserver(void)
         httpd_register_uri_handler(server, &stream_uri);
         httpd_register_uri_handler(server, &recognize_page_uri);
         httpd_register_uri_handler(server, &latest_image_uri);
+        httpd_register_uri_handler(server, &latest_face_uri);
+        
 
         // httpd_register_uri_handler(server, &recognizebt_uri);
         // httpd_register_uri_handler(server, &enrollbt_uri);
@@ -516,7 +540,7 @@ void wifi_init_sta(void)
     }
 }
 
-void recognition_result_cb(char *result,  dl::image::img_t img)
+void recognition_result_cb(char *result,  dl::image::img_t img, dl::image::img_t img_cropped)
 {
     ESP_LOGI(TAG, "Recognition result: %s", result);
     strncpy(latest_result, result, sizeof(latest_result) - 1);
@@ -526,6 +550,7 @@ void recognition_result_cb(char *result,  dl::image::img_t img)
     if (strstr(result, "id") != NULL || strstr(result, "who") != NULL) {
         ESP_LOGI(TAG, "Saving the image");
         memcpy(&img_latest_result, &img, sizeof(dl::image::img_t));
+        memcpy(&img_latest_result_cropped, &img_cropped, sizeof(dl::image::img_t));
     }
 
         // Send result to browser via WebSocket
@@ -552,6 +577,24 @@ void recognition_result_cb(char *result,  dl::image::img_t img)
 
     mqtt_publish(result);
     mqtt_publish(json);
+}
+
+void mqtt_event_cb(const char *data, const size_t data_len)
+{
+    ESP_LOGI(TAG, "MQTT event received: %.*s", (int)data_len, data);
+
+    if (!recognition) return;
+
+    if (strnstr(data, "\"action\": \"enroll\"", data_len)) {
+        recognition->enroll();
+        ESP_LOGI(TAG, "Enroll action triggered from MQTT");
+    } else if (strnstr(data, "\"action\": \"delete\"", data_len)) {
+        recognition->delete_face();
+        ESP_LOGI(TAG, "Delete action triggered from MQTT");
+    } else if (strnstr(data, "\"action\": \"recognize\"", data_len)) {
+        recognition->recognize();
+        ESP_LOGI(TAG, "Recognize action triggered from MQTT");
+    }
 }
 
 extern "C" void app_main(void)
@@ -643,6 +686,6 @@ static void event_handler(void *arg, esp_event_base_t event_base, int32_t event_
             ESP_LOGI(TAG, "Starting webserver");
             server = start_webserver();
         }
-        mqtt_app_start();
+        mqtt_app_start(mqtt_event_cb);
     }
 }
