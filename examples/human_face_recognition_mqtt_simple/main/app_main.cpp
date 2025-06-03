@@ -26,6 +26,9 @@
 #include "http_lcd.hpp"
 #include "mqtt_handler.hpp"
 
+#include "cJSON.h"
+
+
 #define PART_BOUNDARY "123456789000000000000987654321"
 static const char *_STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
 static const char *_STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
@@ -547,13 +550,19 @@ void recognition_result_cb(char *result,  dl::image::img_t img, dl::image::img_t
     latest_result[sizeof(latest_result) - 1] = '\0'; // Ensure null-termination
 
     // Only save the image if "id" is present in the result string
-    if (strstr(result, "id") != NULL || strstr(result, "who") != NULL) {
-        ESP_LOGI(TAG, "Saving the image");
-        memcpy(&img_latest_result, &img, sizeof(dl::image::img_t));
-        memcpy(&img_latest_result_cropped, &img_cropped, sizeof(dl::image::img_t));
+    cJSON *root = cJSON_Parse(result);
+    if (root) {
+        cJSON *action = cJSON_GetObjectItem(root, "action");
+        if (action && cJSON_IsString(action) && strcmp(action->valuestring, "recognize") == 0) {
+            ESP_LOGI(TAG, "Recognition result contains valid JSON with action:recognize");
+            // Your code here
+            ESP_LOGI(TAG, "Saving the image");
+            memcpy(&img_latest_result, &img, sizeof(dl::image::img_t));
+            memcpy(&img_latest_result_cropped, &img_cropped, sizeof(dl::image::img_t));
+        }
+        cJSON_Delete(root);
     }
-
-        // Send result to browser via WebSocket
+    // Send result to browser via WebSocket
     if (ws_server_handle && ws_fd >= 0) {
         httpd_ws_frame_t ws_pkt = {
             .final = true,
@@ -565,18 +574,7 @@ void recognition_result_cb(char *result,  dl::image::img_t img, dl::image::img_t
         httpd_ws_send_frame_async(ws_server_handle, ws_fd, &ws_pkt);
     }
 
-    int id = 0;
-    float sim = 0.0f;
-
-    // Parse the values from the input string
-    sscanf(result, "id: %d, sim: %f", &id, &sim);
-
-    // Format as JSON
-    char json[64];
-    snprintf(json, sizeof(json), "{\"id\":%d,\"sim\":%.2f}", id, sim);
-
     mqtt_publish(result);
-    mqtt_publish(json);
 }
 
 void mqtt_event_cb(const char *data, const size_t data_len)

@@ -34,13 +34,12 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
 {
     printf("Event received from MQTT client, event_id=%d\n", event->event_id);
     esp_mqtt_client_handle_t client = event->client;
-    int msg_id;
     switch (event->event_id)
     {
     case MQTT_EVENT_CONNECTED:
         mqtt.connected = 1;
         //ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-        msg_id = esp_mqtt_client_subscribe(client, TOPIC_CAM_COMMAND, 0);
+        esp_mqtt_client_subscribe(client, TOPIC_CAM_COMMAND, 0);
         //ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
         break;
     case MQTT_EVENT_DISCONNECTED:

@@ -69,6 +69,7 @@ void WhoRecognition::task()
                 img_last_det_res = result.det_res;
 
                 char *text = new char[64];
+                char *json = new char[128];
 
                 // Crop the first detected face
                 xSemaphoreTake(m_res_mutex, portMAX_DELAY);
@@ -78,25 +79,35 @@ void WhoRecognition::task()
 
                 // Prepare the text for the result
                 if (event_bits & RECOGNIZE) {
+                    dl::recognition::result_t recognition_result;
                     auto rec_res = m_recognizer->recognize(img, result.det_res);
 
                     if (rec_res.empty()) {
+                        recognition_result.id = 0;
+                        recognition_result.similarity = 0.0f;
                         strcpy(text, "who?");
                     } else {
+                        recognition_result.id = rec_res[0].id;
+                        recognition_result.similarity = rec_res[0].similarity;
                         snprintf(text, 64, "id: %d, sim: %.2f", rec_res[0].id, rec_res[0].similarity);
                     }
+                    snprintf(json, 128, "{\"action\":\"recognize\",\"id\":%d,\"sim\":%.2f,\"message\":\"%s\"}", recognition_result.id, recognition_result.similarity, text);
 
                     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                     m_results.emplace_back(text);
                     xSemaphoreGive(m_res_mutex);
                 }
                 if (event_bits & ENROLL) {
+                    int enrollId = 0;
                     esp_err_t ret = m_recognizer->enroll(img, result.det_res);
                     if (ret == ESP_FAIL) {
                         strcpy(text, "Failed to enroll.");
                     } else {
                         snprintf(text, 64, "id: %d enrolled.", m_recognizer->get_num_feats());
+                        enrollId = m_recognizer->get_num_feats();
                     }
+                    snprintf(json, 128, "{\"action\":\"enroll\",\"id\":%d,\"message\":\"%s\"}", enrollId, text);
+
                     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                     m_results.emplace_back(text);
                     xSemaphoreGive(m_res_mutex);
@@ -105,28 +116,36 @@ void WhoRecognition::task()
                 // Display the result
                 if (m_result_cb) {
                     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                    m_result_cb(text, latest_image_with_a_face, latest_face_cropped);
+                    m_result_cb(json, latest_image_with_a_face, latest_face_cropped);
                     xSemaphoreGive(m_res_mutex);
                 }
             } else {
                 char *text = new char[64];
+                char *json = new char[128];
+                int enrollId = 0;
+
                 // No face detected -> enroll last detected face
-                if (event_bits & ENROLL) {
+                if (event_bits & RECOGNIZE) {
+                    strcpy(text, "No face detected");
+                    snprintf(json, 128, "{\"action\":\"recognize\",\"id\":%d,\"sim\":%d,\"message\":\"%s\"}", 0, 0, text);
+
+                } else if (event_bits & ENROLL) {
                     esp_err_t ret = m_recognizer->enroll(latest_image_with_a_face, img_last_det_res);
                     if (ret == ESP_FAIL) {
                         strcpy(text, "Failed to enroll latest detected face.");
                     } else {
                         snprintf(text, 64, "id: %d enrolled.", m_recognizer->get_num_feats());
+                        enrollId = m_recognizer->get_num_feats();
                     }
+                    snprintf(json, 128, "{\"action\":\"enroll\",\"id\":%d,\"message\":\"%s\"}", enrollId, text);
+
                     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
                     m_results.emplace_back(text);
                     xSemaphoreGive(m_res_mutex);
-                } else {
-                    strcpy(text, "Failed to enroll latest detected face.");
                 }
                 if (m_result_cb) {
                     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-                    m_result_cb(text, latest_image_with_a_face, latest_face_cropped);
+                    m_result_cb(json, latest_image_with_a_face, latest_face_cropped);
                     xSemaphoreGive(m_res_mutex);
                 }
             }
@@ -134,16 +153,22 @@ void WhoRecognition::task()
         if (event_bits & DELETE) {
             esp_err_t ret = m_recognizer->delete_last_feat();
             char *text = new char[64];
+            char *json = new char[128];
+            int deletedId = 0;
             if (ret == ESP_FAIL) {
                 strcpy(text, "Failed to delete.");
             } else {
-                snprintf(text, 64, "id: %d deleted.", m_recognizer->get_num_feats() + 1);
+                deletedId = m_recognizer->get_num_feats() + 1; // The ID of the deleted face is the current number of faces + 1
+                snprintf(text, 64, "id: %d deleted.", deletedId);
             }
+            snprintf(json, 128, "{\"action\":\"delete\",\"id\":%d,\"message\":\"%s\"}", deletedId, text);
+
+
             xSemaphoreTake(m_res_mutex, portMAX_DELAY);
             m_results.emplace_back(text);
             xSemaphoreGive(m_res_mutex);
             if (m_result_cb) {
-                m_result_cb(text, latest_image_with_a_face, latest_face_cropped);
+                m_result_cb(json, latest_image_with_a_face, latest_face_cropped);
             }
         }
         m_detect->resume();
