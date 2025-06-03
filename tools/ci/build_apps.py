@@ -1,5 +1,6 @@
 from idf_build_apps import build_apps, find_apps
 import argparse
+import sys
 
 
 if __name__ == "__main__":
@@ -19,4 +20,5 @@ if __name__ == "__main__":
         # build_log_filename="build_log.txt",
         size_json_filename="size.json",
     )
-    build_apps(apps, copy_sdkconfig=True)
+    ret_code = build_apps(apps, copy_sdkconfig=True)
+    sys.exit(ret_code)
