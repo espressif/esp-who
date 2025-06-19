@@ -45,7 +45,7 @@ extern "C" void app_main(void)
 #endif
 
 // close led
-#if CONFIG_IDF_TARGET_ESP32S3
+#ifdef BSP_BOARD_ESP32_S3_EYE
     ESP_ERROR_CHECK(bsp_leds_init());
     ESP_ERROR_CHECK(bsp_led_set(BSP_LED_GREEN, false));
 #endif

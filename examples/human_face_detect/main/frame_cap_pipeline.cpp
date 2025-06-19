@@ -20,15 +20,26 @@ WhoFrameCap *get_lcd_dvp_frame_cap_pipeline()
     // which the disp task will display is 2 frames before than the frame which feeds into detection task. So the
     // detection task must finish within 2 frames, or the detect result will have a delay compared to the displayed
     // frame.
-    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, MODEL_TIME + 3);
+    framesize_t frame_size = get_cam_frame_size_from_lcd_resolution();
+#ifdef BSP_BOARD_ESP32_S3_KORVO_2
+    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, frame_size, MODEL_TIME + 3, true, true);
+#else
+    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, frame_size, MODEL_TIME + 3);
+#endif
     auto frame_cap = new WhoFrameCap();
     frame_cap->add_node<WhoFetchNode>("FrameCapFetch", cam);
     return frame_cap;
 }
+
 WhoFrameCap *get_term_dvp_frame_cap_pipeline()
 {
     // Don't need lcd display, cam_fb_count can decrease 1.
-    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, FRAMESIZE_240X240, MODEL_TIME + 2);
+    framesize_t frame_size = get_cam_frame_size_from_lcd_resolution();
+#ifdef BSP_BOARD_ESP32_S3_KORVO_2
+    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, frame_size, MODEL_TIME + 2, true, true);
+#else
+    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, frame_size, MODEL_TIME + 2);
+#endif
     auto frame_cap = new WhoFrameCap();
     frame_cap->add_node<WhoFetchNode>("FrameCapFetch", cam);
     return frame_cap;

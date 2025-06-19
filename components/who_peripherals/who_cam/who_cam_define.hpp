@@ -6,12 +6,23 @@
 #elif CONFIG_IDF_TARGET_ESP32P4
 #include "linux/videodev2.h"
 #endif
+#include "bsp/esp-bsp.h"
 
 namespace who {
 namespace cam {
 enum class cam_fb_fmt_t { CAM_FB_FMT_RGB565, CAM_FB_FMT_RGB888, CAM_FB_FMT_JPEG, CAM_FB_FMT_UKN };
 
 #if CONFIG_IDF_TARGET_ESP32S3
+inline framesize_t get_cam_frame_size_from_lcd_resolution()
+{
+    for (int i = FRAMESIZE_INVALID - 1; i >= 0; i--) {
+        if (resolution[i].width <= BSP_LCD_H_RES && resolution[i].height <= BSP_LCD_V_RES) {
+            return (framesize_t)i;
+        }
+    }
+    return FRAMESIZE_INVALID;
+}
+
 inline cam_fb_fmt_t pix_fmt2cam_fb_fmt(pixformat_t pix_fmt)
 {
     switch (pix_fmt) {

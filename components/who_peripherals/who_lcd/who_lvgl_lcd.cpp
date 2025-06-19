@@ -14,6 +14,13 @@ void WhoLCD::init(const lvgl_port_cfg_t &lvgl_port_cfg)
     };
     ESP_ERROR_CHECK(bsp_display_new(&bsp_disp_cfg, &panel_handle, &io_handle));
     esp_lcd_panel_disp_on_off(panel_handle, true);
+#ifdef BSP_BOARD_ESP32_S3_KORVO_2
+    bool mirror_x = true;
+    bool mirror_y = true;
+#else
+    bool mirror_x = false;
+    bool mirror_y = false;
+#endif
     const lvgl_port_display_cfg_t disp_cfg = {
         .io_handle = io_handle,
         .panel_handle = panel_handle,
@@ -26,8 +33,8 @@ void WhoLCD::init(const lvgl_port_cfg_t &lvgl_port_cfg)
         .rotation =
             {
                 .swap_xy = false,
-                .mirror_x = false,
-                .mirror_y = false,
+                .mirror_x = mirror_x,
+                .mirror_y = mirror_y,
             },
         .flags = {
             .buff_dma = true,

@@ -177,15 +177,28 @@ void WhoRecognition::create_btns()
 #elif CONFIG_IDF_TARGET_ESP32S3
     button_handle_t btns[BSP_BUTTON_NUM];
     ESP_ERROR_CHECK(bsp_iot_button_create(btns, NULL, BSP_BUTTON_NUM));
+#ifdef BSP_BOARD_ESP32_S3_EYE
+    int recognize = BSP_BUTTON_PLAY;
+    int enroll = BSP_BUTTON_UP;
+    int del = BSP_BUTTON_DOWN;
+#elif defined(BSP_BOARD_ESP32_S3_KORVO_2)
+    int recognize = BSP_BUTTON_PLAY;
+    int enroll = BSP_BUTTON_VOLUP;
+    int del = BSP_BUTTON_VOLDOWN;
+#else
+    int recognize = 0;
+    int enroll = 1;
+    int del = 2;
+#endif
     // play  recognize
-    ESP_ERROR_CHECK(
-        iot_button_register_cb(btns[1], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
+    ESP_ERROR_CHECK(iot_button_register_cb(
+        btns[recognize], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)m_btn_user_data));
     // up    enroll
     ESP_ERROR_CHECK(iot_button_register_cb(
-        btns[3], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
+        btns[enroll], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 1)));
     // down  delete
     ESP_ERROR_CHECK(iot_button_register_cb(
-        btns[2], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
+        btns[del], BUTTON_SINGLE_CLICK, nullptr, iot_btn_event_handler, (void *)(m_btn_user_data + 2)));
 #endif
 }
 

@@ -1,7 +1,6 @@
 #include "who_s3_cam.hpp"
 #include "esp_err.h"
 #include "esp_log.h"
-#include "bsp/esp-bsp.h"
 
 static const char *TAG = "WhoS3Cam";
 
