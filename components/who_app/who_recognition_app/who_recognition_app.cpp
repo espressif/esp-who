@@ -32,5 +32,27 @@ bool WhoRecognitionApp::run()
     ret &= m_recognition->run(3584, 2, 0);
     return ret;
 }
+
+void WhoRecognitionApp::new_result_subscription(const std::function<void(char *,  dl::image::img_t, dl::image::img_t)> &cb)
+{
+    m_recognition->new_result_subscription(cb);
+}
+
+
+    void WhoRecognitionApp::recognize()
+    {
+        // simulate a button was pressed
+        m_recognition->virtual_btn_event_handler(RECOGNIZE);
+    }
+    void WhoRecognitionApp::enroll()
+    {
+        // simulate a button was pressed
+        m_recognition->virtual_btn_event_handler(ENROLL);
+    }
+    void WhoRecognitionApp::delete_face()
+    {
+        // simulate a button was pressed
+        m_recognition->virtual_btn_event_handler(DELETE);
+    }
 } // namespace app
 } // namespace who
