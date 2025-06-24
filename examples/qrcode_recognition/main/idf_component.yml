@@ -1,3 +1,10 @@
 ## IDF Component Manager Manifest File
 dependencies:
-  espressif/esp_lvgl_port: "*"
+  espressif/esp32_s3_eye:
+    version: "*"
+    rules:
+      - if: "target == esp32s3"
+  espressif/esp32_p4_function_ev_board:
+    version: "*"
+    rules:
+      - if: "target == esp32p4"

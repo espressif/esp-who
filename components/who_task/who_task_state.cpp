@@ -13,36 +13,43 @@ void WhoTaskState::task()
     const TickType_t interval = pdMS_TO_TICKS(1000 * m_interval);
     TickType_t last_wake_time = xTaskGetTickCount();
     while (true) {
-        set_and_clear_bits(BLOCKING, RUNNING);
         vTaskDelayUntil(&last_wake_time, interval);
-        EventBits_t event_bits = xEventGroupGetBits(m_event_group);
+        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, PAUSE | STOP, pdTRUE, pdFALSE, 0);
         if (event_bits & STOP) {
-            set_and_clear_bits(TERMINATE, BLOCKING | STOP);
             break;
         } else if (event_bits & PAUSE) {
-            xEventGroupClearBits(m_event_group, PAUSE);
+            xEventGroupSetBits(m_event_group, PAUSED);
             EventBits_t pause_event_bits =
                 xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
             if (pause_event_bits & STOP) {
-                set_and_clear_bits(TERMINATE, BLOCKING);
                 break;
+            } else {
+                last_wake_time = xTaskGetTickCount();
+                continue;
             }
         }
-        set_and_clear_bits(RUNNING, BLOCKING);
         print_task_status();
     }
+    xEventGroupSetBits(m_event_group, STOPPED);
     vTaskDelete(NULL);
 }
 
-bool WhoTaskState::stop()
+bool WhoTaskState::stop_async()
 {
-    if (xEventGroupGetBits(m_event_group) & TERMINATE) {
-        return false;
+    if (WhoTask::stop_async()) {
+        xTaskAbortDelay(m_task_handle);
+        return true;
     }
-    xEventGroupSetBits(m_event_group, STOP);
-    xTaskAbortDelay(m_task_handle);
-    xEventGroupWaitBits(m_event_group, TERMINATE, pdFALSE, pdFALSE, portMAX_DELAY);
-    return true;
+    return false;
+}
+
+bool WhoTaskState::pause_async()
+{
+    if (WhoTask::pause_async()) {
+        xTaskAbortDelay(m_task_handle);
+        return true;
+    }
+    return false;
 }
 
 void WhoTaskState::print_task_status()
@@ -50,7 +57,7 @@ void WhoTaskState::print_task_status()
     configRUN_TIME_COUNTER_TYPE total_run_time;
     UBaseType_t num_tasks = uxTaskGetNumberOfTasks();
     TaskStatus_t *task_status_array =
-        (TaskStatus_t *)heap_caps_malloc(num_tasks * sizeof(TaskStatus_t), MALLOC_CAP_SPIRAM);
+        (TaskStatus_t *)heap_caps_malloc(num_tasks * sizeof(TaskStatus_t), MALLOC_CAP_DEFAULT);
     uxTaskGetSystemState(task_status_array, num_tasks, &total_run_time);
 
     printf("\nTask Name       |  coreid  |   State   | Priority |  Stack HWM  |   Run Time  | Run Time Per |\n");

@@ -1,36 +1,52 @@
 #include "who_qrcode_base.hpp"
+#include "quirc.h"
 
 namespace who {
 namespace qrcode {
+WhoQRCodeBase::WhoQRCodeBase(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node) :
+    WhoTask(name), m_frame_cap_node(frame_cap_node), m_qr(quirc_new())
+{
+    frame_cap_node->add_new_frame_signal_subscriber(this);
+#if CONFIG_IDF_TARGET_ESP32S3
+    uint16_t w = BSP_LCD_H_RES, h = BSP_LCD_V_RES;
+#elif CONFIG_IDF_TARGET_ESP32P4
+    uint16_t w = BSP_LCD_H_RES / 2, h = BSP_LCD_V_RES / 2;
+#endif
+    quirc_resize(m_qr, w, h);
+    uint8_t *data = quirc_begin(m_qr, nullptr, nullptr);
+    m_input = {.data = data, .width = w, .height = h, .pix_type = dl::image::DL_IMAGE_PIX_TYPE_GRAY};
+}
+
+WhoQRCodeBase::~WhoQRCodeBase()
+{
+    quirc_destroy(m_qr);
+}
+
 void WhoQRCodeBase::task()
 {
     while (true) {
-        set_and_clear_bits(BLOCKING, RUNNING);
         EventBits_t event_bits =
             xEventGroupWaitBits(m_event_group, NEW_FRAME | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
         if (event_bits & STOP) {
-            set_and_clear_bits(TERMINATE, BLOCKING);
             break;
         } else if (event_bits & PAUSE) {
+            xEventGroupSetBits(m_event_group, PAUSED);
             EventBits_t pause_event_bits =
                 xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
             if (pause_event_bits & STOP) {
-                set_and_clear_bits(TERMINATE, BLOCKING);
                 break;
             } else {
                 continue;
             }
         }
-        set_and_clear_bits(RUNNING, BLOCKING);
-        auto fb = m_frame_cap->get_cam()->cam_fb_peek();
-        auto img = cam::fb2img(fb);
+        auto fb = m_frame_cap_node->cam_fb_peek();
         quirc_begin(m_qr, nullptr, nullptr);
 #if CONFIG_IDF_TARGET_ESP32S3
-        uint32_t caps = 0;
-#elif CONFIG_IDF_TARGET_ESP32P4
         uint32_t caps = DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
+#elif CONFIG_IDF_TARGET_ESP32P4
+        uint32_t caps = 0;
 #endif
-        dl::image::resize(img, m_input, dl::image::DL_IMAGE_INTERPOLATE_NEAREST, caps);
+        dl::image::resize(*fb, m_input, dl::image::DL_IMAGE_INTERPOLATE_NEAREST, caps);
         quirc_end(m_qr);
         int num_codes = quirc_count(m_qr);
         for (int i = 0; i < num_codes; i++) {
@@ -50,6 +66,7 @@ void WhoQRCodeBase::task()
             }
         }
     }
+    xEventGroupSetBits(m_event_group, STOPPED);
     vTaskDelete(NULL);
 }
 } // namespace qrcode

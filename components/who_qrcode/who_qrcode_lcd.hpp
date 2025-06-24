@@ -1,16 +1,15 @@
 #pragma once
+#include "who_lcd_disp.hpp"
 #include "who_qrcode_base.hpp"
 #include <list>
 #include <string>
 
 namespace who {
 namespace qrcode {
-class WhoQRCodeLCD : public WhoQRCodeBase {
+class WhoQRCodeLCD : public WhoQRCodeBase, public lcd_disp::IWhoLCDDisp {
 public:
-    WhoQRCodeLCD(frame_cap::WhoFrameCap *frame_cap, const std::string &name) :
-        WhoQRCodeBase(frame_cap, name), m_res_mutex(xSemaphoreCreateMutex())
-    {
-    }
+    WhoQRCodeLCD(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node, lcd_disp::WhoLCDDisp *lcd_disp);
+    ~WhoQRCodeLCD();
     void lcd_display_cb(who::cam::cam_fb_t *fb) override;
 
 private:

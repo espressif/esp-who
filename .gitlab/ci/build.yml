@@ -8,6 +8,7 @@
     BATCH_BUILD: "1"
     V: "0"
     WARNING_STR: ""
+    IDF_EXTRA_ACTIONS_PATH: "tools/"
   artifacts:
     when: always
     paths:
@@ -28,7 +29,7 @@
   script:
     - pip install --upgrade idf-component-manager
     - pip install idf_build_apps==2.10.1
-    - python tools/ci/build_apps.py ${EXAMPLE_DIR}
+    - python tools/ci/build_apps.py ${EXAMPLE_DIR} --bsp ${BSP}
 
 build_example_human_face_detect:
   extends:
@@ -37,6 +38,7 @@ build_example_human_face_detect:
   parallel:
     matrix:
       - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+        BSP: [esp32_p4_function_ev_board_noglib, esp32_s3_eye_noglib, esp32_s3_korvo_2_noglib]
   variables:
     EXAMPLE_DIR: examples/human_face_detect
 
@@ -47,6 +49,7 @@ build_example_human_face_recognition:
   parallel:
     matrix:
       - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+        BSP: [esp32_p4_function_ev_board, esp32_s3_eye, esp32_s3_korvo_2]
   variables:
     EXAMPLE_DIR: examples/human_face_recognition
 
@@ -57,6 +60,7 @@ build_example_pedestrian_detect:
   parallel:
     matrix:
       - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+        BSP: [esp32_p4_function_ev_board_noglib, esp32_s3_eye_noglib, esp32_s3_korvo_2_noglib]
   variables:
     EXAMPLE_DIR: examples/pedestrian_detect
 
@@ -67,5 +71,6 @@ build_example_qrcode_recognition:
   parallel:
     matrix:
       - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
+        BSP: [esp32_p4_function_ev_board, esp32_s3_eye]
   variables:
     EXAMPLE_DIR: examples/qrcode_recognition

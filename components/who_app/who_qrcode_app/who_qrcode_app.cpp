@@ -3,27 +3,47 @@
 
 namespace who {
 namespace app {
-bool WhoQRCodeAppBase::run()
+WhoQRCodeAppLCD::WhoQRCodeAppLCD(frame_cap::WhoFrameCap *frame_cap,
+                                 frame_cap::WhoFrameCapNode *lcd_disp_frame_cap_node) :
+    m_frame_cap(frame_cap)
 {
-    who::WhoYield2Idle::run();
-    bool ret = m_frame_cap->run(4096, 2, 0);
-    return ret & m_qrcode->run(25600, 2, 1);
+    if (!lcd_disp_frame_cap_node) {
+        lcd_disp_frame_cap_node = frame_cap->get_last_node();
+    }
+    m_lcd_disp = new lcd_disp::WhoLCDDisp("LCDDisp", lcd_disp_frame_cap_node);
+    m_qrcode = new qrcode::WhoQRCodeLCD("QRCode", frame_cap->get_last_node(), m_lcd_disp);
+    WhoApp::add_task(m_lcd_disp);
+    WhoApp::add_task_group(m_frame_cap);
+    WhoApp::add_task(m_qrcode);
 }
 
-WhoQRCodeAppLCD::WhoQRCodeAppLCD()
+bool WhoQRCodeAppLCD::run()
 {
-    m_frame_cap = new frame_cap::WhoFrameCapLCD("FrameCapLCD");
-    m_qrcode = new qrcode::WhoQRCodeLCD(m_frame_cap, "QRCodeLCD");
-    add_element(m_frame_cap);
-    add_element(m_qrcode);
+    bool ret = WhoYield2Idle::get_instance()->run();
+    for (const auto &frame_cap_node : m_frame_cap->get_all_nodes()) {
+        ret &= frame_cap_node->run(4096, 2, 0);
+    }
+    ret &= m_lcd_disp->run(2560, 2, 0);
+    ret &= m_qrcode->run(25600, 2, 1);
+    return ret;
 }
 
-WhoQRCodeAppTerm::WhoQRCodeAppTerm()
+WhoQRCodeAppTerm::WhoQRCodeAppTerm(frame_cap::WhoFrameCap *frame_cap) : m_frame_cap(frame_cap)
 {
-    m_frame_cap = new frame_cap::WhoFrameCap("FrameCap");
-    m_qrcode = new qrcode::WhoQRCodeTerm(m_frame_cap, "QRCodeTerm");
-    add_element(m_frame_cap);
-    add_element(m_qrcode);
+    ;
+    m_qrcode = new qrcode::WhoQRCodeTerm("QRCode", frame_cap->get_last_node());
+    WhoApp::add_task_group(m_frame_cap);
+    WhoApp::add_task(m_qrcode);
+}
+
+bool WhoQRCodeAppTerm::run()
+{
+    bool ret = WhoYield2Idle::get_instance()->run();
+    for (const auto &frame_cap_node : m_frame_cap->get_all_nodes()) {
+        ret &= frame_cap_node->run(4096, 2, 0);
+    }
+    ret &= m_qrcode->run(25600, 2, 1);
+    return ret;
 }
 } // namespace app
 } // namespace who
