@@ -1,62 +1,41 @@
 #pragma once
-#include "human_face_detect.hpp"
 #include "human_face_recognition.hpp"
-#include "who_detect_lcd.hpp"
-#include "bsp/esp-bsp.h"
+#include "who_detect.hpp"
 
 namespace who {
 namespace recognition {
-class WhoRecognition;
-class WhoDetectLCD : public detect::WhoDetectLCD {
+class WhoRecognitionCore : public WhoTask {
 public:
-    WhoDetectLCD(const std::string &name,
-                 frame_cap::WhoFrameCapNode *frame_cap_node,
-                 lcd_disp::WhoLCDDisp *lcd_disp,
-                 dl::detect::Detect *detect,
-                 const std::vector<std::vector<uint8_t>> &palette) :
-        detect::WhoDetectLCD(name, frame_cap_node, lcd_disp, detect, palette), m_res_mutex(xSemaphoreCreateMutex())
-    {
-    }
-    ~WhoDetectLCD() { vSemaphoreDelete(m_res_mutex); }
-    detect::WhoDetectBase::result_t get_result();
+    WhoRecognitionCore(const std::string &name, detect::WhoDetect *detect);
+    ~WhoRecognitionCore();
+    void set_recognizer(HumanFaceRecognizer *recognizer);
+    void set_recognition_result_cb(const std::function<void(const std::string &)> &result_cb);
+    void set_detect_result_cb(const std::function<void(const detect::WhoDetect::result_t &)> &result_cb);
+    void set_cleanup_func(const std::function<void()> &cleanup_func);
+    bool run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID) override;
 
 private:
+    void task() override;
     void cleanup() override;
-    void on_new_detect_result(const result_t &result) override;
-    SemaphoreHandle_t m_res_mutex;
-    result_t m_result;
+    detect::WhoDetect *m_detect;
+    HumanFaceRecognizer *m_recognizer;
+    std::function<void(const detect::WhoDetect::result_t &)> m_detect_result_cb;
+    std::function<void(const std::string &)> m_recognition_result_cb;
+    std::function<void()> m_cleanup;
 };
 
-class WhoRecognition : public WhoTask, public lcd_disp::IWhoLCDDisp {
+class WhoRecognition : public WhoTaskGroup {
 public:
-    using result_t = char *;
-    typedef struct {
-        WhoRecognition *who_rec_ptr;
-        event_type_t event;
-    } user_data_t;
-
-    WhoRecognition(const std::string &name,
-                   lcd_disp::WhoLCDDisp *lcd_disp,
-                   WhoDetectLCD *detect,
-                   HumanFaceRecognizer *recognizer);
+    WhoRecognition(frame_cap::WhoFrameCapNode *frame_cap_node);
     ~WhoRecognition();
-
-    void task() override;
-    void lcd_display_cb(who::cam::cam_fb_t *fb) override;
+    void set_detect_model(dl::detect::Detect *model);
+    void set_recognizer(HumanFaceRecognizer *recognizer);
+    detect::WhoDetect *get_detect_task();
+    WhoRecognitionCore *get_recognition_task();
 
 private:
-    static void lvgl_btn_event_handler(lv_event_t *e);
-    static void iot_btn_event_handler(void *button_handle, void *usr_data);
-    void create_btns();
-    void create_label();
-
-    WhoDetectLCD *m_detect;
-    HumanFaceRecognizer *m_recognizer;
-
-    SemaphoreHandle_t m_res_mutex;
-    std::list<result_t> m_results;
-    lv_obj_t *m_label;
-    user_data_t *m_btn_user_data;
+    detect::WhoDetect *m_detect;
+    WhoRecognitionCore *m_recognition;
 };
 } // namespace recognition
 } // namespace who

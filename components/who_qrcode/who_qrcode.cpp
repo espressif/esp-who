@@ -1,9 +1,10 @@
-#include "who_qrcode_base.hpp"
+#include "who_qrcode.hpp"
 #include "quirc.h"
+#include "who_qrcode.hpp"
 
 namespace who {
 namespace qrcode {
-WhoQRCodeBase::WhoQRCodeBase(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node) :
+WhoQRCode::WhoQRCode(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node) :
     WhoTask(name), m_frame_cap_node(frame_cap_node), m_qr(quirc_new())
 {
     frame_cap_node->add_new_frame_signal_subscriber(this);
@@ -17,12 +18,12 @@ WhoQRCodeBase::WhoQRCodeBase(const std::string &name, frame_cap::WhoFrameCapNode
     m_input = {.data = data, .width = w, .height = h, .pix_type = dl::image::DL_IMAGE_PIX_TYPE_GRAY};
 }
 
-WhoQRCodeBase::~WhoQRCodeBase()
+WhoQRCode::~WhoQRCode()
 {
     quirc_destroy(m_qr);
 }
 
-void WhoQRCodeBase::task()
+void WhoQRCode::task()
 {
     while (true) {
         EventBits_t event_bits =
@@ -60,14 +61,31 @@ void WhoQRCodeBase::task()
                 err = quirc_decode(&code, &data);
             }
             // Even if there are multiple codes, only process one of them.
-            if (!err) {
-                on_new_qrcode_result(reinterpret_cast<const char *>(data.payload));
+            if (!err && m_result_cb) {
+                m_result_cb(std::string(reinterpret_cast<const char *>(data.payload)));
                 break;
             }
         }
     }
     xEventGroupSetBits(m_event_group, STOPPED);
     vTaskDelete(NULL);
+}
+
+void WhoQRCode::set_qrcode_result_cb(const std::function<void(const std::string &)> &result_cb)
+{
+    m_result_cb = result_cb;
+}
+
+void WhoQRCode::set_cleanup_func(const std::function<void()> &cleanup_func)
+{
+    m_cleanup = cleanup_func;
+}
+
+void WhoQRCode::cleanup()
+{
+    if (m_cleanup) {
+        m_cleanup();
+    }
 }
 } // namespace qrcode
 } // namespace who

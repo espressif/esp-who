@@ -1,28 +1,35 @@
-#include "who_detect_base.hpp"
+#include "who_detect.hpp"
 
 namespace who {
 namespace detect {
-WhoDetectBase::WhoDetectBase(const std::string &name,
-                             frame_cap::WhoFrameCapNode *frame_cap_node,
-                             dl::detect::Detect *detect) :
+WhoDetect::WhoDetect(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node) :
     WhoTask(name),
     m_frame_cap_node(frame_cap_node),
-    m_detect(detect),
+    m_model(nullptr),
     m_interval(0),
     m_inv_rescale_x(0),
     m_inv_rescale_y(0),
     m_rescale_max_w(0),
-    m_rescale_max_h(0)
+    m_rescale_max_h(0),
+    m_result_cb_mutex(xSemaphoreCreateRecursiveMutex())
 {
     frame_cap_node->add_new_frame_signal_subscriber(this);
 }
 
-WhoDetectBase::~WhoDetectBase()
+WhoDetect::~WhoDetect()
 {
-    delete m_detect;
+    vSemaphoreDelete(m_result_cb_mutex);
+    if (m_model) {
+        delete m_model;
+    }
 }
 
-void WhoDetectBase::set_rescale_params(float rescale_x, float rescale_y, uint16_t rescale_max_w, uint16_t rescale_max_h)
+void WhoDetect::set_model(dl::detect::Detect *model)
+{
+    m_model = model;
+}
+
+void WhoDetect::set_rescale_params(float rescale_x, float rescale_y, uint16_t rescale_max_w, uint16_t rescale_max_h)
 {
     m_inv_rescale_x = 1.f / rescale_x;
     m_inv_rescale_y = 1.f / rescale_y;
@@ -30,14 +37,26 @@ void WhoDetectBase::set_rescale_params(float rescale_x, float rescale_y, uint16_
     m_rescale_max_h = rescale_max_h;
 }
 
-void WhoDetectBase::set_fps(float fps)
+void WhoDetect::set_fps(float fps)
 {
     if (fps > 0) {
         m_interval = pdMS_TO_TICKS((int)(1000.f / fps));
     }
 }
 
-void WhoDetectBase::task()
+void WhoDetect::set_detect_result_cb(const std::function<void(const result_t &result)> &result_cb)
+{
+    xSemaphoreTakeRecursive(m_result_cb_mutex, portMAX_DELAY);
+    m_result_cb = result_cb;
+    xSemaphoreGiveRecursive(m_result_cb_mutex);
+}
+
+void WhoDetect::set_cleanup_func(const std::function<void()> &cleanup_func)
+{
+    m_cleanup = cleanup_func;
+}
+
+void WhoDetect::task()
 {
     TickType_t last_wake_time = xTaskGetTickCount();
     while (true) {
@@ -58,11 +77,16 @@ void WhoDetectBase::task()
         }
         auto fb = m_frame_cap_node->cam_fb_peek();
         struct timeval timestamp = fb->timestamp;
-        auto &res = m_detect->run(*fb);
+        dl::image::img_t img = static_cast<dl::image::img_t>(*fb);
+        auto &res = m_model->run(img);
         if (m_inv_rescale_x && m_inv_rescale_y && m_rescale_max_w && m_rescale_max_h) {
             rescale_detect_result(res);
         }
-        on_new_detect_result({res, timestamp, fb});
+        if (m_result_cb) {
+            xSemaphoreTakeRecursive(m_result_cb_mutex, portMAX_DELAY);
+            m_result_cb({res, timestamp, img});
+            xSemaphoreGiveRecursive(m_result_cb_mutex);
+        }
         if (m_interval) {
             vTaskDelayUntil(&last_wake_time, m_interval);
         }
@@ -71,7 +95,7 @@ void WhoDetectBase::task()
     vTaskDelete(NULL);
 }
 
-void WhoDetectBase::rescale_detect_result(std::list<dl::detect::result_t> &result)
+void WhoDetect::rescale_detect_result(std::list<dl::detect::result_t> &result)
 {
     for (auto &r : result) {
         r.box[0] *= m_inv_rescale_x;
@@ -90,16 +114,16 @@ void WhoDetectBase::rescale_detect_result(std::list<dl::detect::result_t> &resul
     }
 }
 
-bool WhoDetectBase::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
+bool WhoDetect::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
 {
-    if (!m_detect) {
+    if (!m_model) {
         ESP_LOGE("WhoDetect", "detect model is nullptr, please call set_model() first.");
         return false;
     }
     return WhoTask::run(uxStackDepth, uxPriority, xCoreID);
 }
 
-bool WhoDetectBase::stop_async()
+bool WhoDetect::stop_async()
 {
     if (WhoTask::stop_async()) {
         xTaskAbortDelay(m_task_handle);
@@ -108,13 +132,20 @@ bool WhoDetectBase::stop_async()
     return false;
 }
 
-bool WhoDetectBase::pause_async()
+bool WhoDetect::pause_async()
 {
     if (WhoTask::pause_async()) {
         xTaskAbortDelay(m_task_handle);
         return true;
     }
     return false;
+}
+
+void WhoDetect::cleanup()
+{
+    if (m_cleanup) {
+        m_cleanup();
+    }
 }
 } // namespace detect
 } // namespace who

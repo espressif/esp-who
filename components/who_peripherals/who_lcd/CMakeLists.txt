@@ -4,8 +4,6 @@ set(include_dirs    .)
 
 set(requires esp_lcd)
 
-set(bsp_components )
-
 set(bsp_components esp32_s3_eye_noglib espressif__esp32_s3_eye_noglib
                    esp32_s3_eye espressif__esp32_s3_eye
                    esp32_s3_korvo_2 espressif__esp32_s3_korvo_2

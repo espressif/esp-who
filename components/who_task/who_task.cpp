@@ -247,11 +247,11 @@ void WhoTaskGroup::destroy()
 {
     auto tasks = m_tasks;
     for (const auto &task : tasks) {
-        delete (task);
+        delete task;
     }
     auto task_groups = m_task_groups;
     for (const auto &task_group : m_task_groups) {
-        delete (task_group);
+        delete task_group;
     }
 }
 } // namespace who

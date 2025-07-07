@@ -46,7 +46,6 @@ public:
     virtual bool pause();
     virtual bool pause_async();
     virtual void wait_for_paused(TickType_t timeout);
-    virtual void cleanup() {}
     virtual void cleanup_for_paused();
     virtual void cleanup_for_stopped();
     bool is_active();
@@ -62,6 +61,7 @@ protected:
 private:
     virtual void task() = 0;
     static void task(void *args);
+    virtual void cleanup() {}
     SemaphoreHandle_t m_mutex;
 };
 

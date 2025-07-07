@@ -1,20 +1,19 @@
-#include "who_detect_utils.hpp"
-
-static const char *TAG = "WhoDetect";
+#include "who_detect_result_handle.hpp"
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
+#include "who_lvgl_utils.hpp"
+#endif
 
 namespace who {
 namespace detect {
-
-void draw_detect_results_on_fb(who::cam::cam_fb_t *fb,
-                               const std::list<dl::detect::result_t> &detect_res,
-                               const std::vector<std::vector<uint8_t>> &palette)
+void draw_detect_results_on_img(const dl::image::img_t &img,
+                                const std::list<dl::detect::result_t> &detect_res,
+                                const std::vector<std::vector<uint8_t>> &palette)
 {
 #if CONFIG_IDF_TARGET_ESP32P4
     uint32_t caps = 0;
 #else
     uint32_t caps = DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
 #endif
-    dl::image::img_t img = *fb;
     for (const auto &res : detect_res) {
         dl::image::draw_hollow_rectangle(
             img, res.box[0], res.box[1], res.box[2], res.box[3], palette[res.category], 2, caps);
@@ -69,6 +68,7 @@ void draw_detect_results_on_canvas(lv_obj_t *canvas,
 void print_detect_results(const std::list<dl::detect::result_t> &detect_res)
 {
     int i = 0;
+    const char *TAG = "detect";
     if (!detect_res.empty()) {
         if (detect_res.begin()->keypoint.empty()) {
             ESP_LOGI(TAG, "----------------------------------------");
@@ -107,6 +107,74 @@ void print_detect_results(const std::list<dl::detect::result_t> &detect_res)
         i++;
     }
 }
-
 } // namespace detect
+
+namespace lcd_disp {
+#if !BSP_CONFIG_NO_GRAPHIC_LIB
+WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(WhoTask *task,
+                                               lv_obj_t *canvas,
+                                               const std::vector<std::vector<uint8_t>> &palette) :
+    m_task(task), m_res_mutex(xSemaphoreCreateMutex()), m_result(), m_canvas(canvas)
+{
+    m_palette = cvt_to_lv_palette(palette);
+}
+#else
+WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(WhoTask *task, const std::vector<std::vector<uint8_t>> &palette) :
+    m_task(task), m_res_mutex(xSemaphoreCreateMutex()), m_result(), m_palette(palette)
+{
+}
+#endif
+
+WhoDetectResultLCDDisp::~WhoDetectResultLCDDisp()
+{
+    vSemaphoreDelete(m_res_mutex);
+}
+
+void WhoDetectResultLCDDisp::save_detect_result(const detect::WhoDetect::result_t &result)
+{
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+    m_results.push(result);
+    xSemaphoreGive(m_res_mutex);
+}
+
+void WhoDetectResultLCDDisp::lcd_disp_cb(who::cam::cam_fb_t *fb)
+{
+    if (!m_task->is_active()) {
+        return;
+    }
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+    // Try to sync camera frame and result, skip the future result.
+    auto compare_timestamp = [](const struct timeval &t1, const struct timeval &t2) -> bool {
+        if (t1.tv_sec == t2.tv_sec) {
+            return t1.tv_usec < t2.tv_usec;
+        }
+        return t1.tv_sec < t2.tv_sec;
+    };
+    struct timeval t1 = fb->timestamp;
+    // If detect fps higher than display fps, the result queue may be more than 1. May happen when using lvgl.
+    while (!m_results.empty()) {
+        detect::WhoDetect::result_t result = m_results.front();
+        if (!compare_timestamp(t1, result.timestamp)) {
+            m_result = result;
+            m_results.pop();
+        } else {
+            break;
+        }
+    }
+    xSemaphoreGive(m_res_mutex);
+#if BSP_CONFIG_NO_GRAPHIC_LIB
+    detect::draw_detect_results_on_img(*fb, m_result.det_res, m_palette);
+#else
+    detect::draw_detect_results_on_canvas(m_canvas, m_result.det_res, m_palette);
+#endif
+}
+
+void WhoDetectResultLCDDisp::cleanup()
+{
+    xSemaphoreTake(m_res_mutex, portMAX_DELAY);
+    std::queue<detect::WhoDetect::result_t>().swap(m_results);
+    m_result = {};
+    xSemaphoreGive(m_res_mutex);
+}
+} // namespace lcd_disp
 } // namespace who
