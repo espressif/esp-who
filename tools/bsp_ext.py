@@ -87,24 +87,7 @@ def action_extensions(base_actions, project_path=os.getcwd()):
                 del manifest["dependencies"][dep]
 
         # Add the one we need
-        if not bsp.startswith("esp32_s3_korvo_2"):
-            manifest["dependencies"].insert(0, bsp, {"version": "*"})
-        else:
-            if bsp == "esp32_s3_korvo_2":
-                override_path = os.path.abspath(
-                    os.path.join(__file__, "../../components/bsp/glib/esp32_s3_korvo_2")
-                )
-            else:
-                override_path = os.path.abspath(
-                    os.path.join(
-                        __file__, "../../components/bsp/noglib/esp32_s3_korvo_2"
-                    )
-                )
-            manifest["dependencies"].insert(
-                0,
-                bsp.replace("_noglib", ""),
-                {"version": "*", "override_path": override_path},
-            )
+        manifest["dependencies"].insert(0, bsp, {"version": "*"})
         yaml.dump(manifest, manifest_path)
 
     extensions = {
