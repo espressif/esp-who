@@ -82,9 +82,9 @@ WhoYield2Idle *WhoYield2Idle::get_instance()
     return &yield2idle;
 }
 
-bool WhoYield2Idle::run()
+bool WhoYield2Idle::run(const configSTACK_DEPTH_TYPE uxStackDepth)
 {
-    return WhoTaskBase::run(1024, configMAX_PRIORITIES - 1, tskNO_AFFINITY);
+    return WhoTaskBase::run(uxStackDepth, configMAX_PRIORITIES - 1, tskNO_AFFINITY);
 }
 
 void WhoYield2Idle::start_monitor(WhoTask *task)
