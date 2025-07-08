@@ -20,7 +20,7 @@ class WhoYield2Idle : public WhoTaskBase {
 public:
     static WhoYield2Idle *get_instance();
     using WhoTaskBase::run;
-    bool run();
+    bool run(const configSTACK_DEPTH_TYPE uxStackDepth = 2048);
     void start_monitor(WhoTask *task);
     void end_monitor(WhoTask *task);
     bool stop_async() override;
