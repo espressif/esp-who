@@ -10,7 +10,7 @@ using namespace who::frame_cap;
 // The size of the fb_count and ringbuf_len must be big enough. If you have no idea how to set them, try with 5 and
 // larger.
 #if CONFIG_IDF_TARGET_ESP32S3
-WhoFrameCap *get_lcd_dvp_frame_cap_pipeline()
+WhoFrameCap *get_dvp_frame_cap_pipeline()
 {
     // The ringbuf_len of FetchNode equals cam_fb_count - 2. The WhoFetchNode fb will display on lcd, if you want to
     // make sure the displayed detection result is synced with the frame, the ringbuf size must be big enough to
@@ -29,7 +29,7 @@ WhoFrameCap *get_lcd_dvp_frame_cap_pipeline()
     return frame_cap;
 }
 #elif CONFIG_IDF_TARGET_ESP32P4
-WhoFrameCap *get_lcd_mipi_csi_frame_cap_pipeline()
+WhoFrameCap *get_mipi_csi_frame_cap_pipeline()
 {
     auto cam = new WhoP4Cam(V4L2_PIX_FMT_RGB565, MODEL_TIME + 3);
     auto frame_cap = new WhoFrameCap();
@@ -37,7 +37,7 @@ WhoFrameCap *get_lcd_mipi_csi_frame_cap_pipeline()
     return frame_cap;
 }
 
-WhoFrameCap *get_lcd_uvc_frame_cap_pipeline()
+WhoFrameCap *get_uvc_frame_cap_pipeline()
 {
     auto cam = new WhoUVCCam(UVC_VS_FORMAT_MJPEG, 640, 480, 30, 4);
     auto frame_cap = new WhoFrameCap();

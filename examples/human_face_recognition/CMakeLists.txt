@@ -8,7 +8,7 @@ set(EXTRA_COMPONENT_DIRS ../../components/who_task
                          ../../components/who_peripherals/who_lcd
                          ../../components/who_peripherals/who_spiflash_fatfs
                          ../../components/who_frame_cap
-                         ../../components/who_lcd_disp
+                         ../../components/who_frame_lcd_disp
                          ../../components/who_detect
                          ../../components/who_recognition
                          ../../components/who_app/who_recognition_app)

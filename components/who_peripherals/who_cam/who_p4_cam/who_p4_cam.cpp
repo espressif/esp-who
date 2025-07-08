@@ -178,7 +178,7 @@ esp_err_t WhoP4Cam::close_video_device()
 
 esp_err_t WhoP4Cam::set_video_format()
 {
-    if (CONFIG_CAMERA_SC2336_MIPI_IF_FORMAT_INDEX_DAFAULT < 8) {
+    if (CONFIG_CAMERA_SC2336_MIPI_IF_FORMAT_INDEX_DEFAULT < 8) {
         ESP_LOGE(TAG, "raw10 cam mode is not supported.");
         close(m_fd);
         return ESP_FAIL;

@@ -95,13 +95,6 @@ void WhoLCD::deinit()
     ESP_ERROR_CHECK(bsp_i2c_init());
 }
 #endif
-void WhoLCD::create_canvas(uint16_t width, uint16_t height)
-{
-    bsp_display_lock(0);
-    m_canvas = lv_canvas_create(lv_scr_act());
-    lv_obj_set_size(m_canvas, width, height);
-    bsp_display_unlock();
-}
 } // namespace lcd
 } // namespace who
 #endif

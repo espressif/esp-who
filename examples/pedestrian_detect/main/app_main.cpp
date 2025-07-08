@@ -1,6 +1,7 @@
 #include "frame_cap_pipeline.hpp"
 #include "pedestrian_detect.hpp"
-#include "who_detect_app.hpp"
+#include "who_detect_app_lcd.hpp"
+#include "who_detect_app_term.hpp"
 #include "bsp/esp-bsp.h"
 
 using namespace who::frame_cap;
@@ -16,9 +17,9 @@ void run_detect_lcd()
     // auto frame_cap = get_lcd_mipi_csi_ppa_frame_cap_pipeline(&lcd_disp_frame_cap_node);
     // auto frame_cap = get_lcd_uvc_frame_cap_pipeline();
 #endif
-    auto detect_app = new WhoDetectAppLCD(frame_cap, lcd_disp_frame_cap_node);
+    auto detect_app = new WhoDetectAppLCD({{255, 0, 0}}, frame_cap, lcd_disp_frame_cap_node);
     // create model later to avoid memory fragmentation.
-    detect_app->set_model(new PedestrianDetect(), {{255, 0, 0}});
+    detect_app->set_model(new PedestrianDetect());
     detect_app->run();
 }
 

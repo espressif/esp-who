@@ -84,7 +84,7 @@ WhoYield2Idle *WhoYield2Idle::get_instance()
 
 bool WhoYield2Idle::run()
 {
-    return WhoTaskBase::run(4096, configMAX_PRIORITIES - 1, tskNO_AFFINITY);
+    return WhoTaskBase::run(1024, configMAX_PRIORITIES - 1, tskNO_AFFINITY);
 }
 
 void WhoYield2Idle::start_monitor(WhoTask *task)
