@@ -37,26 +37,49 @@ ESP-WHO 的所有示例都存放在 [examples](./examples) 中，进入对应的
 
 ### 添加环境变量
 
-linux下
+Linux:
 ```
 export IDF_EXTRA_ACTIONS_PATH=/path_to_esp-who/tools/
+echo $IDF_EXTRA_ACTIONS_PATH
 ```
+
+Win/powershell:
+```
+$Env:IDF_EXTRA_ACTIONS_PATH="/path_to_esp-who/tools/"
+echo $Env:IDF_EXTRA_ACTIONS_PATH
+```
+
+Win/cmd:
+```
+set IDF_EXTRA_ACTIONS_PATH=/path_to_esp-who/tools/
+echo %IDF_EXTRA_ACTIONS_PATH%
+```
+
+> [!IMPORTANT]
+> 确保 echo 命令返回正确的路径。
 
 ### 设定目标平台，生成并配置 sdkconfig
 
 #### (可选) 清理工作
-```
-rm sdkconfig                  # 清除 sdkconfig
-rm dependencies.lock.*        # 清除 components 版本依赖
-rm -rf managed_components     # 清除在线拉取的 components
-rm -rf build                  # 清除编译目录
-```
+删除
+- sdkconfig
+- dependencies.lock.*
+- build/
+- managed_components/
 
 #### 设定目标 SOC 和默认 sdkconfig 配置文件。
 ```
 idf.py reconfigure -DIDF_TARGET=target -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name
 ```
-查看各个 example 下的 sdkconfig.bsp.* 文件，查看支持的 bsp_name。
+
+如果用powershell的话，添加""。
+```
+idf.py reconfigure -DIDF_TARGET="target" -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name"
+```
+
+> [!NOTE]
+> - reconfigure 过程会创建 sdkconfig 文件。但是如果 sdkconfig 已存在，则不会覆盖该文件。因此建议在运行 reconfigure 之前删除 sdkconfig 文件。  
+> - 查看每个示例下的 sdkconfig.bsp.* 文件以查看支持的 bsp_name。
 
 #### (可选) 配置 sdkconfig 选项
 ```
@@ -68,6 +91,11 @@ idf.py menuconfig
 ```
 idf.py flash monitor [-p port]
 ```
+
+> [!NOTE]
+> - 这里的 [-p port] 是可选的，如果没有指定端口，则将扫描所有端口。
+> - [在 linux/macos 查看端口](https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/get-started/establish-serial-connection.html#linux-macos)  
+> - [在 win 查看端口](https://docs.espressif.com/projects/esp-idf/zh_CN/stable/esp32/get-started/establish-serial-connection.html#windows)
 
 ## 参考资源
 
