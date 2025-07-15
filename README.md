@@ -35,28 +35,51 @@ Some chip such as esp32 and esp32-s2, and examples such as cat face detection, c
 
 All examples of ESP-WHO are stored in [examples](./examples). Enter the corresponding folder and perform the following steps.
 
-### Add environment variables
+### Add environment variable
 
-Under Linux
+Linux:
 ```
 export IDF_EXTRA_ACTIONS_PATH=/path_to_esp-who/tools/
+echo $IDF_EXTRA_ACTIONS_PATH
 ```
+
+Win/powershell:
+```
+$Env:IDF_EXTRA_ACTIONS_PATH="/path_to_esp-who/tools/"
+echo $Env:IDF_EXTRA_ACTIONS_PATH
+```
+
+Win/cmd:
+```
+set IDF_EXTRA_ACTIONS_PATH=/path_to_esp-who/tools/
+echo %IDF_EXTRA_ACTIONS_PATH%
+```
+
+> [!IMPORTANT]
+> Make sure the echo command return the correct path.
 
 ### Set the target platform, generate and configure sdkconfig
 
 #### (Optional) Cleanup
-```
-rm sdkconfig                  # Clear sdkconfig
-rm dependencies.lock.*        # Clear components version dependencies
-rm -rf managed_components     # Clear online components
-rm -rf build                  # Clear the build directory
-```
+remove
+- sdkconfig
+- dependencies.lock.*
+- build/
+- managed_components/
 
 #### Set the target SOC and the default sdkconfig configuration file.
 ```
 idf.py reconfigure -DIDF_TARGET=target -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name
 ```
-Check the sdkconfig.bsp.* files under each example to see the supported bsp_name.
+
+Add "" if using powershell.
+```
+idf.py reconfigure -DIDF_TARGET="target" -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name"
+```
+
+> [!NOTE]
+> - The reconfigure process will create the sdkconfig file. However, if sdkconfig already exists, it will not be overwritten. So it is recommended to remove the sdkconfig file before run reconfigure.
+> - Check the sdkconfig.bsp.* files under each example to see the supported bsp_name.
 
 #### (Optional) Configure sdkconfig options
 ```
@@ -66,8 +89,13 @@ idf.py menuconfig
 ### Flash and monitor
 
 ```
-idf.py flash monitor [-p port]
+idf.py [-p port] flash monitor
 ```
+
+> [!NOTE]
+> - Here [-p port] is optional, if no port is specified, all ports will be scanned. 
+> - [check port on linux/macos](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/establish-serial-connection.html#check-port-on-linux-and-macos)  
+> - [check port on win](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/establish-serial-connection.html#check-port-on-windows)
 
 ## Resources
 
