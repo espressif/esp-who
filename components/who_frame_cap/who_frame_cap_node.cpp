@@ -8,7 +8,7 @@ static const char *TAG = "WhoFrameCapNode";
 namespace who {
 namespace frame_cap {
 WhoFrameCapNode::WhoFrameCapNode(const std::string &name, uint8_t ringbuf_len, bool out_queue_overwrite) :
-    WhoTask(name),
+    task::WhoTask(name),
     m_out_queue_overwrite(out_queue_overwrite),
     m_out_queue(nullptr),
     m_prev_node(nullptr),
@@ -28,7 +28,7 @@ WhoFrameCapNode::~WhoFrameCapNode()
 
 bool WhoFrameCapNode::pause_async()
 {
-    if (WhoTask::pause_async()) {
+    if (task::WhoTask::pause_async()) {
         cam_fb_t *fb = nullptr;
         if (m_in_queue) {
             xQueueSend(m_in_queue, &fb, 0);
@@ -40,7 +40,7 @@ bool WhoFrameCapNode::pause_async()
 
 bool WhoFrameCapNode::stop_async()
 {
-    if (WhoTask::stop_async()) {
+    if (task::WhoTask::stop_async()) {
         cam_fb_t *fb = nullptr;
         if (m_in_queue) {
             xQueueSend(m_in_queue, &fb, 0);
@@ -75,7 +75,7 @@ cam_fb_t *WhoFrameCapNode::cam_fb_peek(int index)
     return ret;
 }
 
-void WhoFrameCapNode::add_new_frame_signal_subscriber(WhoTask *task)
+void WhoFrameCapNode::add_new_frame_signal_subscriber(task::WhoTask *task)
 {
     m_tasks.emplace_back(task);
 }
@@ -103,14 +103,14 @@ void WhoFrameCapNode::task()
         if (m_in_queue) {
             xQueueReceive(m_in_queue, &in_fb, portMAX_DELAY);
         }
-        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, PAUSE | STOP, pdTRUE, pdFALSE, 0);
-        if (event_bits & STOP) {
+        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, TASK_PAUSE | TASK_STOP, pdTRUE, pdFALSE, 0);
+        if (event_bits & TASK_STOP) {
             break;
-        } else if (event_bits & PAUSE) {
-            xEventGroupSetBits(m_event_group, PAUSED);
+        } else if (event_bits & TASK_PAUSE) {
+            xEventGroupSetBits(m_event_group, TASK_PAUSED);
             EventBits_t pause_event_bits =
-                xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-            if (pause_event_bits & STOP) {
+                xEventGroupWaitBits(m_event_group, TASK_RESUME | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+            if (pause_event_bits & TASK_STOP) {
                 break;
             } else {
                 continue;
@@ -139,7 +139,7 @@ void WhoFrameCapNode::task()
             }
         }
     }
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 

@@ -5,8 +5,10 @@
 
 namespace who {
 namespace lcd_disp {
-class WhoFrameLCDDisp : public WhoTask {
+class WhoFrameLCDDisp : public task::WhoTask {
 public:
+    static inline constexpr EventBits_t NEW_FRAME = frame_cap::WhoFrameCapNode::NEW_FRAME;
+
     WhoFrameLCDDisp(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node, int peek_index = 0);
     ~WhoFrameLCDDisp();
     void set_lcd_disp_cb(const std::function<void(who::cam::cam_fb_t *)> &lcd_disp_cb);

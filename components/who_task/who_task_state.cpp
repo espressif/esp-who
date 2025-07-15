@@ -14,14 +14,14 @@ void WhoTaskState::task()
     TickType_t last_wake_time = xTaskGetTickCount();
     while (true) {
         vTaskDelayUntil(&last_wake_time, interval);
-        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, PAUSE | STOP, pdTRUE, pdFALSE, 0);
-        if (event_bits & STOP) {
+        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, TASK_PAUSE | TASK_STOP, pdTRUE, pdFALSE, 0);
+        if (event_bits & TASK_STOP) {
             break;
-        } else if (event_bits & PAUSE) {
-            xEventGroupSetBits(m_event_group, PAUSED);
+        } else if (event_bits & TASK_PAUSE) {
+            xEventGroupSetBits(m_event_group, TASK_PAUSED);
             EventBits_t pause_event_bits =
-                xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-            if (pause_event_bits & STOP) {
+                xEventGroupWaitBits(m_event_group, TASK_RESUME | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+            if (pause_event_bits & TASK_STOP) {
                 break;
             } else {
                 last_wake_time = xTaskGetTickCount();
@@ -30,7 +30,7 @@ void WhoTaskState::task()
         }
         print_task_status();
     }
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 

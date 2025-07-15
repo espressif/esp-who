@@ -111,7 +111,7 @@ void print_detect_results(const std::list<dl::detect::result_t> &detect_res)
 
 namespace lcd_disp {
 #if !BSP_CONFIG_NO_GRAPHIC_LIB
-WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(WhoTask *task,
+WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(task::WhoTask *task,
                                                lv_obj_t *canvas,
                                                const std::vector<std::vector<uint8_t>> &palette) :
     m_task(task), m_res_mutex(xSemaphoreCreateMutex()), m_result(), m_canvas(canvas)
@@ -119,7 +119,7 @@ WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(WhoTask *task,
     m_palette = cvt_to_lv_palette(palette);
 }
 #else
-WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(WhoTask *task, const std::vector<std::vector<uint8_t>> &palette) :
+WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(task::WhoTask *task, const std::vector<std::vector<uint8_t>> &palette) :
     m_task(task), m_res_mutex(xSemaphoreCreateMutex()), m_result(), m_palette(palette)
 {
 }

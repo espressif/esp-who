@@ -9,7 +9,7 @@
 static const char *TAG = "WhoUVC";
 
 namespace who {
-namespace cam {
+namespace uvc {
 void WhoUVC::task()
 {
     auto usb = usb::WhoUSB::get_instance();
@@ -20,19 +20,19 @@ void WhoUVC::task()
     ESP_ERROR_CHECK(uvc_host_install(&host_config));
     xEventGroupSetBits(m_event_group, UVC_HOST_INSTALLED);
     while (true) {
-        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, STOP, pdTRUE, pdFALSE, 0);
-        if (event_bits & STOP) {
+        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, TASK_STOP, pdTRUE, pdFALSE, 0);
+        if (event_bits & TASK_STOP) {
             break;
         }
         uvc_host_handle_events(portMAX_DELAY);
     }
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 
 bool WhoUVC::stop_async()
 {
-    if (WhoTaskBase::stop_async()) {
+    if (task::WhoTaskBase::stop_async()) {
         // unblock uvc_host_handle_events()
         ESP_ERROR_CHECK(uvc_host_uninstall());
         return true;
@@ -140,5 +140,5 @@ void WhoUVC::uvc_host_event_cb(const uvc_host_driver_event_data_t *event)
         xSemaphoreGive(m_mutex);
     }
 }
-} // namespace cam
+} // namespace uvc
 } // namespace who

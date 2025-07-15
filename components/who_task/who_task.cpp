@@ -6,14 +6,15 @@
 static const char *TAG = "WhoTask";
 
 namespace who {
+namespace task {
 bool WhoTaskBase::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID)
 {
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     EventBits_t event_bits = xEventGroupGetBits(m_event_group);
-    if (event_bits & STOPPED) {
+    if (event_bits & TASK_STOPPED) {
         if (xTaskCreatePinnedToCore(task, m_name.c_str(), uxStackDepth, this, uxPriority, &m_task_handle, xCoreID) ==
             pdPASS) {
-            xEventGroupClearBits(m_event_group, STOPPED);
+            xEventGroupClearBits(m_event_group, TASK_STOPPED);
             xSemaphoreGive(m_mutex);
             return true;
         } else {
@@ -38,8 +39,8 @@ bool WhoTaskBase::stop_async()
 {
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     EventBits_t event_bits = xEventGroupGetBits(m_event_group);
-    if (!(event_bits & STOPPED) && !(event_bits & STOP)) {
-        xEventGroupSetBits(m_event_group, STOP);
+    if (!(event_bits & TASK_STOPPED) && !(event_bits & TASK_STOP)) {
+        xEventGroupSetBits(m_event_group, TASK_STOP);
         xSemaphoreGive(m_mutex);
         return true;
     }
@@ -49,16 +50,16 @@ bool WhoTaskBase::stop_async()
 
 void WhoTaskBase::wait_for_stopped(TickType_t timeout)
 {
-    xEventGroupWaitBits(m_event_group, STOPPED, pdFALSE, pdFALSE, timeout);
+    xEventGroupWaitBits(m_event_group, TASK_STOPPED, pdFALSE, pdFALSE, timeout);
 }
 
 bool WhoTaskBase::resume()
 {
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     EventBits_t event_bits = xEventGroupGetBits(m_event_group);
-    if (event_bits & PAUSED) {
-        xEventGroupSetBits(m_event_group, RESUME);
-        xEventGroupClearBits(m_event_group, PAUSED);
+    if (event_bits & TASK_PAUSED) {
+        xEventGroupSetBits(m_event_group, TASK_RESUME);
+        xEventGroupClearBits(m_event_group, TASK_PAUSED);
         xSemaphoreGive(m_mutex);
         return true;
     }
@@ -80,8 +81,9 @@ bool WhoTaskBase::pause_async()
 {
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     EventBits_t event_bits = xEventGroupGetBits(m_event_group);
-    if (!(event_bits & STOPPED) && !(event_bits & PAUSED) && !(event_bits & STOP) && !(event_bits & PAUSE)) {
-        xEventGroupSetBits(m_event_group, PAUSE);
+    if (!(event_bits & TASK_STOPPED) && !(event_bits & TASK_PAUSED) && !(event_bits & TASK_STOP) &&
+        !(event_bits & TASK_PAUSE)) {
+        xEventGroupSetBits(m_event_group, TASK_PAUSE);
         xSemaphoreGive(m_mutex);
         return true;
     }
@@ -91,18 +93,18 @@ bool WhoTaskBase::pause_async()
 
 void WhoTaskBase::wait_for_paused(TickType_t timeout)
 {
-    xEventGroupWaitBits(m_event_group, PAUSED, pdFALSE, pdFALSE, timeout);
+    xEventGroupWaitBits(m_event_group, TASK_PAUSED, pdFALSE, pdFALSE, timeout);
 }
 
 void WhoTaskBase::cleanup_for_paused()
 {
-    xEventGroupClearBits(m_event_group, ALL_EVENT_BITS & ~PAUSED);
+    xEventGroupClearBits(m_event_group, ALL_EVENT_BITS & ~TASK_PAUSED);
     cleanup();
 }
 
 void WhoTaskBase::cleanup_for_stopped()
 {
-    xEventGroupClearBits(m_event_group, ALL_EVENT_BITS & ~STOPPED);
+    xEventGroupClearBits(m_event_group, ALL_EVENT_BITS & ~TASK_STOPPED);
     cleanup();
 }
 
@@ -110,7 +112,8 @@ bool WhoTaskBase::is_active()
 {
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     EventBits_t event_bits = xEventGroupGetBits(m_event_group);
-    if (!(event_bits & STOPPED) && !(event_bits & PAUSED) && !(event_bits & STOP) && !(event_bits & PAUSE)) {
+    if (!(event_bits & TASK_STOPPED) && !(event_bits & TASK_PAUSED) && !(event_bits & TASK_STOP) &&
+        !(event_bits & TASK_PAUSE)) {
         xSemaphoreGive(m_mutex);
         return true;
     }
@@ -254,4 +257,5 @@ void WhoTaskGroup::destroy()
         delete task_group;
     }
 }
+} // namespace task
 } // namespace who

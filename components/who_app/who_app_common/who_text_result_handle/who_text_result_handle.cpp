@@ -3,7 +3,7 @@
 #if !BSP_CONFIG_NO_GRAPHIC_LIB
 namespace who {
 namespace lcd_disp {
-WhoTextResultLCDDisp::WhoTextResultLCDDisp(WhoTask *task, lv_obj_t *label, int disp_num_frames) :
+WhoTextResultLCDDisp::WhoTextResultLCDDisp(task::WhoTask *task, lv_obj_t *label, int disp_num_frames) :
     m_task(task),
     m_disp_n_frames(disp_num_frames),
     m_disp_frames_cnt(disp_num_frames),

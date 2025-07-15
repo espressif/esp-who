@@ -15,8 +15,8 @@ void WhoUSB::task()
     ESP_ERROR_CHECK(usb_host_install(&host_config));
     xEventGroupSetBits(m_event_group, USB_HOST_INSTALLED);
     while (true) {
-        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, STOP, pdTRUE, pdFALSE, 0);
-        if (event_bits & STOP) {
+        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, TASK_STOP, pdTRUE, pdFALSE, 0);
+        if (event_bits & TASK_STOP) {
             break;
         }
         uint32_t event_flags;
@@ -30,13 +30,13 @@ void WhoUSB::task()
         }
     }
     ESP_ERROR_CHECK(usb_host_uninstall());
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 
 bool WhoUSB::stop_async()
 {
-    if (WhoTaskBase::stop_async()) {
+    if (task::WhoTaskBase::stop_async()) {
         usb_host_lib_unblock();
         return true;
     }

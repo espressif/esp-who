@@ -12,11 +12,11 @@ public:
     virtual bool stop();
 
 protected:
-    void add_task(WhoTask *task) { m_task_group.register_task(task); }
-    void add_task_group(WhoTaskGroup *task_group) { m_task_group.register_task_group(task_group); }
+    void add_task(task::WhoTask *task) { m_task_group.register_task(task); }
+    void add_task_group(task::WhoTaskGroup *task_group) { m_task_group.register_task_group(task_group); }
 
 private:
-    WhoTaskGroup m_task_group;
+    task::WhoTaskGroup m_task_group;
 };
 } // namespace app
 } // namespace who

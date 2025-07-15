@@ -4,8 +4,10 @@
 
 namespace who {
 namespace detect {
-class WhoDetect : public WhoTask {
+class WhoDetect : public task::WhoTask {
 public:
+    static inline constexpr EventBits_t NEW_FRAME = frame_cap::WhoFrameCapNode::NEW_FRAME;
+
     typedef struct {
         std::list<dl::detect::result_t> det_res;
         struct timeval timestamp;

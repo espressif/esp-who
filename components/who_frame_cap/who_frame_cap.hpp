@@ -3,7 +3,7 @@
 
 namespace who {
 namespace frame_cap {
-class WhoFrameCap : public WhoTaskGroup {
+class WhoFrameCap : public task::WhoTaskGroup {
 public:
     ~WhoFrameCap()
     {

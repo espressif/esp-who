@@ -22,9 +22,9 @@ namespace lcd_disp {
 class WhoDetectResultLCDDisp {
 public:
 #if !BSP_CONFIG_NO_GRAPHIC_LIB
-    WhoDetectResultLCDDisp(WhoTask *task, lv_obj_t *canvas, const std::vector<std::vector<uint8_t>> &palette);
+    WhoDetectResultLCDDisp(task::WhoTask *task, lv_obj_t *canvas, const std::vector<std::vector<uint8_t>> &palette);
 #else
-    WhoDetectResultLCDDisp(WhoTask *task, const std::vector<std::vector<uint8_t>> &palette);
+    WhoDetectResultLCDDisp(task::WhoTask *task, const std::vector<std::vector<uint8_t>> &palette);
 #endif
     ~WhoDetectResultLCDDisp();
     void save_detect_result(const detect::WhoDetect::result_t &result);
@@ -32,7 +32,7 @@ public:
     void cleanup();
 
 private:
-    WhoTask *m_task;
+    task::WhoTask *m_task;
     SemaphoreHandle_t m_res_mutex;
     std::queue<detect::WhoDetect::result_t> m_results;
     detect::WhoDetect::result_t m_result;

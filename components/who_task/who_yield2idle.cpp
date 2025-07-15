@@ -60,11 +60,11 @@ void WhoYield2IdleTaskGroup::unlock_selected_tasks()
     }
 }
 
-std::vector<WhoTask *> WhoYield2IdleTaskGroup::get_tasks_by_coreid(BaseType_t coreid)
+std::vector<task::WhoTask *> WhoYield2IdleTaskGroup::get_tasks_by_coreid(BaseType_t coreid)
 {
     assert(coreid == 0 || coreid == 1);
     auto all_tasks = get_all_tasks();
-    std::vector<WhoTask *> tasks;
+    std::vector<task::WhoTask *> tasks;
     for (const auto &task : all_tasks) {
         if (task->get_coreid() == coreid) {
             tasks.emplace_back(task);
@@ -84,22 +84,22 @@ WhoYield2Idle *WhoYield2Idle::get_instance()
 
 bool WhoYield2Idle::run(const configSTACK_DEPTH_TYPE uxStackDepth)
 {
-    return WhoTaskBase::run(uxStackDepth, configMAX_PRIORITIES - 1, tskNO_AFFINITY);
+    return task::WhoTaskBase::run(uxStackDepth, configMAX_PRIORITIES - 1, tskNO_AFFINITY);
 }
 
-void WhoYield2Idle::start_monitor(WhoTask *task)
+void WhoYield2Idle::start_monitor(task::WhoTask *task)
 {
     m_task_group.register_task(task);
 }
 
-void WhoYield2Idle::end_monitor(WhoTask *task)
+void WhoYield2Idle::end_monitor(task::WhoTask *task)
 {
     m_task_group.unregister_task(task);
 }
 
 bool WhoYield2Idle::stop_async()
 {
-    if (WhoTaskBase::stop_async()) {
+    if (task::WhoTaskBase::stop_async()) {
         xTaskAbortDelay(m_task_handle);
         return true;
     }
@@ -108,7 +108,7 @@ bool WhoYield2Idle::stop_async()
 
 bool WhoYield2Idle::pause_async()
 {
-    if (WhoTaskBase::pause_async()) {
+    if (task::WhoTaskBase::pause_async()) {
         xTaskAbortDelay(m_task_handle);
         return true;
     }
@@ -127,14 +127,14 @@ void WhoYield2Idle::task()
     bool last_time_yield = true;
     while (true) {
         vTaskDelayUntil(&last_wake_time, interval);
-        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, PAUSE | STOP, pdTRUE, pdFALSE, 0);
-        if (event_bits & STOP) {
+        EventBits_t event_bits = xEventGroupWaitBits(m_event_group, TASK_PAUSE | TASK_STOP, pdTRUE, pdFALSE, 0);
+        if (event_bits & TASK_STOP) {
             break;
-        } else if (event_bits & PAUSE) {
-            xEventGroupSetBits(m_event_group, PAUSED);
+        } else if (event_bits & TASK_PAUSE) {
+            xEventGroupSetBits(m_event_group, TASK_PAUSED);
             EventBits_t pause_event_bits =
-                xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-            if (pause_event_bits & STOP) {
+                xEventGroupWaitBits(m_event_group, TASK_RESUME | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+            if (pause_event_bits & TASK_STOP) {
                 break;
             } else {
                 last_wake_time = xTaskGetTickCount();
@@ -162,7 +162,7 @@ void WhoYield2Idle::task()
     }
     esp_deregister_freertos_idle_hook_for_cpu(idle0_cb, 0);
     esp_deregister_freertos_idle_hook_for_cpu(idle1_cb, 1);
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 

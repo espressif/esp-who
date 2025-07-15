@@ -8,12 +8,11 @@
 namespace who {
 namespace cam {
 class WhoUVCCam;
-class WhoUVC : public WhoTaskBase {
+}
+namespace uvc {
+class WhoUVC : public task::WhoTaskBase {
 public:
-    typedef enum {
-        UVC_HOST_INSTALLED = WHO_TASK_LAST << 0,
-    } event_type_t;
-
+    static inline constexpr EventBits_t UVC_HOST_INSTALLED = TASK_EVENT_BIT_LAST;
     using stream_info_t = std::unordered_map<uint8_t, std::vector<uvc_host_frame_info_t>>;
     typedef struct {
         uint8_t dev_addr;
@@ -32,7 +31,7 @@ public:
     void print_uvc_devices();
 
 private:
-    WhoUVC() : WhoTaskBase("UVC"), m_mutex(xSemaphoreCreateMutex()) {}
+    WhoUVC() : task::WhoTaskBase("UVC"), m_mutex(xSemaphoreCreateMutex()) {}
     WhoUVC(const WhoUVC &) = delete;
     WhoUVC &operator=(const WhoUVC &) = delete;
     void task() override;
@@ -42,5 +41,5 @@ private:
     std::list<uvc_dev_t> m_uvc_devs;
     SemaphoreHandle_t m_mutex;
 };
-} // namespace cam
+} // namespace uvc
 } // namespace who

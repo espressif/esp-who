@@ -4,8 +4,10 @@
 struct quirc;
 namespace who {
 namespace qrcode {
-class WhoQRCode : public WhoTask {
+class WhoQRCode : public task::WhoTask {
 public:
+    static inline constexpr EventBits_t NEW_FRAME = frame_cap::WhoFrameCapNode::NEW_FRAME;
+
     WhoQRCode(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node);
     ~WhoQRCode();
     void set_qrcode_result_cb(const std::function<void(const std::string &)> &result_cb);

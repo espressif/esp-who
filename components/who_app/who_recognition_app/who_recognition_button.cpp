@@ -4,12 +4,12 @@ LV_FONT_DECLARE(montserrat_bold_26);
 
 namespace who {
 namespace button {
-WhoRecognitionButton::WhoRecognitionButton(WhoTask *task)
+WhoRecognitionButton::WhoRecognitionButton(task::WhoTask *task)
 {
     m_btn_user_data = new btn_user_data_t[3];
-    m_btn_user_data[0] = {task, RECOGNIZE};
-    m_btn_user_data[1] = {task, ENROLL};
-    m_btn_user_data[2] = {task, DELETE};
+    m_btn_user_data[0] = {task, recognition::WhoRecognitionCore::RECOGNIZE};
+    m_btn_user_data[1] = {task, recognition::WhoRecognitionCore::ENROLL};
+    m_btn_user_data[2] = {task, recognition::WhoRecognitionCore::DELETE};
 }
 
 WhoRecognitionButton::~WhoRecognitionButton()

@@ -5,7 +5,7 @@
 namespace who {
 namespace qrcode {
 WhoQRCode::WhoQRCode(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node) :
-    WhoTask(name), m_frame_cap_node(frame_cap_node), m_qr(quirc_new())
+    task::WhoTask(name), m_frame_cap_node(frame_cap_node), m_qr(quirc_new())
 {
     frame_cap_node->add_new_frame_signal_subscriber(this);
 #if CONFIG_IDF_TARGET_ESP32S3
@@ -27,14 +27,14 @@ void WhoQRCode::task()
 {
     while (true) {
         EventBits_t event_bits =
-            xEventGroupWaitBits(m_event_group, NEW_FRAME | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-        if (event_bits & STOP) {
+            xEventGroupWaitBits(m_event_group, NEW_FRAME | TASK_PAUSE | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+        if (event_bits & TASK_STOP) {
             break;
-        } else if (event_bits & PAUSE) {
-            xEventGroupSetBits(m_event_group, PAUSED);
+        } else if (event_bits & TASK_PAUSE) {
+            xEventGroupSetBits(m_event_group, TASK_PAUSED);
             EventBits_t pause_event_bits =
-                xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-            if (pause_event_bits & STOP) {
+                xEventGroupWaitBits(m_event_group, TASK_RESUME | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+            if (pause_event_bits & TASK_STOP) {
                 break;
             } else {
                 continue;
@@ -67,7 +67,7 @@ void WhoQRCode::task()
             }
         }
     }
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 
