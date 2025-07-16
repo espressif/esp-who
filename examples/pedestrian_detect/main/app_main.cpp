@@ -41,7 +41,7 @@ void run_detect_term()
 extern "C" void app_main(void)
 {
     vTaskPrioritySet(xTaskGetCurrentTaskHandle(), 5);
-#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
+#if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 

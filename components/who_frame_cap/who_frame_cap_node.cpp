@@ -130,8 +130,9 @@ void WhoFrameCapNode::task()
         }
         xSemaphoreTake(m_mutex, portMAX_DELAY);
         update_ringbuf(out_fb);
+        bool full_ringbuf = m_cam_fbs.full();
         xSemaphoreGive(m_mutex);
-        if (m_cam_fbs.full()) {
+        if (full_ringbuf) {
             for (const auto &task : m_tasks) {
                 if (task->is_active()) {
                     xEventGroupSetBits(task->get_event_group(), NEW_FRAME);
@@ -150,10 +151,12 @@ WhoFetchNode::~WhoFetchNode()
 
 void WhoFetchNode::cleanup()
 {
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
     while (!m_cam_fbs.empty()) {
         auto fb = m_cam_fbs.pop();
         m_cam->cam_fb_return(fb);
     }
+    xSemaphoreGive(m_mutex);
 }
 
 cam_fb_t *WhoFetchNode::process(who::cam::cam_fb_t *fb)
@@ -176,11 +179,13 @@ void WhoDecodeNode::cleanup()
         cam_fb_t *tmp;
         xQueueReceive(m_in_queue, &tmp, 0);
     }
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
     while (!m_cam_fbs.empty()) {
         auto fb = m_cam_fbs.pop();
         heap_caps_free(fb->buf);
         delete fb;
     }
+    xSemaphoreGive(m_mutex);
 }
 
 cam_fb_t *WhoDecodeNode::process(who::cam::cam_fb_t *fb)
@@ -256,10 +261,12 @@ void WhoPPAResizeNode::cleanup()
         cam_fb_t *tmp;
         xQueueReceive(m_in_queue, &tmp, 0);
     }
+    xSemaphoreTake(m_mutex, portMAX_DELAY);
     while (!m_cam_fbs.empty()) {
         auto fb = m_cam_fbs.pop();
         delete fb;
     }
+    xSemaphoreGive(m_mutex);
 }
 
 cam_fb_t *WhoPPAResizeNode::process(who::cam::cam_fb_t *fb)
