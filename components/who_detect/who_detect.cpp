@@ -3,7 +3,7 @@
 namespace who {
 namespace detect {
 WhoDetect::WhoDetect(const std::string &name, frame_cap::WhoFrameCapNode *frame_cap_node) :
-    WhoTask(name),
+    task::WhoTask(name),
     m_frame_cap_node(frame_cap_node),
     m_model(nullptr),
     m_interval(0),
@@ -61,14 +61,14 @@ void WhoDetect::task()
     TickType_t last_wake_time = xTaskGetTickCount();
     while (true) {
         EventBits_t event_bits =
-            xEventGroupWaitBits(m_event_group, NEW_FRAME | PAUSE | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-        if (event_bits & STOP) {
+            xEventGroupWaitBits(m_event_group, NEW_FRAME | TASK_PAUSE | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+        if (event_bits & TASK_STOP) {
             break;
-        } else if (event_bits & PAUSE) {
-            xEventGroupSetBits(m_event_group, PAUSED);
+        } else if (event_bits & TASK_PAUSE) {
+            xEventGroupSetBits(m_event_group, TASK_PAUSED);
             EventBits_t pause_event_bits =
-                xEventGroupWaitBits(m_event_group, RESUME | STOP, pdTRUE, pdFALSE, portMAX_DELAY);
-            if (pause_event_bits & STOP) {
+                xEventGroupWaitBits(m_event_group, TASK_RESUME | TASK_STOP, pdTRUE, pdFALSE, portMAX_DELAY);
+            if (pause_event_bits & TASK_STOP) {
                 break;
             } else {
                 last_wake_time = xTaskGetTickCount();
@@ -91,7 +91,7 @@ void WhoDetect::task()
             vTaskDelayUntil(&last_wake_time, m_interval);
         }
     }
-    xEventGroupSetBits(m_event_group, STOPPED);
+    xEventGroupSetBits(m_event_group, TASK_STOPPED);
     vTaskDelete(NULL);
 }
 
@@ -120,12 +120,12 @@ bool WhoDetect::run(const configSTACK_DEPTH_TYPE uxStackDepth, UBaseType_t uxPri
         ESP_LOGE("WhoDetect", "detect model is nullptr, please call set_model() first.");
         return false;
     }
-    return WhoTask::run(uxStackDepth, uxPriority, xCoreID);
+    return task::WhoTask::run(uxStackDepth, uxPriority, xCoreID);
 }
 
 bool WhoDetect::stop_async()
 {
-    if (WhoTask::stop_async()) {
+    if (task::WhoTask::stop_async()) {
         xTaskAbortDelay(m_task_handle);
         return true;
     }
@@ -134,7 +134,7 @@ bool WhoDetect::stop_async()
 
 bool WhoDetect::pause_async()
 {
-    if (WhoTask::pause_async()) {
+    if (task::WhoTask::pause_async()) {
         xTaskAbortDelay(m_task_handle);
         return true;
     }

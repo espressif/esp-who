@@ -7,10 +7,10 @@ namespace button {
 class WhoRecognitionButton {
 public:
     typedef struct {
-        WhoTask *task;
-        event_type_t event;
+        task::WhoTask *task;
+        EventBits_t event;
     } btn_user_data_t;
-    WhoRecognitionButton(WhoTask *task);
+    WhoRecognitionButton(task::WhoTask *task);
     virtual ~WhoRecognitionButton();
 
 protected:

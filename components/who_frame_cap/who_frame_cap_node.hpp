@@ -5,8 +5,10 @@
 
 namespace who {
 namespace frame_cap {
-class WhoFrameCapNode : public WhoTask {
+class WhoFrameCapNode : public task::WhoTask {
 public:
+    static inline constexpr EventBits_t NEW_FRAME = TASK_EVENT_BIT_LAST;
+
     WhoFrameCapNode(const std::string &name, uint8_t ringbuf_len, bool out_queue_overwrite = true);
     ~WhoFrameCapNode();
     bool stop_async() override;
@@ -16,7 +18,7 @@ public:
     void set_prev_node(WhoFrameCapNode *node) { m_prev_node = node; }
     void set_next_node(WhoFrameCapNode *node) { m_next_node = node; }
     who::cam::cam_fb_t *cam_fb_peek(int index = -1);
-    void add_new_frame_signal_subscriber(WhoTask *task);
+    void add_new_frame_signal_subscriber(task::WhoTask *task);
     WhoFrameCapNode *get_prev_node();
     WhoFrameCapNode *get_next_node();
     virtual uint16_t get_fb_width() = 0;
@@ -31,7 +33,7 @@ private:
     QueueHandle_t m_out_queue;
     WhoFrameCapNode *m_prev_node;
     WhoFrameCapNode *m_next_node;
-    std::vector<WhoTask *> m_tasks;
+    std::vector<task::WhoTask *> m_tasks;
 
 protected:
     QueueHandle_t m_in_queue;

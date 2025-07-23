@@ -3,35 +3,23 @@
 #include <string>
 #include <vector>
 
-#define ALL_EVENT_BITS ~((EventBits_t)0) & ~(0xff << (sizeof(EventBits_t) - 1) * 8)
-
 namespace who {
-typedef enum {
-    // WhoTask
-    STOPPED = 1 << 0,
-    PAUSED = 1 << 1,
-
-    STOP = 1 << 2,
-    PAUSE = 1 << 3,
-    RESUME = 1 << 4,
-
-    WHO_TASK_LAST = 1 << 6,
-
-    // WhoFramCap
-    NEW_FRAME = 1 << 6,
-
-    // WhoRecognition
-    RECOGNIZE = 1 << 7,
-    ENROLL = 1 << 8,
-    DELETE = 1 << 9,
-} event_type_t;
+namespace task {
 
 class WhoTaskBase {
 public:
+    static inline constexpr EventBits_t ALL_EVENT_BITS = ~((EventBits_t)0) & ~(0xff << (sizeof(EventBits_t) - 1) * 8);
+    static inline constexpr EventBits_t TASK_STOPPED = 1 << 0;
+    static inline constexpr EventBits_t TASK_PAUSED = 1 << 1;
+    static inline constexpr EventBits_t TASK_STOP = 1 << 2;
+    static inline constexpr EventBits_t TASK_PAUSE = 1 << 3;
+    static inline constexpr EventBits_t TASK_RESUME = 1 << 4;
+    static inline constexpr EventBits_t TASK_EVENT_BIT_LAST = 1 << 5;
+
     WhoTaskBase(const std::string &name) :
         m_name(name), m_event_group(xEventGroupCreate()), m_mutex(xSemaphoreCreateMutex())
     {
-        xEventGroupSetBits(m_event_group, STOPPED);
+        xEventGroupSetBits(m_event_group, TASK_STOPPED);
     }
     virtual ~WhoTaskBase()
     {
@@ -96,4 +84,5 @@ private:
     std::vector<WhoTask *> m_tasks;
     std::vector<WhoTaskGroup *> m_task_groups;
 };
+} // namespace task
 } // namespace who

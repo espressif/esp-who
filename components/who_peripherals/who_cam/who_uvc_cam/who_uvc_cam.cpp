@@ -37,13 +37,13 @@ WhoUVCCam::WhoUVCCam(
                 .urb_size = 10 * 1024,
             },
     };
-    auto uvc = WhoUVC::get_instance();
+    auto uvc = uvc::WhoUVC::get_instance();
     uvc->run(4096, 16, 0);
-    xEventGroupWaitBits(uvc->get_event_group(), WhoUVC::UVC_HOST_INSTALLED, pdFALSE, pdFALSE, portMAX_DELAY);
+    xEventGroupWaitBits(uvc->get_event_group(), uvc::WhoUVC::UVC_HOST_INSTALLED, pdFALSE, pdFALSE, portMAX_DELAY);
     if (uvc_host_stream_open(&m_stream_config, pdMS_TO_TICKS(500), &m_stream) == ESP_OK) {
         ESP_ERROR_CHECK(uvc_host_stream_start(m_stream));
     } else {
-        WhoUVC::get_instance()->print_uvc_devices();
+        uvc::WhoUVC::get_instance()->print_uvc_devices();
     }
 }
 
