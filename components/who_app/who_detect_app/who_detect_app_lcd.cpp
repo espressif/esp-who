@@ -56,7 +56,7 @@ bool WhoDetectAppLCD::run()
         ret &= frame_cap_node->run(4096, 2, 0);
     }
     ret &= m_lcd_disp->run(2560, 2, 0);
-    ret &= m_detect->run(2560, 2, 1);
+    ret &= m_detect->run(4096, 2, 1);
     return ret;
 }
 

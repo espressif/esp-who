@@ -21,8 +21,10 @@ WhoRecognitionAppLCD::WhoRecognitionAppLCD(frame_cap::WhoFrameCap *frame_cap) :
 #else
     snprintf(db_path, sizeof(db_path), "%s/face.db", CONFIG_BSP_SD_MOUNT_POINT);
 #endif
-    m_recognition->set_recognizer(new HumanFaceRecognizer(db_path));
-    m_recognition->set_detect_model(new HumanFaceDetect());
+    m_recognition->set_recognizer(new HumanFaceRecognizer(
+        db_path, static_cast<HumanFaceFeat::model_type_t>(CONFIG_DEFAULT_HUMAN_FACE_FEAT_MODEL), false));
+    m_recognition->set_detect_model(
+        new HumanFaceDetect(static_cast<HumanFaceDetect::model_type_t>(CONFIG_DEFAULT_HUMAN_FACE_DETECT_MODEL), false));
 
     bsp_display_lock(0);
     m_label = create_lvgl_label("", &montserrat_bold_26);

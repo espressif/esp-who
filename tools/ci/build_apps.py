@@ -1,6 +1,6 @@
 from idf_build_apps import build_apps, find_apps
-import argparse
 import sys
+import os
 
 BSP2TARGET = {
     "esp_wrover_kit": "esp32",
@@ -28,20 +28,16 @@ BSP2TARGET = {
 BSP2TARGET.update({key + "_noglib": value for key, value in BSP2TARGET.items()})
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Build all the apps.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    )
-    parser.add_argument("paths", nargs="+", help="Paths to the apps to build.")
-    parser.add_argument("--bsp", help="BSP to build.")
+    example_dir = os.environ.get("EXAMPLE_DIR")
+    sdkconfig_defaults = os.environ.get("SDKCONFIG_DEFAULTS")
+    bsp = sdkconfig_defaults.split(".")[-1]
 
-    args = parser.parse_args()
     apps = find_apps(
-        args.paths,
-        target=BSP2TARGET[args.bsp],
+        example_dir,
+        target=BSP2TARGET[bsp],
         #  recursive=True,
         build_dir=f"build_@n_@v_@w",
-        config_rules=f"sdkconfig.bsp.{args.bsp}={args.bsp}",
+        config_rules=f"{sdkconfig_defaults}={bsp}",
         # build_log_filename="build_log.txt",
         size_json_filename="size.json",
     )

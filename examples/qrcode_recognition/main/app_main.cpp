@@ -9,9 +9,6 @@ using namespace who::app;
 extern "C" void app_main(void)
 {
     vTaskPrioritySet(xTaskGetCurrentTaskHandle(), 5);
-#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD
-    ESP_ERROR_CHECK(bsp_sdcard_mount());
-#endif
 
 // close led
 #ifdef BSP_BOARD_ESP32_S3_EYE

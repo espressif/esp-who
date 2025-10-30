@@ -8,7 +8,8 @@
     BATCH_BUILD: "1"
     V: "0"
     WARNING_STR: ""
-    IDF_EXTRA_ACTIONS_PATH: "tools/"
+    IDF_EXTRA_ACTIONS_PATH: "$CI_PROJECT_DIR/tools/"
+    IDF_CI_BUILD: "1"
   artifacts:
     when: always
     paths:
@@ -23,24 +24,25 @@
       - "**/build*/bootloader/*.elf"
       - "**/build*/partition_table/*.bin"
       - "**/build*/size.json"
+      - "${EXAMPLE_DIR}/dependencies.lock*"
     expire_in: 1 week
-  variables:
-    IDF_CI_BUILD: "1"
-  script:
+  before_script:
     - pip install --upgrade idf-component-manager
     - pip install idf_build_apps==2.10.1
-    - python tools/ci/build_apps.py ${EXAMPLE_DIR} --bsp ${BSP}
+  script:
+    - python tools/ci/build_apps.py
 
-build_example_human_face_detect:
+build_example_object_detect:
   extends:
     - .build_template
-    - .rules:build:example_detect
+    - .rules:build:example_object_detect
   parallel:
     matrix:
-      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
-        BSP: [esp32_p4_function_ev_board_noglib, esp32_s3_eye_noglib, esp32_s3_korvo_2_noglib]
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:release-v5.5]
+        SDKCONFIG_DEFAULTS: [sdkconfig.bsp.esp32_p4_function_ev_board_noglib, sdkconfig.bsp.esp32_s3_eye_noglib, sdkconfig.bsp.esp32_s3_korvo_2_noglib]
+        DETECT_MODEL: [human_face_detect, pedestrian_detect, cat_detect, dog_detect]
   variables:
-    EXAMPLE_DIR: examples/human_face_detect
+    EXAMPLE_DIR: examples/object_detect
 
 build_example_human_face_recognition:
   extends:
@@ -48,21 +50,10 @@ build_example_human_face_recognition:
     - .rules:build:example_human_face_recognition
   parallel:
     matrix:
-      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
-        BSP: [esp32_p4_function_ev_board, esp32_s3_eye, esp32_s3_korvo_2]
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:release-v5.5]
+        SDKCONFIG_DEFAULTS: [sdkconfig.bsp.esp32_p4_function_ev_board, sdkconfig.bsp.esp32_s3_eye, sdkconfig.bsp.esp32_s3_korvo_2]
   variables:
     EXAMPLE_DIR: examples/human_face_recognition
-
-build_example_pedestrian_detect:
-  extends:
-    - .build_template
-    - .rules:build:example_detect
-  parallel:
-    matrix:
-      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
-        BSP: [esp32_p4_function_ev_board_noglib, esp32_s3_eye_noglib, esp32_s3_korvo_2_noglib]
-  variables:
-    EXAMPLE_DIR: examples/pedestrian_detect
 
 build_example_qrcode_recognition:
   extends:
@@ -70,7 +61,7 @@ build_example_qrcode_recognition:
     - .rules:build:example_qrcode_recognition
   parallel:
     matrix:
-      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:latest]
-        BSP: [esp32_p4_function_ev_board, esp32_s3_eye]
+      - IMAGE: [espressif/idf:release-v5.4, espressif/idf:release-v5.5]
+        SDKCONFIG_DEFAULTS: [sdkconfig.bsp.esp32_p4_function_ev_board, sdkconfig.bsp.esp32_s3_eye]
   variables:
     EXAMPLE_DIR: examples/qrcode_recognition

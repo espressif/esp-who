@@ -58,35 +58,26 @@ echo %IDF_EXTRA_ACTIONS_PATH%
 > [!IMPORTANT]
 > 确保 echo 命令返回正确的路径。
 
-### 设定目标平台，生成并配置 sdkconfig
-
-#### (可选) 清理工作
-删除
-- sdkconfig
-- dependencies.lock.*
-- build/
-- managed_components/
-
 #### 设定目标 SOC 和默认 sdkconfig 配置文件。
 ```
-idf.py reconfigure -DIDF_TARGET=target -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name
+idf.py -DIDF_TARGET=target -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name set-target esp32xx
 ```
 
 如果用powershell的话，添加""。
 ```
 idf.py reconfigure -DIDF_TARGET="target" -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name"
+set-target "esp32xx"
 ```
 
-> [!NOTE]
-> - reconfigure 过程会创建 sdkconfig 文件。但是如果 sdkconfig 已存在，则不会覆盖该文件。因此建议在运行 reconfigure 之前删除 sdkconfig 文件。  
-> - 查看每个示例下的 sdkconfig.bsp.* 文件以查看支持的 bsp_name。
+> [!NOTE]  
+> 查看每个示例下的 sdkconfig.bsp.* 文件以查看支持的 bsp_name。
 
 #### (可选) 配置 sdkconfig 选项
 ```
 idf.py menuconfig
 ```
 
-### 烧录并监视
+### 编译，烧录并监视
 
 ```
 idf.py flash monitor [-p port]

@@ -1,11 +1,37 @@
 #include "frame_cap_pipeline.hpp"
-#include "pedestrian_detect.hpp"
 #include "who_detect_app_lcd.hpp"
 #include "who_detect_app_term.hpp"
 #include "bsp/esp-bsp.h"
+#if defined(CONFIG_HUMAN_FACE_DETECT_MODEL_LOCATION)
+#include "human_face_detect.hpp"
+#elif defined(CONFIG_PEDESTRIAN_DETECT_MODEL_LOCATION)
+#include "pedestrian_detect.hpp"
+#elif defined(CONFIG_CAT_DETECT_MODEL_LOCATION)
+#include "cat_detect.hpp"
+#elif defined(CONFIG_DOG_DETECT_MODEL_LOCATION)
+#include "dog_detect.hpp"
+#endif
 
 using namespace who::frame_cap;
 using namespace who::app;
+
+dl::detect::Detect *get_detect_model()
+{
+#if defined(CONFIG_HUMAN_FACE_DETECT_MODEL_LOCATION)
+    return new HumanFaceDetect(static_cast<HumanFaceDetect::model_type_t>(CONFIG_DEFAULT_HUMAN_FACE_DETECT_MODEL),
+                               false);
+#elif defined(CONFIG_PEDESTRIAN_DETECT_MODEL_LOCATION)
+    return new PedestrianDetect(static_cast<PedestrianDetect::model_type_t>(CONFIG_DEFAULT_PEDESTRIAN_DETECT_MODEL),
+                                false);
+#elif defined(CONFIG_CAT_DETECT_MODEL_LOCATION)
+    return new CatDetect(static_cast<CatDetect::model_type_t>(CONFIG_DEFAULT_CAT_DETECT_MODEL), false);
+#elif defined(CONFIG_DOG_DETECT_MODEL_LOCATION)
+    return new DogDetect(static_cast<DogDetect::model_type_t>(CONFIG_DEFAULT_DOG_DETECT_MODEL), false);
+#else
+    ESP_LOGE("MAIN", "No detect model component in idf_component.yml");
+    return nullptr;
+#endif
+}
 
 void run_detect_lcd()
 {
@@ -19,7 +45,7 @@ void run_detect_lcd()
 #endif
     auto detect_app = new WhoDetectAppLCD({{255, 0, 0}}, frame_cap, lcd_disp_frame_cap_node);
     // create model later to avoid memory fragmentation.
-    detect_app->set_model(new PedestrianDetect());
+    detect_app->set_model(get_detect_model());
     detect_app->run();
 }
 
@@ -34,14 +60,15 @@ void run_detect_term()
 #endif
     auto detect_app = new WhoDetectAppTerm(frame_cap);
     // create model later to avoid memory fragmentation.
-    detect_app->set_model(new PedestrianDetect());
+    detect_app->set_model(get_detect_model());
     detect_app->run();
 }
 
 extern "C" void app_main(void)
 {
     vTaskPrioritySet(xTaskGetCurrentTaskHandle(), 5);
-#if CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD
+#if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD || CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD || \
+    CONFIG_CAT_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 

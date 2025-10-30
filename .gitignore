@@ -6,4 +6,5 @@ sdkconfig.old
 .vscode/
 
 managed_components/
-dependencies.lock*
+
+.clangd

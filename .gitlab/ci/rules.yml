@@ -21,6 +21,9 @@
 .patterns-components_who_frame_cap: &patterns-components_who_frame_cap
   - "components/who_frame_cap/**/*"
 
+.patterns-components_who_frame_lcd_disp: &patterns-components_who_frame_lcd_disp
+  - "components/who_frame_lcd_disp/**/*"
+
 .patterns-components_who_cam: &patterns-components_who_cam
   - "components/who_peripherals/who_cam/**/*"
 
@@ -29,6 +32,9 @@
 
 .patterns-components_who_spiflash_fatfs: &patterns-components_who_spiflash_fatfs
   - "components/who_peripherals/who_spiflash_fatfs/**/*"
+
+.patterns-components_who_usb: &patterns-components_who_usb
+  - "components/who_peripherals/who_usb/**/*"
 
 .patterns-components_who_qrcode: &patterns-components_who_qrcode
   - "components/who_qrcode/**/*"
@@ -40,14 +46,11 @@
   - "components/who_task/**/*"
 
 # examples folder
-.patterns-example_human_face_detect: &patterns-example_human_face_detect
-  - "examples/human_face_detect/**/*"
+.patterns-example_object_detect: &patterns-example_object_detect
+  - "examples/object_detect/**/*"
 
 .patterns-example_human_face_recognition: &patterns-example_human_face_recognition
   - "examples/human_face_recognition/**/*"
-
-.patterns-example_pedestrian_detect: &patterns-example_pedestrian_detect
-  - "examples/pedestrian_detect/**/*"
 
 .patterns-example_qrcode_recognition: &patterns-example_qrcode_recognition
   - "examples/qrcode_recognition/**/*"
@@ -74,10 +77,12 @@
   - "**/*.md"
 
 # rules for examples
-.rules:build:example_detect:
+.rules:build:example_object_detect:
   rules:
     - <<: *if-protected
     - <<: *if-label-build
+    - <<: *if-dev-push
+      changes: *patterns-example_object_detect
     - <<: *if-dev-push
       changes: *patterns-components_who_detect_app
     - <<: *if-dev-push
@@ -85,9 +90,13 @@
     - <<: *if-dev-push
       changes: *patterns-components_who_frame_cap
     - <<: *if-dev-push
+      changes: *patterns-components_who_frame_lcd_disp
+    - <<: *if-dev-push
       changes: *patterns-components_who_cam
     - <<: *if-dev-push
       changes: *patterns-components_who_lcd
+    - <<: *if-dev-push
+      changes: *patterns-components_who_usb
     - <<: *if-dev-push
       changes: *patterns-components_who_task
     - <<: *if-dev-push
@@ -98,15 +107,21 @@
     - <<: *if-protected
     - <<: *if-label-build
     - <<: *if-dev-push
+      changes: *patterns-example_human_face_recognition
+    - <<: *if-dev-push
       changes: *patterns-components_who_recognition_app
     - <<: *if-dev-push
       changes: *patterns-components_who_detect
     - <<: *if-dev-push
       changes: *patterns-components_who_frame_cap
     - <<: *if-dev-push
+      changes: *patterns-components_who_frame_lcd_disp
+    - <<: *if-dev-push
       changes: *patterns-components_who_cam
     - <<: *if-dev-push
       changes: *patterns-components_who_lcd
+    - <<: *if-dev-push
+      changes: *patterns-components_who_usb
     - <<: *if-dev-push
       changes: *patterns-components_who_spiflash_fatfs
     - <<: *if-dev-push
@@ -121,13 +136,19 @@
     - <<: *if-protected
     - <<: *if-label-build
     - <<: *if-dev-push
+      changes: *patterns-example_qrcode_recognition
+    - <<: *if-dev-push
       changes: *patterns-components_who_qrcode_app
     - <<: *if-dev-push
       changes: *patterns-components_who_frame_cap
     - <<: *if-dev-push
+      changes: *patterns-components_who_frame_lcd_disp
+    - <<: *if-dev-push
       changes: *patterns-components_who_cam
     - <<: *if-dev-push
       changes: *patterns-components_who_lcd
+    - <<: *if-dev-push
+      changes: *patterns-components_who_usb
     - <<: *if-dev-push
       changes: *patterns-components_who_qrcode
     - <<: *if-dev-push
