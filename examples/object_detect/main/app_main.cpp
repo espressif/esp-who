@@ -68,7 +68,7 @@ extern "C" void app_main(void)
 {
     vTaskPrioritySet(xTaskGetCurrentTaskHandle(), 5);
 #if CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD || CONFIG_PEDESTRIAN_DETECT_MODEL_IN_SDCARD || \
-    CONFIG_CAT_DETECT_MODEL_IN_SDCARD
+    CONFIG_CAT_DETECT_MODEL_IN_SDCARD || CONFIG_DOG_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 

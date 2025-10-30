@@ -7,7 +7,7 @@
 | [human_face_detect](https://components.espressif.com/components/espressif/human_face_detect) | :heavy_check_mark: |
 | [pedestrian_detect](https://components.espressif.com/components/espressif/pedestrian_detect) | :heavy_check_mark: |
 | [cat_detect](https://components.espressif.com/components/espressif/cat_detect)               | :heavy_check_mark: |
-| [dog_detect](https://components.espressif.com/components/espressif/dog_detect)               | :x:                |
+| [dog_detect](https://components.espressif.com/components/espressif/dog_detect)               | :heavy_check_mark: |
 
 ## How to use
 
