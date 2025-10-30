@@ -4,10 +4,41 @@
 using namespace who::cam;
 using namespace who::frame_cap;
 
+#if defined(CONFIG_HUMAN_FACE_DETECT_MODEL_LOCATION)
+// num of frames the model take to get result
+#define MODEL_TIME 2
+#define MODEL_INPUT_W 160
+#define MODEL_INPUT_H 120
+#elif defined(CONFIG_PEDESTRIAN_DETECT_MODEL_LOCATION)
 // num of frames the model take to get result
 #define MODEL_TIME 3
 #define MODEL_INPUT_W 224
 #define MODEL_INPUT_H 224
+#elif defined(CONFIG_CAT_DETECT_MODEL_LOCATION)
+// num of frames the model take to get result
+#if defined(CONFIG_ESPDET_PICO_224_224_CAT)
+#define MODEL_TIME 3
+#define MODEL_INPUT_W 224
+#define MODEL_INPUT_H 224
+#endif
+#if defined(CONFIG_ESPDET_PICO_416_416_CAT)
+#define MODEL_TIME 8
+#define MODEL_INPUT_W 416
+#define MODEL_INPUT_H 416
+#endif
+#elif defined(CONFIG_DOG_DETECT_MODEL_LOCATION)
+// num of frames the model take to get result
+#if defined(CONFIG_ESPDET_PICO_224_224_DOG)
+#define MODEL_TIME 3
+#define MODEL_INPUT_W 224
+#define MODEL_INPUT_H 224
+#endif
+#if defined(CONFIG_ESPDET_PICO_416_416_DOG)
+#define MODEL_TIME 8
+#define MODEL_INPUT_W 416
+#define MODEL_INPUT_H 416
+#endif
+#endif
 
 // The size of the fb_count and ringbuf_len must be big enough. If you have no idea how to set them, try with 5 and
 // larger.

@@ -24,6 +24,7 @@ WhoS3Cam::WhoS3Cam(const pixformat_t pixel_format,
         camera_config.xclk_freq_hz = 20000000;
     }
     ESP_ERROR_CHECK(esp_camera_init(&camera_config));
+    ESP_ERROR_CHECK(esp_camera_set_psram_mode(true));
     ESP_ERROR_CHECK(set_flip(!vertical_flip, !horizontal_flip));
 }
 

@@ -37,7 +37,8 @@ private:
     std::queue<detect::WhoDetect::result_t> m_results;
     detect::WhoDetect::result_t m_result;
 #if BSP_CONFIG_NO_GRAPHIC_LIB
-    std::vector<std::vector<uint8_t>> m_palette;
+    std::vector<std::vector<uint8_t>> m_rgb888_palette;
+    std::vector<std::vector<uint8_t>> m_rgb565_palette;
 #else
     lv_obj_t *m_canvas;
     std::vector<lv_color_t> m_palette;

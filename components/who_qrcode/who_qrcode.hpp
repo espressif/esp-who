@@ -19,7 +19,7 @@ private:
 
     frame_cap::WhoFrameCapNode *m_frame_cap_node;
     struct quirc *m_qr;
-    dl::image::img_t m_input;
+    dl::image::ImageTransformer m_image_transformer;
     std::function<void(const std::string &)> m_result_cb;
     std::function<void()> m_cleanup;
 };

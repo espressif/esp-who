@@ -8,7 +8,7 @@ namespace who {
 namespace lcd {
 class WhoLCD {
 public:
-    WhoLCD(const lvgl_port_cfg_t &lvgl_port_cfg = {4, 6144, 0, 500, 5}) { init(lvgl_port_cfg); }
+    WhoLCD(const lvgl_port_cfg_t &lvgl_port_cfg = {4, 6144, 0, 500, MALLOC_CAP_INTERNAL, 5}) { init(lvgl_port_cfg); }
     ~WhoLCD() { deinit(); }
     void init(const lvgl_port_cfg_t &lvgl_port_cfg);
     void deinit();

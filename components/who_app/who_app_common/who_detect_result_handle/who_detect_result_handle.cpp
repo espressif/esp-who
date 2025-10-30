@@ -2,6 +2,7 @@
 #if !BSP_CONFIG_NO_GRAPHIC_LIB
 #include "who_lvgl_utils.hpp"
 #endif
+#include "dl_image_pixel_cvt_dispatch.hpp"
 
 namespace who {
 namespace detect {
@@ -9,19 +10,12 @@ void draw_detect_results_on_img(const dl::image::img_t &img,
                                 const std::list<dl::detect::result_t> &detect_res,
                                 const std::vector<std::vector<uint8_t>> &palette)
 {
-#if CONFIG_IDF_TARGET_ESP32P4
-    uint32_t caps = 0;
-#else
-    uint32_t caps = DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
-#endif
     for (const auto &res : detect_res) {
-        dl::image::draw_hollow_rectangle(
-            img, res.box[0], res.box[1], res.box[2], res.box[3], palette[res.category], 2, caps);
+        dl::image::draw_hollow_rectangle(img, res.box[0], res.box[1], res.box[2], res.box[3], palette[res.category], 2);
         if (!res.keypoint.empty()) {
             assert(res.keypoint.size() == 10);
             for (int i = 0; i < 5; i++) {
-                dl::image::draw_point(
-                    img, res.keypoint[2 * i], res.keypoint[2 * i + 1], palette[res.category], 5, caps);
+                dl::image::draw_point(img, res.keypoint[2 * i], res.keypoint[2 * i + 1], palette[res.category], 3);
             }
         }
     }
@@ -120,8 +114,24 @@ WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(task::WhoTask *task,
 }
 #else
 WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(task::WhoTask *task, const std::vector<std::vector<uint8_t>> &palette) :
-    m_task(task), m_res_mutex(xSemaphoreCreateMutex()), m_result(), m_palette(palette)
+    m_task(task),
+    m_res_mutex(xSemaphoreCreateMutex()),
+    m_result(),
+    m_rgb888_palette(palette),
+    m_rgb565_palette(palette.size(), std::vector<uint8_t>(2))
 {
+#if CONFIG_IDF_TARGET_ESP32P4
+    uint32_t caps = 0;
+#else
+    uint32_t caps = dl::image::DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
+#endif
+    for (int i = 0; i < m_rgb888_palette.size(); i++) {
+        dl::image::cvt_pix(m_rgb888_palette[i].data(),
+                           m_rgb565_palette[i].data(),
+                           dl::image::DL_IMAGE_PIX_TYPE_RGB888,
+                           dl::image::DL_IMAGE_PIX_TYPE_RGB565,
+                           caps);
+    }
 }
 #endif
 
@@ -163,7 +173,11 @@ void WhoDetectResultLCDDisp::lcd_disp_cb(who::cam::cam_fb_t *fb)
     }
     xSemaphoreGive(m_res_mutex);
 #if BSP_CONFIG_NO_GRAPHIC_LIB
-    detect::draw_detect_results_on_img(*fb, m_result.det_res, m_palette);
+    if (fb->format == cam::cam_fb_fmt_t::CAM_FB_FMT_RGB565) {
+        detect::draw_detect_results_on_img(*fb, m_result.det_res, m_rgb565_palette);
+    } else if (fb->format == cam::cam_fb_fmt_t::CAM_FB_FMT_RGB888) {
+        detect::draw_detect_results_on_img(*fb, m_result.det_res, m_rgb888_palette);
+    }
 #else
     detect::draw_detect_results_on_canvas(m_canvas, m_result.det_res, m_palette);
 #endif

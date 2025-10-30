@@ -13,5 +13,8 @@ set(EXTRA_COMPONENT_DIRS ../../components/who_task
 
 add_compile_options(-fdiagnostics-color=always)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-idf_build_set_property(DEPENDENCIES_LOCK dependencies.lock.${IDF_TARGET})
-project(pedestrian_detect)
+if (NOT DEFINED BSP)
+    message(FATAL_ERROR "BSP is not defined, please make sure that the environment variable IDF_EXTRA_ACTIONS_PATH is properly set.")
+endif()
+idf_build_set_property(DEPENDENCIES_LOCK dependencies.lock.${BSP}.${DETECT_MODEL})
+project(object_detect)

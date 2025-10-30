@@ -81,8 +81,8 @@ void WhoP4Cam::video_init(bool vertical_flip, bool horizontal_flip)
                     .i2c_handle = bsp_i2c_get_handle(),
                     .freq = 100000,
                 },
-            .reset_pin = -1,
-            .pwdn_pin = -1,
+            .reset_pin = GPIO_NUM_NC,
+            .pwdn_pin = GPIO_NUM_NC,
         };
         esp_video_init_config_t cam_config{};
         cam_config.csi = &csi_config;

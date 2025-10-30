@@ -58,35 +58,25 @@ echo %IDF_EXTRA_ACTIONS_PATH%
 > [!IMPORTANT]
 > Make sure the echo command return the correct path.
 
-### Set the target platform, generate and configure sdkconfig
-
-#### (Optional) Cleanup
-remove
-- sdkconfig
-- dependencies.lock.*
-- build/
-- managed_components/
-
 #### Set the target SOC and the default sdkconfig configuration file.
 ```
-idf.py reconfigure -DIDF_TARGET=target -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name
+idf.py -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name set-target esp32xx
 ```
 
 Add "" if using powershell.
 ```
-idf.py reconfigure -DIDF_TARGET="target" -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name"
+idf.py -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name" set-target "esp32xx"
 ```
 
 > [!NOTE]
-> - The reconfigure process will create the sdkconfig file. However, if sdkconfig already exists, it will not be overwritten. So it is recommended to remove the sdkconfig file before run reconfigure.
-> - Check the sdkconfig.bsp.* files under each example to see the supported bsp_name.
+> Check the sdkconfig.bsp.* files under each example to see the supported bsp_name.
 
 #### (Optional) Configure sdkconfig options
 ```
 idf.py menuconfig
 ```
 
-### Flash and monitor
+### Build, Flash and monitor
 
 ```
 idf.py [-p port] flash monitor

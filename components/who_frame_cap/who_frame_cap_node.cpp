@@ -194,7 +194,7 @@ cam_fb_t *WhoDecodeNode::process(who::cam::cam_fb_t *fb)
 #if CONFIG_IDF_TARGET_ESP32P4
     uint32_t caps = 0;
 #else
-    uint32_t caps = DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
+    uint32_t caps = dl::image::DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
 #endif
 #if CONFIG_SOC_JPEG_CODEC_SUPPORTED
     auto img = hw_decode_jpeg({fb->buf, fb->len}, m_pix_type, caps);
@@ -241,7 +241,7 @@ WhoPPAResizeNode::WhoPPAResizeNode(const std::string &name,
         img.height = dst_h;
         img.pix_type = dst_pix_type;
         if (i == 0) {
-            m_buf_size = DL_IMAGE_ALIGN_UP(dl::image::get_img_byte_size(img), align);
+            m_buf_size = dl::image::align_up(dl::image::get_img_byte_size(img), align);
         }
         img.data = heap_caps_aligned_calloc(align, 1, m_buf_size, MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
     }
@@ -273,7 +273,7 @@ cam_fb_t *WhoPPAResizeNode::process(who::cam::cam_fb_t *fb)
 {
     auto timestamp = fb->timestamp;
     auto dst_img = get_dst_img();
-    dl::image::resize_ppa(*fb, dst_img, m_ppa_srm_handle, dst_img.data, m_buf_size);
+    dl::image::resize_ppa(*fb, dst_img, m_ppa_srm_handle);
     return new cam_fb_t(dst_img, timestamp);
 }
 
