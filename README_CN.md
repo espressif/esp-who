@@ -60,13 +60,12 @@ echo %IDF_EXTRA_ACTIONS_PATH%
 
 #### 设定目标 SOC 和默认 sdkconfig 配置文件。
 ```
-idf.py -DIDF_TARGET=target -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name set-target esp32xx
+idf.py -DSDKCONFIG_DEFAULTS=sdkconfig.bsp.bsp_name set-target esp32xx
 ```
 
 如果用powershell的话，添加""。
 ```
-idf.py reconfigure -DIDF_TARGET="target" -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name"
-set-target "esp32xx"
+idf.py -DSDKCONFIG_DEFAULTS="sdkconfig.bsp.bsp_name" set-target "esp32xx"
 ```
 
 > [!NOTE]  
