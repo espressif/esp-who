@@ -1,20 +1,21 @@
 #include "frame_cap_pipeline.hpp"
-#include "who_recognition_app_lcd.hpp"
-#include "who_recognition_app_term.hpp"
-#include "who_spiflash_fatfs.hpp"
+#include "cat_detect_app.hpp"
+#include "cat_detect.hpp"
+#include "bsp/esp-bsp.h"
+#include "http_server.hpp"
 
 using namespace who::frame_cap;
 using namespace who::app;
 
+dl::detect::Detect *get_detect_model()
+{
+    return new CatDetect(static_cast<CatDetect::model_type_t>(CONFIG_DEFAULT_CAT_DETECT_MODEL), false);
+}
+
 extern "C" void app_main(void)
 {
     vTaskPrioritySet(xTaskGetCurrentTaskHandle(), 5);
-#if CONFIG_DB_FATFS_FLASH
-    ESP_ERROR_CHECK(fatfs_flash_mount());
-#elif CONFIG_DB_SPIFFS
-    ESP_ERROR_CHECK(bsp_spiffs_mount());
-#endif
-#if CONFIG_DB_FATFS_SDCARD || CONFIG_HUMAN_FACE_DETECT_MODEL_IN_SDCARD || CONFIG_HUMAN_FACE_FEAT_MODEL_IN_SDCARD
+#if CONFIG_CAT_DETECT_MODEL_IN_SDCARD
     ESP_ERROR_CHECK(bsp_sdcard_mount());
 #endif
 
@@ -30,8 +31,11 @@ extern "C" void app_main(void)
     auto frame_cap = get_mipi_csi_frame_cap_pipeline();
     // auto frame_cap = get_uvc_frame_cap_pipeline();
 #endif
-    auto recognition_app = new WhoRecognitionAppLCD(frame_cap);
-    // try this if you don't have a lcd.
-    // auto recognition_app = new WhoRecognitionAppTerm(frame_cap);
-    recognition_app->run();
+    auto detect_app = new CatDetectApp({{255, 0, 0}}, frame_cap);
+    detect_app->set_model(get_detect_model());
+    
+    // Start HTTP server for video streaming
+    start_http_server(get_cam_instance());
+    
+    detect_app->run();
 }

@@ -6,14 +6,16 @@ set(EXTRA_COMPONENT_DIRS ../../components/who_task
                          ../../components/who_peripherals/who_usb
                          ../../components/who_peripherals/who_cam
                          ../../components/who_peripherals/who_lcd
-                         ../../components/who_peripherals/who_spiflash_fatfs
                          ../../components/who_frame_cap
                          ../../components/who_frame_lcd_disp
                          ../../components/who_detect
-                         ../../components/who_recognition
-                         ../../components/who_app/who_recognition_app)
+                         ../../components/who_app/who_detect_app)
 
 add_compile_options(-fdiagnostics-color=always)
+
+# Add HTTP server component
+set(COMPONENTS ${COMPONENTS} esp_http_server)
+
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 if (NOT DEFINED BSP)
     message(FATAL_ERROR "BSP is not defined, please make sure that the environment variable IDF_EXTRA_ACTIONS_PATH is properly set.")

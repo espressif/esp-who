@@ -7,6 +7,8 @@ using namespace who::frame_cap;
 // num of frames the model take to get result
 #define MODEL_TIME 3
 
+static WhoCam *g_cam = NULL;
+
 // The size of the fb_count and ringbuf_len must be big enough. If you have no idea how to set them, try with 5 and
 // larger.
 #if CONFIG_IDF_TARGET_ESP32S3
@@ -20,20 +22,26 @@ WhoFrameCap *get_dvp_frame_cap_pipeline()
     // frame.
     framesize_t frame_size = get_cam_frame_size_from_lcd_resolution();
 #ifdef BSP_BOARD_ESP32_S3_KORVO_2
-    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, frame_size, MODEL_TIME + 3, true, true);
+    g_cam = new WhoS3Cam(PIXFORMAT_JPEG, frame_size, MODEL_TIME + 3, true, true);
 #else
-    auto cam = new WhoS3Cam(PIXFORMAT_RGB565, frame_size, MODEL_TIME + 3);
+    g_cam = new WhoS3Cam(PIXFORMAT_JPEG, frame_size, MODEL_TIME + 3);
 #endif
+
+WhoCam *get_cam_instance()
+{
+    return g_cam;
+}
     auto frame_cap = new WhoFrameCap();
-    frame_cap->add_node<WhoFetchNode>("FrameCapFetch", cam);
+    frame_cap->add_node<WhoFetchNode>("FrameCapFetch", g_cam);
     return frame_cap;
 }
 #elif CONFIG_IDF_TARGET_ESP32P4
 WhoFrameCap *get_mipi_csi_frame_cap_pipeline()
 {
-    auto cam = new WhoP4Cam(V4L2_PIX_FMT_RGB565, MODEL_TIME + 3);
+    framesize_t frame_size = get_cam_frame_size_from_lcd_resolution();
+    g_cam = new WhoP4Cam(PIXFORMAT_JPEG, frame_size, MODEL_TIME + 3);
     auto frame_cap = new WhoFrameCap();
-    frame_cap->add_node<WhoFetchNode>("FrameCapFetch", cam);
+    frame_cap->add_node<WhoFetchNode>("FrameCapFetch", g_cam);
     return frame_cap;
 }
 

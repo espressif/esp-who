@@ -1,5 +1,6 @@
 #pragma once
 #include "who_frame_cap.hpp"
+#include "who_cam.hpp"
 
 #if CONFIG_IDF_TARGET_ESP32S3
 who::frame_cap::WhoFrameCap *get_dvp_frame_cap_pipeline();
@@ -7,3 +8,4 @@ who::frame_cap::WhoFrameCap *get_dvp_frame_cap_pipeline();
 who::frame_cap::WhoFrameCap *get_mipi_csi_frame_cap_pipeline();
 who::frame_cap::WhoFrameCap *get_uvc_frame_cap_pipeline();
 #endif
+who::cam::WhoCam *get_cam_instance();
