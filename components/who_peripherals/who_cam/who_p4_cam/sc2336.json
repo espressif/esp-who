@@ -45,7 +45,7 @@
             "anti_flicker":
             {
                 "mode": "full",
-                "ac_freq": 30
+                "ac_freq": 50
             },
             "f_n0": 0.32,
             "f_m0": 0.42,

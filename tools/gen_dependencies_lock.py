@@ -59,20 +59,18 @@ if __name__ == "__main__":
                     ]
                 )
 
-        build_dir = os.path.join(project_dir, "build")
         for args in args_list:
             try:
-                if os.path.isdir(build_dir):
-                    shutil.rmtree(build_dir)
                 subprocess.run(
                     args, cwd=project_dir, check=True, capture_output=True, text=True
                 )
+                if os.path.isdir(build_dir):
+                    shutil.rmtree(build_dir)
+                # clear manifest
+                with open(manifest, "w", encoding="utf-8"):
+                    pass
             except subprocess.CalledProcessError as e:
                 print("Failed to set-target.")
                 print("ret:", e.returncode)
                 print("stdout:", e.stdout)
                 print("stderr:", e.stderr)
-
-        # clear manifest
-        with open(manifest, "w", encoding="utf-8"):
-            pass
