@@ -2,6 +2,8 @@
 
 [[中文]](../../zh_CN/get-started/ESP-EYE_Getting_Started_Guide.md)
 
+**Note: The ESP-EYE board has reached End-of-Life (EOL). Please use the [ESP32-S3-EYE](./ESP32-S3-EYE_Getting_Started_Guide.md) as a replacement.**
+
 ## What You Need
 
 * 1 × ESP-EYE V2.1 board

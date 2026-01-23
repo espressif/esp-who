@@ -2,6 +2,9 @@
 
 [[EN]](../../en/get-started/ESP-EYE_Getting_Started_Guide.md)
 
+
+**Note: ESP-EYE 已经停止维护。请使用 [ESP32-S3-EYE](./ESP32-S3-EYE_Getting_Started_Guide.md)。**
+
 ## 准备工作
 
 * 1 × ESP-EYE V2.1 开发板
