@@ -64,13 +64,17 @@ void WhoTaskState::print_task_status()
     printf("----------------------------------------------------------------------------------------------\n");
 
     for (UBaseType_t i = 0; i < num_tasks; i++) {
+        BaseType_t core_id = tskNO_AFFINITY;
+#if ( configNUMBER_OF_CORES > 1 )
+        core_id = xTaskGetCoreID(task_status_array[i].xHandle);
+#endif
 #if CONFIG_FREERTOS_RUN_TIME_COUNTER_TYPE_U32
         printf("%-15s | %-8x | %-9s | %-8u | %-11lu | %-11lu | %-12lu |\n",
 #else
         printf("%-15s | %-8x | %-9s | %-8u | %-11lu | %-11llu | %-12llu |\n",
 #endif
                task_status_array[i].pcTaskName,
-               task_status_array[i].xCoreID,
+               (uint32_t)core_id,
                m_task_state[task_status_array[i].eCurrentState].c_str(),
                task_status_array[i].uxCurrentPriority,
                task_status_array[i].usStackHighWaterMark,
