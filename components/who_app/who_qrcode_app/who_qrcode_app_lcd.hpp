@@ -13,7 +13,7 @@ public:
 
 protected:
     virtual void qrcode_result_cb(const std::string &result);
-    virtual void lcd_disp_cb(who::cam::cam_fb_t *fb);
+    virtual void lcd_disp_cb(VideoCapture::Frame *fb);
     virtual void cleanup();
 
 private:

@@ -1,0 +1,8 @@
+## IDF Component Manager Manifest File
+dependencies:
+  who_frame_cap:
+    path: "../who_frame_cap"
+    public: "true"
+  espressif/esp-dl:
+    version: "*"
+    public: "true"

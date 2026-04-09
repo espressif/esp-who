@@ -76,8 +76,8 @@ void WhoDetect::task()
             }
         }
         auto fb = m_frame_cap_node->cam_fb_peek();
-        struct timeval timestamp = fb->timestamp;
-        dl::image::img_t img = static_cast<dl::image::img_t>(*fb);
+        int64_t timestamp = fb->timestamp;
+        dl::image::img_t img = frame2img(fb);
         auto &res = m_model->run(img);
         if (m_inv_rescale_x && m_inv_rescale_y && m_rescale_max_w && m_rescale_max_h) {
             rescale_detect_result(res);

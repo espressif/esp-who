@@ -93,7 +93,7 @@ void WhoRecognitionAppLCD::detect_result_cb(const detect::WhoDetect::result_t &r
     m_detect_result_lcd_disp->save_detect_result(result);
 }
 
-void WhoRecognitionAppLCD::lcd_disp_cb(who::cam::cam_fb_t *fb)
+void WhoRecognitionAppLCD::lcd_disp_cb(VideoCapture::Frame *fb)
 {
     m_detect_result_lcd_disp->lcd_disp_cb(fb);
     m_text_result_lcd_disp->lcd_disp_cb(fb);

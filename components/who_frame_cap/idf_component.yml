@@ -1,0 +1,11 @@
+## IDF Component Manager Manifest File
+dependencies:
+  esp_video_cxx:
+    path: "../who_peripherals/esp_video_cxx"
+    public: true
+  who_task:
+    path: "../who_task"
+    public: true
+  espressif/esp-dl:
+    version: "*"
+    public: true

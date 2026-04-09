@@ -24,7 +24,7 @@ void WhoTextResultLCDDisp::save_text_result(const std::string &text)
     xSemaphoreGive(m_res_mutex);
 }
 
-void WhoTextResultLCDDisp::lcd_disp_cb(who::cam::cam_fb_t *fb)
+void WhoTextResultLCDDisp::lcd_disp_cb(VideoCapture::Frame *fb)
 {
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
     if (!m_result.empty()) {

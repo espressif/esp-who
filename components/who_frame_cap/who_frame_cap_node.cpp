@@ -2,7 +2,6 @@
 #include "hal/cache_hal.h"
 #include "hal/cache_ll.h"
 
-using namespace who::cam;
 static const char *TAG = "WhoFrameCapNode";
 
 namespace who {
@@ -29,7 +28,7 @@ WhoFrameCapNode::~WhoFrameCapNode()
 bool WhoFrameCapNode::pause_async()
 {
     if (task::WhoTask::pause_async()) {
-        cam_fb_t *fb = nullptr;
+        VideoCapture::Frame *fb = nullptr;
         if (m_in_queue) {
             xQueueSend(m_in_queue, &fb, 0);
         }
@@ -41,7 +40,7 @@ bool WhoFrameCapNode::pause_async()
 bool WhoFrameCapNode::stop_async()
 {
     if (task::WhoTask::stop_async()) {
-        cam_fb_t *fb = nullptr;
+        VideoCapture::Frame *fb = nullptr;
         if (m_in_queue) {
             xQueueSend(m_in_queue, &fb, 0);
         }
@@ -50,7 +49,7 @@ bool WhoFrameCapNode::stop_async()
     return false;
 }
 
-cam_fb_t *WhoFrameCapNode::cam_fb_peek(int index)
+VideoCapture::Frame *WhoFrameCapNode::cam_fb_peek(int index)
 {
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     if (m_cam_fbs.empty()) {
@@ -70,7 +69,7 @@ cam_fb_t *WhoFrameCapNode::cam_fb_peek(int index)
         xSemaphoreGive(m_mutex);
         return nullptr;
     }
-    cam_fb_t *ret = m_cam_fbs[index];
+    VideoCapture::Frame *ret = m_cam_fbs[index];
     xSemaphoreGive(m_mutex);
     return ret;
 }
@@ -99,7 +98,7 @@ WhoFrameCapNode *WhoFrameCapNode::get_next_node()
 void WhoFrameCapNode::task()
 {
     while (true) {
-        cam_fb_t *in_fb = nullptr;
+        VideoCapture::Frame *in_fb = nullptr;
         if (m_in_queue) {
             xQueueReceive(m_in_queue, &in_fb, portMAX_DELAY);
         }
@@ -116,7 +115,8 @@ void WhoFrameCapNode::task()
                 continue;
             }
         }
-        cam_fb_t *out_fb = process(in_fb);
+        VideoCapture::Frame *out_fb = process(in_fb);
+        // printf("process: %s\n", this->get_type().c_str());
         // Drop the fb which failed to process.
         if (!out_fb) {
             continue;
@@ -146,7 +146,7 @@ void WhoFrameCapNode::task()
 
 WhoFetchNode::~WhoFetchNode()
 {
-    delete m_cam;
+    delete m_cap;
 }
 
 void WhoFetchNode::cleanup()
@@ -154,21 +154,22 @@ void WhoFetchNode::cleanup()
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     while (!m_cam_fbs.empty()) {
         auto fb = m_cam_fbs.pop();
-        m_cam->cam_fb_return(fb);
+        m_cap->return_frame(fb);
     }
     xSemaphoreGive(m_mutex);
 }
 
-cam_fb_t *WhoFetchNode::process(who::cam::cam_fb_t *fb)
+VideoCapture::Frame *WhoFetchNode::process(VideoCapture::Frame *fb)
 {
-    return m_cam->cam_fb_get();
+    m_cap->get_frame(&fb);
+    return fb;
 }
 
-void WhoFetchNode::update_ringbuf(who::cam::cam_fb_t *fb)
+void WhoFetchNode::update_ringbuf(VideoCapture::Frame *fb)
 {
     if (m_cam_fbs.full()) {
         auto fb_prev = m_cam_fbs.pop();
-        m_cam->cam_fb_return(fb_prev);
+        m_cap->return_frame(fb_prev);
     }
     m_cam_fbs.push(fb);
 }
@@ -176,43 +177,38 @@ void WhoFetchNode::update_ringbuf(who::cam::cam_fb_t *fb)
 void WhoDecodeNode::cleanup()
 {
     while (uxQueueMessagesWaiting(m_in_queue) > 0) {
-        cam_fb_t *tmp;
+        VideoCapture::Frame *tmp;
         xQueueReceive(m_in_queue, &tmp, 0);
     }
     xSemaphoreTake(m_mutex, portMAX_DELAY);
     while (!m_cam_fbs.empty()) {
         auto fb = m_cam_fbs.pop();
-        heap_caps_free(fb->buf);
+        heap_caps_free(fb->data);
         delete fb;
     }
     xSemaphoreGive(m_mutex);
 }
 
-cam_fb_t *WhoDecodeNode::process(who::cam::cam_fb_t *fb)
+VideoCapture::Frame *WhoDecodeNode::process(VideoCapture::Frame *fb)
 {
     auto timestamp = fb->timestamp;
-#if CONFIG_IDF_TARGET_ESP32P4
-    uint32_t caps = 0;
-#else
-    uint32_t caps = dl::image::DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
-#endif
 #if CONFIG_SOC_JPEG_CODEC_SUPPORTED
-    auto img = hw_decode_jpeg({fb->buf, fb->len}, m_pix_type, caps);
+    auto img = hw_decode_jpeg({fb->data, fb->size}, m_pix_type);
 #else
-    auto img = sw_decode_jpeg({fb->buf, fb->len}, m_pix_type, caps);
+    auto img = sw_decode_jpeg({fb->data, fb->size}, m_pix_type);
 #endif
     // Sometimes may fail to decode a corrupted frame.
     if (!img.data) {
         return nullptr;
     }
-    return new cam_fb_t(img, timestamp);
+    return new VideoCapture::Frame(img.data, img.bytes(), img.width, img.height, dl_pix_type2v4l2_fmt(img.pix_type), timestamp);
 }
 
-void WhoDecodeNode::update_ringbuf(who::cam::cam_fb_t *fb)
+void WhoDecodeNode::update_ringbuf(VideoCapture::Frame *fb)
 {
     if (m_cam_fbs.full()) {
         auto fb_prev = m_cam_fbs.pop();
-        heap_caps_free(fb_prev->buf);
+        heap_caps_free(fb_prev->data);
         delete fb_prev;
     }
     m_cam_fbs.push(fb);
@@ -241,7 +237,7 @@ WhoPPAResizeNode::WhoPPAResizeNode(const std::string &name,
         img.height = dst_h;
         img.pix_type = dst_pix_type;
         if (i == 0) {
-            m_buf_size = dl::image::align_up(dl::image::get_img_byte_size(img), align);
+            m_buf_size = dl::image::align_up(img.bytes(), align);
         }
         img.data = heap_caps_aligned_calloc(align, 1, m_buf_size, MALLOC_CAP_SPIRAM | MALLOC_CAP_DMA);
     }
@@ -258,7 +254,7 @@ WhoPPAResizeNode::~WhoPPAResizeNode()
 void WhoPPAResizeNode::cleanup()
 {
     while (uxQueueMessagesWaiting(m_in_queue) > 0) {
-        cam_fb_t *tmp;
+        VideoCapture::Frame *tmp;
         xQueueReceive(m_in_queue, &tmp, 0);
     }
     xSemaphoreTake(m_mutex, portMAX_DELAY);
@@ -269,15 +265,15 @@ void WhoPPAResizeNode::cleanup()
     xSemaphoreGive(m_mutex);
 }
 
-cam_fb_t *WhoPPAResizeNode::process(who::cam::cam_fb_t *fb)
+VideoCapture::Frame *WhoPPAResizeNode::process(VideoCapture::Frame *fb)
 {
     auto timestamp = fb->timestamp;
     auto dst_img = get_dst_img();
-    dl::image::resize_ppa(*fb, dst_img, m_ppa_srm_handle);
-    return new cam_fb_t(dst_img, timestamp);
+    dl::image::resize_ppa(frame2img(fb), dst_img, m_ppa_srm_handle);
+    return new VideoCapture::Frame(dst_img.data, dst_img.bytes(), dst_img.width, dst_img.height, dl_pix_type2v4l2_fmt(dst_img.pix_type), timestamp);
 }
 
-void WhoPPAResizeNode::update_ringbuf(who::cam::cam_fb_t *fb)
+void WhoPPAResizeNode::update_ringbuf(VideoCapture::Frame *fb)
 {
     if (m_cam_fbs.full()) {
         auto fb_prev = m_cam_fbs.pop();

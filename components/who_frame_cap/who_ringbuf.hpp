@@ -1,5 +1,6 @@
 #include <freertos/FreeRTOS.h>
 #include <vector>
+#include "esp_log.h"
 
 template <typename T>
 class RingBuf {

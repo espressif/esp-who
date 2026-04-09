@@ -1,0 +1,7 @@
+## IDF Component Manager Manifest File
+dependencies:
+  who_lcd:
+    path: ../who_peripherals/who_lcd
+    public: "true"
+  who_frame_cap:
+    path: ../who_frame_cap

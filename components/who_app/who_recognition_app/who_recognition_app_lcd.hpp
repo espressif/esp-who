@@ -15,7 +15,7 @@ public:
 protected:
     virtual void recognition_result_cb(const std::string &result);
     virtual void detect_result_cb(const detect::WhoDetect::result_t &result);
-    virtual void lcd_disp_cb(who::cam::cam_fb_t *fb);
+    virtual void lcd_disp_cb(VideoCapture::Frame *fb);
     virtual void recognition_cleanup();
     virtual void detect_cleanup();
 

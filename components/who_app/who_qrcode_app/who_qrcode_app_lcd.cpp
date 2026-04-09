@@ -55,7 +55,7 @@ void WhoQRCodeAppLCD::qrcode_result_cb(const std::string &result)
     m_result_lcd_disp->save_text_result(result);
 }
 
-void WhoQRCodeAppLCD::lcd_disp_cb(who::cam::cam_fb_t *fb)
+void WhoQRCodeAppLCD::lcd_disp_cb(VideoCapture::Frame *fb)
 {
     m_result_lcd_disp->lcd_disp_cb(fb);
 }

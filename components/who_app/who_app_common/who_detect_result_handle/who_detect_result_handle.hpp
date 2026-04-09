@@ -28,7 +28,7 @@ public:
 #endif
     ~WhoDetectResultLCDDisp();
     void save_detect_result(const detect::WhoDetect::result_t &result);
-    void lcd_disp_cb(who::cam::cam_fb_t *fb);
+    void lcd_disp_cb(VideoCapture::Frame *fb);
     void cleanup();
 
 private:

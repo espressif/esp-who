@@ -10,7 +10,7 @@ public:
 
     typedef struct {
         std::list<dl::detect::result_t> det_res;
-        struct timeval timestamp;
+        int64_t timestamp;
         dl::image::img_t img;
     } result_t;
 

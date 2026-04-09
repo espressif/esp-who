@@ -1,0 +1,5 @@
+## IDF Component Manager Manifest File
+dependencies:
+  espressif/esp_video:
+    version: "*"
+    public: true

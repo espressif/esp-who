@@ -1,0 +1,20 @@
+menu "esp-who: mcpwm"
+    config SERVO_MIN_PULSEWIDTH_US
+        int "Servo minimum pulse width in microsecond"
+        default 500
+    config SERVO_MAX_PULSEWIDTH_US
+        int "Servo maximum pulse width in microsecond"
+        default 2500
+    config SERVO_MIN_DEGREE
+        int "Servo minimum angle"
+        default -90
+    config SERVO_MAX_DEGREE
+        int "Servo maximum angle"
+        default 90
+    config SERVO_TIMEBASE_RESOLUTION_HZ
+        int "Servo timebase resolution hz."
+        default 1000000
+    config SERVO_TIMEBASE_PERIOD
+        int "Servo timebase period."
+        default 20000
+endmenu

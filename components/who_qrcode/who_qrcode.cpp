@@ -46,7 +46,7 @@ void WhoQRCode::task()
         uint8_t *data = quirc_begin(m_qr, &w, &h);
         dl::image::img_t dst_img = {
             .data = data, .width = (uint16_t)w, .height = (uint16_t)h, .pix_type = dl::image::DL_IMAGE_PIX_TYPE_GRAY};
-        m_image_transformer.set_src_img(*fb).set_dst_img(dst_img).transform();
+        m_image_transformer.set_src_img(frame2img(fb)).set_dst_img(dst_img).transform();
         quirc_end(m_qr);
         int num_codes = quirc_count(m_qr);
         for (int i = 0; i < num_codes; i++) {

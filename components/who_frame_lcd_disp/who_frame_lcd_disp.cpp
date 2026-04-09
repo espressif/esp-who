@@ -26,7 +26,7 @@ WhoFrameLCDDisp::~WhoFrameLCDDisp()
     delete m_lcd;
 }
 
-void WhoFrameLCDDisp::set_lcd_disp_cb(const std::function<void(who::cam::cam_fb_t *)> &lcd_disp_cb)
+void WhoFrameLCDDisp::set_lcd_disp_cb(const std::function<void(VideoCapture::Frame *)> &lcd_disp_cb)
 {
     m_lcd_disp_cb = lcd_disp_cb;
 }
@@ -60,10 +60,10 @@ void WhoFrameLCDDisp::task()
         if (m_lcd_disp_cb) {
             m_lcd_disp_cb(fb);
         }
-        m_lcd->draw_bitmap(fb->buf, (int)fb->width, (int)fb->height, 0, 0);
+        m_lcd->draw_bitmap(fb->data, (int)fb->width, (int)fb->height, 0, 0);
 #else
         bsp_display_lock(0);
-        lv_canvas_set_buffer(m_canvas, fb->buf, fb->width, fb->height, LV_COLOR_FORMAT_NATIVE);
+        lv_canvas_set_buffer(m_canvas, fb->data, fb->width, fb->height, LV_COLOR_FORMAT_NATIVE);
         if (m_lcd_disp_cb) {
             m_lcd_disp_cb(fb);
         }

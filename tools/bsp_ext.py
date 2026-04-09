@@ -46,7 +46,7 @@ def action_extensions(base_actions, project_path=os.getcwd()):
         "dog_detect",
     }
 
-    EXAMPLES = {"human_face_recognition", "object_detect", "qrcode_recognition"}
+    EXAMPLES = {"human_face_recognition", "object_detect", "object_tracking", "qrcode_recognition"}
 
     def get_value_from_cache_or_env(key, global_args):
         regex = compile(rf"^{key}=.*")
@@ -108,7 +108,7 @@ def action_extensions(base_actions, project_path=os.getcwd()):
                         sys.exit(2)
                     if not is_key_in_cache("BSP", global_args):
                         global_args["define_cache_entry"].append(f"BSP={bsp}")
-                    if example == "object_detect":
+                    if example == "object_detect" or example == "object_tracking":
                         detect_model = get_value_from_cache_or_env(
                             "DETECT_MODEL", global_args
                         )

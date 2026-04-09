@@ -121,16 +121,15 @@ WhoDetectResultLCDDisp::WhoDetectResultLCDDisp(task::WhoTask *task, const std::v
     m_rgb565_palette(palette.size(), std::vector<uint8_t>(2))
 {
 #if CONFIG_IDF_TARGET_ESP32P4
-    uint32_t caps = 0;
+    dl::image::pix_type_t pix_type = dl::image::DL_IMAGE_PIX_TYPE_RGB565LE;
 #else
-    uint32_t caps = dl::image::DL_IMAGE_CAP_RGB565_BIG_ENDIAN;
+    dl::image::pix_type_t pix_type = dl::image::DL_IMAGE_PIX_TYPE_RGB565BE;
 #endif
     for (int i = 0; i < m_rgb888_palette.size(); i++) {
         dl::image::cvt_pix(m_rgb888_palette[i].data(),
                            m_rgb565_palette[i].data(),
                            dl::image::DL_IMAGE_PIX_TYPE_RGB888,
-                           dl::image::DL_IMAGE_PIX_TYPE_RGB565,
-                           caps);
+                           pix_type);
     }
 }
 #endif
@@ -147,24 +146,24 @@ void WhoDetectResultLCDDisp::save_detect_result(const detect::WhoDetect::result_
     xSemaphoreGive(m_res_mutex);
 }
 
-void WhoDetectResultLCDDisp::lcd_disp_cb(who::cam::cam_fb_t *fb)
+void WhoDetectResultLCDDisp::lcd_disp_cb(VideoCapture::Frame *fb)
 {
     if (!m_task->is_active()) {
         return;
     }
     xSemaphoreTake(m_res_mutex, portMAX_DELAY);
-    // Try to sync camera frame and result, skip the future result.
-    auto compare_timestamp = [](const struct timeval &t1, const struct timeval &t2) -> bool {
-        if (t1.tv_sec == t2.tv_sec) {
-            return t1.tv_usec < t2.tv_usec;
-        }
-        return t1.tv_sec < t2.tv_sec;
-    };
-    struct timeval t1 = fb->timestamp;
+    // // Try to sync camera frame and result, skip the future result.
+    // auto compare_timestamp = [](const struct timeval &t1, const struct timeval &t2) -> bool {
+    //     if (t1.tv_sec == t2.tv_sec) {
+    //         return t1.tv_usec < t2.tv_usec;
+    //     }
+    //     return t1.tv_sec < t2.tv_sec;
+    // };
+    int64_t t1 = fb->timestamp;
     // If detect fps higher than display fps, the result queue may be more than 1. May happen when using lvgl.
     while (!m_results.empty()) {
         detect::WhoDetect::result_t result = m_results.front();
-        if (!compare_timestamp(t1, result.timestamp)) {
+        if (t1 >= result.timestamp) {
             m_result = result;
             m_results.pop();
         } else {
@@ -173,10 +172,10 @@ void WhoDetectResultLCDDisp::lcd_disp_cb(who::cam::cam_fb_t *fb)
     }
     xSemaphoreGive(m_res_mutex);
 #if BSP_CONFIG_NO_GRAPHIC_LIB
-    if (fb->format == cam::cam_fb_fmt_t::CAM_FB_FMT_RGB565) {
-        detect::draw_detect_results_on_img(*fb, m_result.det_res, m_rgb565_palette);
-    } else if (fb->format == cam::cam_fb_fmt_t::CAM_FB_FMT_RGB888) {
-        detect::draw_detect_results_on_img(*fb, m_result.det_res, m_rgb888_palette);
+    if (fb->pixel_format == V4L2_PIX_FMT_RGB565 || fb->pixel_format == V4L2_PIX_FMT_RGB565X) {
+        detect::draw_detect_results_on_img(frame2img(fb), m_result.det_res, m_rgb565_palette);
+    } else if (fb->pixel_format == V4L2_PIX_FMT_RGB24) {
+        detect::draw_detect_results_on_img(frame2img(fb), m_result.det_res, m_rgb888_palette);
     }
 #else
     detect::draw_detect_results_on_canvas(m_canvas, m_result.det_res, m_palette);

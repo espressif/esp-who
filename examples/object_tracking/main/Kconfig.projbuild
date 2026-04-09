@@ -1,0 +1,170 @@
+menu "Servo Configuration"
+
+    menu "Pan Servo Configuration"
+        config PAN_GPIO
+            int "Pan Servo GPIO"
+            default 5
+            help
+                GPIO number for pan servo control.
+
+        choice PAN_DIRECTION
+            prompt "Pan Servo Direction"
+            default PAN_DIRECTION_FORWARD
+            help
+                Pan servo rotation direction.
+
+            config PAN_DIRECTION_FORWARD
+                bool "Forward"
+            config PAN_DIRECTION_REVERSE
+                bool "Reverse"
+        endchoice
+
+        config PAN_DIR
+            int
+            default 1 if PAN_DIRECTION_FORWARD
+            default -1 if PAN_DIRECTION_REVERSE
+
+        config PAN_KP
+            string "Pan PID Kp"
+            default "0.25"
+            help
+                Pan servo PID proportional gain.
+
+        config PAN_KI
+            string "Pan PID Ki"
+            default "0.0"
+            help
+                Pan servo PID integral gain.
+
+        config PAN_KD
+            string "Pan PID Kd"
+            default "0.0"
+            help
+                Pan servo PID derivative gain.
+
+        config PAN_INIT_ANGLE
+            int "Pan Initial Angle"
+            default 0
+            help
+                Pan servo initial angle in degrees.
+
+        config PAN_MIN_ANGLE
+            int "Pan Minimum Angle"
+            default -90
+            help
+                Pan servo minimum angle in degrees.
+
+        config PAN_MAX_ANGLE
+            int "Pan Maximum Angle"
+            default 90
+            help
+                Pan servo maximum angle in degrees.
+    endmenu
+
+    menu "Tilt Servo Configuration"
+        config TILT_GPIO
+            int "Tilt Servo GPIO"
+            default 6
+            help
+                GPIO number for tilt servo control.
+
+        choice TILT_DIRECTION
+            prompt "Tilt Servo Direction"
+            default TILT_DIRECTION_FORWARD
+            help
+                Tilt servo rotation direction.
+
+            config TILT_DIRECTION_FORWARD
+                bool "Forward"
+            config TILT_DIRECTION_REVERSE
+                bool "Reverse"
+        endchoice
+
+        config TILT_DIR
+            int
+            default 1 if TILT_DIRECTION_FORWARD
+            default -1 if TILT_DIRECTION_REVERSE
+
+        config TILT_KP
+            string "Tilt PID Kp"
+            default "0.2"
+            help
+                Tilt servo PID proportional gain.
+
+        config TILT_KI
+            string "Tilt PID Ki"
+            default "0.0"
+            help
+                Tilt servo PID integral gain.
+
+        config TILT_KD
+            string "Tilt PID Kd"
+            default "0.0"
+            help
+                Tilt servo PID derivative gain.
+
+        config TILT_INIT_ANGLE
+            int "Tilt Initial Angle"
+            default 0
+            help
+                Tilt servo initial angle in degrees.
+
+        config TILT_MIN_ANGLE
+            int "Tilt Minimum Angle"
+            default -90
+            help
+                Tilt servo minimum angle in degrees.
+
+        config TILT_MAX_ANGLE
+            int "Tilt Maximum Angle"
+            default 90
+            help
+                Tilt servo maximum angle in degrees.
+    endmenu
+
+    menu "Camera Configuration"
+        config CAMERA_WIDTH
+            int "Camera Capture Width"
+            default 640
+            help
+                UVC camera capture width in pixels.
+
+        config CAMERA_HEIGHT
+            int "Camera Capture Height"
+            default 480
+            help
+                UVC camera capture height in pixels.
+
+        config CAMERA_FPS
+            string "Camera FPS"
+            default "30"
+            help
+                UVC camera frames per second.
+
+        config DISPLAY_WIDTH
+            int "Display Width"
+            default 800
+            help
+                Display width after resize in pixels.
+
+        config DISPLAY_HEIGHT
+            int "Display Height"
+            default 600
+            help
+                Display height after resize in pixels.
+
+        config CAMERA_FX
+            string "Camera Focal Length X (fx)"
+            default "266"
+            help
+                Camera intrinsic parameter fx (focal length in x direction).
+
+        config CAMERA_FY
+            string "Camera Focal Length Y (fy)"
+            default "266"
+            help
+                Camera intrinsic parameter fy (focal length in y direction).
+
+    endmenu
+
+endmenu

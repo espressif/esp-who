@@ -1,0 +1,12 @@
+dependencies:
+  who_detect_app:
+    path: ../../../components/who_app/who_detect_app
+  pid:
+    path: ../../../components/pid
+  mcpwm_cxx:
+    path: ../../../components/who_peripherals/mcpwm_cxx
+  esp32_p4_function_ev_board_noglib:
+    version: '*'
+  human_face_detect:
+    version: '*'
+  esp-dsp: '*'

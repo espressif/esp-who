@@ -1,0 +1,6 @@
+## IDF Component Manager Manifest File
+dependencies:
+  who_detect:
+    path: "../../who_detect"
+  who_frame_lcd_disp:
+    path: "../../who_frame_lcd_disp"

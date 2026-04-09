@@ -19,7 +19,7 @@ public:
         T *node = new T(std::forward<Args>(args)...);
         if (!m_nodes.empty()) {
             auto &prev_node = m_nodes.back();
-            QueueHandle_t queue = xQueueCreate(1, sizeof(who::cam::cam_fb_t *));
+            QueueHandle_t queue = xQueueCreate(1, sizeof(VideoCapture::Frame *));
             node->set_in_queue(queue);
             node->set_prev_node(prev_node);
             prev_node->set_out_queue(queue);
