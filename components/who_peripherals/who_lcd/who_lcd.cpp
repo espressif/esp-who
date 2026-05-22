@@ -43,24 +43,22 @@ void WhoLCD::draw_bitmap(const void *data, int width, int height, int x_start, i
 #elif CONFIG_IDF_TARGET_ESP32P4
 void WhoLCD::init()
 {
-    bsp_display_config_t bsp_disp_cfg = {
+    bsp_display_config_t bsp_disp_cfg = {};
+
 #if CONFIG_BSP_LCD_TYPE_HDMI
 #if CONFIG_BSP_LCD_HDMI_800x600_60HZ
-        .hdmi_resolution = BSP_HDMI_RES_800x600,
+    bsp_disp_cfg.hdmi_resolution = BSP_HDMI_RES_800x600,
 #elif CONFIG_BSP_LCD_HDMI_1280x720_60HZ
-        .hdmi_resolution = BSP_HDMI_RES_1280x720,
+    bsp_disp_cfg.hdmi_resolution = BSP_HDMI_RES_1280x720,
 #elif CONFIG_BSP_LCD_HDMI_1280x800_60HZ
-        .hdmi_resolution = BSP_HDMI_RES_1280x800,
+    bsp_disp_cfg.hdmi_resolution = BSP_HDMI_RES_1280x800,
 #elif CONFIG_BSP_LCD_HDMI_1920x1080_30HZ
-        .hdmi_resolution = BSP_HDMI_RES_1920x1080,
+    bsp_disp_cfg.hdmi_resolution = BSP_HDMI_RES_1920x1080,
 #endif
 #else
-        .hdmi_resolution = BSP_HDMI_RES_NONE,
+    bsp_disp_cfg.hdmi_resolution = BSP_HDMI_RES_NONE,
 #endif
-        .dsi_bus = {
-            .phy_clk_src = MIPI_DSI_PHY_PLLREF_CLK_SRC_DEFAULT,
-            .lane_bit_rate_mbps = BSP_LCD_MIPI_DSI_LANE_BITRATE_MBPS,
-        }};
+    bsp_disp_cfg.dsi_bus.lane_bit_rate_mbps = BSP_LCD_MIPI_DSI_LANE_BITRATE_MBPS;
     bsp_display_new_with_handles(&bsp_disp_cfg, &m_lcd_handles);
     ESP_ERROR_CHECK(bsp_display_brightness_init());
     ESP_ERROR_CHECK(bsp_display_backlight_on());

@@ -24,7 +24,8 @@ WhoFrameCap *get_mipi_csi_frame_cap_pipeline()
     };
     esp_video_init_config_t video_cfg = {};
     video_cfg.csi = &csi_cfg;
-    esp_video_init(&video_cfg);
+    esp_video_init_with_flags(&video_cfg, ESP_VIDEO_INIT_FLAGS_MIPI_CSI | ESP_VIDEO_INIT_FLAGS_ISP);
+    // esp_video_init(&video_cfg);
 
     auto cap = new VideoCapture();
     auto cfg = VideoCapture::Config(ESP_VIDEO_MIPI_CSI_DEVICE_NAME, V4L2_PIX_FMT_RGB565, MODEL_TIME + 3);

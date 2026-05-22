@@ -19,7 +19,7 @@ dependencies:
       type: service
     version: 0.5.3
   espressif/dl_fft:
-    component_hash: 7dadbd644c0d7ba4733cc3726ec4cff6edf27b043725e1115861dec1609a3d28
+    component_hash: ced3cf28cc70452b7859c06f4e5059215167254a2047e34c893d6f501ccd6ea2
     dependencies:
     - name: idf
       require: private
@@ -27,9 +27,9 @@ dependencies:
     source:
       registry_url: https://components.espressif.com
       type: service
-    version: 0.3.1
+    version: 0.4.0
   espressif/esp-dl:
-    component_hash: 6622c0dc7e3d7a647b60371c6e5e339918526e1da48000ebd594bb2a3b6ef6d5
+    component_hash: a8ab6c5317b213da00da7d62957243c01937d70c5c2e8c50dc0f5e985d8a8c1c
     dependencies:
     - name: espressif/dl_fft
       registry_url: https://components.espressif.com
@@ -42,7 +42,7 @@ dependencies:
     - name: espressif/esp_new_jpeg
       registry_url: https://components.espressif.com
       require: private
-      version: ^0.6.1
+      version: ^1
     - name: idf
       require: private
       version: '*'
@@ -58,7 +58,8 @@ dependencies:
     - esp32p4
     - esp32s2
     - esp32s3
-    version: 3.3.2
+    - esp32s31
+    version: 3.3.3
   espressif/esp-dsp:
     component_hash: 12e44db246517a627bc0fe2b255b8335410c0215c98bfba2df5a8e3edea839ef
     dependencies:
@@ -257,7 +258,7 @@ dependencies:
       type: service
     version: 2.7.2
   espressif/esp_new_jpeg:
-    component_hash: e6af208a875abd0ecfc0213d3751a11b504b463ebde6930f24096047925fa5c1
+    component_hash: 98823384f51ca298e2c9bebacd1c629148e528ed0902d18b16556df151519e68
     dependencies: []
     source:
       registry_url: https://components.espressif.com
@@ -266,12 +267,15 @@ dependencies:
     - esp32
     - esp32s2
     - esp32s3
+    - esp32s31
     - esp32p4
     - esp32c2
     - esp32c3
     - esp32c5
     - esp32c6
-    version: 0.6.1
+    - esp32c61
+    - esp32h4
+    version: 1.0.1
   espressif/esp_sccb_intf:
     component_hash: c071b189e49f40940722aea01a5489f873385cc39cd5b14012341135b85d1a9d
     dependencies:
@@ -327,7 +331,7 @@ dependencies:
     - esp32s31
     version: 2.1.0
   espressif/human_face_detect:
-    component_hash: 0ab9612140eddbb74ede40d30c9567617f020bfbccf5a1ffe4c19d26da3d24d4
+    component_hash: b6f898ba69e0355641db0f2974f5810fb26c265ab3e1b1a03a37469976ad4591
     dependencies:
     - name: espressif/esp-dl
       registry_url: https://components.espressif.com
@@ -336,7 +340,7 @@ dependencies:
     source:
       registry_url: https://components.espressif.com/
       type: service
-    version: 0.4.1
+    version: 0.4.2
   espressif/usb_host_uvc:
     component_hash: f20c4e4dea50536e2e29daaf589b5f5984402284c155867daef27d6b64869f78
     dependencies:

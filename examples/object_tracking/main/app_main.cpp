@@ -14,8 +14,8 @@ dl::detect::Detect *get_detect_model()
 
 void run_detect_lcd()
 {
-    // auto frame_cap = get_mipi_csi_frame_cap_pipeline();
-    auto frame_cap = get_uvc_frame_cap_pipeline();
+    auto frame_cap = get_mipi_csi_frame_cap_pipeline();
+    // auto frame_cap = get_uvc_frame_cap_pipeline();
     auto detect_app = new WhoDetectTrackAppLCD(frame_cap);
     // create model later to avoid memory fragmentation.
     detect_app->set_model(get_detect_model());

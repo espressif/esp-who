@@ -107,7 +107,6 @@ esp_err_t V4L2Device::set_format(enum v4l2_buf_type type, uint32_t width, uint32
     format.fmt.pix.width = width;
     format.fmt.pix.height = height;
     format.fmt.pix.pixelformat = pixel_format;
-    format.fmt.pix.field = V4L2_FIELD_NONE;
 
     esp_err_t ret = set_format(format);
     if (ret != ESP_OK) {
