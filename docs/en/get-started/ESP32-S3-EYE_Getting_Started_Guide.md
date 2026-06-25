@@ -29,6 +29,7 @@
   - [5.3. PCB Layout](#53-pcb-layout)
   - [5.4. Dimensions](#54-dimensions)
   - [5.5. 3D Printed Case](#55-3d-printed-case)
+  - [5.6. Reference Design](#56-reference-design)
 
 This user guide will help you get started with ESP32-S3-EYE v2.2 and will also provide more in-depth information.
 
@@ -355,5 +356,9 @@ The following 3D model is a two-part case you can 3D print for your ESP32-S3-EYE
 |ESP32-S3-EYE - Case 3D printed on [BambuLab P1S](https://bambulab.com/en/p1)|
 
 </center>
+
+## 5.6. Reference Design
+
+- [ESP32-S3-EYE Reference Design](https://documentation.espressif.com/ESP32-S3-EYE_Reference_Design.zip)
 
 For further design documentation for the board, please contact us at [<sales@espressif.com>](sales@espressif.com).
