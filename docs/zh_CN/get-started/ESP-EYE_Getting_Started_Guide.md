@@ -2,8 +2,9 @@
 
 [[EN]](../../en/get-started/ESP-EYE_Getting_Started_Guide.md)
 
-
-**Note: ESP-EYE 已经停止维护。请使用 [ESP32-S3-EYE](./ESP32-S3-EYE_Getting_Started_Guide.md)。**
+> **注意**
+>
+> ESP-EYE 已停产（EOL）。本指南仅供参考。如需进行新设计，请考虑使用其他乐鑫 AI 开发板。
 
 ## 准备工作
 
