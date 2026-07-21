@@ -2,7 +2,9 @@
 
 [[中文]](../../zh_CN/get-started/ESP-EYE_Getting_Started_Guide.md)
 
-**Note: The ESP-EYE board has reached End-of-Life (EOL). Please use the [ESP32-S3-EYE](./ESP32-S3-EYE_Getting_Started_Guide.md) as a replacement.**
+> **Note**
+>
+> ESP-EYE has reached End of Life (EOL). This guide is kept for reference only. For new designs, please consider other Espressif AI development boards.
 
 ## What You Need
 

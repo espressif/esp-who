@@ -2,6 +2,10 @@
 
 [[中文]](../../zh_CN/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
 
+> **Note**
+>
+> ESP32-S3-EYE has reached End of Life (EOL). This guide is kept for reference only. For new designs, please consider other Espressif AI development boards.
+
 - [1. Getting Started](#1-getting-started)
   - [1.1. Overview](#11-overview)
   - [1.2. Comparison with ESP-EYE](#12-comparison-with-esp-eye)

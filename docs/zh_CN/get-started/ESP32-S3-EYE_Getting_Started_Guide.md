@@ -2,6 +2,10 @@
 
 [[English Version]](../../en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
 
+> **注意**
+>
+> ESP32-S3-EYE 已停产（EOL）。本指南仅供参考。如需进行新设计，请考虑使用其他乐鑫 AI 开发板。
+
 - [1. 入门指南](#1-入门指南)
   - [1.1. 概述](#11-概述)
   - [1.2. ESP32-S3-EYE 与 ESP-EYE](#12-esp32-s3-eye-与-esp-eye)
