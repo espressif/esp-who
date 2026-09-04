@@ -94,3 +94,17 @@ idf.py [-p port] flash monitor
 * For the use of the peripheral interfaces related to the development board, you can refer to [ESP-BSP](https://github.com/espressif/esp-bsp).
 * For camera driver related information, please refer to [ESP32_CAMERA](https://github.com/espressif/esp32-camera), [ESP_VIDEO_COMPONENTS](https://github.com/espressif/esp-video-components).
 * If you find an error or need new features during use, please check [GitHub Issues](https://github.com/espressif/esp-who/issues) first to ensure that the issue is not submitted repeatedly.
+
+## How It Works
+
+**Enroll** — Point the camera at a face and press the enroll button. The model extracts a face embedding and saves it to flash.
+
+**Recognize** — Press the recognize button. The system compares the live camera frame against all stored embeddings and displays the result on the LCD.
+
+**Delete** — Press the delete button to remove the most recently enrolled face embedding.
+
+**Note:** Ensure the face is well-lit and centred in the frame for best enrollment and recognition accuracy. The system stores embeddings in NVS flash; they persist across reboots.
+
+## Difference from the Pre-built Firmware (Why the downloaded version was better)
+
+The default firmware binaries shipped in this repo are compiled with additional tuning (ex tighter detection thresholds, optimised camera settings). If your self-compiled build feels less accurate than the factory firmware, try adjusting the detection confidence threshold via the `menuconfig` under **ESP-WHO Configuration**.
